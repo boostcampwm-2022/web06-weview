@@ -3,3 +3,5 @@ describe("empty spec", () => {
     cy.visit("/");
   });
 });
+
+export {};
