@@ -1,7 +1,7 @@
 import React from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
-import useBearStore from "./store/example";
+import useBearStore from "./store/useBearStore";
 
 function App(): JSX.Element {
   const [bearCnt, increaseBear] = useBearStore((state) => [
