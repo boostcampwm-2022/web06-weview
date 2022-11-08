@@ -7,7 +7,8 @@
         "plugin:react/recommended",
         "standard-with-typescript",
         "plugin:prettier/recommended",
-        "prettier"
+        "prettier",
+        "plugin:cypress/recommended"
     ],
     "overrides": [
     ],
