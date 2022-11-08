@@ -2,7 +2,7 @@ name: "Dev Server Auto Deploy"
 on:
   push: # commit이 push되었을 때 이벤트가 발생
     branches: # -be-라는 문자열이 포함된 feature 브랜치에서만 동작
-      - feature/**-be-**
+      - feature/**-do-**
   workflow_dispatch: # POST 요청 및 버튼 클릭 등 임의 (수동) 실행
 jobs:
   deployment: # Job 고유 식별자 (구분용)
