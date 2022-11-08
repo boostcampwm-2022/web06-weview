@@ -27,6 +27,7 @@ jobs:
       - name: Build and Push Docker image # 도커 허브에 이미지 push
         uses: docker/build-push-action@v3
         with:
+          context: ./server
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/weview:latest
 
