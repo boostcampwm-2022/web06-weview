@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+if npx git-branch-is dev;
+then echo "dev 브랜치입니다. 커밋에 유의하세요."
+fi
