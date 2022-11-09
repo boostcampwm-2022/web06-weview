@@ -1,8 +1,6 @@
 # WeView
 
-<img src="https://img.shields.io/badge/node-16.18.1-339933?logo=node.js"> 
-<img src="https://img.shields.io/badge/NestJS-9.1.5-E0234E?logo=NestJS"> 
-<img src="https://img.shields.io/badge/TypeScript-4.8.4-3178C6?logo=typescript">
+<img src="https://img.shields.io/badge/node-16.18.1-339933?logo=node.js"> <img src="https://img.shields.io/badge/NestJS-9.1.5-E0234E?logo=NestJS"> <img src="https://img.shields.io/badge/TypeScript-4.8.4-3178C6?logo=typescript">
 
 우리가 함께하는 코드리뷰 커뮤니티, **WeView**
 
