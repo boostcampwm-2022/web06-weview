@@ -35,7 +35,7 @@ jobs:
                   AWS_ACCESS_KEY_ID: ${{ secrets.NCLOUD_BUCKET_ACCESS_KEY }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.NCLOUD_BUCKET_SECRET_KEY }}
                   AWS_DEFAULT_REGION: ap-northeast-2
-              run: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive ./dist s3://weview
+              run: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive ./dist s3://weview-dev
 
             - name: Deploy with SSH
               uses: appleboy/ssh-action@master
@@ -45,4 +45,4 @@ jobs:
                   password: ${{ secrets.NCLOUD_DEV_PASSWORD }}
                   port: ${{ secrets.NCLOUD_DEV_PORT }}
                   script: |
-                      aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive s3://weview ./client
+                      aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive s3://weview-dev ./client
