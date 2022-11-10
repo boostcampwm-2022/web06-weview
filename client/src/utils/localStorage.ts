@@ -15,9 +15,7 @@ const customLocalStorage: CustomLocalStorage = {
   getItem: (key) => {
     try {
       const storedValue = localStorage.getItem(key);
-      if (storedValue !== null) {
-        return JSON.parse(storedValue);
-      }
+      return storedValue !== null ? JSON.parse(storedValue) : null;
     } catch (e: any) {
       alert(e.message);
     }
