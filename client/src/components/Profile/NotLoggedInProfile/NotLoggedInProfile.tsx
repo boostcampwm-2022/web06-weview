@@ -19,7 +19,7 @@ const NotLoggedInProfile = (): JSX.Element => {
     const timer = setInterval(() => {
       const authCode = getAuthCode();
       if (authCode === null) {
-        return clearPopup();
+        return null;
       }
 
       // 여기에 서버 통신 로직을 추가
