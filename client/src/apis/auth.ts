@@ -1,5 +1,5 @@
 import axiosInstance from "./axios";
-import { AccessTokenInfo, UserInfo } from "../types/auth";
+import { AccessTokenInfo, UserInfo } from "@/types/auth";
 
 export const githubLogInAPI = async (code: string): Promise<UserInfo> => {
   const { data } = await axiosInstance.get(`/auth?code=${code}`);

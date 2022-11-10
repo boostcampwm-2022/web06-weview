@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 
 import "./NotLoggedInProfile.scss";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import { githubLogInAPI } from "../../../apis/auth";
-import useAuthStore from "../../../store/useAuthStore";
-import useOAuthPopup from "../../../hooks/useOAuthPopup";
+import { githubLogInAPI } from "@/apis/auth";
+import useAuthStore from "@/store/useAuthStore";
+import useOAuthPopup from "@/hooks/useOAuthPopup";
 
 const NotLoggedInProfile = (): JSX.Element => {
   const { popup, clearPopup, handleOpenOAuthPopup, getAuthCode } =

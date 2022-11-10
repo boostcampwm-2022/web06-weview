@@ -3,6 +3,7 @@ import React from "react";
 import "./UserProfile.scss";
 
 const UserProfile = (): JSX.Element => {
+  // TODO : RQ로 처리하도록 변경
   const user = {
     name: "shyuuuuni",
     avatar_url:

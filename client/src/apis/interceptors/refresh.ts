@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import { logOutAPI, tokenRefreshAPI } from "../auth";
-import customLocalStorage from "../../utils/localStorage";
+import customLocalStorage from "@/utils/localStorage";
 
 export const refreshInterceptor = async (
   config: AxiosRequestConfig
@@ -14,7 +14,7 @@ export const refreshInterceptor = async (
 
   const { accessToken, expiresIn: newExpiresIn } = await tokenRefreshAPI();
   if (config.headers !== undefined) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+    config.headers.Authorization = `Bearer ${String(accessToken)}`;
   }
   customLocalStorage.setItem("expiresIn", newExpiresIn);
   return config;
