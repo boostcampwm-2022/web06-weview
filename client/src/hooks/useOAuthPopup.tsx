@@ -17,17 +17,14 @@ const useOAuthPopup = (): OAuthPopup => {
     const height = 400;
     const left = window.screenX + (window.outerWidth - width) / 2;
     const top = window.screenY + (window.outerHeight - height) / 2.5;
-
-    // TODO : 상수로 빼기
     const url = import.meta.env.VITE_GITHUB_AUTH_SERVER_URL;
-
     const popup = window.open(
       url,
       title,
       `width=${width},height=${height},left=${left},top=${top}`
     );
     setPopup(popup);
-  }, []);
+  }, [popup]);
 
   // 팝업을 닫고 null 로 초기화합니다.
   const clearPopup = useCallback((): void => {
