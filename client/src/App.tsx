@@ -1,6 +1,6 @@
 import React from "react";
 import reactLogo from "./assets/react.svg";
-import "./App.css";
+import "./App.scss";
 import useBearStore from "./store/useBearStore";
 
 function App(): JSX.Element {
