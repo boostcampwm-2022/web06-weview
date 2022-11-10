@@ -2,6 +2,7 @@ import React from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.scss";
 import useBearStore from "./store/useBearStore";
+import Profile from "./components/Profile/Profile";
 
 function App(): JSX.Element {
   const [bearCnt, increaseBear] = useBearStore((state) => [
@@ -10,6 +11,7 @@ function App(): JSX.Element {
   ]);
   return (
     <div className="App">
+      <Profile />
       <div>
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
           <img src="/vite.svg" className="logo" alt="Vite logo" />
