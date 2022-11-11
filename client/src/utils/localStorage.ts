@@ -1,6 +1,7 @@
 interface CustomLocalStorage {
   getItem: (key: string) => string;
   setItem: (key: string, value: string) => void;
+  removeItem: (key: string) => void;
 }
 
 const customLocalStorage: CustomLocalStorage = {
@@ -16,6 +17,14 @@ const customLocalStorage: CustomLocalStorage = {
     try {
       const storedValue = localStorage.getItem(key);
       return storedValue !== null ? JSON.parse(storedValue) : null;
+    } catch (e: any) {
+      alert(e.message);
+    }
+  },
+
+  removeItem: (key) => {
+    try {
+      localStorage.removeItem(key);
     } catch (e: any) {
       alert(e.message);
     }
