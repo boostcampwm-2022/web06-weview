@@ -1,11 +1,12 @@
 name: "Server Test Build (Pull Request)"
+
 on:
   pull_request: # commit이 push되었을 때 이벤트가 발생
-    branches:
-      - [ "main", "dev" ]
+    branches: ["main", "dev"]
     paths:
       - "server/**"
   workflow_dispatch:
+
 jobs:
   integration: # 식별자
     name: integration #이름
@@ -30,4 +31,3 @@ jobs:
 
       - name: Build Files
         run: npm run build
-

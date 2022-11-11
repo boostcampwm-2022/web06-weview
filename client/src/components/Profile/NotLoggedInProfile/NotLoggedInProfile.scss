@@ -1,0 +1,18 @@
+.not-logged-in-profile {
+  background-color: #535bf2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 200px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  &__image {
+  }
+
+  &__alert {
+    flex-grow: 1;
+    text-align: left;
+  }
+}
