@@ -1,36 +1,22 @@
-import React from "react";
-import reactLogo from "./assets/react.svg";
+import React, { useRef } from "react";
 import "./App.scss";
-import useBearStore from "./store/useBearStore";
-import Profile from "./components/Profile/Profile";
+import { queryClient } from "@/react-query/queryClient";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { isEmpty } from "@/utils/typeCheck";
+import ReactRouter from "@/ReactRouter";
 
 function App(): JSX.Element {
-  const [bearCnt, increaseBear] = useBearStore((state) => [
-    state.bears,
-    state.increase,
-  ]);
+  const queryClientRef = useRef<QueryClient>();
+  if (isEmpty(queryClientRef.current)) {
+    // current 값이 null 값일 때 변경이 발생하더라도 재렌더링이 일어나지 않기 위해 useRef 사용
+    queryClientRef.current = new QueryClient();
+  }
   return (
-    <div className="App">
-      <Profile />
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => increaseBear(3)}>count is {bearCnt}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <ReactRouter />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 
