@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import "./NotLoggedInProfile.scss";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import { githubLogInAPI } from "@/apis/auth";
@@ -7,8 +6,7 @@ import useAuthStore from "@/store/useAuthStore";
 import useOAuthPopup from "@/hooks/useOAuthPopup";
 
 const NotLoggedInProfile = (): JSX.Element => {
-  const { popup, clearPopup, handleOpenOAuthPopup, getAuthCode } =
-    useOAuthPopup();
+  const { popup, clearPopup, handleOpenOAuthPopup } = useOAuthPopup();
   const login = useAuthStore((state) => state.login);
 
   useEffect(() => {
@@ -16,16 +14,19 @@ const NotLoggedInProfile = (): JSX.Element => {
       return;
     }
 
-    const timer = setInterval(() => {
-      const authCode = getAuthCode();
-      if (authCode === null) {
-        return null;
+    /**
+     * 팝업 Window 에서 Github OAuth Authorization Code 전달 이벤트를
+     * 수신하여 처리하는 이벤트 리스너
+     */
+    const githubOAuthCodeListener = (e: MessageEvent<any>): void => {
+      // 동일한 Origin 의 이벤트만 처리하도록 제한
+      if (e.origin !== window.location.origin) {
+        return;
       }
+      const { code } = e.data;
 
-      // 여기에 서버 통신 로직을 추가
-      githubLogInAPI(authCode)
+      githubLogInAPI(code)
         .then((userData) => {
-          console.log("user:", userData);
           login();
         })
         .catch((e) => {
@@ -34,11 +35,13 @@ const NotLoggedInProfile = (): JSX.Element => {
         .finally(() => {
           return clearPopup();
         });
-    }, 500);
+    };
+
+    window.addEventListener("message", githubOAuthCodeListener, false);
 
     return () => {
+      window.removeEventListener("message", githubOAuthCodeListener);
       clearPopup();
-      clearInterval(timer);
     };
   }, [popup]);
 
