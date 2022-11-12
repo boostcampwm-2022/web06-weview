@@ -10,7 +10,7 @@ const ReactRouter = (): React.ReactElement => {
       element: <App />,
     },
     {
-      path: "",
+      path: "/redirect/github",
       element: <LoginCallback />,
     },
   ]);
