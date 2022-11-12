@@ -1,0 +1,21 @@
+.login-callback {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+
+  &__spinner {
+    display: block;
+    width: 50px;
+    height: 50px;
+    border: 7px solid #D7D7D7;
+    border-radius: 50%;
+    border-top-color: #84CB8D;
+    animation: spin 1s linear infinite;
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
+}
