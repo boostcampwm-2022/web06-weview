@@ -41,10 +41,24 @@ export class AuthService {
     return userId;
   }
 
-  login(email: string) {
+  getTokens(email: string) {
+    const accessToken = this.jwtService.sign(
+      { email },
+      {
+        secret: 'ACCESS TOKEN TEMP KEY',
+        expiresIn: '30m',
+      },
+    );
+    const refreshToken = this.jwtService.sign(
+      { email },
+      {
+        secret: 'REFRESH TOKEN TEMP KEY',
+        expiresIn: '14d',
+      },
+    );
     return {
-      accessToken: null,
-      refreshToken: null,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     };
   }
 }

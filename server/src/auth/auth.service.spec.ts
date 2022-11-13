@@ -86,17 +86,23 @@ describe('AuthService', () => {
         TEST_PROFILE_URL,
       );
     }).rejects.toThrowError(); // TODO : 에러 구체화하기
-    // ToThrow와 ToThowError의 차이는 뭐야???
   });
 
   it('User에게 JWT토큰을 발행한다', async () => {
-    const { accessToken, refreshToken } = service.login('test@naver.com');
+    const REFRESH_EXPIRES_TIME = 60 * 60 * 24 * 14;
+    const ACCESS_EXPIRES_TIME = 60 * 30;
+    const { accessToken, refreshToken } = service.getTokens(
+      'sdafasfas@naver.com',
+    );
+    const accessPayload = jwtService.decode(accessToken);
+    const refreshPayload = jwtService.decode(refreshToken);
 
-    //accessToken, refreshToken을 까서 값이 올바른가 검사한다
-    // TODO 어떤 값이 리턴될지 정확하게 모르겠음
-    // const { payload } = jwtService.decode(accessToken);
-    // expect(payload.email).toBe('test@naver.com');
-    expect(refreshToken).not.toBeNull();
-    expect(refreshToken).not.toBeUndefined();
+    expect(accessPayload['email']).toBe('sdafasfas@naver.com');
+    expect(refreshPayload['email']).toBe('sdafasfas@naver.com');
+    expect(refreshPayload['exp'] - accessPayload['exp']).toBe(
+      REFRESH_EXPIRES_TIME - ACCESS_EXPIRES_TIME,
+    );
+    expect(accessPayload['iat']).not.toBeUndefined();
+    expect(refreshPayload['iat']).not.toBeUndefined();
   });
 });
