@@ -12,15 +12,34 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async inquery(email: string) {
+  async findByEmail(email: string) {
+    const user = await this.userRepository.findOneBy({
+      email: email,
+    });
+    if (user == null) {
+      return null;
+    }
     return {
-      email: null,
-      nickname: null,
-      profileUrl: null,
+      id: user.id,
+      email: user.email,
+      nickname: user.nickname,
+      profileUrl: user.profileUrl,
     };
   }
 
-  async join(email: string, nickname: string, avatarUrl: string) {}
+  async join(email: string, nickname: string, avatarUrl: string) {
+    const user = await this.findByEmail(email);
+    if (user != null) {
+      throw new Error('이미 존재하는 계정입니다');
+    }
+
+    const userId = await this.userRepository.save({
+      email: email,
+      nickname: nickname,
+      profileUrl: avatarUrl,
+    });
+    return userId;
+  }
 
   login(email: string) {
     return {
