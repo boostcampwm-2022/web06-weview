@@ -46,7 +46,11 @@ const NotLoggedInProfile = (): JSX.Element => {
   }, [popup]);
 
   return (
-    <div className="not-logged-in-profile" onClick={handleOpenOAuthPopup}>
+    <div
+      className="not-logged-in-profile"
+      onClick={handleOpenOAuthPopup}
+      data-cy={"login-btn"}
+    >
       <AccountCircleRoundedIcon
         className="not-logged-in-profile__image"
         fontSize="small"
