@@ -25,4 +25,5 @@ export interface PostInfo {
 export interface PostScroll {
   posts: PostInfo[];
   lastId: number;
+  isLast: boolean;
 }

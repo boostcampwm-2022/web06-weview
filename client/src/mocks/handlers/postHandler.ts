@@ -26,16 +26,16 @@ const posts = Array.from(Array(1024).keys()).map(
 
 export const postHandlers = [
   rest.get(`${baseUrl}api/posts`, (req, res, ctx) => {
-    const lastId = req.url.searchParams.get("lastId");
-    const size = Number(lastId);
-    const isLast = posts.length >= size + 1;
+    const lastId = Number(req.url.searchParams.get("lastId"));
+    const size = Number(req.url.searchParams.get("size"));
+    const isLast = posts.length <= lastId + size;
 
     return res(
       ctx.status(200),
       ctx.delay(1000),
       ctx.json({
-        posts: posts.slice(size, size + 1),
-        lastId: size + 1,
+        posts: posts.slice(lastId, lastId + size),
+        lastId: lastId + size,
         isLast,
       })
     );
