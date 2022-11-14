@@ -1,10 +1,22 @@
 import { HttpService } from '@nestjs/axios';
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Req,
+  Res,
+  Get,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AuthGuard } from '@nestjs/passport';
+import { Request, Response } from 'express';
 import { lastValueFrom } from 'rxjs';
 import { AuthService } from './auth.service';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -12,7 +24,7 @@ export class AuthController {
     private readonly httpService: HttpService,
   ) {}
 
-  @Get('github')
+  @Get('auth/github')
   async authorizeWithGithub(@Query('code') code: string) {
     // TODO Service 계층으로 분리하기
     const { data } = await lastValueFrom(
@@ -42,5 +54,21 @@ export class AuthController {
 
     const { email } = emails.filter((v) => v.primary)[0];
     const { avatar_url: avatarUrl, login: nickname } = githubInfo;
+  }
+
+  @Get('auth/refresh')
+  @UseGuards(AuthGuard('jwt-refresh'))
+  refreshTokens(@Req() req: Request, @Res() res: Response) {
+    const email = req.user['email'];
+
+    return this.authService.getTokens(email);
+  }
+
+  @Delete('logout')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  logout(@Req() req: Request, @Res() res: Response) {
+    res.clearCookie('refreshToken');
+    return;
   }
 }
