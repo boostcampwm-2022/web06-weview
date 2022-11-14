@@ -17,7 +17,7 @@ export class AuthService {
     private readonly httpService: HttpService,
   ) {}
 
-  async join(email: string, nickname: string, avatarUrl: string) {
+  async join(email: string, nickname: string, profileUrl: string) {
     const user = await this.findByEmail(email);
     if (user != null) {
       throw new Error('이미 존재하는 계정입니다');
@@ -25,7 +25,7 @@ export class AuthService {
     return await this.userRepository.save({
       email: email,
       nickname: nickname,
-      profileUrl: avatarUrl,
+      profileUrl: profileUrl,
     });
   }
 
@@ -85,8 +85,8 @@ export class AuthService {
       }),
     );
     const { email } = emails.filter((v) => v.primary)[0];
-    const { avatar_url: avatarUrl, login: nickname } = githubInfo;
-    return { email, nickname, avatarUrl };
+    const { avatar_url: profileUrl, login: nickname } = githubInfo;
+    return { email, nickname, profileUrl };
   }
 
   private async getGithubToken(code: string) {
