@@ -1,8 +1,6 @@
 @import url("https://webfontworld.github.io/gmarket/GmarketSans.css");
 @import "./src/components/MainNav/MainNav.scss";
-
-
-
+@import "./src/components/WriteModal/WriteModal.scss";
 
 html, body {
   margin: 0;
@@ -17,8 +15,6 @@ html, body {
   max-width: 1280px;
   width: 100%;
   height: 100%;
-
   padding: 0 4em;
   color: $text-color;
 }
-
