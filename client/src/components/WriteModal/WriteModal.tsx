@@ -2,6 +2,8 @@ import React from "react";
 import useModalStore from "@/store/useModalStore";
 import TitleInput from "./TitleInput/TitleInput";
 import CloseButton from "@/components/WriteModal/CloseButton/CloseButton";
+import SnapShotNav from "@/components/WriteModal/SnapShotNav/SnapShotNav";
+import CodeEditor from "@/components/WriteModal/CodeEditor/CodeEditor";
 
 const WriteModal = (): JSX.Element => {
   const { isOpened } = useModalStore((state) => ({
@@ -11,10 +13,10 @@ const WriteModal = (): JSX.Element => {
   return (
     <div className={isOpened ? "modal open" : "modal close"}>
       <CloseButton />
-      {/* <SnapShotNav /> */}
-      <form>
+      <SnapShotNav />
+      <form className="writing-form">
         <TitleInput />
-        {/* <Editor /> */}
+        <CodeEditor />
       </form>
     </div>
   );

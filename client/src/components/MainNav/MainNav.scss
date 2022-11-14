@@ -12,4 +12,9 @@
   min-width: 300px !important;
   box-shadow: $box-shadow;
   padding: 0 2em;
+  transition: all 0.5s ease-in-out;
+}
+
+.hidden-nav{
+  visibility: hidden;
 }
