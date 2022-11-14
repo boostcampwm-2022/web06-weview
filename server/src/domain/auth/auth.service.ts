@@ -29,19 +29,18 @@ export class AuthService {
     });
   }
 
-  // TODO 직관적으로 이름 변경하기
-  getTokens(id: number) {
+  createTokens(id: number) {
     const accessToken = this.jwtService.sign(
       { id },
       {
-        secret: 'ACCESS TOKEN TEMP KEY',
+        secret: this.configService.get<string>('JWT_SECRET'),
         expiresIn: '30m',
       },
     );
     const refreshToken = this.jwtService.sign(
       { id },
       {
-        secret: 'REFRESH TOKEN TEMP KEY', //TODO env로 이동, 새로운 문자열 만들기
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
         expiresIn: '14d',
       },
     );

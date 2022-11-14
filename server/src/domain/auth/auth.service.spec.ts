@@ -97,7 +97,7 @@ describe('AuthService', () => {
   it('User에게 JWT토큰을 발행한다', async () => {
     const REFRESH_EXPIRES_TIME = 60 * 60 * 24 * 14;
     const ACCESS_EXPIRES_TIME = 60 * 30;
-    const { accessToken, refreshToken } = service.getTokens(12311);
+    const { accessToken, refreshToken } = service.createTokens(12311);
     const accessPayload = jwtService.decode(accessToken);
     const refreshPayload = jwtService.decode(refreshToken);
 

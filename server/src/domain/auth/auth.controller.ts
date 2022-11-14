@@ -34,9 +34,8 @@ export class AuthController {
     if (user == null) {
       user = await this.authService.join(email, nickname, avatarUrl);
     }
-    const { accessToken, refreshToken, expiresIn } = this.authService.getTokens(
-      user.id,
-    );
+    const { accessToken, refreshToken, expiresIn } =
+      this.authService.createTokens(user.id);
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -59,7 +58,7 @@ export class AuthController {
   ): RefreshTokensDto {
     const email = req.user['email'];
     const { accessToken, refreshToken, expiresIn } =
-      this.authService.getTokens(email);
+      this.authService.createTokens(email);
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
     });
