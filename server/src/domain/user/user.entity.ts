@@ -8,7 +8,7 @@ export class User extends BaseTimeEntity {
   id: number;
 
   @Column()
-  username!: string;
+  nickname!: string;
 
   @Column()
   profileUrl!: string;

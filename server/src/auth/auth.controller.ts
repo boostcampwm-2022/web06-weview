@@ -14,6 +14,7 @@ export class AuthController {
 
   @Get('github')
   async authorizeWithGithub(@Query('code') code: string) {
+    // TODO Service 계층으로 분리하기
     const { data } = await lastValueFrom(
       this.httpService.post('https://github.com/login/oauth/access_token', {
         client_id: this.configService.get<string>('AUTH_GITHUB_CLIENT_ID'),
