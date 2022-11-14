@@ -11,7 +11,14 @@ const TitleInput = (): JSX.Element => {
     setTitle(e.target.value);
   }, []);
 
-  return <input value={title} onChange={changeTitle} />;
+  return (
+    <input
+      className="title"
+      value={title}
+      onChange={changeTitle}
+      placeholder="제목을 입력해주세요"
+    />
+  );
 };
 
 export default TitleInput;
