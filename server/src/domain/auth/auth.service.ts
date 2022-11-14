@@ -41,7 +41,7 @@ export class AuthService {
     const refreshToken = this.jwtService.sign(
       { id },
       {
-        secret: 'REFRESH TOKEN TEMP KEY',
+        secret: 'REFRESH TOKEN TEMP KEY', //TODO env로 이동, 새로운 문자열 만들기
         expiresIn: '14d',
       },
     );

@@ -12,6 +12,10 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
+import {
+  AuthorizeWithGithubDto,
+  RefreshTokensDto,
+} from './dto/controller-response.dto';
 
 @Controller()
 export class AuthController {
@@ -21,7 +25,7 @@ export class AuthController {
   async authorizeWithGithub(
     @Res({ passthrough: true }) res: Response,
     @Query('code') code: string,
-  ) {
+  ): Promise<AuthorizeWithGithubDto> {
     const userInfo = await this.authService.getUserInfoUsingGithub(code);
 
     const { email, nickname, avatarUrl } = userInfo;
@@ -52,7 +56,7 @@ export class AuthController {
   refreshTokens(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ) {
+  ): RefreshTokensDto {
     const email = req.user['email'];
     const { accessToken, refreshToken, expiresIn } =
       this.authService.getTokens(email);
@@ -60,7 +64,7 @@ export class AuthController {
       httpOnly: true,
     });
     return {
-      accessToken,
+      accessToken: accessToken,
       expiresIn: expiresIn * 1000,
     };
   }
