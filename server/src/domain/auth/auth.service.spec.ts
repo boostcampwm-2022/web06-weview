@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../domain/user/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from '../user/user.entity';
 
 // TODO 의문 : 서비스 계층 테스트를 할 때 Repository를 Mocking 해야하나?
 //  Mocking에 대해 학습해보기
