@@ -1,13 +1,13 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import LoginCallback from "@/components/LoginCallback/LoginCallback";
+import LoginCallback from "@/pages/LoginCallback/LoginCallback";
 import React from "react";
-import Profile from "@/components/Profile/Profile";
+import Main from "@/pages/Main";
 
 const ReactRouter = (): React.ReactElement => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Profile />,
+      element: <Main />,
     },
     {
       path: "/redirect/github",

@@ -1,7 +1,24 @@
+@import url("https://webfontworld.github.io/gmarket/GmarketSans.css");
+@import "./src/components/MainNav/MainNav.scss";
+
+
+
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
 #root {
+  display: flex;
+  align-items: center;
+  font-family: 'GmarketSans';
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  height: 100%;
+
+  padding: 0 4em;
+  color: $text-color;
 }
 
