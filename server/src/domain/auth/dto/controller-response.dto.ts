@@ -7,7 +7,7 @@ export class AuthorizeWithGithubDto {
   accessToken: string;
   expiresIn: number;
   id: number;
-  username: string;
+  nickname: string;
   email: string;
-  avatarUrl: string;
+  profileUrl: string;
 }

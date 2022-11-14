@@ -28,12 +28,13 @@ export class AuthController {
   ): Promise<AuthorizeWithGithubDto> {
     const userInfo = await this.authService.getUserInfoUsingGithub(code);
 
-    const { email, nickname, avatarUrl } = userInfo;
+    const { email, nickname, profileUrl } = userInfo;
 
     let user = await this.authService.findByEmail(email);
     if (user == null) {
-      user = await this.authService.join(email, nickname, avatarUrl);
+      user = await this.authService.join(email, nickname, profileUrl);
     }
+
     const { accessToken, refreshToken, expiresIn } =
       this.authService.createTokens(user.id);
 
@@ -44,9 +45,9 @@ export class AuthController {
       accessToken: accessToken,
       expiresIn: expiresIn * 1000,
       id: user.id,
-      username: user.nickname,
+      nickname: user.nickname,
       email: user.email,
-      avatarUrl: user.profileUrl,
+      profileUrl: user.profileUrl,
     };
   }
 
@@ -57,11 +58,14 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ): RefreshTokensDto {
     const email = req.user['email'];
+
     const { accessToken, refreshToken, expiresIn } =
       this.authService.createTokens(email);
+
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
     });
+
     return {
       accessToken: accessToken,
       expiresIn: expiresIn * 1000,
