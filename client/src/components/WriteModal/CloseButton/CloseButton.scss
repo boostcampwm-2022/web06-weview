@@ -1,0 +1,21 @@
+@import "constants/_library.scss";
+
+.close-btn{
+  right: 1em;
+  top: 1em;
+  width: 4em;
+  height: 4em;
+  position: absolute;
+  cursor: pointer;
+  background: $error none;
+  border: medium none;
+  border-radius: 10000px;
+  border-spacing: 0;
+  box-shadow: $button-shadow;
+
+  &__icon{
+    color: $weview-white;
+    width: 1.5em !important;
+    height: 1.5em !important;
+  }
+}
