@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import useModalStore from "@/store/useModalStore";
 import CloseIcon from "@mui/icons-material/Close";
+import TitleInput from "./TitleInput/TitleInput";
 
 const WriteModal = (): JSX.Element => {
   const { isOpened, closeModal } = useModalStore((state) => ({
@@ -17,6 +18,11 @@ const WriteModal = (): JSX.Element => {
       <button onClick={clickCloseBtn} className={"modal__close"}>
         <CloseIcon className={"modal__close__icon"} />
       </button>
+      {/* <SnapShotNav /> */}
+      <form>
+        <TitleInput />
+        {/* <Editor /> */}
+      </form>
     </div>
   );
 };
