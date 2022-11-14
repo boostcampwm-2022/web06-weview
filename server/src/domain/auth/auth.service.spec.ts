@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../user/user.entity';
+import { HttpModule } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 // TODO 의문 : 서비스 계층 테스트를 할 때 Repository를 Mocking 해야하나?
 //  Mocking에 대해 학습해보기
@@ -34,17 +36,28 @@ const mockRepository = () => ({
   }),
 });
 
+const mockConfigService = () => ({
+  get: jest.fn((key: string) => {
+    return key;
+  }),
+});
+
 describe('AuthService', () => {
   let service: AuthService;
   let jwtService: JwtService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       providers: [
         AuthService,
         {
           provide: getRepositoryToken(User),
           useValue: mockRepository(),
+        },
+        {
+          provide: ConfigService,
+          useValue: mockConfigService(),
         },
         JwtService,
       ],
