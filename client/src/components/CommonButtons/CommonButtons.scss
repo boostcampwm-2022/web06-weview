@@ -1,0 +1,28 @@
+@import 'constants/_library.scss';
+
+@mixin weview-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4.5rem;
+  height: 2.3rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: normal;
+  background: $weview-off-white;
+  border-radius: 0.9em;
+}
+
+@mixin green-button {
+  @include weview-button;
+  color: $primary-light;
+  border: 1px solid $primary-light;
+  &:hover {
+    border: 1px solid $primary;
+    color: $primary;
+  }
+  &:focus{
+    background-color: $primary;
+    color: $weview-off-white;
+  }
+}

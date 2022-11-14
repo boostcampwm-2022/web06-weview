@@ -1,9 +1,8 @@
 import React from "react";
 import useModalStore from "@/store/useModalStore";
-import TitleInput from "./TitleInput/TitleInput";
-import CloseButton from "@/components/WriteModal/CloseButton/CloseButton";
-import SnapShotNav from "@/components/WriteModal/SnapShotNav/SnapShotNav";
-import CodeEditor from "@/components/WriteModal/CodeEditor/CodeEditor";
+import CloseButton from "./CloseButton/CloseButton";
+import SnapShotNav from "./SnapShotNav/SnapShotNav";
+import WritingForm from "./WritingForm/WritingForm";
 
 const WriteModal = (): JSX.Element => {
   const { isOpened } = useModalStore((state) => ({
@@ -14,10 +13,7 @@ const WriteModal = (): JSX.Element => {
     <div className={isOpened ? "modal open" : "modal close"}>
       <CloseButton />
       <SnapShotNav />
-      <form className="writing-form">
-        <TitleInput />
-        <CodeEditor />
-      </form>
+      <WritingForm />
     </div>
   );
 };

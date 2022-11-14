@@ -1,8 +1,8 @@
 @import "constants/_library.scss";
 @import "./CloseButton/CloseButton.scss";
 @import "./SnapShotNav/SnapShotNav.scss";
-@import "./TitleInput/TitleInput.scss";
-@import "./CodeEditor/CodeEditor.scss";
+@import "WritingForm/WritingForm.scss";
+
 
 .modal{
   margin-top: 2em;
@@ -29,9 +29,3 @@
   top: 100%;
 }
 
-.writing-form{
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 2em;
-}
