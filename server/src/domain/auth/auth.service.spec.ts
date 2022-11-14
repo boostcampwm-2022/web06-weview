@@ -25,7 +25,12 @@ const mockRepository = () => ({
     };
   }),
   save: jest.fn((obj) => {
-    return TEST_ID;
+    return {
+      id: TEST_ID,
+      email: obj.email,
+      nickname: TEST_NICKNAME,
+      profileUrl: TEST_PROFILE_URL,
+    };
   }),
 });
 
@@ -71,11 +76,12 @@ describe('AuthService', () => {
   });
 
   it('DB에 존재하지 않는 계정은 정상적으로 회원가입이 된다', async () => {
-    const userId = await service.join(
+    const user = await service.join(
       'not_register@naver.com',
       TEST_NICKNAME,
       TEST_PROFILE_URL,
     );
+    expect(user.email).toBe('not_register@naver.com');
   });
 
   it('DB에 계정이 존재하면 예외를 반환한다', async () => {
@@ -91,14 +97,12 @@ describe('AuthService', () => {
   it('User에게 JWT토큰을 발행한다', async () => {
     const REFRESH_EXPIRES_TIME = 60 * 60 * 24 * 14;
     const ACCESS_EXPIRES_TIME = 60 * 30;
-    const { accessToken, refreshToken } = service.getTokens(
-      'sdafasfas@naver.com',
-    );
+    const { accessToken, refreshToken } = service.getTokens(12311);
     const accessPayload = jwtService.decode(accessToken);
     const refreshPayload = jwtService.decode(refreshToken);
 
-    expect(accessPayload['email']).toBe('sdafasfas@naver.com');
-    expect(refreshPayload['email']).toBe('sdafasfas@naver.com');
+    expect(accessPayload['id']).toBe(12311);
+    expect(refreshPayload['id']).toBe(12311);
     expect(refreshPayload['exp'] - accessPayload['exp']).toBe(
       REFRESH_EXPIRES_TIME - ACCESS_EXPIRES_TIME,
     );

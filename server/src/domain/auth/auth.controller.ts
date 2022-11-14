@@ -25,7 +25,10 @@ export class AuthController {
   ) {}
 
   @Get('auth/github')
-  async authorizeWithGithub(@Query('code') code: string) {
+  async authorizeWithGithub(
+    @Res({ passthrough: true }) res: Response,
+    @Query('code') code: string,
+  ) {
     // TODO Service 계층으로 분리하기
     const { data } = await lastValueFrom(
       this.httpService.post('https://github.com/login/oauth/access_token', {
@@ -54,20 +57,48 @@ export class AuthController {
 
     const { email } = emails.filter((v) => v.primary)[0];
     const { avatar_url: avatarUrl, login: nickname } = githubInfo;
+    let user = await this.authService.findByEmail(email);
+    if (user == null) {
+      user = await this.authService.join(email, nickname, avatarUrl);
+    }
+    const { accessToken, refreshToken, expiresIn } = this.authService.getTokens(
+      user.id,
+    );
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+    });
+    return {
+      accessToken: accessToken,
+      expiresIn: expiresIn * 1000,
+      id: user.id,
+      username: user.nickname,
+      email: user.email,
+      avatarUrl: user.profileUrl,
+    };
   }
 
   @Get('auth/refresh')
   @UseGuards(AuthGuard('jwt-refresh'))
-  refreshTokens(@Req() req: Request, @Res() res: Response) {
+  refreshTokens(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const email = req.user['email'];
-
-    return this.authService.getTokens(email);
+    const { accessToken, refreshToken, expiresIn } =
+      this.authService.getTokens(email);
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+    });
+    return {
+      accessToken,
+      expiresIn: expiresIn * 1000,
+    };
   }
 
   @Delete('logout')
-  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
-  logout(@Req() req: Request, @Res() res: Response) {
+  logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     res.clearCookie('refreshToken');
     return;
   }
