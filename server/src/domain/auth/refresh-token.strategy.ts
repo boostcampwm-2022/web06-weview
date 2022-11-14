@@ -23,8 +23,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  validate(req: Request, payload: any) {
-    const refreshToken = req.cookies['refreshToken'];
-    return { ...payload, refreshToken };
+  validate(payload: any) {
+    return payload;
   }
 }
