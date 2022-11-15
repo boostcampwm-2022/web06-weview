@@ -29,3 +29,16 @@ export interface PostScroll {
   lastId: number;
   isLast: boolean;
 }
+
+export interface WritingResponse {
+  message: string;
+}
+
+export interface Writing {
+  title: string;
+  content: string;
+  code: string;
+  language: string;
+  images: string[];
+  tags?: string[];
+}
