@@ -1,5 +1,8 @@
 .post-bar {
-  max-width: 540px;
-  height: 100rem;
   background-color: red;
+  overflow: scroll;
+
+  &__target {
+    height: 1px;
+  }
 }

@@ -1,42 +1,38 @@
-import React, { Fragment } from "react";
+import React, { useMemo } from "react";
 
 import "./PostBar.scss";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchPost } from "@/apis/post";
 import Post from "@/components/PostBar/Post/Post";
+import usePostInfiniteScroll from "@/hooks/usePostInfiniteScroll";
+import useIntersect from "@/hooks/useIntersect";
+import useRelativeSize from "@/hooks/useRelativeSize";
 
 const PostBar = (): JSX.Element => {
-  const { data, status, fetchNextPage } = useInfiniteQuery(
-    ["posts"],
-    async ({ pageParam = 1 }) => await fetchPost(pageParam),
-    {
-      getNextPageParam: (lastPost, posts) => lastPost.lastId,
-    }
+  const { data, isFetching, onIntersect } = usePostInfiniteScroll({ size: 5 });
+  const { windowSize } = useRelativeSize({
+    minWidth: 200,
+    minHeight: 308,
+    heightRatio: 308 / 200,
+  });
+  const ref = useIntersect(onIntersect);
+
+  // 포스트 바에 표시할 포스트 정보 목록
+  const postInfos = useMemo(
+    () =>
+      data != null ? data.pages.flatMap((postScroll) => postScroll.posts) : [],
+    [data]
   );
 
-  const fetchNext = (): void => {
-    fetchNextPage()
-      .then(() => {})
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  if (status === "loading") return <div>Loading...</div>;
-  if (status === "error") return <div>error...</div>;
-
   return (
-    <>
-      목록:
-      {data?.pages.map((postScroll, index) => (
-        <Fragment key={index}>
-          {postScroll.posts.map((post) => {
-            return <Post key={post.id} postInfo={post} />;
-          })}
-        </Fragment>
+    <div
+      className="post-bar"
+      style={{ width: windowSize.width, height: windowSize.height }}
+    >
+      {postInfos.map((postInfo) => (
+        <Post key={postInfo.id} postInfo={postInfo} />
       ))}
-      <button onClick={fetchNext}>버튼</button>
-    </>
+      {isFetching && <div>Loading...</div>}
+      <div className="post-bar__target" ref={ref} />
+    </div>
   );
 };
 
