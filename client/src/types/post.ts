@@ -15,11 +15,13 @@ export interface Review {
 export interface PostInfo {
   id: string;
   title: string;
-  contents: string;
+  content: string;
   imageUrls: string[];
   user: User;
   tags: string[];
   reviews: Review[];
+  updatedAt: string;
+  code: string;
 }
 
 export interface PostScroll {

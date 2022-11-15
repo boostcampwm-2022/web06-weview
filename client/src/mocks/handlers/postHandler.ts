@@ -8,7 +8,7 @@ const posts = Array.from(Array(1024).keys()).map(
   (id): PostInfo => ({
     id: `${id}`,
     title: `title${id}`,
-    contents: `post_contents_${id}`,
+    content: `post_contents_${id}`,
     imageUrls: [
       "http://placeimg.com/640/640/animals",
       "http://placeimg.com/640/640/animals",
@@ -21,6 +21,8 @@ const posts = Array.from(Array(1024).keys()).map(
     },
     tags: [`tag1`, `tag2`],
     reviews: [],
+    updatedAt: "2022-11-14 16:42:56.124939",
+    code: `sourcecode: ~~~~~~~~~~~~~~~~~~`,
   })
 );
 
