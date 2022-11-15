@@ -1,0 +1,11 @@
+.title{
+  width: 90%;
+  height: 2em;
+  border: none;
+  font-size: 1.2em;
+  background: none;
+  &::placeholder{
+    font-size: 1em;
+    font-family: GmarketSans;
+  }
+}

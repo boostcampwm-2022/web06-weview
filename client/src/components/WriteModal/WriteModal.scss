@@ -1,0 +1,31 @@
+@import "constants/_library.scss";
+@import "./CloseButton/CloseButton.scss";
+@import "./SnapShotNav/SnapShotNav.scss";
+@import "WritingForm/WritingForm.scss";
+
+
+.modal{
+  margin-top: 2em;
+  position: absolute;
+  display: flex;
+  width: 90%;
+  height: calc(100% - 4em);
+  background-color: $weview-off-white;
+  box-shadow: $button-shadow;
+  transition: all 600ms cubic-bezier(0.86, 0, 0.3, 1);
+  border-radius: 2em;
+  -webkit-box-shadow: 0 3px 1px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 3px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  transition: all 600ms cubic-bezier(0.86, 0, 0.3, 1);
+  z-index: 5000;
+}
+
+.open{
+  top: 0;
+}
+
+.close{
+  top: 100%;
+}
+

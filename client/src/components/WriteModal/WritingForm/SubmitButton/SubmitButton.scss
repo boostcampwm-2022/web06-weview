@@ -1,0 +1,5 @@
+@import "../../../CommonButtons/CommonButtons.scss";
+
+.submit-button{
+  @include green-button;
+}

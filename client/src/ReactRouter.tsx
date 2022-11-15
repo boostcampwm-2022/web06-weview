@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import LoginCallback from "@/components/LoginCallback/LoginCallback";
+import LoginCallback from "@/pages/LoginCallback/LoginCallback";
 import React from "react";
 import Main from "@/pages/Main";
 

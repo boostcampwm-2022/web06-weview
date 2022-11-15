@@ -1,0 +1,20 @@
+@import "./Menu/Menu.scss";
+@import "./Filter/Filter.scss";
+
+@import 'constants/_library.scss';
+
+.nav{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 30%;
+  height: 90%;
+  min-width: 300px !important;
+  box-shadow: $box-shadow;
+  padding: 0 2em;
+  transition: all 0.5s ease-in-out;
+}
+
+.hidden-nav{
+  visibility: hidden;
+}
