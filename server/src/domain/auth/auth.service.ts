@@ -37,6 +37,7 @@ export class AuthService {
         expiresIn: '30m',
       },
     );
+
     const refreshToken = this.jwtService.sign(
       { id },
       {
@@ -44,11 +45,13 @@ export class AuthService {
         expiresIn: '14d',
       },
     );
+
     const payload = this.jwtService.decode(accessToken);
+
     return {
       accessToken: accessToken,
       refreshToken: refreshToken,
-      expiresIn: payload['exp'],
+      expiresIn: payload['exp'] * 1000,
     };
   }
 
@@ -56,9 +59,11 @@ export class AuthService {
     const user = await this.userRepository.findOneBy({
       email: email,
     });
+
     if (user == null) {
       return null;
     }
+
     return {
       id: user.id,
       email: user.email,

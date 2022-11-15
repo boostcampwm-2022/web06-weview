@@ -43,7 +43,7 @@ export class AuthController {
     });
     return {
       accessToken: accessToken,
-      expiresIn: expiresIn * 1000,
+      expiresIn: expiresIn,
       id: user.id,
       nickname: user.nickname,
       email: user.email,
@@ -68,7 +68,7 @@ export class AuthController {
 
     return {
       accessToken: accessToken,
-      expiresIn: expiresIn * 1000,
+      expiresIn: expiresIn,
     };
   }
 
