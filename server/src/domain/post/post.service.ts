@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class PostService {
+  private WANT_NEW_DATA = -1;
   constructor(
       @InjectRepository(Post)
       private readonly postRepository: Repository<Post>,
@@ -74,8 +75,15 @@ export class PostService {
     }
   }
 
-  loadPostList(lastId: number, size: number) {
-    return [];
+  async loadPostList(lastId: number, size: number): Promise<Post[]> {
+    const queryBuilder = this.postRepository
+      .createQueryBuilder('post')
+      .orderBy('id', 'DESC');
+    if (lastId != this.WANT_NEW_DATA) {
+      queryBuilder.where('post.id < :lastId', { lastId: lastId });
+    }
+    const result = await queryBuilder.take(size).getMany();
+    return result;
   }
 
 }
