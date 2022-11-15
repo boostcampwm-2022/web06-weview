@@ -12,13 +12,10 @@ const CodeEditor = (): JSX.Element => {
     setHighlightedCode(
       hljs.highlightAuto(code).value.replace(/" "/g, "&nbsp; ")
     );
-  }, []);
+  }, [code]);
 
   const changeCode = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     setCode(e.target.value);
-    setHighlightedCode(
-      hljs.highlightAuto(e.target.value).value.replace(/" "/g, "&nbsp; ")
-    );
   }, []);
 
   const createMarkUpCode = (code: string): { __html: string } => ({
