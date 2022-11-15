@@ -12,7 +12,7 @@ const CodeEditor = (): JSX.Element => {
     setHighlightedCode(
       hljs.highlightAuto(code).value.replace(/" "/g, "&nbsp; ")
     );
-  });
+  }, []);
 
   const changeCode = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     setCode(e.target.value);
