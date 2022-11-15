@@ -15,14 +15,20 @@
 
 @mixin green-button {
   @include weview-button;
-  color: $primary-light;
-  border: 1px solid $primary-light;
-  &:hover {
-    border: 1px solid $primary;
-    color: $primary;
-  }
-  &:focus{
+  color: $primary;
+  border: 1px solid $primary;
+  &:hover{
     background-color: $primary;
+    color: $weview-off-white;
+  }
+}
+
+@mixin red-button {
+  @include weview-button;
+  color: $error;
+  border: 1px solid $error;
+  &:hover {
+    background-color: $error;
     color: $weview-off-white;
   }
 }
