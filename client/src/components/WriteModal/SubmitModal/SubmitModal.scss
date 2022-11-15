@@ -1,4 +1,5 @@
 @import "../../CommonButtons/CommonButtons.scss";
+@import "./ContentArea/ContentArea.scss";
 
 .submit-modal{
   display: flex;
@@ -19,16 +20,6 @@
     font-weight: 500;
     font-size: 1.3rem;
   }
-  &__content{
-    margin-top: 1em;
-    width: 80%;
-    height: 50%;
-    border: 3px solid $primary;
-    border-radius: 1em;
-    padding: 0.5em;
-    font-size: 1.3rem;
-  }
-
   &__button{
     display: flex;
     margin-top: 1em;

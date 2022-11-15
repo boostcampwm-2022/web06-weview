@@ -1,5 +1,6 @@
 import React from "react";
 import useModalStore from "@/store/useModalStore";
+import ContentArea from "@/components/WriteModal/SubmitModal/ContentArea/ContentArea";
 
 const SubmitModal = (): JSX.Element => {
   const { isOpened, closeModal } = useModalStore((state) => ({
@@ -16,8 +17,7 @@ const SubmitModal = (): JSX.Element => {
       }
     >
       <h2 className="submit-modal__header">제출하기</h2>
-      <label htmlFor="content">코드에 대한 소개나 질문등을 입력해주세요</label>
-      <textarea id="content" className="submit-modal__content" />
+      <ContentArea />
       <div className="submit-modal__button">
         <button className="submit-modal__button--close" onClick={closeModal}>
           닫기

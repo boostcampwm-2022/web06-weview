@@ -6,6 +6,8 @@ interface BearStore {
   setTitle: (title: string) => void;
   code: string;
   setCode: (code: string) => void;
+  content: string;
+  setContent: (code: string) => void;
 }
 
 const useBearStore = create<BearStore>()(
@@ -16,6 +18,8 @@ const useBearStore = create<BearStore>()(
         setTitle: (title: string) => set({ title }),
         code: "",
         setCode: (code: string) => set({ code }),
+        content: "",
+        setContent: (content: string) => set({ content }),
       }),
       {
         name: "writing-store",
