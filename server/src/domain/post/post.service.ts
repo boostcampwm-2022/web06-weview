@@ -5,10 +5,15 @@ import { Image } from '../image/image.entity';
 import { PostToTag } from '../tag/post-to-tag.entity';
 import { Tag } from '../tag/tag.entity';
 import { User } from '../user/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly dataSource: DataSource) {}
+  constructor(
+      @InjectRepository(Post)
+      private readonly postRepository: Repository<Post>,
+      private readonly dataSource: DataSource) {}
 
   async write(
     userId: number,
@@ -68,4 +73,9 @@ export class PostService {
       await queryRunner.release();
     }
   }
+
+  loadPostList(lastId: number, size: number) {
+    return [];
+  }
+
 }

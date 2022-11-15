@@ -10,6 +10,10 @@ import { PostModule } from './domain/post/post.module';
 import { PostToTag } from './domain/tag/post-to-tag.entity';
 import { Tag } from './domain/tag/tag.entity';
 import { Image } from './domain/image/image.entity';
+import { Review } from './domain/review.entity';
+import { Likes } from './domain/likes.entity';
+import { Report } from './domain/report.entity';
+import { PostTag } from './domain/post-tag.entity';
 
 @Module({
   imports: [
@@ -26,7 +30,7 @@ import { Image } from './domain/image/image.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Post, Image, Tag, PostToTag],
+        entities: [User, Post, Image, Likes, Tag, PostToTag, PostTag, Report, Review],
         synchronize: true,
         logging: true,
       }),
