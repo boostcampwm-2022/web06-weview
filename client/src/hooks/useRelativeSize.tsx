@@ -58,6 +58,8 @@ const useRelativeSize = ({
       setWindowSize({ width, height });
     };
 
+    resizeEventListener();
+
     window.addEventListener("resize", resizeEventListener);
 
     return () => {
