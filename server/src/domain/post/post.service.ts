@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './post.entity';
 import { Repository } from 'typeorm';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
+import { PostTag } from '../post-tag.entity';
 
 @Injectable()
 export class PostService {
@@ -10,6 +11,8 @@ export class PostService {
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
+    @InjectRepository(PostTag)
+    private readonly postTagRepository: Repository<PostTag>,
   ) {}
 
   async loadPostList(
@@ -45,7 +48,19 @@ export class PostService {
     }
 
     // TODO 리뷰 개수로 필터링
-    // TODO 태그를 보고 필터링
+
+    // 태그를 보고 필터링
+    if (tags.length !== 0) {
+      const postIdsFilteringTags = await this.findPostIdsFilteringTags(tags);
+      if (postIdsFilteringTags.length == 0) {
+        return new LoadPostListResponseDto([], true); // 결과가 없음. 이후 로직 실행할 필요 x
+      }
+      queryBuilder.andWhere('post.id in (:postIdsFilteringTags)', {
+        postIdsFilteringTags: postIdsFilteringTags,
+      });
+    }
+
+    // lastId로 필터링
     if (lastId != this.WANT_NEW_DATA) {
       queryBuilder.andWhere('post.id < :lastId', { lastId: lastId });
     }
