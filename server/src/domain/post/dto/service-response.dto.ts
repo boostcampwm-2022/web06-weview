@@ -8,7 +8,7 @@ export class LoadPostListResponseDto {
 
   constructor(posts: Post[], isLast: boolean) {
     this.posts = posts.map((post) => new EachPostResponseDto(post));
-    this.lastId = posts.slice(-1)[0].id;
+    this.lastId = posts.length == 0 ? -1 : posts.slice(-1)[0].id;
     this.isLast = isLast;
   }
 }
