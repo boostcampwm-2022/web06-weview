@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "jest",
-    "prepare": "cd .. && husky install client/.husky",
+    "prepare": "chmod ug+x .husky/* && cd .. && husky install server/.husky",
     "checkTs": "tsc --noEmit"
   },
   "dependencies": {
