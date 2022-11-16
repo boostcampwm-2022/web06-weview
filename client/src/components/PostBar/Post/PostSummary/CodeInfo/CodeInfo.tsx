@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { PostContext } from "@/components/PostBar/Post/Post";
-
-// TODO: 지원's reg 유틸리티에 포함하기
-const LINE_COUNT_REGEX = /\r\n|\r|\n/;
+import { LINE_COUNT_REGEX } from "@/utils/regExpression";
 
 const CodeInfo = (): JSX.Element => {
   const { code, imageUrls } = useContext(PostContext);
