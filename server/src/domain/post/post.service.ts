@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { Post } from './post.entity';
 import { Image } from '../image/image.entity';
 import { PostToTag } from '../tag/post-to-tag.entity';
@@ -43,10 +42,8 @@ export class PostService {
 
       await Promise.all(
         tags.map(async (tag) => {
-          let tagEntity = await queryRunner.manager.findOne(Tag, {
-            where: {
-              name: tag,
-            },
+          let tagEntity = await queryRunner.manager.findOneBy(Tag, {
+            name: tag,
           });
 
           if (tagEntity === null) {
@@ -63,6 +60,7 @@ export class PostService {
       );
 
       await queryRunner.commitTransaction();
+      return postEntity.id;
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw new Error('글 작성에 실패했습니다.');
