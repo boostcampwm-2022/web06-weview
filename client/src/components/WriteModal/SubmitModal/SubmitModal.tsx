@@ -3,6 +3,7 @@ import useModalStore from "@/store/useModalStore";
 import ContentArea from "./ContentArea/ContentArea";
 import CloseButton from "./CloseButton/CloseButton";
 import RegisterButton from "./RegisterButton/RegisterButton";
+import TagInput from "@/components/WriteModal/SubmitModal/TagInput/TagInput";
 
 const SubmitModal = (): JSX.Element => {
   const { isOpened } = useModalStore((state) => ({
@@ -19,6 +20,7 @@ const SubmitModal = (): JSX.Element => {
     >
       <h2 className="submit-modal__header">제출하기</h2>
       <ContentArea />
+      <TagInput />
       <div className="submit-modal__button">
         <CloseButton />
         <RegisterButton />
