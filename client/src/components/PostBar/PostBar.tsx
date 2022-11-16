@@ -7,11 +7,11 @@ import useIntersect from "@/hooks/useIntersect";
 import useRelativeSize from "@/hooks/useRelativeSize";
 
 const PostBar = (): JSX.Element => {
-  const { data, isFetching, onIntersect } = usePostInfiniteScroll({ size: 5 });
+  const { data, onIntersect } = usePostInfiniteScroll({ size: 5 });
   const { windowSize } = useRelativeSize({
-    minWidth: 200,
-    minHeight: 308,
-    heightRatio: 308 / 200,
+    minWidth: 400,
+    minHeight: 616,
+    heightRatio: 616 / 400,
   });
   const ref = useIntersect(onIntersect);
 
@@ -30,7 +30,6 @@ const PostBar = (): JSX.Element => {
       {postInfos.map((postInfo) => (
         <Post key={postInfo.id} postInfo={postInfo} />
       ))}
-      {isFetching && <div>Loading...</div>}
       <div className="post-bar__target" ref={ref} />
     </div>
   );

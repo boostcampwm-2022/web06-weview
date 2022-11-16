@@ -1,6 +1,19 @@
+@import "constants/_library.scss";
+
 .post-bar {
   background-color: red;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  // 스크롤 스냅핑: 블록 단위로 이동할 수 있는 기능
+  scroll-snap-type: y mandatory;
+
+  // 테두리
+  border: 1px solid $line-color;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   &__target {
     height: 1px;
