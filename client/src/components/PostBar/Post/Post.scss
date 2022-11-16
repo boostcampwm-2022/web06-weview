@@ -1,54 +1,151 @@
-.post {
-  width: 100%;
-  height: 100vh;
-  display: grid;
-  border: solid 10px black;
-  overflow: hidden;
-  background-color: yellow;
+@import "constants/_library.scss";
 
+.post {
+  width: inherit;
+  height: inherit;
+  background-color: $weview-off-white;
+
+  border-top: 0.25rem solid $line-color;
+
+  // 스크롤 스냅핑 기능을 적용받을 자식 블록 선언
+  scroll-snap-align: start;
+
+  // 반응형 레이아웃
+  display: grid;
+  grid-template-rows: 12fr 8fr 100fr 25fr 10fr; // 가로:세로 = 1:1.54 비율 기준
 
   &__title {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex: 1 1 0%;
-    width: inherit;
-    overflow-y: hidden;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    grid-row: 1;
 
-    .author-profile {
-      &__image {
-        width: 75%;
-        height: 75%;
-        border: 0.5px solid #D7D7D7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-sizing:border-box;
+    padding-inline: 1rem 1rem;
+
+    // 아래 구분선
+    border-bottom: 1px solid $line-color;
+
+    &__author-profile {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      width: fit-content;
+      height: 100%;
+
+      &--image {
+        height: 80%;
+        object-fit: contain;
         border-radius: 50%;
       }
-
-      &__username {
-        width: 50%;
-        height: 50%;
-        text-align: left;
+      &--username {
+        font-size: 1rem;
+      }
+      &--follow-btn {
+        font-size: 1rem;
       }
     }
 
-    &__history {
-
+    &__timestamp {
+      font-size: 1rem;
+      width: fit-content;
+      white-space: nowrap;
+      text-align: left;
     }
   }
 
-  &__code-info {
+  &__info {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    grid-row: 2;
+
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-sizing:border-box;
+    padding-inline: 1rem 1rem;
+
+    &__type-toggle {
+      display: flex;
+      gap: 1rem;
+    }
+
+    &__code-info {
+      font-size: 0.8rem;
+    }
   }
 
-  &__code-image {
-    display: flex;
+  &__image-slider {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    grid-row: 3;
+    background-color: black;
 
-    &__image {
-      width: 100px;
-      height: 100px;
+    &--image {
+      width: inherit;
+      height: inherit;
+      object-fit: cover; // 가로-세로 비율 맞춰서 꽉 차게
     }
   }
 
   &__body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    grid-row: 4;
+    background-color: white;
+
     display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    box-sizing:border-box;
+    padding: 1rem 1rem 0.5rem 0.5rem;
+
+    // 아래 구분선
+    border-bottom: 1px solid $line-color;
+
+    &--title {
+      font-size: 1.4rem;
+    }
+
+    &--content {
+      font-size: 1rem;
+    }
+  }
+
+  &__footer {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    grid-row: 5;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-sizing:border-box;
+    padding-inline: 1rem 1rem;
+
+    &__left-block {
+      display:flex;
+      gap: 1rem;
+    }
+
+    &__right-block {
+      display:flex;
+      flex-direction: row-reverse;
+      gap: 1rem;
+    }
   }
 }
