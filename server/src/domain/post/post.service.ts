@@ -80,12 +80,14 @@ export class PostService {
     }
   }
 
+  // TODO 코드 분리하기
   async loadPostList(
-    lastId: number,
     size: number,
-    users?: string[],
-    category?: Category,
-    likesCnt?: number,
+    lastId: number,
+    tags: string[],
+    users: string[],
+    category: Category,
+    likesCnt: number,
   ): Promise<LoadPostListResponseDto> {
     const queryBuilder = this.postRepository
       .createQueryBuilder('post')
@@ -93,21 +95,21 @@ export class PostService {
       .where('post.isDeleted = 0');
 
     // 이름으로 필터링
-    if (users !== undefined && users.length !== 0) {
+    if (users.length !== 0) {
       queryBuilder.andWhere('user.nickname in (:users)', {
         users: users,
       });
     }
+
     // 좋아요 개수로 필터링
-    if (likesCnt !== undefined || likesCnt > 1) {
-      // likesCnt 가 유효하다면
+    if (likesCnt !== undefined && likesCnt >= 1) {
       const postIdsFilteringLikesCnt = await this.findPostIdsFilteringLikesCnt(
         likesCnt,
       );
       if (postIdsFilteringLikesCnt.length == 0) {
         return new LoadPostListResponseDto([], true); // 결과가 없음. 이후 로직 실행할 필요 x
       }
-      queryBuilder.where('post.id in (:postIdsFilteringLikesCnt)', {
+      queryBuilder.andWhere('post.id in (:postIdsFilteringLikesCnt)', {
         postIdsFilteringLikesCnt: postIdsFilteringLikesCnt,
       });
     }
@@ -131,7 +133,7 @@ export class PostService {
     }
 
     // 카테고리 필터링 (인덱스)
-    category = Category.QUESTION;
+    category = Category.QUESTION; //example
     queryBuilder.andWhere('post.category = :category', {
       category: category,
     });
@@ -141,19 +143,32 @@ export class PostService {
       .orderBy('post.id', 'DESC')
       .getMany();
     return new LoadPostListResponseDto(result, size != result.length);
-    // result.map((each) => new PostResponseDto(each));
   }
 
   private async findPostIdsFilteringLikesCnt(likesCnt: number) {
     const postsFilteringLikesCnt = await this.postRepository
       .createQueryBuilder('post')
-      .leftJoin('likes', 'likes', 'post.id = likes.postId')
+      .innerJoin('likes', 'likes', 'post.id = likes.postId')
+      .where('likes.isDeleted = false')
+      .andWhere('post.isDeleted= false')
       .select('post.id')
       .addSelect('COUNT(*) AS likesCnt')
       .groupBy('post.id')
       .having('likesCnt > :likesCnt', { likesCnt: likesCnt })
       .getRawMany();
     return postsFilteringLikesCnt.map((obj) => obj['post_id']);
+  }
+
+  private async findPostIdsFilteringTags(tags: string[]) {
+    const postsFilteringTags = await this.postTagRepository
+      .createQueryBuilder('pt')
+      .select('postId')
+      .leftJoin('tag', 'tag', 'pt.tagId = tag.id')
+      .where('tag.name in (:tags)', { tags: tags })
+      .groupBy('postId')
+      .having('COUNT(tag.id) >= :tagCnt', { tagCnt: tags.length })
+      .getRawMany();
+    return postsFilteringTags.map((obj) => obj['postId']);
   }
 
 }

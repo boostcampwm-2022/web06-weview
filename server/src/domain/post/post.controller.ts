@@ -25,20 +25,22 @@ export class PostController {
   async inqueryUsingFilter(
     @Query('lastId') lastId: number,
     @Query('category') category: string,
-    @Query('tags') tags?: string[],
+    @Query('tags') tagString?: string,
     @Query('authors') authors?: string[],
     @Query('writtenAnswer') writtenAnswer?: number,
     @Query('scores') scores?: number,
   ): Promise<LoadPostListResponseDto> {
-    if (tags === undefined) {
-      tags = [];
+    if (tagString === undefined) {
+      const tags = [];
     }
     if (authors === undefined) {
       authors = [];
     }
+    const tags = tagString.slice(1, -1).split(','); //TODO 입력값 자체에서 검증을 하도록 변경
     const result = await this.postService.loadPostList(
-      Number(lastId), //TODO 다른 방법 찾기
       3,
+      Number(lastId), //TODO 다른 방법 찾기,
+      tags,
       authors,
       category as Category,
       scores,
