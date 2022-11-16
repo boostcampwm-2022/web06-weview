@@ -1,0 +1,35 @@
+@import "../../CommonButtons/CommonButtons.scss";
+@import "./ContentArea/ContentArea.scss";
+
+.submit-modal{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - 2em);
+  padding: 1em;
+  height: 50%;
+  background-color: $weview-off-white;
+  border-radius: 2em;
+  z-index: 2;
+  &__hidden{
+    visibility: hidden;
+  }
+  &__header{
+    font-weight: 500;
+    font-size: 1.3rem;
+  }
+  &__button{
+    display: flex;
+    margin-top: 1em;
+    &--close{
+      @include red-button;
+      margin-right: 0.25em;
+    }
+    &--register{
+      margin-left: 0.25em;
+      @include green-button;
+    }
+  }
+}

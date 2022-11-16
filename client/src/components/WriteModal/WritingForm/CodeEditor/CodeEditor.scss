@@ -1,12 +1,30 @@
-@import "../../../../../constants/library";
+@import "../../../../constants/library";
 
 .code-editor{
-  width: calc(100% - 4em);
-  height: 70%;
-  margin-top: 2em;
-  border-radius: 20px;
-  background-color: $codeblock-color;
-  caret-color: $alert;
-  font-size: 2em;
-  padding: 1em 1.5em;
+    position: relative;
+    width: calc(100% - 5em);
+    height: calc(70%);
+    border-radius: 20px;
+  &__textarea, &__present {
+    font-size: 2rem;
+    position: absolute;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    padding: 1em 1em 0 1em;
+  }
+  &__textarea {
+    caret-color: $alert;
+    color: transparent;
+    background-color: transparent;
+    z-index: 1;
+    border: none;
+    resize: none;
+  }
+  &__present{
+    z-index: 0;
+    background-color: $codeblock-color;
+    border-radius: 20px;
+    text-overflow: ellipsis;
+  }
 }

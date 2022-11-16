@@ -1,0 +1,11 @@
+@import 'src/constants/_library.scss';
+
+.content-textarea{
+  margin-top: 1em;
+  width: 80%;
+  height: 50%;
+  border: 3px solid $primary;
+  border-radius: 1em;
+  padding: 0.5em;
+  font-size: 1.3rem;
+}

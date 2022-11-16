@@ -42,4 +42,11 @@ export const postHandlers = [
       })
     );
   }),
+
+  rest.post(`${baseUrl}api/posts`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({ message: "글 작성에 성공했습니다." })
+    );
+  }),
 ];

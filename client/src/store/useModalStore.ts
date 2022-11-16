@@ -5,6 +5,10 @@ interface ModalStore {
   isWritingModalOpened: boolean;
   openWritingModal: () => void;
   closeWritingModal: () => void;
+
+  isSubmitModalOpened: boolean;
+  openSubmitModal: () => void;
+  closeSubmitModal: () => void;
 }
 
 const useModalStore = create<ModalStore>()(
@@ -12,6 +16,10 @@ const useModalStore = create<ModalStore>()(
     isWritingModalOpened: false,
     openWritingModal: () => set(() => ({ isWritingModalOpened: true })),
     closeWritingModal: () => set(() => ({ isWritingModalOpened: false })),
+
+    isSubmitModalOpened: false,
+    openSubmitModal: () => set(() => ({ isSubmitModalOpened: true })),
+    closeSubmitModal: () => set(() => ({ isSubmitModalOpened: false })),
   }))
 );
 
