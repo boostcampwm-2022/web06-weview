@@ -6,8 +6,20 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
+  font-size: 62.5%;
 }
 
+@media (min-height: 616px) {
+  html {
+    font-size:80%;
+  }
+}
+
+@media (min-height: 924px) {
+  html {
+    font-size:100%;
+  }
+}
 
 #root {
   display: flex;
