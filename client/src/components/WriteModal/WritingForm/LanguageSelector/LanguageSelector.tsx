@@ -1,11 +1,10 @@
 import React from "react";
 import { LANGUAGES } from "@/constants/options";
-import { IntegrationInstructionsOutlined } from "@mui/icons-material";
+import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
 
 const LanguageSelector = (): JSX.Element => {
   return (
     <div className="language">
-      <IntegrationInstructionsOutlined className="language__icon" />
       <select className="language__select">
         {LANGUAGES.map((language, idx) => (
           <option key={language} value={language}>
@@ -13,6 +12,7 @@ const LanguageSelector = (): JSX.Element => {
           </option>
         ))}
       </select>
+      <ArrowDropDownOutlinedIcon className="language__icon" />
     </div>
   );
 };

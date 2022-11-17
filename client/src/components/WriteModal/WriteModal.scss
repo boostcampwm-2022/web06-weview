@@ -6,7 +6,12 @@
 
 
 .modal{
-  position: absolute;
+  &__wrapper {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+  }
+
   left: 0;
   right: 0;
   display: flex;
@@ -14,7 +19,6 @@
   width: 60%;
   max-width: 1080px;
   height: calc(100% - 0.5rem);
-  //background-color: $weview-white;
   box-shadow: $button-shadow;
   transition: all 600ms cubic-bezier(0.86, 0, 0.3, 1);
   border-radius: 1rem;

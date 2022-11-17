@@ -2,16 +2,16 @@
 
 .code-editor{
     position: relative;
-    width: calc(100% - 5em);
+    width: 100%;
     height: 90%;
     border-radius: 0.25rem;
   &__textarea, &__present {
     font-size: 1.25rem;
     position: absolute;
     margin: 0;
-    width: 100%;
-    height: 100%;
-    padding: 1em 1em 0 1em;
+    width: calc(100% - 1em);
+    height: calc(100% - 1em);
+    padding: 0.5em;
   }
   &__textarea {
     caret-color: $alert;

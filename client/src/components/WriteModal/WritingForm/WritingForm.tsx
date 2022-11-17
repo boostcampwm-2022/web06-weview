@@ -1,6 +1,5 @@
 import React, { FormEvent, useCallback } from "react";
 import CodeEditor from "./CodeEditor/CodeEditor";
-import PrettifyButton from "./PrettifyButton/PrettifyButton";
 import SubmitButton from "./SubmitButton/SubmitButton";
 import useModalStore from "@/store/useModalStore";
 import LanguageSelector from "@/components/WriteModal/WritingForm/LanguageSelector/LanguageSelector";
@@ -20,7 +19,7 @@ const WritingForm = (): JSX.Element => {
       <LanguageSelector />
       <CodeEditor />
       <div className="writing-form__buttons">
-        <PrettifyButton />
+        {/* <PrettifyButton /> */}
         <SubmitButton />
       </div>
     </form>
