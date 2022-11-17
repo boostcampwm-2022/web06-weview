@@ -4,6 +4,7 @@ import "./UserProfile.scss";
 import { logOutAPI } from "@/apis/auth";
 import customLocalStorage from "@/utils/localStorage";
 import useAuthStore from "@/store/useAuthStore";
+import axiosInstance from "@/apis/axios";
 
 const UserProfile = (): JSX.Element => {
   const { myInfo, logout } = useAuthStore((state) => ({
@@ -20,6 +21,7 @@ const UserProfile = (): JSX.Element => {
       .then(() => {
         customLocalStorage.removeItem("expiresIn");
         logout();
+        delete axiosInstance.defaults.headers.common.Authorization;
       })
       .catch((e) => console.log("로그아웃 실패", e));
   };

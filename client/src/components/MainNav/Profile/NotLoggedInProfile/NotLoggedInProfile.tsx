@@ -3,6 +3,7 @@ import { githubLogInAPI } from "@/apis/auth";
 import useAuthStore from "@/store/useAuthStore";
 import useOAuthPopup from "@/hooks/useOAuthPopup";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import axiosInstance from "@/apis/axios";
 
 const NotLoggedInProfile = (): JSX.Element => {
   const { popup, clearPopup, handleOpenOAuthPopup } = useOAuthPopup();
@@ -27,6 +28,8 @@ const NotLoggedInProfile = (): JSX.Element => {
       githubLogInAPI(code)
         .then((userData) => {
           login(userData);
+          axiosInstance.defaults.headers.common.Authorization =
+            userData.accessToken;
         })
         .catch((e) => {
           console.log("서버에 요청을 보내는 데 실패했습니다.", e);
