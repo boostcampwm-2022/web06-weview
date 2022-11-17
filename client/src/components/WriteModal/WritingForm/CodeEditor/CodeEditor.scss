@@ -3,10 +3,10 @@
 .code-editor{
     position: relative;
     width: calc(100% - 5em);
-    height: calc(70%);
-    border-radius: 20px;
+    height: 80%;
+    border-radius: 0.25rem;
   &__textarea, &__present {
-    font-size: 2rem;
+    font-size: 1.25rem;
     position: absolute;
     margin: 0;
     width: 100%;
@@ -24,7 +24,7 @@
   &__present{
     z-index: 0;
     background-color: $codeblock-color;
-    border-radius: 20px;
+    border-radius: 0.25rem;
     text-overflow: ellipsis;
   }
 }

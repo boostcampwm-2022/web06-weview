@@ -1,6 +1,6 @@
 @import 'src/constants/_library.scss';
 
-.main{
+@mixin main-common{
   display: flex;
   align-items: stretch;
   gap: 10em;
@@ -9,4 +9,20 @@
   width: 100%;
   height: 100%;
   color: $text-color;
+}
+
+.main{
+  @include main-common;
+  // 애니메이션
+  transition: 1s all ease;
+  transform: translateY(0);
+  opacity: 1;
+
+}
+
+.hidden-main{
+  @include main-common;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: 1s all ease;
 }

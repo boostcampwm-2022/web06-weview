@@ -6,19 +6,19 @@
 
 
 .modal{
-  margin-top: 2em;
   position: absolute;
+  left: 0;
+  right: 0;
   display: flex;
-  width: 90%;
-  height: calc(100% - 4em);
-  background-color: $weview-off-white;
+  margin : 0 auto;
+  width: 60%;
+  max-width: 1080px;
+  height: calc(100% - 0.5rem);
+  //background-color: $weview-white;
   box-shadow: $button-shadow;
   transition: all 600ms cubic-bezier(0.86, 0, 0.3, 1);
-  border-radius: 2em;
-  -webkit-box-shadow: 0 3px 1px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0 3px 1px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-  transition: all 600ms cubic-bezier(0.86, 0, 0.3, 1);
+  border-radius: 1rem;
+  border: 0.25rem solid $line-color;
   z-index: 1;
 }
 
