@@ -1,7 +1,8 @@
+@import 'src/constants/_library.scss';
+
 @import "./Menu/Menu.scss";
 @import "./Filter/Filter.scss";
-
-@import 'src/constants/_library.scss';
+@import "./Profile/Profile.scss";
 
 .nav{
   display: flex;

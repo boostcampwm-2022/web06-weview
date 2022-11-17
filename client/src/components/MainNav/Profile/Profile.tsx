@@ -9,7 +9,11 @@ const Profile = (): JSX.Element => {
   // TODO : 전역에서 가져오기
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
-  return isLoggedIn ? <UserProfile /> : <NotLoggedInProfile />;
+  return (
+    <div className="profile">
+      {isLoggedIn ? <UserProfile /> : <NotLoggedInProfile />}
+    </div>
+  );
 };
 
 export default Profile;
