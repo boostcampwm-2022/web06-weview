@@ -1,9 +1,9 @@
-@import "../../../../constants/library";
+@import "src/constants/library";
 
 .code-editor{
     position: relative;
     width: calc(100% - 5em);
-    height: 80%;
+    height: 90%;
     border-radius: 0.25rem;
   &__textarea, &__present {
     font-size: 1.25rem;

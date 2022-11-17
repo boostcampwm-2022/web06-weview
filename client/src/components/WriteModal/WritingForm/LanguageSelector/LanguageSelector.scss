@@ -1,0 +1,23 @@
+@import "../../../../constants/library";
+
+.language{
+  display: flex;
+  align-items: center;
+  background-color: $text-color;
+  border: 1px solid $line-color;
+  border-radius: 0.25rem;
+  width: 30%;
+  height: 1.75rem;
+  &__icon{
+    color: $alert;
+  }
+  &__select{
+    background-color: $text-color;
+    text-overflow: ellipsis;
+    color: $alert;
+    font-size: 1rem;
+    padding-left: 0.25em;
+    width: 100%;
+    border: none;
+  }
+}
