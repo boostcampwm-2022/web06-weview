@@ -2,6 +2,7 @@ import { LOCAL_URL } from "@/constants/env";
 import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./LoginCallback.scss";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
 const LoginCallback = (): JSX.Element => {
   const [searchParams] = useSearchParams();
@@ -17,11 +18,7 @@ const LoginCallback = (): JSX.Element => {
     targetWindow.postMessage({ code }, targetOrigin);
   }, [searchParams]);
 
-  return (
-    <div className="login-callback">
-      <div className="login-callback__spinner"></div>
-    </div>
-  );
+  return <LoadingSpinner />;
 };
 
 export default LoginCallback;
