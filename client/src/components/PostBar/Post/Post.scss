@@ -3,7 +3,7 @@
 .post {
   background-color: $weview-off-white;
 
-  border-radius: 0.5rem;
+  border-radius: 0.35rem;
   border: 1px solid $line-color;
 
   // 그림자
@@ -27,7 +27,7 @@
     align-items: center;
 
     box-sizing:border-box;
-    padding-inline: 1rem 1rem;
+    padding-inline: 0.75rem 0.75rem;
 
     // 아래 구분선
     border-bottom: 1px solid $line-color;
@@ -35,7 +35,7 @@
     &__author-profile {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.35rem;
 
       width: fit-content;
       height: 100%;
@@ -46,15 +46,12 @@
         border-radius: 50%;
       }
       &--username {
-        font-size: 1rem;
-      }
-      &--follow-btn {
-        font-size: 1rem;
+        font-size: 0.75rem;
       }
     }
 
     &__timestamp {
-      font-size: 1rem;
+      font-size: 0.75rem;
       width: fit-content;
       white-space: nowrap;
       text-align: left;
@@ -72,15 +69,15 @@
     align-items: center;
 
     box-sizing:border-box;
-    padding-inline: 1rem 1rem;
+    padding-inline: 0.75rem 0.75rem;
 
     &__type-toggle {
       display: flex;
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
     &__code-info {
-      font-size: 0.8rem;
+      font-size: 0.65rem;
     }
   }
 
@@ -109,20 +106,20 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.35rem;
 
     box-sizing:border-box;
-    padding: 1rem 1rem 0.5rem 0.5rem;
+    padding: 0.75rem 0.75rem 0.35rem 0.35rem;
 
     // 아래 구분선
     border-bottom: 1px solid $line-color;
 
     &--title {
-      font-size: 1.4rem;
+      font-size: 1rem;
     }
 
     &--content {
-      font-size: 1rem;
+      font-size: 0.75rem;
     }
   }
 
@@ -137,17 +134,17 @@
     align-items: center;
 
     box-sizing:border-box;
-    padding-inline: 1rem 1rem;
+    padding-inline: 0.75rem 0.75rem;
 
     &__left-block {
       display:flex;
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
     &__right-block {
       display:flex;
       flex-direction: row-reverse;
-      gap: 1rem;
+      gap: 0.75rem;
     }
   }
 }
