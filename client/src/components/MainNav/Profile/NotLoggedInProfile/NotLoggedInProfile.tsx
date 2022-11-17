@@ -28,8 +28,7 @@ const NotLoggedInProfile = (): JSX.Element => {
       githubLogInAPI(code)
         .then((userData) => {
           login(userData);
-          axiosInstance.defaults.headers.common.Authorization =
-            userData.accessToken;
+          axiosInstance.defaults.headers.common.Authorization = `Bearer ${userData.accessToken}`;
         })
         .catch((e) => {
           console.log("서버에 요청을 보내는 데 실패했습니다.", e);
