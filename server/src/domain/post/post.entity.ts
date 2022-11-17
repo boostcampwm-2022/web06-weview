@@ -7,11 +7,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
-import { Review } from '../review.entity';
-import { Image } from '../image.entity';
-import { Likes } from '../likes.entity';
-import { PostTag } from '../post-tag.entity';
-import { Report } from '../report.entity';
+import { PostToTag } from '../tag/post-to-tag.entity';
+import { Likes } from '../likes/likes.entity';
+import { Report } from '../report/report.entity';
+import { Review } from '../review/review.entity';
+import { Image } from '../image/image.entity';
 
 @Entity()
 export class Post extends BaseTimeEntity {
@@ -21,7 +21,7 @@ export class Post extends BaseTimeEntity {
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
 
-  @Column()
+  @Column({ default: Category.QUESTION })
   category!: Category;
 
   @Column()
@@ -36,14 +36,14 @@ export class Post extends BaseTimeEntity {
   @Column()
   language!: string; //enum??
 
-  @OneToMany(() => Image, (image) => image.post)
+  @OneToMany(() => Image, (image) => image.post, { cascade: true })
   images: Image[];
 
   @OneToMany(() => Likes, (likes) => likes.post)
   likesList: Likes[];
 
-  @OneToMany(() => PostTag, (postTag) => postTag.post)
-  postTags: PostTag[];
+  @OneToMany(() => PostToTag, (postToTag) => postToTag.post)
+  postToTags: PostToTag[];
 
   @OneToMany(() => Report, (report) => report.post)
   reports: Report[];

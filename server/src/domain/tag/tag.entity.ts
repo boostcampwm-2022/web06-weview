@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { PostTag } from './post-tag.entity';
+import { PostToTag } from './post-to-tag.entity';
 
 @Entity()
 export class Tag {
@@ -9,6 +9,6 @@ export class Tag {
   @Column()
   name!: string;
 
-  @OneToMany(() => PostTag, (postTag) => postTag.tag)
-  postTags: PostTag[];
+  @OneToMany(() => PostToTag, (postToTag) => postToTag.tag)
+  postToTags: PostToTag[];
 }

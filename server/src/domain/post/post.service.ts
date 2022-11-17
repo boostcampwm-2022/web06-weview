@@ -3,7 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './post.entity';
 import { Repository } from 'typeorm';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
-import { PostTag } from '../post-tag.entity';
+import { DataSource } from 'typeorm';
+import { Image } from '../image/image.entity';
+import { PostToTag } from '../tag/post-to-tag.entity';
+import { Tag } from '../tag/tag.entity';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class PostService {
@@ -11,8 +15,9 @@ export class PostService {
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
-    @InjectRepository(PostTag)
-    private readonly postTagRepository: Repository<PostTag>,
+    @InjectRepository(PostToTag)
+    private readonly postToTagRepository: Repository<PostToTag>,
+    private readonly dataSource: DataSource,
   ) {}
 
   // TODO 코드 분리하기
@@ -52,7 +57,7 @@ export class PostService {
     // TODO 리뷰 개수로 필터링
 
     // 태그를 보고 필터링
-    if (tags.length !== 0) {
+    if (tags !== undefined && tags.length !== 0) {
       const postIdsFilteringTags = await this.findPostIdsFilteringTags(tags);
       if (postIdsFilteringTags.length == 0) {
         return new LoadPostListResponseDto([], true); // 결과가 없음. 이후 로직 실행할 필요 x
@@ -95,7 +100,7 @@ export class PostService {
   }
 
   private async findPostIdsFilteringTags(tags: string[]) {
-    const postsFilteringTags = await this.postTagRepository
+    const postsFilteringTags = await this.postToTagRepository
       .createQueryBuilder('pt')
       .select('postId')
       .leftJoin('tag', 'tag', 'pt.tagId = tag.id')
@@ -104,5 +109,64 @@ export class PostService {
       .having('COUNT(tag.id) >= :tagCnt', { tagCnt: tags.length })
       .getRawMany();
     return postsFilteringTags.map((obj) => obj['postId']);
+  }
+
+  async write(
+    userId: number,
+    { title, content, category, code, language, images, tags },
+  ) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const postEntity = queryRunner.manager.create(Post);
+      postEntity.title = title;
+      postEntity.content = content;
+      postEntity.category = category;
+      postEntity.code = code;
+      postEntity.language = language;
+
+      const userEntity = await queryRunner.manager.findOneBy(User, {
+        id: userId,
+      });
+      postEntity.user = userEntity;
+
+      const imageEntities = images.map((image) => {
+        const imageEntity = queryRunner.manager.create(Image);
+        imageEntity.url = image;
+        return imageEntity;
+      });
+
+      postEntity.images = imageEntities;
+      await queryRunner.manager.save(postEntity);
+
+      await Promise.all(
+        tags.map(async (tag) => {
+          let tagEntity = await queryRunner.manager.findOneBy(Tag, {
+            name: tag,
+          });
+
+          if (tagEntity === null) {
+            tagEntity = queryRunner.manager.create(Tag);
+            tagEntity.name = tag;
+            tagEntity = await queryRunner.manager.save(tagEntity);
+          }
+
+          const postToTagEntity = queryRunner.manager.create(PostToTag);
+          postToTagEntity.post = postEntity;
+          postToTagEntity.tag = tagEntity;
+          return queryRunner.manager.save(postToTagEntity);
+        }),
+      );
+
+      await queryRunner.commitTransaction();
+      return postEntity.id;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw new Error('글 작성에 실패했습니다.');
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

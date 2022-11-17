@@ -6,13 +6,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from './domain/user/user.entity';
 import { Post } from './domain/post/post.entity';
 import { AuthModule } from './domain/auth/auth.module';
-import { Review } from './domain/review.entity';
 import { PostModule } from './domain/post/post.module';
-import { Tag } from './domain/tag.entity';
-import { Likes } from './domain/likes.entity';
-import { Report } from './domain/report.entity';
-import { PostTag } from './domain/post-tag.entity';
-import { Image } from './domain/image.entity';
+import { PostToTag } from './domain/tag/post-to-tag.entity';
+import { Tag } from './domain/tag/tag.entity';
+import { Image } from './domain/image/image.entity';
+import { Likes } from './domain/likes/likes.entity';
+import { Review } from './domain/review/review.entity';
+import { Report } from './domain/report/report.entity';
 
 @Module({
   imports: [
@@ -29,8 +29,9 @@ import { Image } from './domain/image.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Post, Image, Likes, PostTag, Report, Review, Tag],
+        entities: [User, Post, Image, Likes, PostToTag, Report, Review, Tag],
         synchronize: true,
+        logging: true,
       }),
     }),
     AuthModule,
