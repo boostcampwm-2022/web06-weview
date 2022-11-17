@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { GITHUB_AUTH_SERVER_URL } from "@/constants/env";
 
 interface OAuthPopup {
   popup: Window | null;
@@ -16,7 +17,7 @@ const useOAuthPopup = (): OAuthPopup => {
     const height = 400;
     const left = window.screenX + (window.outerWidth - width) / 2;
     const top = window.screenY + (window.outerHeight - height) / 2.5;
-    const url = import.meta.env.VITE_GITHUB_AUTH_SERVER_URL;
+    const url = GITHUB_AUTH_SERVER_URL;
     const popup = window.open(
       url,
       title,

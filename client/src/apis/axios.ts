@@ -1,3 +1,4 @@
+import { API_SERVER_URL } from "@/constants/env";
 import axios, { AxiosRequestConfig } from "axios";
 import {
   refreshErrorHandler,
@@ -5,7 +6,7 @@ import {
 } from "./interceptors/refresh";
 
 const axiosConfig: AxiosRequestConfig = {
-  baseURL: import.meta.env.VITE_API_SERVER_URL,
+  baseURL: API_SERVER_URL,
   timeout: 10000,
   withCredentials: true,
 };
