@@ -1,0 +1,16 @@
+@import 'src/constants/_library.scss';
+
+@import "./Menu/Menu.scss";
+@import "./Filter/Filter.scss";
+@import "./Profile/Profile.scss";
+
+.nav{
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  min-width: 300px !important;
+  padding: 0.5em 2em 0.5em 2em;
+  border: 1px solid $line-color;
+  border-top: 0.25rem solid $line-color;
+  border-bottom: 0.25rem solid $line-color;
+}

@@ -1,0 +1,47 @@
+@import "../../CommonButtons/CommonButtons.scss";
+@import "./ContentArea/ContentArea.scss";
+@import "./TagInput/TagInput.scss";
+
+.submit-modal{
+  &__wrapper{
+    width: calc(100% + 0.5rem);
+    height: 100vh;
+    border-radius: 1rem;
+    position: absolute;
+    left: -0.25rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+  }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - 4rem);
+  padding: 1rem 2rem;
+  height: 50%;
+  background-color: $weview-white;
+  border-radius: 0.25rem;
+
+  &__hidden{
+    visibility: hidden;
+  }
+  &__header{
+    font-weight: 500;
+    font-size: 1rem;
+
+  }
+
+  &__button{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1em;
+    &--close{
+      @include red-button;
+      margin-right: 0.25em;
+    }
+    &--register{
+      @include nav-button;
+    }
+  }
+}

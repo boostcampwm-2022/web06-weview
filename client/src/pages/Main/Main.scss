@@ -1,0 +1,29 @@
+@import 'src/constants/_library.scss';
+
+@mixin main-common{
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10em;
+  margin: 0 auto;
+  max-width: 1000px;
+  width: 100%;
+  height: 100%;
+  color: $text-color;
+}
+
+.main{
+  @include main-common;
+  // 애니메이션
+  transition: 1s all ease;
+  transform: translateY(0);
+  opacity: 1;
+
+}
+
+.hidden-main{
+  @include main-common;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: 1s all ease;
+}

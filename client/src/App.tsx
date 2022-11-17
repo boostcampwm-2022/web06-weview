@@ -1,10 +1,11 @@
 import React, { useRef } from "react";
 import "./App.scss";
-import Profile from "./components/Profile/Profile";
 import { queryClient } from "@/react-query/queryClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { isEmpty } from "@/utils/typeCheck";
+import ReactRouter from "@/ReactRouter";
+import WriteModal from "@/components/WriteModal/WriteModal";
 
 function App(): JSX.Element {
   const queryClientRef = useRef<QueryClient>();
@@ -14,7 +15,8 @@ function App(): JSX.Element {
   }
   return (
     <QueryClientProvider client={queryClient}>
-      <Profile />
+      <ReactRouter />
+      <WriteModal />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

@@ -1,0 +1,19 @@
+@import "src/constants/_library.scss";
+
+.close-btn{
+  right: 1.5em;
+  top: 1.5em;
+  width: 4em;
+  height: 4em;
+  position: absolute;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-spacing: 0;
+
+  &__icon{
+    color: $error;
+    width: 2em !important;
+    height: 2em !important;
+  }
+}

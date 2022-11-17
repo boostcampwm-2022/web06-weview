@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { MODE } from "../constants/mode";
+import { MODE } from "./constants/mode";
 
 if (MODE.MOCK === import.meta.env.VITE_API_MODE) {
   import("@/mocks/browser")
