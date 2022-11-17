@@ -46,11 +46,11 @@ export class EachPostResponseDto {
 }
 
 export class EachImageResponseDto {
-  url: string;
+  src: string;
   name: string;
 
   constructor(image: Image) {
-    this.url = image.url;
+    this.src = image.url;
     this.name = image.url.split('/').slice(-1)[0].split('.').slice(0)[0];
   }
 }
