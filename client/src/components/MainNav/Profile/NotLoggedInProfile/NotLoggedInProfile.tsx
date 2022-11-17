@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import "./NotLoggedInProfile.scss";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import { githubLogInAPI } from "@/apis/auth";
 import useAuthStore from "@/store/useAuthStore";
 import useOAuthPopup from "@/hooks/useOAuthPopup";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
 const NotLoggedInProfile = (): JSX.Element => {
   const { popup, clearPopup, handleOpenOAuthPopup } = useOAuthPopup();
@@ -46,17 +45,21 @@ const NotLoggedInProfile = (): JSX.Element => {
   }, [popup]);
 
   return (
-    <div
-      className="not-logged-in-profile"
-      onClick={handleOpenOAuthPopup}
-      data-cy={"login-btn"}
-    >
-      <AccountCircleRoundedIcon
-        className="not-logged-in-profile__image"
-        fontSize="small"
-      />
-      <div className="not-logged-in-profile__alert">로그인이 필요합니다.</div>
-    </div>
+    <>
+      <div className="not-logged-in-profile__wrapper">
+        <AccountCircleOutlinedIcon className="not-logged-in-profile__image" />
+        <span className="not-logged-in-profile__alert">
+          로그인이 필요합니다.
+        </span>
+      </div>
+      <button
+        onClick={handleOpenOAuthPopup}
+        className="not-logged-in-profile__button"
+        data-cy={"login-btn"}
+      >
+        로그인
+      </button>
+    </>
   );
 };
 

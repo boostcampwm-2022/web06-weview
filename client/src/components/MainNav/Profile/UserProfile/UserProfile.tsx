@@ -29,10 +29,18 @@ const UserProfile = (): JSX.Element => {
   };
 
   return (
-    <div className="user-profile" onClick={handleLogout}>
-      <img className="user-profile__image" src={user.avatar_url} />
-      <div className="user-profile__name">{user.name}</div>
-    </div>
+    <>
+      <div className="user-profile">
+        <img className="user-profile__image" src={user.avatar_url} />
+        <span className="user-profile__name">{user.name}</span>
+      </div>
+      <div className="profile-button">
+        <button className="profile-button--logout" onClick={handleLogout}>
+          로그아웃
+        </button>
+        <button className="profile-button--my-page">마이페이지</button>
+      </div>
+    </>
   );
 };
 

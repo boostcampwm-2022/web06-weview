@@ -1,18 +1,19 @@
+@import 'src/constants/_library.scss';
+
 @import "./Menu/Menu.scss";
 @import "./Filter/Filter.scss";
-
-@import 'src/constants/_library.scss';
+@import "./Profile/Profile.scss";
 
 .nav{
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   width: 30%;
-  height: 90%;
   min-width: 300px !important;
-  box-shadow: $box-shadow;
-  padding: 0 2em;
+  padding: 0.5em 2em 0.5em 2em;
   transition: all 0.5s ease-in-out;
+  border: 1px solid $line-color;
+  border-top: 0.25rem solid $line-color;
+  border-bottom: 0.25rem solid $line-color;
 }
 
 .hidden-nav{
