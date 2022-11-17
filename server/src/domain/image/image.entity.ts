@@ -13,12 +13,9 @@ export class Image extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @PrimaryColumn()
-  postId: number;
-
   @ManyToOne(() => Post, (post) => post.images)
   post: Post;
 
   @Column()
-  url: string;
+  url!: string;
 }
