@@ -1,27 +1,34 @@
 // GET /api/post API 명세를 보고 만든 타입
 export interface User {
   id: string;
-  username: string;
+  nickname: string;
   profileUrl: string;
   email: string;
 }
 
 export interface Review {
   id: string;
-  user: User;
-  contents: string;
+  reviewer: User;
+  content: string;
+  updatedAt: string;
+}
+
+export interface Image {
+  src: string;
+  name: string;
 }
 
 export interface PostInfo {
   id: string;
   title: string;
   content: string;
-  imageUrls: string[];
-  user: User;
+  code: string;
+  language: string;
+  images: Image[];
+  updatedAt: string;
+  author: User;
   tags: string[];
   reviews: Review[];
-  updatedAt: string;
-  code: string;
 }
 
 export interface PostScroll {

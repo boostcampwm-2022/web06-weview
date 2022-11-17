@@ -34,8 +34,8 @@ const usePostInfiniteScroll = ({
 }: PostInfiniteScrollOptions): PostInfiniteScrollResults => {
   const { data, hasNextPage, isFetching, fetchNextPage } = useInfiniteQuery(
     ["posts"],
-    async ({ pageParam = 0 }: QueryFunctionContext) =>
-      await fetchPost(pageParam, size),
+    async ({ pageParam = -1 }: QueryFunctionContext) =>
+      await fetchPost(pageParam),
     {
       getNextPageParam: (lastPost) =>
         lastPost.isLast ? undefined : lastPost.lastId,
