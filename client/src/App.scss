@@ -2,6 +2,7 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/styles/github.min.css");
 @import "./src/components/MainNav/MainNav.scss";
 @import "./src/components/WriteModal/WriteModal.scss";
+@import "./pages/Main/Main.scss";
 
 html, body {
   margin: 0;
@@ -16,14 +17,8 @@ body {
 
 #root {
   margin: 0 auto;
-  display: flex;
   font-family: GmarketSans;
-  align-items: center;
-  gap: 10em;
-  max-width: 1280px;
-  width: 100%;
-  height: 100%;
-  color: $text-color;
+
 }
 
 input{
