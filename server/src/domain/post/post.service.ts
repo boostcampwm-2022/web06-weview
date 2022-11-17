@@ -50,24 +50,26 @@ export class PostService {
       postEntity.images = imageEntities;
       await queryRunner.manager.save(postEntity);
 
-      await Promise.all(
-        tags.map(async (tag) => {
-          let tagEntity = await queryRunner.manager.findOneBy(Tag, {
-            name: tag,
-          });
+      if (tags) {
+        await Promise.all(
+          tags.map(async (tag) => {
+            let tagEntity = await queryRunner.manager.findOneBy(Tag, {
+              name: tag,
+            });
 
-          if (tagEntity === null) {
-            tagEntity = queryRunner.manager.create(Tag);
-            tagEntity.name = tag;
-            tagEntity = await queryRunner.manager.save(tagEntity);
-          }
+            if (tagEntity === null) {
+              tagEntity = queryRunner.manager.create(Tag);
+              tagEntity.name = tag;
+              tagEntity = await queryRunner.manager.save(tagEntity);
+            }
 
-          const postToTagEntity = queryRunner.manager.create(PostToTag);
-          postToTagEntity.post = postEntity;
-          postToTagEntity.tag = tagEntity;
-          return queryRunner.manager.save(postToTagEntity);
-        }),
-      );
+            const postToTagEntity = queryRunner.manager.create(PostToTag);
+            postToTagEntity.post = postEntity;
+            postToTagEntity.tag = tagEntity;
+            return queryRunner.manager.save(postToTagEntity);
+          }),
+        );
+      }
 
       await queryRunner.commitTransaction();
       return postEntity.id;
