@@ -1,31 +1,42 @@
-import React from "react";
+import React, { useCallback, MouseEvent } from "react";
 import useModalStore from "@/store/useModalStore";
 import ContentArea from "./ContentArea/ContentArea";
-import CloseButton from "./CloseButton/CloseButton";
 import RegisterButton from "./RegisterButton/RegisterButton";
 import TagInput from "@/components/WriteModal/SubmitModal/TagInput/TagInput";
+import TitleInput from "@/components/WriteModal/SubmitModal/TitleInput/TitleInput";
 
 const SubmitModal = (): JSX.Element => {
-  const { isOpened } = useModalStore((state) => ({
+  const { isOpened, closeModal } = useModalStore((state) => ({
     isOpened: state.isSubmitModalOpened,
+    closeModal: state.closeSubmitModal,
   }));
 
+  const closeSubmitModal = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    const clicked = (e.target as HTMLElement).closest(".submit-modal");
+    if (clicked === null) {
+      closeModal();
+    }
+  }, []);
+
   return (
-    <section
+    <div
       className={
         isOpened
-          ? "submit-modal submit-modal__shown"
-          : "submit-modal submit-modal__hidden"
+          ? "submit-modal__wrapper submit-modal__shown"
+          : "submit-modal__wrapper submit-modal__hidden"
       }
+      onClick={closeSubmitModal}
     >
-      <h2 className="submit-modal__header">제출하기</h2>
-      <ContentArea />
-      <TagInput />
-      <div className="submit-modal__button">
-        <CloseButton />
-        <RegisterButton />
-      </div>
-    </section>
+      <section className="submit-modal">
+        <h2 className="submit-modal__header">제출하기</h2>
+        <TitleInput />
+        <ContentArea />
+        <TagInput />
+        <div className="submit-modal__button">
+          <RegisterButton />
+        </div>
+      </section>
+    </div>
   );
 };
 

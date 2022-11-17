@@ -13,12 +13,15 @@ const ContentArea = (): JSX.Element => {
 
   return (
     <>
-      <label htmlFor="content">코드에 대한 소개나 질문등을 입력해주세요</label>
+      <label className="content-label" htmlFor="content">
+        코드에 대한 소개나 질문등을 입력해주세요
+      </label>
       <textarea
         value={content}
         onChange={changeContent}
         id="content"
         className="content-textarea"
+        spellCheck={false}
       />
     </>
   );

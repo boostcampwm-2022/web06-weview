@@ -1,0 +1,22 @@
+@import "@/constants/_library.scss";
+
+.tag-label{
+  margin-top: 1rem;
+  font-size: 0.8rem;
+}
+
+.tag-input{
+  width: 60%;
+  border: 1px solid $line-color;
+  height: 1.5rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+}
+
+.tag-list{
+  display: flex;
+  & > span{
+    margin-right: 0.2rem;
+    font-size: 0.75rem;
+  }
+}

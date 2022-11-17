@@ -41,17 +41,27 @@ const TagInput = (): JSX.Element => {
 
   return (
     <>
+      <label className="tag-label" htmlFor="tag">
+        태그들을 입력해주세요
+      </label>
       <input
         type="text"
+        className="tag-input"
         value={tag}
         onChange={changeTagValue}
         onKeyDown={handlePressedKey}
       />
-      {tags.map((tag) => (
-        <span onClick={() => clickSubmittedTag(tag)} key={tag}>
-          {tag}
-        </span>
-      ))}
+      <div className="tag-list">
+        {tags.map((tag) => (
+          <span
+            className="tag-span"
+            onClick={() => clickSubmittedTag(tag)}
+            key={tag}
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
     </>
   );
 };
