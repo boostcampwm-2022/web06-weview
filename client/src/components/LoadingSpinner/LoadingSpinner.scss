@@ -1,12 +1,13 @@
 @import 'src/constants/_library.scss';
 
-.login-callback {
+.loading-spinner {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+  background-color: $weview-off-white;
 
   &__spinner {
     display: block;
