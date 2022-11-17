@@ -1,5 +1,6 @@
 import { Post } from '../post.entity';
 import { Image } from '../../image/image.entity';
+import { User } from '../../user/user.entity';
 
 export class LoadPostListResponseDto {
   posts: EachPostResponseDto[];
@@ -21,9 +22,10 @@ export class EachPostResponseDto {
   language: string;
   images: EachImageResponseDto[];
   updatedAt: Date;
-  authorId: number;
-  tags: string[];
+  author: AuthorDto;
+  tags: number[];
   reviews: number[];
+  isLiked: boolean;
 
   constructor(post: Post) {
     this.id = post.id;
@@ -36,9 +38,10 @@ export class EachPostResponseDto {
     }
     this.images = post.images.map((image) => new EachImageResponseDto(image));
     this.updatedAt = post.updatedAt;
-    this.authorId = post.id;
-    this.tags = []; // TODO
+    this.author = new AuthorDto(post.user);
+    this.tags = post.postToTags.map((obj) => obj.tagId);
     this.reviews = []; // TODO
+    this.isLiked = true;
   }
 }
 
@@ -49,5 +52,19 @@ export class EachImageResponseDto {
   constructor(image: Image) {
     this.url = image.url;
     this.name = image.url.split('/').slice(-1)[0].split('.').slice(0)[0];
+  }
+}
+
+export class AuthorDto {
+  id: number;
+  nickname: string;
+  profileUrl: string;
+  email: string;
+
+  constructor(user: User) {
+    this.id = user.id;
+    this.nickname = user.nickname;
+    this.profileUrl = user.profileUrl;
+    this.email = user.email;
   }
 }

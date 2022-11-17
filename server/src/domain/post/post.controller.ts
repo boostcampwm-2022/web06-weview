@@ -15,7 +15,7 @@ import { Request } from 'express';
 import { PostService } from './post.service';
 import { InqueryUsingFilterDto } from './dto/controller-response.dto';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
-import {WriteDto} from "./dto/controller-request.dto";
+import { WriteDto } from './dto/controller-request.dto';
 
 @Controller('posts')
 export class PostController {
@@ -36,7 +36,6 @@ export class PostController {
     }
     if (tagString !== undefined) {
       tags = tagString.slice(1, -1).split(','); //TODO 입력값 자체에서 검증을 하도록 변경
-
     }
     const result = await this.postService.loadPostList(
       3,

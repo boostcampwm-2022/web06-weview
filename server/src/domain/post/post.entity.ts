@@ -8,10 +8,10 @@ import {
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { PostToTag } from '../tag/post-to-tag.entity';
-import {Image} from "../image/image.entity";
-import {Likes} from "../likes/likes.entity";
-import {Report} from "../report/report.entity";
-import {Review} from "../review/review.entity";
+import { Image } from '../image/image.entity';
+import { Likes } from '../likes/likes.entity';
+import { Report } from '../report/report.entity';
+import { Review } from '../review/review.entity';
 
 @Entity()
 export class Post extends BaseTimeEntity {
@@ -36,7 +36,7 @@ export class Post extends BaseTimeEntity {
   @Column()
   language!: string; //enum??
 
-  @OneToMany(() => Image, (image) => image.post)
+  @OneToMany(() => Image, (image) => image.post, { cascade: true })
   images: Image[];
 
   @OneToMany(() => Likes, (likes) => likes.post)

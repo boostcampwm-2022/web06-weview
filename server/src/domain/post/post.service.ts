@@ -90,7 +90,9 @@ export class PostService {
   ): Promise<LoadPostListResponseDto> {
     const queryBuilder = this.postRepository
       .createQueryBuilder('post')
-      .innerJoin('user', 'user', 'post.userId = user.id')
+      .innerJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.postToTags', 'postToTag')
+      .leftJoinAndSelect('post.images', 'image')
       .where('post.isDeleted = 0');
 
     // 이름으로 필터링
@@ -169,5 +171,4 @@ export class PostService {
       .getRawMany();
     return postsFilteringTags.map((obj) => obj['postId']);
   }
-
 }
