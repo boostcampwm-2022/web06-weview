@@ -12,12 +12,17 @@ const TitleInput = (): JSX.Element => {
   }, []);
 
   return (
-    <input
-      className="title"
-      value={title}
-      onChange={changeTitle}
-      placeholder="제목을 입력해주세요"
-    />
+    <div className="title">
+      <label className="title__label" htmlFor="title">
+        제목
+      </label>
+      <input
+        id="title"
+        className="title__input"
+        value={title}
+        onChange={changeTitle}
+      />
+    </div>
   );
 };
 

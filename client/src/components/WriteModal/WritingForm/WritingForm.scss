@@ -1,17 +1,17 @@
-@import "./TitleInput/TitleInput.scss";
+@import "../SubmitModal/TitleInput/TitleInput.scss";
 @import "./CodeEditor/CodeEditor.scss";
 @import "./PrettifyButton/PrettifyButton.scss";
 @import "./SubmitButton/SubmitButton.scss";
+@import "./LanguageSelector/LanguageSelector.scss";
 
 .writing-form{
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   padding: 2em;
   &__buttons{
     display: flex;
     justify-content: flex-end;
-    margin-top: 2em;
-    padding-right: 1.5em;
   }
 }

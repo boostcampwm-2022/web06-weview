@@ -8,7 +8,8 @@
   width: 25%;
   height: 100%;
   box-shadow: $box-shadow;
-  border-radius: 1em;
+  border: 1px solid $line-color;
+  border-radius: 0.25rem;
   overflow-y: auto;
   &__item{
     margin: 1em 0;

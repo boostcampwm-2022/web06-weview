@@ -35,3 +35,9 @@ input{
 button{
   font-family: GmarketSans;
 }
+
+select{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}

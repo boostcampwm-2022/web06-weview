@@ -10,12 +10,7 @@
   width: 30%;
   min-width: 300px !important;
   padding: 0.5em 2em 0.5em 2em;
-  transition: all 0.5s ease-in-out;
   border: 1px solid $line-color;
   border-top: 0.25rem solid $line-color;
   border-bottom: 0.25rem solid $line-color;
-}
-
-.hidden-nav{
-  visibility: hidden;
 }
