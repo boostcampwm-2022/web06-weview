@@ -8,11 +8,13 @@
   flex-direction: column;
   align-items: flex-start;
   width: 30%;
-  height: 90%;
+  height: calc(100% - 0.5rem);
   min-width: 300px !important;
-  box-shadow: $box-shadow;
   padding: 0 2em;
   transition: all 0.5s ease-in-out;
+  border: 1px solid $line-color;
+  border-top: 0.25rem solid $line-color;
+  border-bottom: 0.25rem solid $line-color;
 }
 
 .hidden-nav{
