@@ -6,6 +6,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from './domain/user/user.entity';
 import { Post } from './domain/post/post.entity';
 import { AuthModule } from './domain/auth/auth.module';
+import { PostModule } from './domain/post/post.module';
+import { PostToTag } from './domain/tag/post-to-tag.entity';
+import { Tag } from './domain/tag/tag.entity';
+import { Image } from './domain/image/image.entity';
 
 @Module({
   imports: [
@@ -22,11 +26,13 @@ import { AuthModule } from './domain/auth/auth.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Post],
+        entities: [User, Post, Image, Tag, PostToTag],
         synchronize: true,
+        logging: true,
       }),
     }),
     AuthModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService],
