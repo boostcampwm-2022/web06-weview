@@ -1,6 +1,7 @@
 import React, { useContext, useLayoutEffect, useState } from "react";
 import { PostContext } from "@/components/PostBar/Post/Post";
 import { isEmpty } from "@/utils/typeCheck";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
 const PostImageSlider = (): JSX.Element => {
   const { images } = useContext(PostContext);
@@ -16,7 +17,7 @@ const PostImageSlider = (): JSX.Element => {
   return (
     <div className="post__image-slider">
       {isLoading ? (
-        <div className="login-callback__spinner"></div>
+        <LoadingSpinner />
       ) : (
         <img className="post__image-slider--image" src={images[0].src} />
       )}
