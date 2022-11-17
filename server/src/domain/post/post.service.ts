@@ -8,7 +8,6 @@ import { User } from '../user/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
-import { PostTag } from '../post-tag.entity';
 
 @Injectable()
 export class PostService {
@@ -16,8 +15,8 @@ export class PostService {
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
-    @InjectRepository(PostTag)
-    private readonly postTagRepository: Repository<PostTag>,
+    @InjectRepository(PostToTag)
+    private readonly postToTagRepository: Repository<PostToTag>,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -160,7 +159,7 @@ export class PostService {
   }
 
   private async findPostIdsFilteringTags(tags: string[]) {
-    const postsFilteringTags = await this.postTagRepository
+    const postsFilteringTags = await this.postToTagRepository
       .createQueryBuilder('pt')
       .select('postId')
       .leftJoin('tag', 'tag', 'pt.tagId = tag.id')

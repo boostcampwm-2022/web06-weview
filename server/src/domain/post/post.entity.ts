@@ -7,12 +7,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
-import { Review } from '../review.entity';
-import { Image } from '../image.entity';
-import { Likes } from '../likes.entity';
-import { PostTag } from '../post-tag.entity';
-import { Report } from '../report.entity';
 import { PostToTag } from '../tag/post-to-tag.entity';
+import {Image} from "../image/image.entity";
+import {Likes} from "../likes/likes.entity";
+import {Report} from "../report/report.entity";
+import {Review} from "../review/review.entity";
 
 @Entity()
 export class Post extends BaseTimeEntity {
@@ -42,10 +41,6 @@ export class Post extends BaseTimeEntity {
 
   @OneToMany(() => Likes, (likes) => likes.post)
   likesList: Likes[];
-
-  // TODO postTag 삭제. postToTag로 대체할거
-  @OneToMany(() => PostTag, (postTag) => postTag.post)
-  postTags: PostTag[];
 
   @OneToMany(() => PostToTag, (postToTag) => postToTag.post)
   postToTags: PostToTag[];

@@ -12,10 +12,10 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
-import { WriteDto } from '../auth/dto/controller-request.dto';
 import { PostService } from './post.service';
 import { InqueryUsingFilterDto } from './dto/controller-response.dto';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
+import {WriteDto} from "./dto/controller-request.dto";
 
 @Controller('posts')
 export class PostController {
@@ -30,13 +30,14 @@ export class PostController {
     @Query('writtenAnswer') writtenAnswer?: number,
     @Query('scores') scores?: number,
   ): Promise<LoadPostListResponseDto> {
-    if (tagString === undefined) {
-      const tags = [];
-    }
+    let tags = [];
     if (authors === undefined) {
       authors = [];
     }
-    const tags = tagString.slice(1, -1).split(','); //TODO 입력값 자체에서 검증을 하도록 변경
+    if (tagString !== undefined) {
+      tags = tagString.slice(1, -1).split(','); //TODO 입력값 자체에서 검증을 하도록 변경
+
+    }
     const result = await this.postService.loadPostList(
       3,
       Number(lastId), //TODO 다른 방법 찾기,

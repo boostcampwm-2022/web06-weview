@@ -7,7 +7,7 @@ export class Tag {
   id: number;
 
   @Column()
-  name: string;
+  name!: string;
 
   @OneToMany(() => PostToTag, (postToTag) => postToTag.tag)
   postToTags: PostToTag[];
