@@ -1,48 +1,55 @@
 name: "Dev Client Auto Deploy"
 
 on:
-    push:
-        branches:
-            - dev
-        paths:
-            - "client/**"
-    workflow_dispatch:
+  push:
+    branches:
+      - dev
+    paths:
+      - "client/**"
+  workflow_dispatch:
 
 jobs:
-    deployment:
-        name: deployment
-        runs-on: ubuntu-18.04
-        defaults:
-            run:
-                working-directory: client
-        steps: # job 구동 과정
-            - name: Checkout
-              uses: actions/checkout@v3
+  deployment:
+    name: deployment
+    runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: client
+    steps: # job 구동 과정
+      - name: Checkout
+        uses: actions/checkout@v3
 
-            - name: Use Node JS
-              uses: actions/setup-node@v2
-              with:
-                  node-version: "16.x"
+      - name: Use Node JS
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.x"
 
-            - name: Install npm
-              run: npm ci
+      - name: Set .env file
+        run: |
+          echo "VITE_API_SERVER_URL=${{ secrets.VITE_API_SERVER_URL }}" >> .env
+          echo "VITE_GITHUB_AUTH_SERVER_URL=${{ secrets.VITE_GITHUB_AUTH_SERVER_URL }}" >> .env
+          echo "VITE_API_MODE=${{ secrets.VITE_API_MODE }}" >> .env
+          cat .env
 
-            - name: Build Files
-              run: npm run build
+      - name: Install npm
+        run: npm ci
 
-            - name: Copy files to Bucket
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ secrets.NCLOUD_BUCKET_ACCESS_KEY }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.NCLOUD_BUCKET_SECRET_KEY }}
-                  AWS_DEFAULT_REGION: ap-northeast-2
-              run: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive ./dist s3://weview-dev
+      - name: Build Files
+        run: npm run build
 
-            - name: Deploy with SSH
-              uses: appleboy/ssh-action@master
-              with:
-                  host: ${{ secrets.NCLOUD_DEV_HOST }}
-                  username: ${{ secrets.NCLOUD_DEV_USERNAME }}
-                  password: ${{ secrets.NCLOUD_DEV_PASSWORD }}
-                  port: ${{ secrets.NCLOUD_DEV_PORT }}
-                  script: |
-                      aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive s3://weview-dev ./client
+      - name: Copy files to Bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.NCLOUD_BUCKET_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.NCLOUD_BUCKET_SECRET_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
+        run: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive ./dist s3://weview-dev
+
+      - name: Deploy with SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.NCLOUD_DEV_HOST }}
+          username: ${{ secrets.NCLOUD_DEV_USERNAME }}
+          password: ${{ secrets.NCLOUD_DEV_PASSWORD }}
+          port: ${{ secrets.NCLOUD_DEV_PORT }}
+          script: |
+            aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive s3://weview-dev ./client
