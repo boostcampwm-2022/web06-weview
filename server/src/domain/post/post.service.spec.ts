@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataSource, QueryRunner } from 'typeorm';
-import { WriteDto } from '../auth/dto/controller-request.dto';
+import { WriteDto } from '../post/dto/controller-request.dto';
 import { PostService } from './post.service';
 import { Post } from './post.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { PostToTag } from '../tag/post-to-tag.entity';
 
 // TODO mock 만들기
 const mockRepository = jest.fn(() => ({
@@ -40,6 +41,10 @@ describe('PostService', () => {
         PostService,
         {
           provide: getRepositoryToken(Post),
+          useValue: mockRepository(),
+        },
+        {
+          provide: getRepositoryToken(PostToTag),
           useValue: mockRepository(),
         },
         {

@@ -9,5 +9,6 @@ import { PostToTag } from '../tag/post-to-tag.entity';
   imports: [TypeOrmModule.forFeature([Post, PostToTag])],
   controllers: [PostController],
   providers: [PostService],
+  exports: [PostService],
 })
 export class PostModule {}
