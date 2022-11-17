@@ -1,14 +1,16 @@
 @import "@/constants/_library.scss";
 
 .post {
-  width: inherit;
-  height: inherit;
   background-color: $weview-off-white;
 
-  border-top: 0.25rem solid $line-color;
+  border-radius: 0.5rem;
+  border: 1px solid $line-color;
+
+  // 그림자
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
   // 스크롤 스냅핑 기능을 적용받을 자식 블록 선언
-  scroll-snap-align: start;
+  scroll-snap-align: center;
 
   // 반응형 레이아웃
   display: grid;

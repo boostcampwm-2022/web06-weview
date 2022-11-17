@@ -1,9 +1,22 @@
 @import "@/constants/_library.scss";
 
 .post-bar {
-  background-color: red;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+
+  background-color: $weview-off-white;
   overflow-y: scroll;
   overflow-x: hidden;
+
+  //width: 100%;
+  flex-grow: 1;
+  height: 100%;
+
+  // 1:1.54 비율의 최소 포스트 크기
+  min-width: 450px;
+  min-height: 693px;
 
   // 스크롤 스냅핑: 블록 단위로 이동할 수 있는 기능
   scroll-snap-type: y mandatory;
