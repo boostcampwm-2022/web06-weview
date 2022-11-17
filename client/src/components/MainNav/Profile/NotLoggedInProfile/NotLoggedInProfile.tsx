@@ -26,7 +26,7 @@ const NotLoggedInProfile = (): JSX.Element => {
 
       githubLogInAPI(code)
         .then((userData) => {
-          login();
+          login(userData);
         })
         .catch((e) => {
           console.log("서버에 요청을 보내는 데 실패했습니다.", e);

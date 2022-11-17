@@ -4,8 +4,8 @@ export interface AccessTokenInfo {
 }
 
 export interface UserInfo extends AccessTokenInfo {
-  id: number;
-  username: string;
+  id: string;
+  nickname: string;
+  profileUrl: string;
   email: string;
-  avatar_url: string;
 }
