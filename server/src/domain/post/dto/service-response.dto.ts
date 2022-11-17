@@ -1,5 +1,5 @@
 import { Post } from '../post.entity';
-import { Image } from '../../image.entity';
+import { Image } from '../../image/image.entity';
 
 export class LoadPostListResponseDto {
   posts: EachPostResponseDto[];
