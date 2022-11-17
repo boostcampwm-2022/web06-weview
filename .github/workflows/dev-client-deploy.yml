@@ -26,7 +26,8 @@ jobs:
 
       - name: Set .env file
         run: |
-          echo "VITE_API_SERVER_URL=${{ secrets.VITE_API_SERVER_URL }}" >> .env
+          echo "VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}" >> .env
+          echo "VITE_LOCAL_URL=${{ secrets.VITE_LOCAL_URL }}" >> .env
           echo "VITE_GITHUB_AUTH_SERVER_URL=${{ secrets.VITE_GITHUB_AUTH_SERVER_URL }}" >> .env
           echo "VITE_API_MODE=${{ secrets.VITE_API_MODE }}" >> .env
           cat .env
