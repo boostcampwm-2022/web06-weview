@@ -7,14 +7,17 @@ interface WritingStates {
   code: string;
   content: string;
   images: string[];
+  tags: string[];
 }
 
 interface WritingActions {
   setTitle: (title: string) => void;
   setLanguage: (language: string) => void;
   setCode: (code: string) => void;
-  setContent: (code: string) => void;
-  setImages: (code: string) => void;
+  setContent: (content: string) => void;
+  setImages: (imageSrc: string) => void;
+  setTags: (tag: string) => void;
+  removeTag: (willFilteredTag: string) => void;
   reset: () => void;
 }
 
@@ -24,6 +27,7 @@ const initialWritingState: WritingStates = {
   code: "",
   content: "",
   images: [],
+  tags: [],
 };
 
 const useWritingStore = create<WritingStates & WritingActions>()(
@@ -40,6 +44,16 @@ const useWritingStore = create<WritingStates & WritingActions>()(
         setImages: (newImg: string) =>
           set((state: WritingStates) => {
             return { images: [...state.images, newImg] };
+          }),
+        setTags: (newTag) =>
+          set((state: WritingStates) => {
+            return { tags: [...state.tags, newTag] };
+          }),
+        removeTag: (willFilteredTag: string) =>
+          set((state: WritingStates) => {
+            return {
+              tags: state.tags.filter((tag) => tag !== willFilteredTag),
+            };
           }),
         reset: () => {
           set(initialWritingState);
