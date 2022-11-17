@@ -72,7 +72,7 @@ export class AuthController {
     };
   }
 
-  @Delete('logout')
+  @Delete('auth/logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     res.clearCookie('refreshToken');

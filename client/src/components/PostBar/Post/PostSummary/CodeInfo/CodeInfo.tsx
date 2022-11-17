@@ -3,7 +3,7 @@ import { PostContext } from "@/components/PostBar/Post/Post";
 import { LINE_COUNT_REGEX } from "@/utils/regExpression";
 
 const CodeInfo = (): JSX.Element => {
-  const { code, imageUrls } = useContext(PostContext);
+  const { code, images } = useContext(PostContext);
   const [lineCount, setLineCount] = useState(0);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ const CodeInfo = (): JSX.Element => {
 
   return (
     <div className="post__info__code-info">
-      {lineCount ?? 0} Lines, {imageUrls.length} Images
+      {lineCount ?? 0} Lines, {images.length} Images
     </div>
   );
 };

@@ -1,18 +1,25 @@
 import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { UserInfo } from "@/types/auth";
 
-interface AuthStore {
+interface AuthState {
   isLoggedIn: boolean;
-  login: () => void;
+  myInfo: UserInfo | null;
+}
+
+interface AuthAction {
+  login: (userInfo: UserInfo) => void;
   logout: () => void;
 }
 
-const useAuthStore = create<AuthStore>()(
+const useAuthStore = create<AuthState & AuthAction>()(
   devtools(
     persist(
       (set) => ({
+        myInfo: null,
         isLoggedIn: false,
-        login: () => set((state) => ({ isLoggedIn: true })),
+        login: (userInfo) =>
+          set((state) => ({ isLoggedIn: true, myInfo: userInfo })),
         logout: () => set((state) => ({ isLoggedIn: false })),
       }),
       {

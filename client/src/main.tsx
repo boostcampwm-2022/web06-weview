@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { API_MODE } from "./constants/env";
 import { MODE } from "./constants/mode";
 
-if (MODE.MOCK === import.meta.env.VITE_API_MODE) {
+if (MODE.MOCK === API_MODE) {
   import("@/mocks/browser")
     .then(async ({ worker }) => {
       await worker.start({
