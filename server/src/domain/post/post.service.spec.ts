@@ -4,7 +4,7 @@ import { WriteDto } from '../post/dto/controller-request.dto';
 import { PostService } from './post.service';
 import { Post } from './post.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { PostToTag } from '../tag/post-to-tag.entity';
+import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 
 // TODO mock 만들기
 const mockRepository = jest.fn(() => ({

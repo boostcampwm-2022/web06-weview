@@ -7,11 +7,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
-import { PostToTag } from '../tag/post-to-tag.entity';
 import { Image } from '../image/image.entity';
 import { Likes } from '../likes/likes.entity';
 import { Report } from '../report/report.entity';
 import { Review } from '../review/review.entity';
+import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 
 @Entity()
 export class Post extends BaseTimeEntity {
