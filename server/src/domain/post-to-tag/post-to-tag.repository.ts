@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 @CustomRepository(PostToTag)
 export class PostToTagRepository extends Repository<PostToTag> {
   async findByContainingTags(tags: string[]): Promise<any> {
-    if (tags.length == 0) {
+    if (tags === undefined || tags.length == 0) {
       return null; //해당 조건은 사용하지 않습니다
     }
     return this.createQueryBuilder('pt')

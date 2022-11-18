@@ -14,10 +14,13 @@ export class PostRepository extends Repository<Post> {
       .innerJoinAndSelect('post.user', 'user')
       .leftJoinAndSelect('post.postToTags', 'postToTag')
       .leftJoinAndSelect('post.images', 'image')
-      .where('post.isDeleted = 0')
-      .andWhere('post.id in (:postIdsFiltered)', {
+      .where('post.isDeleted = 0');
+
+    if (postIdsFiltered) {
+      queryBuilder.andWhere('post.id in (:postIdsFiltered)', {
         postIdsFiltered: postIdsFiltered,
       });
+    }
 
     // 이름으로 필터링
     if (users.length !== 0) {
@@ -37,11 +40,14 @@ export class PostRepository extends Repository<Post> {
     });
 
     // 3: 서버에서 지정한 한번에 전해주는 Data의 크기
-    return await queryBuilder.take(3).orderBy('post.id', 'DESC').getMany();
+    return await queryBuilder
+      .take(3 + 1)
+      .orderBy('post.id', 'DESC')
+      .getMany();
   }
 
   async findByIdLikesCntGreaterThan(likesCnt: number): Promise<any> {
-    if (likesCnt == 0) {
+    if (likesCnt === undefined || likesCnt <= 0) {
       return null; //해당 조건은 사용하지 않습니다
     }
     return this.createQueryBuilder('post')
