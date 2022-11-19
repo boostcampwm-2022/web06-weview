@@ -12,6 +12,7 @@ import { Likes } from '../likes/likes.entity';
 import { Report } from '../report/report.entity';
 import { Review } from '../review/review.entity';
 import { PostToTag } from '../post-to-tag/post-to-tag.entity';
+import { Category } from './category';
 
 @Entity()
 export class Post extends BaseTimeEntity {

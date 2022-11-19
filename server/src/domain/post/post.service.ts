@@ -4,12 +4,12 @@ import { Post } from './post.entity';
 import { Image } from '../image/image.entity';
 import { Tag } from '../tag/tag.entity';
 import { User } from '../user/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
 import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 import { PostRepository } from './post.repository';
 import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
+import { Category } from './category';
+import { SEND_POST_CNT } from './post.controller';
 
 @Injectable()
 export class PostService {
@@ -81,7 +81,6 @@ export class PostService {
   }
 
   async loadPostList(
-    size: number,
     lastId: number,
     tags: string[],
     users: string[],
@@ -93,6 +92,7 @@ export class PostService {
     tags = ['java', 'greedy'];
     category = Category.QUESTION;
 
+    let isLast = true;
     const postInfosAfterFiltering = await Promise.all([
       this.postRepository.findByIdLikesCntGreaterThan(likesCnt),
       this.postToTagRepository.findByContainingTags(tags),
@@ -107,7 +107,16 @@ export class PostService {
       users,
       category,
     );
-    return new LoadPostListResponseDto(result, size != 3); // TODO 로직 수정 필요. 프론트와 이야기해보기
+    if (this.canGetNextPost(result.length)) {
+      //DB에서 다음 POST를 불러올 수 있는 상태라면
+      result.pop();
+      isLast = false;
+    }
+    return new LoadPostListResponseDto(result, isLast);
+  }
+
+  private canGetNextPost(resultCnt: number) {
+    return resultCnt === SEND_POST_CNT + 1;
   }
 
   /**
@@ -115,7 +124,7 @@ export class PostService {
    * 비어있는 배열을 반환하면 -> 조건을 만족시키는 사용자가 한 명도 없다
    * 어떤 값이 있다면 -> 조건을 만족한 사용자들의 값이다
    */
-  returnPostIdByAllConditionPass(postInfos: any[]) {
+  private returnPostIdByAllConditionPass(postInfos: any[]) {
     // 자세한 로직을 주석으로 달자
     let result;
     // postInfos의 원소들은 모두 스트림

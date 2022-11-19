@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { CustomRepository } from '../../typeorm/typeorm-ex.decorator';
+import { LATEST_DATA_CONDITION, SEND_POST_CNT } from './post.controller';
 
 @CustomRepository(Post)
 export class PostRepository extends Repository<Post> {
@@ -29,8 +30,7 @@ export class PostRepository extends Repository<Post> {
       });
     }
 
-    // lastId로 필터링 (-1의미 : 가장 최신의 데이터들을 받겠다)
-    if (lastId != -1) {
+    if (!this.wantLatestPosts(lastId)) {
       queryBuilder.andWhere('post.id < :lastId', { lastId: lastId });
     }
 
@@ -41,7 +41,7 @@ export class PostRepository extends Repository<Post> {
 
     // 3: 서버에서 지정한 한번에 전해주는 Data의 크기
     return await queryBuilder
-      .take(3 + 1)
+      .take(SEND_POST_CNT + 1)
       .orderBy('post.id', 'DESC')
       .getMany();
   }
@@ -58,5 +58,9 @@ export class PostRepository extends Repository<Post> {
       .groupBy('post.id')
       .having('likesCnt >= :likesCnt', { likesCnt: likesCnt })
       .getRawMany();
+  }
+
+  private wantLatestPosts(lastId) {
+    return lastId == LATEST_DATA_CONDITION;
   }
 }

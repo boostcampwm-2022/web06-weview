@@ -1,4 +1,4 @@
-const enum Category {
+export enum Category {
   QUESTION = 'QUESTION',
   ARCHIVING = 'ARCHIVING',
 }
