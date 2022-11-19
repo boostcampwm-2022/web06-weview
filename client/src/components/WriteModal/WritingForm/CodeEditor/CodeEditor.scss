@@ -1,4 +1,5 @@
 @import "src/constants/library";
+@import "./CodeTheme.scss";
 
 .code-editor{
     position: relative;
@@ -6,6 +7,7 @@
     height: 90%;
     border-radius: 0.25rem;
   &__textarea, &__present {
+    color: $weview-white;
     font-size: 1.25rem;
     position: absolute;
     margin: 0;
@@ -22,8 +24,9 @@
     resize: none;
   }
   &__present{
-    z-index: 0;
     background-color: $codeblock-color;
+    color: #c9d1d9;
+    z-index: 0;
     border-radius: 0.25rem;
     text-overflow: ellipsis;
   }

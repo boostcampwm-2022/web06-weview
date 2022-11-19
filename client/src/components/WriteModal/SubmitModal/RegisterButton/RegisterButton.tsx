@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import useWritingStore from "@/store/useWritingStore";
-import { getHashTags } from "@/utils/regExpression";
+import { getHashTags, preventXSS } from "@/utils/regExpression";
 import { postWritingsAPI } from "@/apis/post";
 import useModalStore from "@/store/useModalStore";
 
@@ -27,8 +27,8 @@ const RegisterButton = (): JSX.Element => {
     postWritingsAPI({
       title,
       content,
-      code,
-      language: "javascript",
+      code: preventXSS(code),
+      language: language,
       images: images,
       tags: getHashTags(content),
     })
