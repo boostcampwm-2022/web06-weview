@@ -1,5 +1,6 @@
 import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { DEFAULT_LANGUAGE } from "@/constants/options";
 
 interface WritingStates {
   title: string;
@@ -23,7 +24,7 @@ interface WritingActions {
 
 const initialWritingState: WritingStates = {
   title: "",
-  language: "",
+  language: DEFAULT_LANGUAGE,
   code: "",
   content: "",
   images: [],

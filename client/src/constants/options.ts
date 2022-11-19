@@ -15,3 +15,5 @@ export const LANGUAGES = [
   "Swift",
   "Kotlin",
 ];
+
+export const DEFAULT_LANGUAGE = "JavaScript";

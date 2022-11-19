@@ -28,7 +28,7 @@ const RegisterButton = (): JSX.Element => {
       title,
       content,
       code,
-      language: "javascript",
+      language: language,
       images: images,
       tags: getHashTags(content),
     })
