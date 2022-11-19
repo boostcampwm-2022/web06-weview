@@ -35,9 +35,11 @@ export class PostRepository extends Repository<Post> {
     }
 
     // 카테고리 필터링 (인덱스)
-    queryBuilder.andWhere('post.category = :category', {
-      category: category,
-    });
+    if (category) {
+      queryBuilder.andWhere('post.category = :category', {
+        category: category,
+      });
+    }
 
     // 3: 서버에서 지정한 한번에 전해주는 Data의 크기
     return await queryBuilder

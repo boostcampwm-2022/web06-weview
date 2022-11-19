@@ -10,6 +10,7 @@ import { PostRepository } from './post.repository';
 import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
 import { Category } from './category';
 import { SEND_POST_CNT } from './post.controller';
+import { LoadPostListRequestDto } from './dto/service-request.dto';
 
 @Injectable()
 export class PostService {
@@ -81,17 +82,10 @@ export class PostService {
   }
 
   async loadPostList(
-    lastId: number,
-    tags: string[],
-    users: string[],
-    category: Category,
-    likesCnt: number,
+    loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
-    // TODO 임시로 값들을 고정. 입력값 검증 넣어주고 고정값 지워주기
-    likesCnt = 1;
-    tags = ['java', 'greedy'];
-    category = Category.QUESTION;
-
+    const { lastId, tags, authors, category, writtenAnswer, likesCnt } =
+      loadPostListRequestDto;
     let isLast = true;
     const postInfosAfterFiltering = await Promise.all([
       this.postRepository.findByIdLikesCntGreaterThan(likesCnt),
@@ -100,11 +94,10 @@ export class PostService {
     const postIdsFiltered = this.returnPostIdByAllConditionPass(
       postInfosAfterFiltering,
     );
-
     const result = await this.postRepository.findByIdUsingCondition(
       lastId,
       postIdsFiltered,
-      users,
+      authors,
       category,
     );
     if (this.canGetNextPost(result.length)) {

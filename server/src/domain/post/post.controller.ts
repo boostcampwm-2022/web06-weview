@@ -15,8 +15,9 @@ import { Request } from 'express';
 import { PostService } from './post.service';
 import { InqueryUsingFilterDto } from './dto/controller-response.dto';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
-import { WriteDto } from './dto/controller-request.dto';
+import { InqueryDto, WriteDto } from './dto/controller-request.dto';
 import { Category } from './category';
+import { LoadPostListRequestDto } from './dto/service-request.dto';
 
 export const SEND_POST_CNT = 3;
 export const LATEST_DATA_CONDITION = -1;
@@ -27,28 +28,28 @@ export class PostController {
 
   @Get()
   async inqueryUsingFilter(
-    @Query('lastId') lastId: number,
-    @Query('category') category: string,
-    @Query('tags') tagString?: string,
-    @Query('authors') authors?: string[],
-    @Query('writtenAnswer') writtenAnswer?: number,
-    @Query('scores') scores?: number,
+    @Query() inqueryDto: InqueryDto,
   ): Promise<LoadPostListResponseDto> {
-    let tags = [];
+    const { lastId, category, writtenAnswer, scores: likesCnt } = inqueryDto;
+    let { authors, tags } = inqueryDto;
+    // TODO 35-39 덜 깔끔해보임
     if (authors === undefined) {
       authors = [];
     }
-    if (tagString !== undefined) {
-      tags = tagString.slice(1, -1).split(','); //TODO 입력값 자체에서 검증을 하도록 변경
+    if (tags === undefined) {
+      tags = [];
     }
-    const result = await this.postService.loadPostList(
-      Number(lastId), //TODO 다른 방법 찾기,
-      tags,
-      authors,
-      category as Category,
-      scores,
+
+    return await this.postService.loadPostList(
+      new LoadPostListRequestDto(
+        lastId,
+        tags,
+        authors,
+        category as Category,
+        writtenAnswer,
+        likesCnt,
+      ),
     );
-    return result;
   }
 
   @Post()
