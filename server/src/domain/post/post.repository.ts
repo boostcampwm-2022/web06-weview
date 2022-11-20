@@ -17,6 +17,9 @@ export class PostRepository extends Repository<Post> {
       .leftJoinAndSelect('post.images', 'image')
       .where('post.isDeleted = 0');
 
+    if (!this.havePostSatisfiedFiltering(postIdsFiltered.length)) {
+      return [];
+    }
     if (postIdsFiltered) {
       queryBuilder.andWhere('post.id in (:postIdsFiltered)', {
         postIdsFiltered: postIdsFiltered,
@@ -64,5 +67,9 @@ export class PostRepository extends Repository<Post> {
 
   private wantLatestPosts(lastId) {
     return lastId == LATEST_DATA_CONDITION;
+  }
+
+  private havePostSatisfiedFiltering(filteringCnt: number) {
+    return filteringCnt !== 0;
   }
 }

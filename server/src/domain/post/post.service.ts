@@ -8,9 +8,9 @@ import { LoadPostListResponseDto } from './dto/service-response.dto';
 import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 import { PostRepository } from './post.repository';
 import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
-import { Category } from './category';
 import { SEND_POST_CNT } from './post.controller';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
+import { TagRepository } from '../tag/tag.repository';
 
 @Injectable()
 export class PostService {
@@ -18,6 +18,7 @@ export class PostService {
     private readonly dataSource: DataSource,
     private readonly postRepository: PostRepository,
     private readonly postToTagRepository: PostToTagRepository,
+    private readonly tagRepository: TagRepository, // TODO 모듈에 넣기
   ) {}
 
   async write(
@@ -128,7 +129,7 @@ export class PostService {
    * 비어있는 배열을 반환하면 -> 조건을 만족시키는 사용자가 한 명도 없다
    * 어떤 값이 있다면 -> 조건을 만족한 사용자들의 값이다
    */
-  private returnPostIdByAllConditionPass(postInfos: any[]) {
+  public returnPostIdByAllConditionPass(postInfos: any[]) {
     // 자세한 로직을 주석으로 달자
     let result;
     // postInfos의 원소들은 모두 스트림
