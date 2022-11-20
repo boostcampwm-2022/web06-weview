@@ -2,22 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { Post } from './post.entity';
 import { Image } from '../image/image.entity';
-import { PostToTag } from '../tag/post-to-tag.entity';
 import { Tag } from '../tag/tag.entity';
 import { User } from '../user/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
+import { PostToTag } from '../post-to-tag/post-to-tag.entity';
+import { PostRepository } from './post.repository';
+import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
+import { SEND_POST_CNT } from './post.controller';
+import { LoadPostListRequestDto } from './dto/service-request.dto';
+import { TagRepository } from '../tag/tag.repository';
 
 @Injectable()
 export class PostService {
-  private WANT_NEW_DATA = -1;
   constructor(
-    @InjectRepository(Post)
-    private readonly postRepository: Repository<Post>,
-    @InjectRepository(PostToTag)
-    private readonly postToTagRepository: Repository<PostToTag>,
     private readonly dataSource: DataSource,
+    private readonly postRepository: PostRepository,
+    private readonly postToTagRepository: PostToTagRepository,
+    private readonly tagRepository: TagRepository,
   ) {}
 
   async write(
@@ -43,7 +44,7 @@ export class PostService {
 
       const imageEntities = images.map((image) => {
         const imageEntity = queryRunner.manager.create(Image);
-        imageEntity.url = image;
+        imageEntity.src = image;
         return imageEntity;
       });
 
@@ -81,96 +82,70 @@ export class PostService {
     }
   }
 
-  // TODO 코드 분리하기
   async loadPostList(
-    size: number,
-    lastId: number,
-    tags: string[],
-    users: string[],
-    category: Category,
-    likesCnt: number,
+    loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
-    const queryBuilder = this.postRepository
-      .createQueryBuilder('post')
-      .innerJoinAndSelect('post.user', 'user')
-      .leftJoinAndSelect('post.postToTags', 'postToTag')
-      .leftJoinAndSelect('post.images', 'image')
-      .where('post.isDeleted = 0');
-
-    // 이름으로 필터링
-    if (users.length !== 0) {
-      queryBuilder.andWhere('user.nickname in (:users)', {
-        users: users,
-      });
+    const { lastId, tags, authors, category, writtenAnswer, likesCnt } =
+      loadPostListRequestDto;
+    let isLast = true;
+    const postInfosAfterFiltering = await Promise.all([
+      this.postRepository.findByIdLikesCntGreaterThan(likesCnt),
+      this.postToTagRepository.findByContainingTags(tags),
+    ]);
+    const postIdsFiltered = this.returnPostIdByAllConditionPass(
+      postInfosAfterFiltering,
+    );
+    const result = await this.postRepository.findByIdUsingCondition(
+      lastId,
+      postIdsFiltered,
+      authors,
+      category,
+    );
+    if (this.canGetNextPost(result.length)) {
+      result.pop();
+      isLast = false;
     }
-
-    // 좋아요 개수로 필터링
-    if (likesCnt !== undefined && likesCnt >= 1) {
-      const postIdsFilteringLikesCnt = await this.findPostIdsFilteringLikesCnt(
-        likesCnt,
-      );
-      if (postIdsFilteringLikesCnt.length == 0) {
-        return new LoadPostListResponseDto([], true); // 결과가 없음. 이후 로직 실행할 필요 x
-      }
-      queryBuilder.andWhere('post.id in (:postIdsFilteringLikesCnt)', {
-        postIdsFilteringLikesCnt: postIdsFilteringLikesCnt,
-      });
-    }
-
-    // TODO 리뷰 개수로 필터링
-
-    // 태그를 보고 필터링
-    if (tags.length !== 0) {
-      const postIdsFilteringTags = await this.findPostIdsFilteringTags(tags);
-      if (postIdsFilteringTags.length == 0) {
-        return new LoadPostListResponseDto([], true); // 결과가 없음. 이후 로직 실행할 필요 x
-      }
-      queryBuilder.andWhere('post.id in (:postIdsFilteringTags)', {
-        postIdsFilteringTags: postIdsFilteringTags,
-      });
-    }
-
-    // lastId로 필터링
-    if (lastId != this.WANT_NEW_DATA) {
-      queryBuilder.andWhere('post.id < :lastId', { lastId: lastId });
-    }
-
-    // 카테고리 필터링 (인덱스)
-    category = Category.QUESTION; //example
-    queryBuilder.andWhere('post.category = :category', {
-      category: category,
-    });
-
-    const result = await queryBuilder
-      .take(size)
-      .orderBy('post.id', 'DESC')
-      .getMany();
-    return new LoadPostListResponseDto(result, size != result.length);
+    await this.addTagNamesEachPost(result);
+    return new LoadPostListResponseDto(result, isLast);
   }
 
-  private async findPostIdsFilteringLikesCnt(likesCnt: number) {
-    const postsFilteringLikesCnt = await this.postRepository
-      .createQueryBuilder('post')
-      .innerJoin('likes', 'likes', 'post.id = likes.postId')
-      .where('likes.isDeleted = false')
-      .andWhere('post.isDeleted= false')
-      .select('post.id')
-      .addSelect('COUNT(*) AS likesCnt')
-      .groupBy('post.id')
-      .having('likesCnt > :likesCnt', { likesCnt: likesCnt })
-      .getRawMany();
-    return postsFilteringLikesCnt.map((obj) => obj['post_id']);
+  private async addTagNamesEachPost(result: Post[]) {
+    for (const each of result) {
+      const temp = [];
+      for (const tag of each.postToTags) {
+        temp.push(this.tagRepository.findById(tag.tagId));
+      }
+      const tags = await Promise.all(temp);
+      each.tagsNames = tags.map((obj) => obj.name);
+    }
   }
 
-  private async findPostIdsFilteringTags(tags: string[]) {
-    const postsFilteringTags = await this.postToTagRepository
-      .createQueryBuilder('pt')
-      .select('postId')
-      .leftJoin('tag', 'tag', 'pt.tagId = tag.id')
-      .where('tag.name in (:tags)', { tags: tags })
-      .groupBy('postId')
-      .having('COUNT(tag.id) >= :tagCnt', { tagCnt: tags.length })
-      .getRawMany();
-    return postsFilteringTags.map((obj) => obj['postId']);
+  private canGetNextPost(resultCnt: number) {
+    return resultCnt === SEND_POST_CNT + 1;
+  }
+
+  /**
+   * 사용된 검색 조건이 한개도 없으면 -> null을 반환
+   * 조건을 만족시키는 사용자가 한 명도 없으면 -> 비어있는 배열 []을 반환
+   * 배열 안에 값이 있다면 -> 조건을 만족하는 사용자들의 id 리스트를 반환
+   */
+  public returnPostIdByAllConditionPass(postInfos: any[]) {
+    let result;
+    for (const postInfo of postInfos) {
+      if (postInfo === null) {
+        continue;
+      }
+      if (result === undefined) {
+        result = postInfo.map((obj) => obj.postId);
+      } else {
+        result = postInfo
+          .map((obj) => obj.postId)
+          .filter((each) => result.includes(each));
+      }
+    }
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

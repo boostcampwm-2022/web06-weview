@@ -17,11 +17,11 @@ import {
   RefreshTokensDto,
 } from './dto/controller-response.dto';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('auth/github')
+  @Get('github')
   async authorizeWithGithub(
     @Res({ passthrough: true }) res: Response,
     @Query('code') code: string,
@@ -51,7 +51,7 @@ export class AuthController {
     };
   }
 
-  @Get('auth/refresh')
+  @Get('refresh')
   @UseGuards(AuthGuard('jwt-refresh'))
   refreshTokens(
     @Req() req: Request,
@@ -72,7 +72,7 @@ export class AuthController {
     };
   }
 
-  @Delete('auth/logout')
+  @Delete('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     res.clearCookie('refreshToken');

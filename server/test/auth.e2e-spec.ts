@@ -56,13 +56,13 @@ describe('Auth E2E', () => {
   describe('로그아웃', () => {
     it('토큰이 없어도 로그아웃시 성공(204)', () => {
       return request(app.getHttpServer())
-        .delete('/logout')
+        .delete('/auth/logout')
         .expect(HttpStatus.NO_CONTENT);
     });
 
     it('쿠키에 있던 리프레쉬 토큰이 삭제된다(204', () => {
       return request(app.getHttpServer())
-        .delete('/logout')
+        .delete('/auth/logout')
         .set('Cookie', [`refreshToken=${refreshToken}`])
         .expect(HttpStatus.NO_CONTENT)
         .expect((res) => {
