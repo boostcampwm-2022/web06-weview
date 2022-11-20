@@ -13,6 +13,7 @@ import { Likes } from './domain/likes/likes.entity';
 import { Review } from './domain/review/review.entity';
 import { Report } from './domain/report/report.entity';
 import { ReviewModule } from './domain/review/review.module';
+import { PostToTag } from './domain/post-to-tag/post-to-tag.entity';
 
 @Module({
   imports: [

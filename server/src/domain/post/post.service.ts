@@ -44,7 +44,7 @@ export class PostService {
 
       const imageEntities = images.map((image) => {
         const imageEntity = queryRunner.manager.create(Image);
-        imageEntity.url = image;
+        imageEntity.src = image;
         return imageEntity;
       });
 

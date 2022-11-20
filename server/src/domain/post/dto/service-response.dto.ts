@@ -50,8 +50,8 @@ export class EachImageResponseDto {
   name: string;
 
   constructor(image: Image) {
-    this.src = image.url;
-    this.name = image.url.split('/').slice(-1)[0].split('.').slice(0)[0];
+    this.src = image.src;
+    this.name = image.src.split('/').slice(-1)[0].split('.').slice(0)[0];
   }
 }
 

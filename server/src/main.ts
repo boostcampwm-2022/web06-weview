@@ -16,6 +16,7 @@ async function bootstrap() {
       transformOptions: {
         enableImplicitConversion: true,
       },
+      forbidUnknownValues: true,
     }),
   );
   app.use(cookieParser());
@@ -23,12 +24,6 @@ async function bootstrap() {
     origin: [process.env.TARGET_ORIGIN],
     credentials: true,
   });
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      forbidUnknownValues: true,
-    }),
-  );
 
   await app.listen(8000);
 }

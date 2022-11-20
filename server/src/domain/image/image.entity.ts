@@ -17,5 +17,5 @@ export class Image extends BaseTimeEntity {
   post: Post;
 
   @Column()
-  url!: string;
+  src!: string;
 }

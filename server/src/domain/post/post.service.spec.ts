@@ -394,14 +394,14 @@ describe('PostService', () => {
               createdAt: '2022-11-17T11:41:34.568Z',
               updatedAt: '2022-11-17T11:41:34.568Z',
               id: 1,
-              url: 'https://code.visualstudio.com/assets/docs/nodejs/reactjs/js-error.png',
+              src: 'https://code.visualstudio.com/assets/docs/nodejs/reactjs/js-error.png',
             },
             {
               isDeleted: false,
               createdAt: '2022-11-17T11:41:34.568Z',
               updatedAt: '2022-11-17T11:41:34.568Z',
               id: 2,
-              url: 'https://code.visualstudio.com/assets/docs/nodejs/reactjs/suggestions.png',
+              src: 'https://code.visualstudio.com/assets/docs/nodejs/reactjs/suggestions.png',
             },
           ],
         },
@@ -417,11 +417,11 @@ describe('PostService', () => {
             language: 'java',
             images: [
               {
-                url: 'https://code.visualstudio.com/assets/docs/nodejs/reactjs/js-error.png',
+                src: 'https://code.visualstudio.com/assets/docs/nodejs/reactjs/js-error.png',
                 name: 'js-error',
               },
               {
-                url: 'https://code.visualstudio.com/assets/docs/nodejs/reactjs/suggestions.png',
+                src: 'https://code.visualstudio.com/assets/docs/nodejs/reactjs/suggestions.png',
                 name: 'suggestions',
               },
             ],
