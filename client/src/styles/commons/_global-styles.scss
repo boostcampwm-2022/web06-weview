@@ -1,0 +1,36 @@
+/**
+ * global styles
+ */
+$root-em: 100%; // 1rem = 6.3px
+$standard-em: 62.5%; // 1rem = 10px
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-size: $root-em; // rem
+}
+
+/**
+ * responsive size
+ */
+$device-min-width: 1024px; // 64rem
+$tablet-min-width: 768px; // 48rem
+$mobile-min-width: 320px; // 20rem
+
+/**
+ * gap, margin, padding
+ */
+$main-gap: 2rem; // nav 와 post-bar 사이 gap
+$post-bar-margin-side: 0.063rem; // post-bar 양 옆 마진 (테두리 여백)
+$post-gap: 2rem; // post 와 post 사이 gap
+
+/**
+ * page Main
+ */
+$main-nav-width: 20rem;
+$main-post-bar-width: 44rem;
+$main-post-height: $main-post-bar-width * 1.54;
+$desktop-main-width: $main-nav-width + $main-post-bar-width + $main-gap;
+
