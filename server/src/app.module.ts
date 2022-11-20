@@ -13,6 +13,7 @@ import { Image } from './domain/image/image.entity';
 import { Likes } from './domain/likes/likes.entity';
 import { Review } from './domain/review/review.entity';
 import { Report } from './domain/report/report.entity';
+import { ReviewModule } from './domain/review/review.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { Report } from './domain/report/report.entity';
     }),
     AuthModule,
     PostModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],
