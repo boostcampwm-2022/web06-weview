@@ -640,7 +640,7 @@ describe('PostService', () => {
         resultFilteringTag,
       ]);
 
-      expect(result).toBeUndefined();
+      expect(result).toBeNull();
     });
   });
 

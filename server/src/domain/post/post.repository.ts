@@ -17,10 +17,10 @@ export class PostRepository extends Repository<Post> {
       .leftJoinAndSelect('post.images', 'image')
       .where('post.isDeleted = 0');
 
-    if (!this.havePostSatisfiedFiltering(postIdsFiltered.length)) {
-      return [];
-    }
     if (postIdsFiltered) {
+      if (!this.havePostSatisfiedFiltering(postIdsFiltered.length)) {
+        return [];
+      }
       queryBuilder.andWhere('post.id in (:postIdsFiltered)', {
         postIdsFiltered: postIdsFiltered,
       });
