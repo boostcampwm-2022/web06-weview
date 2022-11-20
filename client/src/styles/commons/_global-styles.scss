@@ -15,8 +15,8 @@ html {
 /**
  * responsive size
  */
-$device-min-width: 1024px; // 64rem
-$tablet-min-width: 768px; // 48rem
+$device-min-width: 864px; // 54rem
+$tablet-min-width: 576px; // 36rem
 $mobile-min-width: 320px; // 20rem
 
 /**
@@ -30,7 +30,7 @@ $post-gap: 2rem; // post 와 post 사이 gap
  * page Main
  */
 $main-nav-width: 20rem;
-$main-post-bar-width: 44rem;
+$main-post-bar-width: 32rem;
 $main-post-height: $main-post-bar-width * 1.54;
 $desktop-main-width: $main-nav-width + $main-post-bar-width + $main-gap;
 
