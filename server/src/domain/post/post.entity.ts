@@ -51,4 +51,7 @@ export class Post extends BaseTimeEntity {
 
   @OneToMany(() => Review, (review) => review.post)
   reviews: Review[];
+
+  // tag들의 이름을 저장하기 위해 사용하는 변수
+  tagsNames: string[];
 }

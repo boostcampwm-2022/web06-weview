@@ -23,7 +23,7 @@ export class EachPostResponseDto {
   images: EachImageResponseDto[];
   updatedAt: Date;
   author: AuthorDto;
-  tags: number[];
+  tags: string[];
   reviews: number[];
   isLiked: boolean;
 
@@ -39,9 +39,9 @@ export class EachPostResponseDto {
     this.images = post.images.map((image) => new EachImageResponseDto(image));
     this.updatedAt = post.updatedAt;
     this.author = new AuthorDto(post.user);
-    this.tags = post.postToTags.map((obj) => obj.tagId);
-    this.reviews = []; // TODO
-    this.isLiked = true;
+    this.tags = post.tagsNames;
+    this.reviews = []; // TODO api에서 삭제될 예정
+    this.isLiked = true; // TODO
   }
 }
 

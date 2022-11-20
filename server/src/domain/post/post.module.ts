@@ -7,10 +7,15 @@ import { TypeOrmExModule } from '../../typeorm/typeorm-ex.module';
 import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 import { PostRepository } from './post.repository';
 import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
+import { TagRepository } from '../tag/tag.repository';
 
 @Module({
   imports: [
-    TypeOrmExModule.forCustomRepository([PostRepository, PostToTagRepository]),
+    TypeOrmExModule.forCustomRepository([
+      PostRepository,
+      PostToTagRepository,
+      TagRepository,
+    ]),
     TypeOrmModule.forFeature([Post, PostToTag]),
   ],
   controllers: [PostController],

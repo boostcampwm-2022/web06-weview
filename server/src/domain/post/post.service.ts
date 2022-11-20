@@ -101,11 +101,22 @@ export class PostService {
       category,
     );
     if (this.canGetNextPost(result.length)) {
-      //DB에서 다음 POST를 불러올 수 있는 상태라면
       result.pop();
       isLast = false;
     }
+    await this.addTagNamesEachPost(result);
     return new LoadPostListResponseDto(result, isLast);
+  }
+
+  private async addTagNamesEachPost(result: Post[]) {
+    for (const each of result) {
+      const temp = [];
+      for (const tag of each.postToTags) {
+        temp.push(this.tagRepository.findById(tag.tagId));
+      }
+      const tags = await Promise.all(temp);
+      each.tagsNames = tags.map((obj) => obj.name);
+    }
   }
 
   private canGetNextPost(resultCnt: number) {
