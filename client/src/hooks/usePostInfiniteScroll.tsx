@@ -9,10 +9,6 @@ import { fetchPost } from "@/apis/post";
 import { PostScroll } from "@/types/post";
 import { useCallback } from "react";
 
-interface PostInfiniteScrollOptions {
-  size: number;
-}
-
 interface PostInfiniteScrollResults {
   data: InfiniteData<PostScroll> | undefined;
   hasNextPage: boolean | undefined;
@@ -29,9 +25,7 @@ interface PostInfiniteScrollResults {
 /**
  * react-query 를 이용한 포스트 정보에 대한 인피니티 스크롤 커스텀 훅 입니다.
  */
-const usePostInfiniteScroll = ({
-  size,
-}: PostInfiniteScrollOptions): PostInfiniteScrollResults => {
+const usePostInfiniteScroll = (): PostInfiniteScrollResults => {
   const { data, hasNextPage, isFetching, fetchNextPage } = useInfiniteQuery(
     ["posts"],
     async ({ pageParam = -1 }: QueryFunctionContext) =>
