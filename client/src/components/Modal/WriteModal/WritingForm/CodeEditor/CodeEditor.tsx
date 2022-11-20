@@ -1,9 +1,11 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import useWritingStore from "@/store/useWritingStore";
 import hljs from "highlight.js";
+import useLineNumbers from "@/hooks/useLineNumbers";
 
 const CodeEditor = (): JSX.Element => {
   const [highlightedHTML, setHighlightedHTML] = useState("");
+  const { lineCount, setLines } = useLineNumbers();
   const { code, setCode, language } = useWritingStore((state) => ({
     code: state.code,
     setCode: state.setCode,
@@ -11,7 +13,10 @@ const CodeEditor = (): JSX.Element => {
   }));
   useEffect(() => {
     setHighlightedHTML(
-      hljs.highlight(code, { language }).value.replace(/" "/g, "&nbsp;")
+      hljs
+        .highlight(code, { language })
+        .value.replace(/" "/g, "&nbsp;")
+        .replace(/"\n"/g, "<br/>")
     );
   }, [code]);
 
