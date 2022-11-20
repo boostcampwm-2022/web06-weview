@@ -9,7 +9,7 @@ export class Review extends BaseTimeEntity {
   id: number;
 
   @Column()
-  name!: string;
+  content!: string;
 
   @ManyToOne(() => Post, (post) => post.reviews)
   post: Post;
