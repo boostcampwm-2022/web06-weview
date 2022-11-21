@@ -1,9 +1,13 @@
-import { CustomRepository } from '../../typeorm/typeorm-ex.decorator';
 import { Tag } from './tag.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 
-@CustomRepository(Tag)
+@Injectable()
 export class TagRepository extends Repository<Tag> {
+  constructor(private dataSource: DataSource) {
+    super(Tag, dataSource.createEntityManager());
+  }
+
   findById(id: number) {
     return this.findOneOrFail({ where: { id: id } });
   }
