@@ -456,7 +456,7 @@ describe('PostService', () => {
       isLast: true,
     };
 
-    it('마지막 결과값을 포함할 때 isLast는 true가 된다', async () => {
+    beforeEach(async () => {
       // given
       jest
         .spyOn(postRepository, 'findByIdLikesCntGreaterThan')
@@ -467,10 +467,14 @@ describe('PostService', () => {
       jest
         .spyOn(postRepository, 'findBySearchWord')
         .mockResolvedValue(resultFilteringTag);
+      jest.spyOn(tagRepository, 'findById').mockResolvedValue({ name: 'java' });
+    });
+
+    it('마지막 결과값을 포함할 때 isLast는 true가 된다', async () => {
+      //given
       jest
         .spyOn(postRepository, 'findByIdUsingCondition')
         .mockResolvedValue(postListThatHasOnePost);
-      jest.spyOn(tagRepository, 'findById').mockResolvedValue({ name: 'java' });
 
       //when
       const result = await service.loadPostList(dto);
@@ -480,24 +484,14 @@ describe('PostService', () => {
     });
 
     it('마지막 결과가 아닐 때 isLast는 false가 된다', async () => {
-      // given
-      jest
-        .spyOn(postRepository, 'findByIdLikesCntGreaterThan')
-        .mockResolvedValue(resultFilteringLikesCnt);
-      jest
-        .spyOn(postToTagRepository, 'findByContainingTags')
-        .mockResolvedValue(resultFilteringTag);
-      jest
-        .spyOn(postRepository, 'findBySearchWord')
-        .mockResolvedValue(resultFilteringTag);
+      //given
       jest
         .spyOn(postRepository, 'findByIdUsingCondition')
         .mockResolvedValue(postListThatHasFourPost);
-      jest.spyOn(tagRepository, 'findById').mockResolvedValue({ name: 'java' });
+      // jest.spyOn(tagRepository, 'findById').mockResolvedValue({ name: 'java' });
 
       // when
       const result = await service.loadPostList(dto);
-
       // then
       expect(result).toEqual(inqueryResultNotIncludeLastValue);
     });
@@ -505,18 +499,8 @@ describe('PostService', () => {
     it('검색 결과가 없을 때, post=[], lastId -1 isLast: true 를 반환한다', async () => {
       // given
       jest
-        .spyOn(postRepository, 'findByIdLikesCntGreaterThan')
-        .mockResolvedValue(resultFilteringLikesCnt);
-      jest
-        .spyOn(postToTagRepository, 'findByContainingTags')
-        .mockResolvedValue(resultFilteringTag);
-      jest
-        .spyOn(postRepository, 'findBySearchWord')
-        .mockResolvedValue(resultFilteringTag);
-      jest
         .spyOn(postRepository, 'findByIdUsingCondition')
         .mockResolvedValue([]);
-      jest.spyOn(tagRepository, 'findById').mockResolvedValue({ name: 'java' });
 
       // when
       const result = await service.loadPostList(dto);
@@ -532,18 +516,8 @@ describe('PostService', () => {
     it('이미지가 없어도, 정상적으로 결과를 반환한다', async () => {
       // TODO
       jest
-        .spyOn(postRepository, 'findByIdLikesCntGreaterThan')
-        .mockResolvedValue(resultFilteringLikesCnt);
-      jest
-        .spyOn(postToTagRepository, 'findByContainingTags')
-        .mockResolvedValue(resultFilteringTag);
-      jest
         .spyOn(postRepository, 'findByIdUsingCondition')
         .mockResolvedValue(postList);
-      jest
-        .spyOn(postRepository, 'findBySearchWord')
-        .mockResolvedValue(postList);
-      jest.spyOn(tagRepository, 'findById').mockResolvedValue({ name: 'java' });
 
       const result = await service.loadPostList(dto);
       expect(result).toEqual(inqueryResult);
@@ -552,19 +526,8 @@ describe('PostService', () => {
     it('글에 태그들이 없어도, 정상적으로 결과를 반환한다', async () => {
       // TODO
       jest
-        .spyOn(postRepository, 'findByIdLikesCntGreaterThan')
-        .mockResolvedValue(resultFilteringLikesCnt);
-      jest
-        .spyOn(postToTagRepository, 'findByContainingTags')
-        .mockResolvedValue(resultFilteringTag);
-      jest
         .spyOn(postRepository, 'findByIdUsingCondition')
         .mockResolvedValue(postList);
-      jest
-        .spyOn(postRepository, 'findBySearchWord')
-        .mockResolvedValue(postList);
-
-      jest.spyOn(tagRepository, 'findById').mockResolvedValue({ name: 'java' });
 
       const result = await service.loadPostList(dto);
       expect(result).toEqual(inqueryResult);
