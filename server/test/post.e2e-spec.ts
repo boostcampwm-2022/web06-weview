@@ -12,7 +12,6 @@ import { ConfigModule } from '@nestjs/config';
 describe('Post e2e', () => {
   let app: INestApplication;
   let authService: AuthService;
-  let accessToken: string;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,7 +23,7 @@ describe('Post e2e', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: ['src/domain/**/*.entity.ts', 'src/domain/*.entity.ts'],
+          entities: ['src/domain/**/*.entity.ts'],
           dropSchema: true,
           synchronize: true,
         }),
@@ -45,21 +44,17 @@ describe('Post e2e', () => {
     authService = module.get<AuthService>(AuthService);
 
     await app.init();
-
-    // 회원가입
-    const user = await authService.join(
-      'admin@test',
-      'nickname',
-      'http://localhost:8080/image.png',
-    );
-
-    const { accessToken: newAccessToken } = await authService.createTokens(
-      user.id,
-    );
-    accessToken = newAccessToken;
   });
 
   describe('게시글 작성', () => {
+    let accessToken;
+
+    beforeAll(async () => {
+      const { accessToken: newAccessToken } = await authService.createTokens(1);
+
+      accessToken = newAccessToken;
+    });
+
     it('올바른 양식으로 게시글 작성', () => {
       const writeDto: WriteDto = {
         title: '제목',
