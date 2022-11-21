@@ -49,7 +49,7 @@ const TagInput = (): JSX.Element => {
         className="tag-input"
         value={tag}
         onChange={changeTagValue}
-        onKeyDown={handlePressedKey}
+        onKeyUp={handlePressedKey}
       />
       <div className="tag-list">
         {tags.map((tag) => (

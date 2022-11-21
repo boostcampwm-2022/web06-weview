@@ -1,6 +1,6 @@
 import React, { useCallback, MouseEvent } from "react";
 import useModalStore from "@/store/useModalStore";
-import SearchModal from "@/components/MainNav/Filter/SearchModal/SearchModal";
+import SearchModal from "@/components/ModalContainer/SearchModal/SearchModal";
 import WriteModal from "@/components/WriteModal/WriteModal";
 
 const ModalContainer = (): JSX.Element => {
