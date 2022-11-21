@@ -1,16 +1,21 @@
 @import "@/constants/_library.scss";
+@import "@/styles/commons/_global-styles.scss";
 
 .post {
+  width: 100%;
+  height: $main-post-height;
+
   background-color: $weview-off-white;
 
   border-radius: 0.35rem;
   border: 1px solid $line-color;
 
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
   // 그림자
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-
-  // 스크롤 스냅핑 기능을 적용받을 자식 블록 선언
-  scroll-snap-align: center;
 
   // 반응형 레이아웃
   display: grid;
