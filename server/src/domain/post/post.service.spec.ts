@@ -7,16 +7,13 @@ import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { Category } from './category';
 import { TagRepository } from '../tag/tag.repository';
 import { DataSource, QueryRunner } from 'typeorm';
-import { UserNotFoundException } from 'src/exception/user-not-found.exception';
-import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
-import { User } from '../user/user.entity';
-import { Tag } from '../tag/tag.entity';
 
 describe('PostService', () => {
   let service: PostService;
   let postRepository;
   let postToTagRepository;
   let tagRepository;
+  let likesRepository;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -25,6 +22,7 @@ describe('PostService', () => {
         PostRepository,
         PostToTagRepository,
         TagRepository,
+        LikesRepository,
         {
           provide: DataSource,
           useValue: {
@@ -38,6 +36,11 @@ describe('PostService', () => {
     postRepository = module.get<PostRepository>(PostRepository);
     postToTagRepository = module.get<PostToTagRepository>(PostToTagRepository);
     tagRepository = module.get<TagRepository>(TagRepository);
+    likesRepository = module.get<LikesRepository>(LikesRepository);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
   });
 
   describe('게시물 조회', () => {

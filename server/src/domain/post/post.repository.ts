@@ -62,7 +62,6 @@ export class PostRepository extends Repository<Post> {
     return this.createQueryBuilder('post')
       .innerJoin('likes', 'likes', 'post.id = likes.postId')
       .select('post.id', 'postId')
-      .where('likes.isDeleted = false')
       .addSelect('COUNT(*) AS likesCnt')
       .groupBy('post.id')
       .having('likesCnt >= :likesCnt', { likesCnt: likesCnt })
