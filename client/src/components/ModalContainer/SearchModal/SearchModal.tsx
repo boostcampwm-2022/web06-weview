@@ -7,6 +7,7 @@ const SearchModal = (): JSX.Element => {
   const { isSearchModalOpened } = useModalStore((state) => ({
     isSearchModalOpened: state.isSearchModalOpened,
   }));
+
   return isSearchModalOpened ? (
     <div className="search-modal">
       <SearchForm />
