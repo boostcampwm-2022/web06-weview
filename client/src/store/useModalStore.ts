@@ -1,17 +1,24 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 
-interface ModalStore {
+interface ModalStates {
   isWritingModalOpened: boolean;
+  isSubmitModalOpened: boolean;
+  isSearchModalOpened: boolean;
+}
+
+interface ModalActions {
   openWritingModal: () => void;
   closeWritingModal: () => void;
 
-  isSubmitModalOpened: boolean;
   openSubmitModal: () => void;
   closeSubmitModal: () => void;
+
+  openSearchModal: () => void;
+  closeSearchModal: () => void;
 }
 
-const useModalStore = create<ModalStore>()(
+const useModalStore = create<ModalStates & ModalActions>()(
   devtools((set) => ({
     isWritingModalOpened: false,
     openWritingModal: () => set(() => ({ isWritingModalOpened: true })),
@@ -20,6 +27,10 @@ const useModalStore = create<ModalStore>()(
     isSubmitModalOpened: false,
     openSubmitModal: () => set(() => ({ isSubmitModalOpened: true })),
     closeSubmitModal: () => set(() => ({ isSubmitModalOpened: false })),
+
+    isSearchModalOpened: false,
+    openSearchModal: () => set(() => ({ isSearchModalOpened: true })),
+    closeSearchModal: () => set(() => ({ isSearchModalOpened: false })),
   }))
 );
 
