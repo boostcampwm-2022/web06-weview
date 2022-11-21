@@ -1,6 +1,7 @@
 @import "../../CommonButtons/CommonButtons.scss";
 @import "./ContentArea/ContentArea.scss";
 @import "./TagInput/TagInput.scss";
+@import "src/styles/commons/_global-styles.scss";
 
 .submit-modal{
   &__wrapper{
@@ -10,7 +11,7 @@
     position: absolute;
     left: -0.25rem;
     background-color: rgba(0, 0, 0, 0.7);
-    z-index: 2;
+    z-index: $modal-upper-z-index;
   }
   display: flex;
   flex-direction: column;

@@ -46,10 +46,9 @@
   .main {
     @include main-common;
     @include main-responsive($desktop-main-width, $main-gap);
-    @include main-fade-in;
   }
   .hidden-main {
     @include main-common;
-    @include main-fade-out;
+    @include main-responsive($desktop-main-width, $main-gap);
   }
 }
