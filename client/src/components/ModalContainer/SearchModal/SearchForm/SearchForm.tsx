@@ -29,10 +29,8 @@ const SearchForm = (): JSX.Element => {
   const createSearchQuery = (inputLabels: Label[]): SearchQuery => {
     return inputLabels.reduce(
       (prev: SearchQuery, { type, value }: Label) => {
-        console.log(type, value);
         switch (type) {
           case "tag":
-            console.log("push");
             prev.tags?.push(value);
             break;
           case "category":
