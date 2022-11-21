@@ -9,6 +9,7 @@ export class LoadPostListRequestDto {
     category: Category,
     writtenAnswer: number,
     likesCnt: number,
+    search: string,
   ) {
     this.lastId = lastId;
     this.tags = tags;
@@ -16,6 +17,7 @@ export class LoadPostListRequestDto {
     this.category = category;
     this.writtenAnswer = writtenAnswer;
     this.likesCnt = likesCnt;
+    this.search = search;
   }
 
   @IsInt()
@@ -37,4 +39,7 @@ export class LoadPostListRequestDto {
   @IsOptional()
   @Min(1)
   likesCnt?: number;
+
+  @IsOptional()
+  search?: string;
 }

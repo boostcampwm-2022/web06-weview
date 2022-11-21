@@ -85,12 +85,13 @@ export class PostService {
   async loadPostList(
     loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
-    const { lastId, tags, authors, category, writtenAnswer, likesCnt } =
+    const { lastId, tags, authors, category, writtenAnswer, likesCnt, search } =
       loadPostListRequestDto;
     let isLast = true;
     const postInfosAfterFiltering = await Promise.all([
       this.postRepository.findByIdLikesCntGreaterThan(likesCnt),
       this.postToTagRepository.findByContainingTags(tags),
+      this.postRepository.findBySearchWord(search),
     ]);
     const postIdsFiltered = this.returnPostIdByAllConditionPass(
       postInfosAfterFiltering,
@@ -130,6 +131,7 @@ export class PostService {
    * 배열 안에 값이 있다면 -> 조건을 만족하는 사용자들의 id 리스트를 반환
    */
   public returnPostIdByAllConditionPass(postInfos: any[]) {
+    console.log('내부 ', postInfos);
     let result;
     for (const postInfo of postInfos) {
       if (postInfo === null) {

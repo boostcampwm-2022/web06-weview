@@ -72,4 +72,17 @@ export class PostRepository extends Repository<Post> {
   private havePostSatisfiedFiltering(filteringCnt: number) {
     return filteringCnt !== 0;
   }
+
+  findBySearchWord(search: string): Promise<any[]> {
+    console.log('repo> ', search);
+    if (search === undefined || search.length < 0) {
+      return null; //해당 조건은 사용하지 않습니다
+    }
+    return this.createQueryBuilder('post')
+      .select('post.id', 'postId')
+      .where('post.title like :search OR post.content like :search', {
+        search: `%${search}%`,
+      })
+      .getRawMany();
+  }
 }

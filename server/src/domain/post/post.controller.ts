@@ -30,7 +30,13 @@ export class PostController {
   async inqueryUsingFilter(
     @Query() inqueryDto: InqueryDto,
   ): Promise<LoadPostListResponseDto> {
-    const { lastId, category, writtenAnswer, scores: likesCnt } = inqueryDto;
+    const {
+      lastId,
+      category,
+      writtenAnswer,
+      scores: likesCnt,
+      search,
+    } = inqueryDto;
     let { authors, tags } = inqueryDto;
     // TODO 35-39 덜 깔끔해보임
     if (authors === undefined) {
@@ -48,6 +54,7 @@ export class PostController {
         category as Category,
         writtenAnswer,
         likesCnt,
+        search,
       ),
     );
   }

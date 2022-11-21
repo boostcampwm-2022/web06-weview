@@ -59,4 +59,8 @@ export class InqueryDto {
     message: '추천수 1개 이상부터 검색 가능합니다',
   }) //0인 경우는 해당 옵션을 쓸 필요가 없음
   scores?: number;
+
+  @IsOptional()
+  @Transform(({ value }) => value.trim())
+  search?: string;
 }

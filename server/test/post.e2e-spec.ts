@@ -150,6 +150,50 @@ describe('Post e2e', () => {
           category: 'question',
           writtenAnswer: 3,
           scores: 2,
+          search: '어떻게',
+        })
+        .expect(200);
+
+      expect(res.body.posts).not.toBeUndefined();
+      expect(res.body.lastId).not.toBeUndefined();
+      expect(res.body.isLast).not.toBeUndefined();
+      for (const post of res.body.posts) {
+        expect(post).toHaveProperty('id');
+        expect(post).toHaveProperty('title');
+        expect(post).toHaveProperty('content');
+        expect(post).toHaveProperty('code');
+        expect(post).toHaveProperty('language');
+
+        expect(post).toHaveProperty('images');
+        for (const image of post.images) {
+          expect(image).toHaveProperty('url');
+          expect(image).toHaveProperty('name');
+        }
+
+        expect(post).toHaveProperty('updatedAt');
+        expect(post).toHaveProperty('author');
+        expect(post.author).toHaveProperty('id');
+        expect(post.author).toHaveProperty('nickname');
+        expect(post.author).toHaveProperty('profileUrl');
+        expect(post.author).toHaveProperty('email');
+
+        expect(post).toHaveProperty('tags');
+        expect(post).toHaveProperty('reviews');
+        expect(post).toHaveProperty('isLiked');
+      }
+    });
+
+    it('(정상)검색 조건에서 앞뒤 공백을 제거해주는지 확인한다', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/posts')
+        .query({
+          lastId: -1,
+          tags: '["sort", "greedy"]',
+          authors: '["taehoon1229"]',
+          category: 'question',
+          writtenAnswer: 3,
+          scores: 2,
+          search: '           어떻게            ',
         })
         .expect(200);
 
