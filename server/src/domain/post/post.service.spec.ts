@@ -129,6 +129,9 @@ describe('PostService', () => {
       jest
         .spyOn(postRepository, 'findByIdUsingCondition')
         .mockResolvedValue(postList);
+      jest
+        .spyOn(postRepository, 'findBySearchWord')
+        .mockResolvedValue(postList);
 
       const result = await service.loadPostList(dto);
       expect(result).toEqual(inqueryResult);
@@ -312,6 +315,9 @@ describe('PostService', () => {
       jest
         .spyOn(postRepository, 'findByIdUsingCondition')
         .mockResolvedValue(postList);
+      jest
+        .spyOn(postRepository, 'findBySearchWord')
+        .mockResolvedValue(postList);
 
       const result = await service.loadPostList(dto);
       expect(result).toEqual(inqueryResult);
@@ -347,6 +353,9 @@ describe('PostService', () => {
         .mockResolvedValue(resultFilteringTag);
       jest
         .spyOn(postRepository, 'findByIdUsingCondition')
+        .mockResolvedValue(postList);
+      jest
+        .spyOn(postRepository, 'findBySearchWord')
         .mockResolvedValue(postList);
 
       const result = await service.loadPostList(dto);
@@ -451,6 +460,9 @@ describe('PostService', () => {
       jest
         .spyOn(postRepository, 'findByIdUsingCondition')
         .mockResolvedValue(postList);
+      jest
+        .spyOn(postRepository, 'findBySearchWord')
+        .mockResolvedValue(postList);
 
       const result = await service.loadPostList(dto);
       expect(result).toEqual(inqueryResult);
@@ -538,6 +550,10 @@ describe('PostService', () => {
       jest
         .spyOn(postRepository, 'findByIdUsingCondition')
         .mockResolvedValue(postList);
+      jest
+        .spyOn(postRepository, 'findBySearchWord')
+        .mockResolvedValue(postList);
+
       jest.spyOn(tagRepository, 'findById').mockResolvedValue({ name: 'java' });
 
       const result = await service.loadPostList(dto);
