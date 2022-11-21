@@ -1,6 +1,5 @@
 import React, { useCallback, MouseEvent } from "react";
 import useModalStore from "@/store/useModalStore";
-import CloseButton from "./CloseButton/CloseButton";
 import SnapShotNav from "./SnapShotNav/SnapShotNav";
 import WritingForm from "./WritingForm/WritingForm";
 import SubmitModal from "@/components/WriteModal/SubmitModal/SubmitModal";
