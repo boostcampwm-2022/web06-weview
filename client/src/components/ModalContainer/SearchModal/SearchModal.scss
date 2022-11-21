@@ -1,7 +1,7 @@
-@import "src/styles/commons/_global-styles.scss";
-@import "src/styles/commons/_responsive.scss";
-@import 'src/constants/_library.scss';
-@import 'src/styles/commons/_global-styles.scss';
+@import "../../../styles/commons/global-styles";
+@import "../../../styles/commons/responsive";
+@import '../../../constants/library';
+@import '../../../styles/commons/global-styles';
 $modal-border-radius: 10px;
 
 @include device() {

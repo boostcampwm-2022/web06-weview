@@ -1,5 +1,4 @@
 import React, { MouseEvent } from "react";
-import SearchModal from "@/components/MainNav/Filter/SearchModal/SearchModal";
 import useModalStore from "@/store/useModalStore";
 
 const Filter = (): JSX.Element => {
@@ -20,8 +19,6 @@ const Filter = (): JSX.Element => {
         type="search"
         placeholder={"태그를 선택해주세요"}
         onClick={handleOnClick}
-        // disabled
-        // value={searchParams ?? ""}
       />
     </section>
   );
