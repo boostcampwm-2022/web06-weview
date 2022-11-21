@@ -1,32 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../user/user.entity';
 import { lastValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: UserRepository,
     private jwtService: JwtService,
-    private readonly configService: ConfigService,
-    private readonly httpService: HttpService,
+    private configService: ConfigService,
+    private httpService: HttpService,
   ) {}
 
-  async join(email: string, nickname: string, profileUrl: string) {
-    const user = await this.findByEmail(email);
-    if (user != null) {
-      throw new Error('이미 존재하는 계정입니다');
+  async authorize({ email, nickname, profileUrl }) {
+    let user = await this.userRepository.findOneBy({ email });
+    if (user == null) {
+      user = await this.userRepository.save({
+        email,
+        nickname,
+        profileUrl,
+      });
     }
-    return await this.userRepository.save({
-      email: email,
-      nickname: nickname,
-      profileUrl: profileUrl,
-    });
+
+    return {
+      id: user.id,
+      email: user.email,
+      nickname: user.nickname,
+      profileUrl: user.profileUrl,
+    };
   }
 
   createTokens(id: number) {
@@ -55,23 +58,6 @@ export class AuthService {
     };
   }
 
-  async findByEmail(email: string) {
-    const user = await this.userRepository.findOneBy({
-      email: email,
-    });
-
-    if (user == null) {
-      return null;
-    }
-
-    return {
-      id: user.id,
-      email: user.email,
-      nickname: user.nickname,
-      profileUrl: user.profileUrl,
-    };
-  }
-
   async getUserInfoUsingGithub(code: string) {
     const githubToken = await this.getGithubToken(code);
 
@@ -91,6 +77,7 @@ export class AuthService {
     );
     const { email } = emails.filter((v) => v.primary)[0];
     const { avatar_url: profileUrl, login: nickname } = githubInfo;
+
     return { email, nickname, profileUrl };
   }
 

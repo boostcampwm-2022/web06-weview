@@ -28,12 +28,7 @@ export class AuthController {
   ): Promise<AuthorizeWithGithubDto> {
     const userInfo = await this.authService.getUserInfoUsingGithub(code);
 
-    const { email, nickname, profileUrl } = userInfo;
-
-    let user = await this.authService.findByEmail(email);
-    if (user == null) {
-      user = await this.authService.join(email, nickname, profileUrl);
-    }
+    const user = await this.authService.authorize(userInfo);
 
     const { accessToken, refreshToken, expiresIn } =
       this.authService.createTokens(user.id);
@@ -41,6 +36,7 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
     });
+
     return {
       accessToken: accessToken,
       expiresIn: expiresIn,
@@ -74,7 +70,7 @@ export class AuthController {
 
   @Delete('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
-  logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('refreshToken');
     return;
   }
