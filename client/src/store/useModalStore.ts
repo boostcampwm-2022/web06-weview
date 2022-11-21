@@ -7,6 +7,8 @@ interface ModalStates {
   isSearchModalOpened: boolean;
 }
 
+interface ModalStore extends ModalStates, ModalActions {}
+
 interface ModalActions {
   openWritingModal: () => void;
   closeWritingModal: () => void;
@@ -16,12 +18,19 @@ interface ModalActions {
 
   openSearchModal: () => void;
   closeSearchModal: () => void;
+
+  closeRecentOpenedModal: (() => void) | null;
+  resetRecentOpenedModal: () => void;
 }
 
-const useModalStore = create<ModalStates & ModalActions>()(
+const useModalStore = create<ModalStore>()(
   devtools((set) => ({
     isWritingModalOpened: false,
-    openWritingModal: () => set(() => ({ isWritingModalOpened: true })),
+    openWritingModal: () =>
+      set((state: ModalStore) => ({
+        isWritingModalOpened: true,
+        closeRecentOpenedModal: state.closeWritingModal,
+      })),
     closeWritingModal: () => set(() => ({ isWritingModalOpened: false })),
 
     isSubmitModalOpened: false,
@@ -29,8 +38,18 @@ const useModalStore = create<ModalStates & ModalActions>()(
     closeSubmitModal: () => set(() => ({ isSubmitModalOpened: false })),
 
     isSearchModalOpened: false,
-    openSearchModal: () => set(() => ({ isSearchModalOpened: true })),
+    openSearchModal: () =>
+      set((state: ModalStore) => ({
+        isSearchModalOpened: true,
+        closeRecentOpenedModal: state.closeSearchModal,
+      })),
     closeSearchModal: () => set(() => ({ isSearchModalOpened: false })),
+
+    closeRecentOpenedModal: null,
+    resetRecentOpenedModal: () =>
+      set(() => ({
+        closeRecentOpenedModal: null,
+      })),
   }))
 );
 
