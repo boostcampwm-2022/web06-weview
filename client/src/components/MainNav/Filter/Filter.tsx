@@ -23,7 +23,6 @@ const Filter = (): JSX.Element => {
         // disabled
         // value={searchParams ?? ""}
       />
-      <SearchModal />
     </section>
   );
 };
