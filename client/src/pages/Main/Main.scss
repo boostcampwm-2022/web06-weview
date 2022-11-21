@@ -16,13 +16,13 @@
   color: $text-color;
 }
 
-@mixin main-pade-in {
+@mixin main-fade-in {
   transition: 1s all ease;
   transform: translateY(0);
   opacity: 1;
 }
 
-@mixin main-pade-out {
+@mixin main-fade-out {
   transform: translateY(-100%);
   opacity: 0;
   transition: 1s all ease;
@@ -46,10 +46,10 @@
   .main {
     @include main-common;
     @include main-responsive($desktop-main-width, $main-gap);
-    @include main-pade-in;
+    @include main-fade-in;
   }
   .hidden-main {
     @include main-common;
-    @include main-pade-out;
+    @include main-fade-out;
   }
 }
