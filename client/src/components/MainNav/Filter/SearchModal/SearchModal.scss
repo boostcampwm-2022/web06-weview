@@ -25,11 +25,15 @@ $modal-border-radius: 10px;
       box-sizing: border-box;
       background-color: $weview-off-white;
 
+      // text
+      color: $text-color;
+      font-size: 1.3rem;
+      padding-left: 0.4rem;
+
       &::placeholder{
         font-family: GmarketSans;
         color: $placeholder-color;
         font-size: 1.3rem;
-        padding-left: 0.4rem;
       }
     }
 
