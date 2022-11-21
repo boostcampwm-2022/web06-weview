@@ -3,14 +3,6 @@
  */
 $root-em: 100%; // 1rem = 6.3px
 $standard-em: 62.5%; // 1rem = 10px
-html, body {
-  padding: 0;
-  margin: 0;
-}
-
-html {
-  font-size: $root-em; // rem
-}
 
 /**
  * responsive size
@@ -34,3 +26,11 @@ $main-post-bar-width: 32rem;
 $main-post-height: $main-post-bar-width * 1.54;
 $desktop-main-width: $main-nav-width + $main-post-bar-width + $main-gap;
 
+/**
+ * z-index
+ */
+
+$default-z-index: 0;
+$modal-background-z-index: 1;
+$modal-content-z-index: 2;
+$modal-upper-z-index: 3;

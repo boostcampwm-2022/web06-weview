@@ -5,8 +5,8 @@
   height: 8.25rem; // 50% -> 5rem
   display: flex;
   flex-direction: column;
-
   border-bottom: 1px solid $line-color;
+  z-index: 2;
 
   &__header{
     font-weight: 500;
