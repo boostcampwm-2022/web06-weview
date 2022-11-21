@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
 import { Post } from './post.entity';
 import { Image } from '../image/image.entity';
 import { Tag } from '../tag/tag.entity';
-import { User } from '../user/user.entity';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
 import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 import { PostRepository } from './post.repository';
@@ -11,6 +9,10 @@ import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
 import { SEND_POST_CNT } from './post.controller';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { TagRepository } from '../tag/tag.repository';
+import { UserNotFoundException } from 'src/exception/user-not-found.exception';
+import { DataSource } from 'typeorm';
+import { PostNotWrittenException } from 'src/exception/post-not-written';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class PostService {
@@ -29,54 +31,60 @@ export class PostService {
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
+
     try {
-      const postEntity = queryRunner.manager.create(Post);
+      const manager = queryRunner.manager;
+
+      const userEntity = await manager.findOneBy(User, {
+        id: userId,
+      });
+
+      if (userEntity === null) {
+        throw new UserNotFoundException();
+      }
+
+      const imageEntities = images.map((src) => (new Image().src = src));
+
+      const postEntity = new Post();
       postEntity.title = title;
       postEntity.content = content;
       postEntity.category = category;
       postEntity.code = code;
       postEntity.language = language;
-
-      const userEntity = await queryRunner.manager.findOneBy(User, {
-        id: userId,
-      });
       postEntity.user = userEntity;
-
-      const imageEntities = images.map((image) => {
-        const imageEntity = queryRunner.manager.create(Image);
-        imageEntity.src = image;
-        return imageEntity;
-      });
-
       postEntity.images = imageEntities;
-      await queryRunner.manager.save(postEntity);
 
-      if (tags) {
-        await Promise.all(
-          tags.map(async (tag) => {
-            let tagEntity = await queryRunner.manager.findOneBy(Tag, {
-              name: tag,
-            });
+      await manager.save(postEntity);
 
-            if (tagEntity === null) {
-              tagEntity = queryRunner.manager.create(Tag);
-              tagEntity.name = tag;
-              tagEntity = await queryRunner.manager.save(tagEntity);
-            }
+      await Promise.all(
+        tags.map(async (tag) => {
+          let tagEntity = await manager.findOneBy(Tag, {
+            name: tag,
+          });
 
-            const postToTagEntity = queryRunner.manager.create(PostToTag);
-            postToTagEntity.post = postEntity;
-            postToTagEntity.tag = tagEntity;
-            return queryRunner.manager.save(postToTagEntity);
-          }),
-        );
-      }
+          if (tagEntity === null) {
+            tagEntity = new Tag();
+            tagEntity.name = tag;
+            await manager.save(tagEntity);
+          }
+
+          const postToTagEntity = new PostToTag();
+          postToTagEntity.post = postEntity;
+          postToTagEntity.tag = tagEntity;
+          return manager.save(postToTagEntity);
+        }),
+      );
 
       await queryRunner.commitTransaction();
       return postEntity.id;
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      throw new Error('글 작성에 실패했습니다.');
+
+      if (err instanceof UserNotFoundException) {
+        throw err;
+      }
+
+      throw new PostNotWrittenException();
     } finally {
       await queryRunner.release();
     }

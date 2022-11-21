@@ -1,23 +1,34 @@
-import { Query } from '@nestjs/common';
 import {
+  IsArray,
   IsInt,
-  IsNumber,
-  IsNumberString,
   IsOptional,
   IsString,
-  Max,
-  MaxLength,
   Min,
+  ValidateNested,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class WriteDto {
+  @IsString()
   title: string;
+
+  @IsString()
   content: string;
+
+  @IsString()
   category: string;
+
+  @IsString()
   code: string;
+
+  @IsString()
   language: string;
+
+  @IsString({ each: true })
   images: string[];
+
+  @IsOptional()
+  @IsString({ each: true })
   tags: string[];
 }
 
