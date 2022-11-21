@@ -8,12 +8,13 @@ import { AuthService } from '../src/domain/auth/auth.service';
 import { WriteDto } from '../src/domain/post/dto/controller-request.dto';
 import { AuthModule } from '../src/domain/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { Category } from 'src/domain/post/category';
 
 describe('Post e2e', () => {
   let app: INestApplication;
   let authService: AuthService;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         PostModule,
@@ -49,8 +50,15 @@ describe('Post e2e', () => {
   describe('게시글 작성', () => {
     let accessToken;
 
-    beforeAll(async () => {
-      const { accessToken: newAccessToken } = await authService.createTokens(1);
+    beforeEach(async () => {
+      const mockUserInfo = {
+        email: 'alreadyRegister@naver.com',
+        nickname: 'nickname',
+        profileUrl: 'https://avatars.githubusercontent.com/u/67636607?v=4',
+      };
+
+      await authService.authorize(mockUserInfo);
+      const { accessToken: newAccessToken } = authService.createTokens(1);
 
       accessToken = newAccessToken;
     });
@@ -61,7 +69,7 @@ describe('Post e2e', () => {
         content: '내용',
         code: 'console.log("test")',
         language: 'javascript',
-        category: '리뷰요청',
+        category: Category.QUESTION,
         images: [
           'http://localhost:8080/test.png',
           'http://localhost:8080/abc.jpg',
@@ -69,14 +77,17 @@ describe('Post e2e', () => {
         tags: ['알고리즘', '정렬'],
       };
 
-      request(app.getHttpServer())
+      return request(app.getHttpServer())
         .post('/posts')
         .auth(accessToken, { type: 'bearer' })
         .send(writeDto)
-        .expect(HttpStatus.CREATED);
+        .expect(HttpStatus.CREATED)
+        .then((res) => {
+          expect(res.body.message).toBe('글 작성에 성공했습니다.');
+        });
     });
 
-    it('올바르지 않은 양식으로 게시글 작성', () => {
+    it('양식이 맞지 않는 요청', () => {
       const writeDto = {
         title: '제목',
         code: 'console.log("test")',
@@ -89,11 +100,14 @@ describe('Post e2e', () => {
         tags: ['알고리즘', '정렬'],
       };
 
-      request(app.getHttpServer())
+      return request(app.getHttpServer())
         .post('/posts')
         .auth(accessToken, { type: 'bearer' })
         .send(writeDto)
-        .expect(HttpStatus.INTERNAL_SERVER_ERROR);
+        .expect(HttpStatus.BAD_REQUEST)
+        .then((res) => {
+          expect(res.body.message).not.toBeNull();
+        });
     });
   });
 

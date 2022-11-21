@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DataSource, QueryRunner } from 'typeorm';
 import { WriteDto } from '../post/dto/controller-request.dto';
 import { PostService } from './post.service';
 import { PostRepository } from './post.repository';
@@ -7,6 +6,11 @@ import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { Category } from './category';
 import { TagRepository } from '../tag/tag.repository';
+import { DataSource, QueryRunner } from 'typeorm';
+import { UserNotFoundException } from 'src/exception/user-not-found.exception';
+import { PostNotWrittenException } from 'src/exception/post-not-written';
+import { User } from '../user/user.entity';
+import { Tag } from '../tag/tag.entity';
 
 describe('PostService', () => {
   let service: PostService;
@@ -14,23 +18,7 @@ describe('PostService', () => {
   let postToTagRepository;
   let tagRepository;
 
-  const qr = {
-    manager: {},
-  } as QueryRunner;
-
-  class MockDatasource {
-    createQueryRunner(): QueryRunner {
-      return qr;
-    }
-  }
-
-  beforeEach(async () => {
-    qr.connect = jest.fn();
-    qr.startTransaction = jest.fn();
-    qr.commitTransaction = jest.fn();
-    qr.rollbackTransaction = jest.fn();
-    qr.release = jest.fn();
-
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         PostService,
@@ -39,7 +27,9 @@ describe('PostService', () => {
         TagRepository,
         {
           provide: DataSource,
-          useClass: MockDatasource,
+          useValue: {
+            createEntityManager: () => jest.fn(),
+          },
         },
       ],
     }).compile();
@@ -48,10 +38,6 @@ describe('PostService', () => {
     postRepository = module.get<PostRepository>(PostRepository);
     postToTagRepository = module.get<PostToTagRepository>(PostToTagRepository);
     tagRepository = module.get<TagRepository>(TagRepository);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
   });
 
   describe('게시물 조회', () => {
@@ -603,24 +589,60 @@ describe('PostService', () => {
   });
 
   describe('글 작성', () => {
-    Object.assign(qr.manager, {
-      save: jest.fn(),
-      findOneBy: jest.fn(),
-      create: jest.fn((entity) => new entity()),
-    });
+    const qr = {} as QueryRunner;
+
+    class mockDatasource {
+      createQueryRunner() {
+        return qr;
+      }
+
+      createEntityManager() {
+        return {};
+      }
+    }
 
     const writeDto: WriteDto = {
       title: '제목',
       content: '내용',
       code: 'console.log("test")',
       language: 'javascript',
-      category: '리뷰요청',
+      category: Category.QUESTION,
       images: [
         'http://localhost:8080/test.png',
         'http://localhost:8080/abc.jpg',
       ],
       tags: ['알고리즘', '정렬'],
     };
+
+    beforeEach(async () => {
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          PostService,
+          PostRepository,
+          PostToTagRepository,
+          TagRepository,
+          {
+            provide: DataSource,
+            useClass: mockDatasource,
+          },
+        ],
+      }).compile();
+
+      service = module.get<PostService>(PostService);
+      Object.assign(qr, {
+        manager: {
+          save: jest.fn(),
+          findOneBy: jest.fn(() => {
+            return {};
+          }),
+        },
+        connect: jest.fn(),
+        startTransaction: jest.fn(),
+        commitTransaction: jest.fn(),
+        rollbackTransaction: jest.fn(),
+        release: jest.fn(),
+      });
+    });
 
     it('글 작성 성공', async () => {
       await service.write(1, writeDto);
@@ -629,21 +651,48 @@ describe('PostService', () => {
     });
 
     it('처음 작성된 태그로 글 작성', async () => {
-      qr.manager.findOneBy = jest.fn(() => null);
+      jest.spyOn(qr.manager, 'findOneBy').mockImplementation(async (entity) => {
+        if (entity instanceof Tag) {
+          return null;
+        }
+
+        return {};
+      });
+
       await service.write(1, writeDto);
 
       expect(qr.commitTransaction).toBeCalledTimes(1);
     });
 
-    it('글 작성 실패', async () => {
-      qr.manager.save = jest.fn(() => {
-        throw new Error();
+    it('유저를 찾지 못해서 글 작성 실패', async () => {
+      jest.spyOn(qr.manager, 'findOneBy').mockImplementation(async (entity) => {
+        if (entity === User) {
+          return null;
+        }
+
+        return {};
       });
 
       try {
         await service.write(1, writeDto);
+        throw new Error();
       } catch (err) {
-        expect(err.message).toEqual('글 작성에 실패했습니다.');
+        expect(err).toBeInstanceOf(UserNotFoundException);
+        expect(qr.rollbackTransaction).toBeCalledTimes(1);
+        expect(qr.release).toBeCalledTimes(1);
+      }
+    });
+
+    it('그 외 에러로 글 작성 실패', async () => {
+      jest.spyOn(qr.manager, 'save').mockImplementationOnce(() => {
+        throw new PostNotWrittenException();
+      });
+
+      try {
+        await service.write(1, writeDto);
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(PostNotWrittenException);
         expect(qr.rollbackTransaction).toBeCalledTimes(1);
         expect(qr.release).toBeCalledTimes(1);
       }

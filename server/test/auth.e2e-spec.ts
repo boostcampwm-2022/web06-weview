@@ -98,10 +98,8 @@ describe('Auth E2E', () => {
   describe('로그아웃', () => {
     let refreshToken;
 
-    beforeAll(async () => {
-      const { refreshToken: newRefreshToken } = await authService.createTokens(
-        1,
-      );
+    beforeAll(() => {
+      const { refreshToken: newRefreshToken } = authService.createTokens(1);
       refreshToken = newRefreshToken;
     });
 
@@ -128,9 +126,9 @@ describe('Auth E2E', () => {
     let accessToken;
     let refreshToken;
 
-    beforeAll(async () => {
+    beforeAll(() => {
       const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-        await authService.createTokens(1);
+        authService.createTokens(1);
 
       accessToken = newAccessToken;
       refreshToken = newRefreshToken;
