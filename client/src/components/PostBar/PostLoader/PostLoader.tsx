@@ -11,7 +11,7 @@ const PostLoader = (): JSX.Element => {
 
   return (
     <div className="post-loader">
-      <LoadingSpinner className="post-loader__loading-spinner" />
+      <LoadingSpinner className="post-loader__spinner" />
       <div className="post-loader__target" ref={intersectRef}></div>
     </div>
   );
