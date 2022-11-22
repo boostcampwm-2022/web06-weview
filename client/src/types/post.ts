@@ -18,7 +18,12 @@ export interface Image {
   name: string;
 }
 
-export interface PostInfo {
+interface AdditionalPostInfo {
+  category?: string;
+  likes?: number;
+}
+
+export interface PostInfo extends AdditionalPostInfo {
   id: string;
   title: string;
   content: string;
