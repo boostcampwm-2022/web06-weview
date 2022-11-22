@@ -11,9 +11,9 @@ export class Review extends BaseTimeEntity {
   @Column()
   content!: string;
 
-  @ManyToOne(() => Post, (post) => post.reviews)
+  @ManyToOne(() => Post)
   post: Post;
 
-  @ManyToOne(() => User, (user) => user.reviews)
+  @ManyToOne(() => User)
   user: User;
 }

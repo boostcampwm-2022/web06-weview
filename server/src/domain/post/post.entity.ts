@@ -8,9 +8,6 @@ import {
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Image } from '../image/image.entity';
-import { Likes } from '../likes/likes.entity';
-import { Report } from '../report/report.entity';
-import { Review } from '../review/review.entity';
 import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 import { Category } from './category';
 
@@ -19,7 +16,7 @@ export class Post extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User)
   user: User;
 
   @Column({ default: Category.QUESTION })
@@ -40,18 +37,11 @@ export class Post extends BaseTimeEntity {
   @OneToMany(() => Image, (image) => image.post, { cascade: true })
   images: Image[];
 
-  @OneToMany(() => Likes, (likes) => likes.post)
-  likesList: Likes[];
-
+  // TODO 구조 바꾼 뒤 삭제
   @OneToMany(() => PostToTag, (postToTag) => postToTag.post)
   postToTags: PostToTag[];
 
-  @OneToMany(() => Report, (report) => report.post)
-  reports: Report[];
-
-  @OneToMany(() => Review, (review) => review.post)
-  reviews: Review[];
-
+  // TODO 구조 바꾼 뒤 삭제
   // tag들의 이름을 저장하기 위해 사용하는 변수
   tagsNames: string[];
 }
