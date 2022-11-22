@@ -1,10 +1,14 @@
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Post } from './post.entity';
-import { CustomRepository } from '../../typeorm/typeorm-ex.decorator';
 import { LATEST_DATA_CONDITION, SEND_POST_CNT } from './post.controller';
+import { Injectable } from '@nestjs/common';
 
-@CustomRepository(Post)
+@Injectable()
 export class PostRepository extends Repository<Post> {
+  constructor(private dataSource: DataSource) {
+    super(Post, dataSource.createEntityManager());
+  }
+
   async findByIdUsingCondition(
     lastId: number,
     postIdsFiltered: number[],

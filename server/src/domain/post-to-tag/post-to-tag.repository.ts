@@ -1,9 +1,13 @@
-import { CustomRepository } from '../../typeorm/typeorm-ex.decorator';
 import { PostToTag } from './post-to-tag.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 
-@CustomRepository(PostToTag)
+@Injectable()
 export class PostToTagRepository extends Repository<PostToTag> {
+  constructor(private dataSource: DataSource) {
+    super(PostToTag, dataSource.createEntityManager());
+  }
+
   async findByContainingTags(tags: string[]): Promise<any> {
     if (tags === undefined || tags.length == 0) {
       return null; //해당 조건은 사용하지 않습니다
