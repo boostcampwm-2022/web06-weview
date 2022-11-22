@@ -3,7 +3,6 @@ import "./SearchModal.scss";
 import useModalStore from "@/store/useModalStore";
 import SearchForm from "@/components/ModalContainer/SearchModal/SearchForm/SearchForm";
 import { DESCRIPTION } from "@/constants/search";
-import SearchLabel from "@/components/ModalContainer/SearchModal/SearchForm/SearchLabel/SearchLabel";
 
 const SearchModal = (): JSX.Element => {
   const { isSearchModalOpened } = useModalStore((state) => ({

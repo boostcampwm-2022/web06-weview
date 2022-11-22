@@ -1,10 +1,9 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 import { isEnterKey, isSubmitKey } from "@/utils/pressedKeyCheck";
 import SearchLabel from "@/components/ModalContainer/SearchModal/SearchForm/SearchLabel/SearchLabel";
-import { Label } from "@/types/search";
+import { Label, SearchQuery } from "@/types/search";
 import { SEPARATOR } from "@/constants/search";
 import { fetchPost } from "@/apis/post";
-import { SearchQuery } from "@/types/post";
 
 const SearchForm = (): JSX.Element => {
   const [word, setWord] = useState("");

@@ -49,13 +49,3 @@ export interface Writing {
   images: string[];
   tags?: string[];
 }
-
-export interface SearchQuery {
-  lastId?: string;
-  tags?: string[];
-  authors?: string[];
-  category?: string;
-  reviews?: number;
-  likes?: number;
-  detail?: string;
-}
