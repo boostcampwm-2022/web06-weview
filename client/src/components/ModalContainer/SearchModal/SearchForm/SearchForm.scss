@@ -29,17 +29,19 @@ $modal-border-radius: 10px;
 .search-form {
   display: flex;
   gap: 1rem;
-
+  row-gap: 0.5rem;
   // 검색 폼 레이아웃
   width: 100%;
-  height: 2.7rem;
+  height: fit-content;
+  flex-wrap: wrap;
   border: 1px solid $text-color;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 15px;
-  background-color: $weview-off-white;
+  border-radius: $modal-border-radius;
 
+  background-color: $weview-off-white;
+  padding: 0.5rem;
   // 정렬
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   &__label {
@@ -66,18 +68,15 @@ $modal-border-radius: 10px;
 
   &__input {
     flex-grow: 1;
-
-    height: 2.7rem;
-    border: 1px solid $text-color;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: $modal-border-radius;
-
+    height: 0.8rem;
+    border: none;
+    overflow-x: hidden;
     box-sizing: border-box;
-    background-color: $weview-off-white;
+    background: none;
 
     // text
     color: $text-color;
-    font-size: 1.3rem;
+    font-size: 0.8rem;
     padding-left: 0.4rem;
 
     &::placeholder{
