@@ -11,7 +11,7 @@ import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { TagRepository } from '../tag/tag.repository';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
 import { DataSource } from 'typeorm';
-import { PostNotWrittenException } from 'src/exception/post-not-written';
+import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
 import { User } from '../user/user.entity';
 
 @Injectable()
@@ -43,7 +43,11 @@ export class PostService {
         throw new UserNotFoundException();
       }
 
-      const imageEntities = images.map((src) => (new Image().src = src));
+      const imageEntities = images.map((src) => {
+        const imageEntity = new Image();
+        imageEntity.src = src;
+        return imageEntity;
+      });
 
       const postEntity = new Post();
       postEntity.title = title;

@@ -8,7 +8,7 @@ import { Category } from './category';
 import { TagRepository } from '../tag/tag.repository';
 import { DataSource, QueryRunner } from 'typeorm';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
-import { PostNotWrittenException } from 'src/exception/post-not-written';
+import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
 import { User } from '../user/user.entity';
 import { Tag } from '../tag/tag.entity';
 
