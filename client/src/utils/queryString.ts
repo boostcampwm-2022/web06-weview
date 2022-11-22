@@ -1,5 +1,5 @@
 import { isQueryTypeFine } from "@/utils/typeCheck";
-import { SearchQuery } from "@/types/post";
+import { SearchQuery } from "@/types/search";
 
 export const setQueryString = (searchingObj: SearchQuery): string =>
   Object.entries(searchingObj)
