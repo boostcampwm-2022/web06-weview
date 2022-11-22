@@ -11,9 +11,9 @@ export class Report extends BaseTimeEntity {
   @Column()
   reason: string;
 
-  @ManyToOne(() => Post, (post) => post.reports)
+  @ManyToOne(() => Post)
   post: Post;
 
-  @ManyToOne(() => User, (user) => user.reports)
+  @ManyToOne(() => User)
   user: User;
 }

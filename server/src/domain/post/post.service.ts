@@ -116,6 +116,7 @@ export class PostService {
       this.postToTagRepository.findByContainingTags(tags),
       this.postRepository.findBySearchWord(detail),
     ]);
+
     const postIdsFiltered = this.returnPostIdByAllConditionPass(
       postInfosAfterFiltering,
     );
