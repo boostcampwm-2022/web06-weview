@@ -7,16 +7,20 @@ import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { Category } from './category';
 import { TagRepository } from '../tag/tag.repository';
 import { DataSource, QueryRunner } from 'typeorm';
-import { UserNotFoundException } from 'src/exception/user-not-found.exception';
-import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
-import { User } from '../user/user.entity';
+import { LikesRepository } from '../likes/likes.repository';
 import { Tag } from '../tag/tag.entity';
+import { User } from '../user/user.entity';
+import { UserNotFoundException } from '../../exception/user-not-found.exception';
+import { PostNotWrittenException } from '../../exception/post-not-written.exception';
+import { UserRepository } from '../user/user.repository';
 
 describe('PostService', () => {
   let service: PostService;
   let postRepository;
   let postToTagRepository;
   let tagRepository;
+  let likesRepository;
+  let userRepository;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,7 +28,9 @@ describe('PostService', () => {
         PostService,
         PostRepository,
         PostToTagRepository,
+        UserRepository,
         TagRepository,
+        LikesRepository,
         {
           provide: DataSource,
           useValue: {
@@ -38,6 +44,12 @@ describe('PostService', () => {
     postRepository = module.get<PostRepository>(PostRepository);
     postToTagRepository = module.get<PostToTagRepository>(PostToTagRepository);
     tagRepository = module.get<TagRepository>(TagRepository);
+    likesRepository = module.get<LikesRepository>(LikesRepository);
+    userRepository = module.get<UserRepository>(UserRepository);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
   });
 
   describe('게시물 조회', () => {
@@ -621,6 +633,8 @@ describe('PostService', () => {
           PostRepository,
           PostToTagRepository,
           TagRepository,
+          LikesRepository,
+          UserRepository,
           {
             provide: DataSource,
             useClass: mockDatasource,

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { DataSource, Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { Image } from '../image/image.entity';
 import { Tag } from '../tag/tag.entity';
@@ -9,10 +10,13 @@ import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
 import { SEND_POST_CNT } from './post.controller';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { TagRepository } from '../tag/tag.repository';
+import { LikesRepository } from '../likes/likes.repository';
+import { Likes } from '../likes/likes.entity';
+import { PostNotFoundException } from '../../exception/post-not-found.exception';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
-import { DataSource } from 'typeorm';
 import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
 import { User } from '../user/user.entity';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class PostService {
@@ -21,6 +25,8 @@ export class PostService {
     private readonly postRepository: PostRepository,
     private readonly postToTagRepository: PostToTagRepository,
     private readonly tagRepository: TagRepository,
+    private readonly likesRepository: LikesRepository,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async write(
@@ -143,7 +149,6 @@ export class PostService {
    * 배열 안에 값이 있다면 -> 조건을 만족하는 사용자들의 id 리스트를 반환
    */
   public returnPostIdByAllConditionPass(postInfos: any[]) {
-    console.log('내부 ', postInfos);
     let result;
     for (const postInfo of postInfos) {
       if (postInfo === null) {
@@ -161,5 +166,26 @@ export class PostService {
       return null;
     }
     return result;
+  }
+
+  async addLikes(userId: number, postId: number) {
+    const likes = new Likes();
+    const [user, post] = await Promise.all([
+      this.userRepository.findOneBy({ id: userId }),
+      this.postRepository.findOneBy({ id: postId }),
+    ]);
+    if (post === null) {
+      throw new PostNotFoundException();
+    }
+    likes.user = user;
+    likes.post = post;
+    await this.likesRepository.save(likes);
+  }
+
+  async cancelLikes(userId: number, postId: number) {
+    await this.likesRepository.delete({
+      userId: userId,
+      postId: postId,
+    });
   }
 }

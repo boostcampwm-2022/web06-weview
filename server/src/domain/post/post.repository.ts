@@ -62,7 +62,6 @@ export class PostRepository extends Repository<Post> {
     return this.createQueryBuilder('post')
       .innerJoin('likes', 'likes', 'post.id = likes.postId')
       .select('post.id', 'postId')
-      .where('likes.isDeleted = false')
       .addSelect('COUNT(*) AS likesCnt')
       .groupBy('post.id')
       .having('likesCnt >= :likesCnt', { likesCnt: likesCnt })
@@ -78,7 +77,6 @@ export class PostRepository extends Repository<Post> {
   }
 
   findBySearchWord(search: string): Promise<any[]> {
-    console.log('repo> ', search);
     if (search === undefined || search.length < 0) {
       return null; //해당 조건은 사용하지 않습니다
     }
