@@ -1,6 +1,10 @@
-import { Repository } from 'typeorm';
-import { CustomRepository } from '../../typeorm/typeorm-ex.decorator';
+import { DataSource, Repository } from 'typeorm';
 import { Likes } from './likes.entity';
+import { Injectable } from '@nestjs/common';
 
-@CustomRepository(Likes)
-export class LikesRepository extends Repository<Likes> {}
+@Injectable()
+export class LikesRepository extends Repository<Likes> {
+  constructor(private dataSource: DataSource) {
+    super(Likes, dataSource.createEntityManager());
+  }
+}

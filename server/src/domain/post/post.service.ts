@@ -11,13 +11,12 @@ import { SEND_POST_CNT } from './post.controller';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { TagRepository } from '../tag/tag.repository';
 import { LikesRepository } from '../likes/likes.repository';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Likes } from '../likes/likes.entity';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
-import { DataSource } from 'typeorm';
 import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
 import { User } from '../user/user.entity';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class PostService {
@@ -27,8 +26,7 @@ export class PostService {
     private readonly postToTagRepository: PostToTagRepository,
     private readonly tagRepository: TagRepository,
     private readonly likesRepository: LikesRepository,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async write(
