@@ -10,10 +10,6 @@ const SearchForm = (): JSX.Element => {
   const [word, setWord] = useState("");
   const [labels, setLabels] = useState<Label[]>([]);
 
-  const handleWordChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setWord(e.target.value);
-  };
-
   const createLabel = (word: string): Label => {
     const separator = word[0];
     const value = word.slice(1);
@@ -63,6 +59,16 @@ const SearchForm = (): JSX.Element => {
     );
   };
 
+  const handleLabelClick =
+    (index: number): (() => void) =>
+    () => {
+      setLabels((labels) => labels.filter((item, idx) => idx !== index));
+    };
+
+  const handleWordChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setWord(e.target.value);
+  };
+
   const handlePressedKey = (e: KeyboardEvent<HTMLInputElement>): void => {
     const key = e.key;
     const newLabel = createLabel(word);
@@ -84,11 +90,16 @@ const SearchForm = (): JSX.Element => {
   return (
     <span className="search-form">
       {labels.map((label, index) => (
-        <SearchLabel key={index} label={label} />
+        <SearchLabel
+          key={index}
+          label={label}
+          onClick={handleLabelClick(index)}
+        />
       ))}
       <input
         type="text"
         className="search-form__input"
+        placeholder="검색어를 입력해주세요."
         value={word}
         onChange={handleWordChange}
         onKeyUp={handlePressedKey}

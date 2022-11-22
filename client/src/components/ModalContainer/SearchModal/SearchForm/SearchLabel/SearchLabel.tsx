@@ -3,11 +3,17 @@ import { Label } from "@/types/search";
 
 interface SearchLabelProps {
   label: Label;
+  onClick: () => void;
 }
 
-const SearchLabel = ({ label }: SearchLabelProps): JSX.Element => {
+const SearchLabel = ({ label, onClick }: SearchLabelProps): JSX.Element => {
   return (
-    <span className={`search-form__label--${label.type}`}>{label.value}</span>
+    <span
+      className={`search-form__label--${label.type}`}
+      onClick={() => onClick()}
+    >
+      {label.value}
+    </span>
   );
 };
 
