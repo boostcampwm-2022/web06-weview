@@ -1,12 +1,16 @@
 import React from "react";
-import usePostInfiniteScroll from "@/hooks/usePostInfiniteScroll";
-import useIntersect from "@/hooks/useIntersect";
-
 import "./PostLoader.scss";
+import useIntersect from "@/hooks/useIntersect";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
-const PostLoader = (): JSX.Element => {
-  const { onIntersect } = usePostInfiniteScroll();
+interface PostLoaderProps {
+  onIntersect: (
+    entry: IntersectionObserverEntry,
+    observer: IntersectionObserver
+  ) => void;
+}
+
+const PostLoader = ({ onIntersect }: PostLoaderProps): JSX.Element => {
   const intersectRef = useIntersect(onIntersect);
 
   return (

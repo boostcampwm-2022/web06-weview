@@ -6,7 +6,13 @@ export const SEPARATOR: { [key: string]: string } = {
   "^": "reviews",
 };
 
-export const DESCRIPTION = [
+interface Description {
+  example: string;
+  description: string;
+  type: string;
+}
+
+export const DESCRIPTION: Description[] = [
   { example: "#알고리즘", description: "태그", type: "tag" },
   { example: "$홍길동", description: "유저 닉네임", type: "author" },
   { example: "@리뷰요청", description: "카테고리", type: "category" },
