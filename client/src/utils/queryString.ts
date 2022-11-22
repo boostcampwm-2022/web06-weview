@@ -4,7 +4,6 @@ export const setQueryString = (obj: any): string =>
       if (Array.isArray(value)) {
         return `${key}=${value.join(",")}`;
       }
-      if (typeof value === "string") return `${key}=${value}`;
-      return `${key}=${value as number}`;
+      return `${key}=${String(value)}`;
     })
     .join("&");
