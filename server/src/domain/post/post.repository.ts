@@ -77,7 +77,6 @@ export class PostRepository extends Repository<Post> {
   }
 
   findBySearchWord(search: string): Promise<any[]> {
-    console.log('repo> ', search);
     if (search === undefined || search.length < 0) {
       return null; //해당 조건은 사용하지 않습니다
     }

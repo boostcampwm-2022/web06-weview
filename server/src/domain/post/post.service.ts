@@ -149,7 +149,6 @@ export class PostService {
    * 배열 안에 값이 있다면 -> 조건을 만족하는 사용자들의 id 리스트를 반환
    */
   public returnPostIdByAllConditionPass(postInfos: any[]) {
-    console.log('내부 ', postInfos);
     let result;
     for (const postInfo of postInfos) {
       if (postInfo === null) {
