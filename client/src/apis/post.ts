@@ -1,17 +1,12 @@
 import axiosInstance from "@/apis/axios";
-import {
-  PostScroll,
-  SearchQuery,
-  Writing,
-  WritingResponse,
-} from "@/types/post";
+import { PostScroll, Writing, WritingResponse } from "@/types/post";
 import { setQueryString } from "@/utils/queryString";
+import useSearchStore from "@/store/useSearchStore";
 
-export const fetchPost = async (
-  searchQuery: SearchQuery
-): Promise<PostScroll> => {
+export const fetchPost = async (pageParam: string): Promise<PostScroll> => {
+  const { searchQuery } = useSearchStore.getState();
   const { data } = await axiosInstance.get(
-    `/posts?${setQueryString(searchQuery)}`
+    `/posts?${setQueryString({ ...searchQuery, lastId: pageParam })}`
   );
   return data;
 };

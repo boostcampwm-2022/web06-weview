@@ -3,11 +3,18 @@ import {
   InfiniteData,
   InfiniteQueryObserverResult,
   QueryFunctionContext,
+  QueryObserverBaseResult,
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
   useInfiniteQuery,
 } from "@tanstack/react-query";
 import { fetchPost } from "@/apis/post";
 import { PostScroll } from "@/types/post";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import useSearchStore from "@/store/useSearchStore";
+import { SearchQuery } from "@/types/search";
+import { queryClient } from "@/react-query/queryClient";
 
 interface PostInfiniteScrollResults {
   data: InfiniteData<PostScroll> | undefined;
@@ -26,17 +33,30 @@ interface PostInfiniteScrollResults {
  * react-query 를 이용한 포스트 정보에 대한 인피니티 스크롤 커스텀 훅 입니다.
  */
 const usePostInfiniteScroll = (): PostInfiniteScrollResults => {
+  const [searchQuery] = useSearchStore((state) => [state.searchQuery]);
+
   const { data, hasNextPage, isFetching, fetchNextPage } = useInfiniteQuery(
     ["posts"],
     async ({ pageParam = -1 }: QueryFunctionContext) =>
-      await fetchPost({
-        lastId: pageParam,
-      }),
+      await fetchPost(pageParam),
     {
       getNextPageParam: (lastPost) =>
         lastPost.isLast ? undefined : lastPost.lastId,
     }
   );
+
+  /**
+   * searchQuery 값이 변경되면 다시 로딩합니다.
+   */
+  useEffect(() => {
+    queryClient
+      .resetQueries(
+        { queryKey: ["posts"], exact: true },
+        { cancelRefetch: true }
+      )
+      .then(() => {})
+      .catch(() => {});
+  }, [searchQuery]);
 
   /**
    * Intersection Observer 를 위한 콜백 함수

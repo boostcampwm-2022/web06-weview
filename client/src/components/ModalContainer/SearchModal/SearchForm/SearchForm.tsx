@@ -3,9 +3,10 @@ import { isEnterKey, isSubmitKey } from "@/utils/pressedKeyCheck";
 import SearchLabel from "@/components/ModalContainer/SearchModal/SearchForm/SearchLabel/SearchLabel";
 import { Label, SearchQuery } from "@/types/search";
 import { SEPARATOR } from "@/constants/search";
-import { fetchPost } from "@/apis/post";
+import useSearchStore from "@/store/useSearchStore";
 
 const SearchForm = (): JSX.Element => {
+  const [updateQuery] = useSearchStore((state) => [state.updateQuery]);
   const [word, setWord] = useState("");
   const [labels, setLabels] = useState<Label[]>([]);
 
@@ -76,13 +77,7 @@ const SearchForm = (): JSX.Element => {
       setWord("");
     }
     if (isEnterKey(key)) {
-      fetchPost(createSearchQuery([...labels, newLabel]))
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      updateQuery(createSearchQuery([...labels, newLabel]));
     }
   };
 
