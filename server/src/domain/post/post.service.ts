@@ -103,13 +103,13 @@ export class PostService {
   async loadPostList(
     loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
-    const { lastId, tags, authors, category, writtenAnswer, likesCnt, search } =
+    const { lastId, tags, authors, category, reviews, likesCnt, detail } =
       loadPostListRequestDto;
     let isLast = true;
     const postInfosAfterFiltering = await Promise.all([
       this.postRepository.findByIdLikesCntGreaterThan(likesCnt),
       this.postToTagRepository.findByContainingTags(tags),
-      this.postRepository.findBySearchWord(search),
+      this.postRepository.findBySearchWord(detail),
     ]);
     const postIdsFiltered = this.returnPostIdByAllConditionPass(
       postInfosAfterFiltering,

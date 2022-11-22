@@ -33,11 +33,12 @@ export class WriteDto {
 }
 
 export class InqueryDto {
+  @IsOptional()
   @IsInt()
   @Min(-1, {
     message: 'lastId는 -1과 Post의 인덱스만 입력 가능합니다',
   })
-  lastId: number;
+  lastId?: number = -1;
 
   @IsOptional()
   @IsString()
@@ -63,15 +64,15 @@ export class InqueryDto {
   @Min(1, {
     message: '리뷰 개수 1개 이상부터 검색 가능합니다',
   }) //0인 경우는 해당 옵션을 쓸 필요가 없음
-  writtenAnswer?: number;
+  reviews?: number;
 
   @IsOptional()
   @Min(1, {
     message: '추천수 1개 이상부터 검색 가능합니다',
   }) //0인 경우는 해당 옵션을 쓸 필요가 없음
-  scores?: number;
+  likes?: number;
 
   @IsOptional()
   @Transform(({ value }) => value.trim())
-  search?: string;
+  detail?: string;
 }

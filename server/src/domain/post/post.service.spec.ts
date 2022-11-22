@@ -58,7 +58,7 @@ describe('PostService', () => {
       tags: ['java'],
       authors: [],
       category: Category.QUESTION,
-      writtenAnswer: 1,
+      reviews: 1,
       likesCnt: 1,
     };
     const resultFilteringLikesCnt = [

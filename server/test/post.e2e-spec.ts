@@ -157,9 +157,9 @@ describe('Post e2e', () => {
           tags: '["sort", "greedy"]',
           authors: '["taehoon1229"]',
           category: 'question',
-          writtenAnswer: 3,
-          scores: 2,
-          search: '어떻게',
+          reviews: 3,
+          likes: 2,
+          detail: '어떻게',
         })
         .expect(200);
 
@@ -200,9 +200,9 @@ describe('Post e2e', () => {
           tags: '["sort", "greedy"]',
           authors: '["taehoon1229"]',
           category: 'question',
-          writtenAnswer: 3,
-          scores: 2,
-          search: '           어떻게            ',
+          reviews: 3,
+          likes: 2,
+          detail: '           어떻게            ',
         })
         .expect(200);
 
