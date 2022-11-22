@@ -236,8 +236,8 @@ describe('Post e2e', () => {
     });
 
     // TODO 카테고리 필수로 처리해야 하는지 고민해보기
-    it('(실패)필수 파라미터 lastId 없는 상황', async () => {
-      const res = await request(app.getHttpServer()).get('/posts').expect(400);
+    it('필수 파라미터 lastId 없어도 검색 가능', async () => {
+      const res = await request(app.getHttpServer()).get('/posts').expect(200);
     });
   });
 

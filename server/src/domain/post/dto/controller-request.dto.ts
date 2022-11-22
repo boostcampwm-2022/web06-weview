@@ -47,16 +47,11 @@ export class InqueryDto {
   category: string;
 
   @IsOptional()
-  @Transform(({ value }) => {
-    value = value.slice(1, -1);
-    let x = value.split(',');
-    x = x.map((y) => y.slice(1, -1));
-    return x;
-  })
+  @Transform(({ value }) => value.split(','))
   tags?: string[];
 
   @IsOptional()
-  // @Transform(({ value }) => value.split(','))
+  @Transform(({ value }) => value.split(','))
   authors?: string[];
 
   @IsOptional()
