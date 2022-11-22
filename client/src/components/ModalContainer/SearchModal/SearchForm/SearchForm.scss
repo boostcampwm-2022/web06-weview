@@ -4,7 +4,7 @@
 $author-color: #C08834;
 $reviews-color: #4DD2BA;
 $likes-color: #EF69DA;
-
+$modal-border-radius: 10px;
 
 @mixin label($border-color) {
   display: table-cell;
@@ -29,7 +29,6 @@ $likes-color: #EF69DA;
 .search-form {
   display: flex;
   gap: 1rem;
-  padding: 0 1rem;
 
   // 검색 폼 레이아웃
   width: 100%;
@@ -67,7 +66,24 @@ $likes-color: #EF69DA;
 
   &__input {
     flex-grow: 1;
-    background:pink; // TODO
-    border: 0;
+
+    height: 2.7rem;
+    border: 1px solid $text-color;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: $modal-border-radius;
+
+    box-sizing: border-box;
+    background-color: $weview-off-white;
+
+    // text
+    color: $text-color;
+    font-size: 1.3rem;
+    padding-left: 0.4rem;
+
+    &::placeholder{
+      font-family: GmarketSans;
+      color: $placeholder-color;
+      font-size: 1.3rem;
+    }
   }
 }
