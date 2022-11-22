@@ -1,14 +1,24 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Post } from './post.entity';
 import { PostController } from './post.controller';
 import { PostService } from './post.service';
-import { PostToTag } from '../tag/post-to-tag.entity';
+import { PostRepository } from './post.repository';
+import { TagRepository } from '../tag/tag.repository';
+import { PostSubscriber } from './post.subscriber';
+import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
+import { UserRepository } from '../user/user.repository';
+import { LikesRepository } from '../likes/likes.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, PostToTag])],
   controllers: [PostController],
-  providers: [PostService],
-  exports: [PostService],
+  providers: [
+    PostService,
+    PostRepository,
+    TagRepository,
+    PostToTagRepository,
+    UserRepository,
+    LikesRepository,
+    PostSubscriber,
+  ],
+  exports: [PostService, PostRepository],
 })
 export class PostModule {}

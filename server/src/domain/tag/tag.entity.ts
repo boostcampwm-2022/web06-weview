@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { PostToTag } from './post-to-tag.entity';
+import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 
 @Entity()
 export class Tag {

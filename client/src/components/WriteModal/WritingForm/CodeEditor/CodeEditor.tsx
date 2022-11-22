@@ -3,14 +3,15 @@ import useWritingStore from "@/store/useWritingStore";
 import hljs from "highlight.js";
 
 const CodeEditor = (): JSX.Element => {
-  const [highlightedCode, setHighlightedCode] = useState("");
-  const { code, setCode } = useWritingStore((state) => ({
+  const [highlightedHTML, setHighlightedHTML] = useState("");
+  const { code, setCode, language } = useWritingStore((state) => ({
     code: state.code,
     setCode: state.setCode,
+    language: state.language,
   }));
   useEffect(() => {
-    setHighlightedCode(
-      hljs.highlightAuto(code).value.replace(/" "/g, "&nbsp; ")
+    setHighlightedHTML(
+      hljs.highlight(code, { language }).value.replace(/" "/g, "&nbsp;")
     );
   }, [code]);
 
@@ -18,9 +19,12 @@ const CodeEditor = (): JSX.Element => {
     setCode(e.target.value);
   }, []);
 
-  const createMarkUpCode = (code: string): { __html: string } => ({
-    __html: code,
-  });
+  const createMarkUpCode = useCallback(
+    (code: string): { __html: string } => ({
+      __html: code,
+    }),
+    [code]
+  );
 
   return (
     <div className="code-editor">
@@ -33,7 +37,7 @@ const CodeEditor = (): JSX.Element => {
       />
       <pre className="code-editor__present">
         <code
-          dangerouslySetInnerHTML={createMarkUpCode(highlightedCode)}
+          dangerouslySetInnerHTML={createMarkUpCode(highlightedHTML)}
         ></code>
       </pre>
     </div>

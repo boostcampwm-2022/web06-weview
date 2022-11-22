@@ -1,22 +1,19 @@
 import React, { useCallback } from "react";
 import useWritingStore from "@/store/useWritingStore";
-import { getHashTags } from "@/utils/regExpression";
+import { getHashTags, preventXSS } from "@/utils/regExpression";
 import { postWritingsAPI } from "@/apis/post";
 import useModalStore from "@/store/useModalStore";
-
-const dummyImages = [
-  "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8Y29kZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-  "https://images.unsplash.com/photo-1576836165612-8bc9b07e7778?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGNvZGV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
-];
+import { isEmpty } from "@/utils/typeCheck";
 
 const RegisterButton = (): JSX.Element => {
-  const { title, language, code, content, images, resetWritingStore } =
+  const { title, language, code, content, images, tags, resetWritingStore } =
     useWritingStore((state) => ({
       title: state.title,
       language: state.language,
       code: state.code,
       content: state.content,
       images: state.images,
+      tags: state.tags,
       setImages: state.setImages,
       setLanguage: state.setLanguage,
       resetWritingStore: state.reset,
@@ -29,13 +26,26 @@ const RegisterButton = (): JSX.Element => {
   }));
 
   const submitWholeWriting = useCallback(() => {
+    // TODO -> 없는 정보 예외 처리
+    if (
+      isEmpty(title) ||
+      isEmpty(content) ||
+      isEmpty(language) ||
+      isEmpty(code)
+    ) {
+      alert("필수 정보들을 입력해주세요!");
+      return;
+    }
     postWritingsAPI({
+      category: "리뷰요청",
       title,
       content,
-      code,
-      language: "javascript",
-      images: [dummyImages[0]],
-      tags: getHashTags(content),
+      code: preventXSS(code),
+      language: language,
+      images: [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReFASlWHLC8RC6TAfXDIbMeUEqB3TfxvuFZg&usqp=CAU",
+      ],
+      tags: tags,
     })
       .then((res) => {
         alert(res.message);

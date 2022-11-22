@@ -1,16 +1,22 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseTimeEntity } from '../base-time.entity';
+import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Post } from '../post/post.entity';
 
 @Entity()
-export class Likes extends BaseTimeEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class Likes {
+  @PrimaryColumn()
+  userId: number;
+
+  @PrimaryColumn()
+  postId: number;
 
   @ManyToOne(() => User, (user) => user.likesList)
-  user: User;
+  @JoinColumn({ name: 'userId' })
+  user!: User;
 
-  @ManyToOne(() => Post, (post) => post.likesList)
-  post: Post;
+  @ManyToOne(() => Post, (post) => post.likesList, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'postId' })
+  post!: Post;
 }

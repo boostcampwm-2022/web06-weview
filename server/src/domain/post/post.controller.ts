@@ -9,13 +9,20 @@ import {
   Get,
   Query,
   InternalServerErrorException,
+  Param,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { PostService } from './post.service';
 import { InqueryUsingFilterDto } from './dto/controller-response.dto';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
-import { WriteDto } from './dto/controller-request.dto';
+import { InqueryDto, WriteDto } from './dto/controller-request.dto';
+import { Category } from './category';
+import { LoadPostListRequestDto } from './dto/service-request.dto';
+
+export const SEND_POST_CNT = 3;
+export const LATEST_DATA_CONDITION = -1;
 
 @Controller('posts')
 export class PostController {
@@ -23,29 +30,29 @@ export class PostController {
 
   @Get()
   async inqueryUsingFilter(
-    @Query('lastId') lastId: number,
-    @Query('category') category: string,
-    @Query('tags') tagString?: string,
-    @Query('authors') authors?: string[],
-    @Query('writtenAnswer') writtenAnswer?: number,
-    @Query('scores') scores?: number,
+    @Query() inqueryDto: InqueryDto,
   ): Promise<LoadPostListResponseDto> {
-    let tags = [];
+    const { lastId, category, reviews, likes: likesCnt, detail } = inqueryDto;
+    let { authors, tags } = inqueryDto;
+    // TODO 35-39 덜 깔끔해보임
     if (authors === undefined) {
       authors = [];
     }
-    if (tagString !== undefined) {
-      tags = tagString.slice(1, -1).split(','); //TODO 입력값 자체에서 검증을 하도록 변경
+    if (tags === undefined) {
+      tags = [];
     }
-    const result = await this.postService.loadPostList(
-      3,
-      Number(lastId), //TODO 다른 방법 찾기,
-      tags,
-      authors,
-      category as Category,
-      scores,
+
+    return await this.postService.loadPostList(
+      new LoadPostListRequestDto(
+        lastId,
+        tags,
+        authors,
+        category as Category,
+        reviews,
+        likesCnt,
+        detail,
+      ),
     );
-    return result;
   }
 
   @Post()
@@ -63,5 +70,21 @@ export class PostController {
     return {
       message: '글 작성에 성공했습니다.',
     };
+  }
+
+  @Post(':postId/likes')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.CREATED)
+  async likes(@Req() req: Request, @Param('postId') postId: number) {
+    const userId = req.user['id'];
+    await this.postService.addLikes(userId, postId);
+  }
+
+  @Delete(':postId/likes')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async cancelLikes(@Req() req: Request, @Param('postId') postId: number) {
+    const userId = req.user['id'];
+    await this.postService.cancelLikes(userId, postId);
   }
 }

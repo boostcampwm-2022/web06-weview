@@ -1,0 +1,21 @@
+@import "@/constants/_library.scss";
+@import "@/styles/commons/_global-styles.scss";
+
+.post-loader {
+  flex-shrink: 0;
+  width: 80%;
+  height: $main-post-height * 0.2;
+
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.35rem;
+
+  &__spinner {
+    height: 90%;
+  }
+
+  &__target {
+    width: 100%;
+    height: 10%;
+  }
+}

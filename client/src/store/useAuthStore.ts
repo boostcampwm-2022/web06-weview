@@ -2,17 +2,17 @@ import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { UserInfo } from "@/types/auth";
 
-interface AuthState {
+interface AuthStates {
   isLoggedIn: boolean;
   myInfo: UserInfo | null;
 }
 
-interface AuthAction {
+interface AuthActions {
   login: (userInfo: UserInfo) => void;
   logout: () => void;
 }
 
-const useAuthStore = create<AuthState & AuthAction>()(
+const useAuthStore = create<AuthStates & AuthActions>()(
   devtools(
     persist(
       (set) => ({

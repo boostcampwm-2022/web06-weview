@@ -6,26 +6,17 @@ import PostSummary from "./PostSummary/PostSummary";
 import PostImageSlider from "@/components/PostBar/Post/PostImageSlider/PostImageSlider";
 import PostBody from "@/components/PostBar/Post/PostBody/PostBody";
 import PostFooter from "@/components/PostBar/Post/PostFooter/PostFooter";
-import useRelativeSize from "@/hooks/useRelativeSize";
 
 interface PostProps {
   postInfo: PostInfo;
-  boxRef: RefObject<HTMLDivElement>;
 }
 
 export const PostContext = createContext<PostInfo>({} as PostInfo);
 
-const Post = ({ postInfo, boxRef }: PostProps): JSX.Element => {
-  const { windowSize } = useRelativeSize({
-    targetRef: boxRef,
-    minHeight: 693,
-    heightRatio: 1.54,
-    windowRatio: 0.9,
-  });
-
+const Post = ({ postInfo }: PostProps): JSX.Element => {
   return (
     <PostContext.Provider value={postInfo}>
-      <div className="post" style={windowSize}>
+      <div className="post">
         <PostTitle />
         <PostSummary />
         <PostImageSlider />

@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseTimeEntity } from '../base-time.entity';
 import { Post } from '../post/post.entity';
 
@@ -17,5 +11,5 @@ export class Image extends BaseTimeEntity {
   post: Post;
 
   @Column()
-  url!: string;
+  src!: string;
 }

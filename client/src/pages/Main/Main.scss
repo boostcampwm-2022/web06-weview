@@ -1,29 +1,54 @@
 @import 'src/constants/_library.scss';
+@import "src/styles/commons/global-styles.scss";
+@import "src/styles/commons/_responsive.scss";
 
-@mixin main-common{
+@mixin main-responsive($width, $gap) {
+  width: $width;
+  gap: $gap;
+}
+
+@mixin main-common {
   display: flex;
   align-items: stretch;
   justify-content: center;
-  gap: 10em;
   margin: 0 auto;
-  max-width: 1000px;
-  width: 100%;
   height: 100%;
   color: $text-color;
 }
 
-.main{
-  @include main-common;
-  // 애니메이션
+@mixin main-fade-in {
   transition: 1s all ease;
   transform: translateY(0);
   opacity: 1;
-
 }
 
-.hidden-main{
-  @include main-common;
+@mixin main-fade-out {
   transform: translateY(-100%);
   opacity: 0;
   transition: 1s all ease;
+}
+
+@include mobile {
+  .main {
+  }
+  .hidden-main {
+  }
+}
+
+@include tablet {
+  .main {
+  }
+  .hidden-main {
+  }
+}
+
+@include device {
+  .main {
+    @include main-common;
+    @include main-responsive($desktop-main-width, $main-gap);
+  }
+  .hidden-main {
+    @include main-common;
+    @include main-responsive($desktop-main-width, $main-gap);
+  }
 }

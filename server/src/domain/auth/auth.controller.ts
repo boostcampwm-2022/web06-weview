@@ -17,23 +17,18 @@ import {
   RefreshTokensDto,
 } from './dto/controller-response.dto';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('auth/github')
+  @Get('github')
   async authorizeWithGithub(
     @Res({ passthrough: true }) res: Response,
     @Query('code') code: string,
   ): Promise<AuthorizeWithGithubDto> {
     const userInfo = await this.authService.getUserInfoUsingGithub(code);
 
-    const { email, nickname, profileUrl } = userInfo;
-
-    let user = await this.authService.findByEmail(email);
-    if (user == null) {
-      user = await this.authService.join(email, nickname, profileUrl);
-    }
+    const user = await this.authService.authorize(userInfo);
 
     const { accessToken, refreshToken, expiresIn } =
       this.authService.createTokens(user.id);
@@ -41,6 +36,7 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
     });
+
     return {
       accessToken: accessToken,
       expiresIn: expiresIn,
@@ -51,7 +47,7 @@ export class AuthController {
     };
   }
 
-  @Get('auth/refresh')
+  @Get('refresh')
   @UseGuards(AuthGuard('jwt-refresh'))
   refreshTokens(
     @Req() req: Request,
@@ -72,9 +68,9 @@ export class AuthController {
     };
   }
 
-  @Delete('auth/logout')
+  @Delete('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
-  logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('refreshToken');
     return;
   }

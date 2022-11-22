@@ -3,18 +3,18 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../user/user.entity';
 import { AccessTokenStrategy } from './access-token.strategy';
 import { RefreshTokenStrategy } from './refresh-token.strategy';
+import { UserRepository } from '../user/user.repository';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    HttpModule,
-    JwtModule.register({}),
+  imports: [HttpModule, JwtModule.register({})],
+  providers: [
+    AuthService,
+    UserRepository,
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
   ],
-  providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
   controllers: [AuthController],
   exports: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
 })

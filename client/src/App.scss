@@ -2,6 +2,7 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/styles/github.min.css");
 @import "./src/components/MainNav/MainNav.scss";
 @import "./src/components/WriteModal/WriteModal.scss";
+@import "./src/components/ModalContainer/ModalContainer.scss";
 @import "./pages/Main/Main.scss";
 
 html, body {
@@ -9,6 +10,7 @@ html, body {
   padding: 0;
   height: 100%;
   overflow: hidden;
+  font-size: $root-em; // rem
 }
 
 body {

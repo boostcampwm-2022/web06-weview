@@ -43,6 +43,7 @@ export interface WritingResponse {
 
 export interface Writing {
   title: string;
+  category: string;
   content: string;
   code: string;
   language: string;

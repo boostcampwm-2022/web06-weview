@@ -1,23 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { Image } from '../image/image.entity';
-import { PostToTag } from '../tag/post-to-tag.entity';
 import { Tag } from '../tag/tag.entity';
-import { User } from '../user/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
+import { PostToTag } from '../post-to-tag/post-to-tag.entity';
+import { PostRepository } from './post.repository';
+import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
+import { SEND_POST_CNT } from './post.controller';
+import { LoadPostListRequestDto } from './dto/service-request.dto';
+import { TagRepository } from '../tag/tag.repository';
+import { LikesRepository } from '../likes/likes.repository';
+import { Likes } from '../likes/likes.entity';
+import { PostNotFoundException } from '../../exception/post-not-found.exception';
+import { UserNotFoundException } from 'src/exception/user-not-found.exception';
+import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
+import { User } from '../user/user.entity';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class PostService {
-  private WANT_NEW_DATA = -1;
   constructor(
-    @InjectRepository(Post)
-    private readonly postRepository: Repository<Post>,
-    @InjectRepository(PostToTag)
-    private readonly postToTagRepository: Repository<PostToTag>,
     private readonly dataSource: DataSource,
+    private readonly postRepository: PostRepository,
+    private readonly postToTagRepository: PostToTagRepository,
+    private readonly tagRepository: TagRepository,
+    private readonly likesRepository: LikesRepository,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async write(
@@ -28,149 +37,160 @@ export class PostService {
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
+
     try {
-      const postEntity = queryRunner.manager.create(Post);
+      const manager = queryRunner.manager;
+
+      const userEntity = await manager.findOneBy(User, {
+        id: userId,
+      });
+
+      if (userEntity === null) {
+        throw new UserNotFoundException();
+      }
+
+      const imageEntities = images.map((src) => {
+        const imageEntity = new Image();
+        imageEntity.src = src;
+        return imageEntity;
+      });
+
+      const postEntity = new Post();
       postEntity.title = title;
       postEntity.content = content;
       postEntity.category = category;
       postEntity.code = code;
       postEntity.language = language;
-
-      const userEntity = await queryRunner.manager.findOneBy(User, {
-        id: userId,
-      });
       postEntity.user = userEntity;
-
-      const imageEntities = images.map((image) => {
-        const imageEntity = queryRunner.manager.create(Image);
-        imageEntity.url = image;
-        return imageEntity;
-      });
-
       postEntity.images = imageEntities;
-      await queryRunner.manager.save(postEntity);
 
-      if (tags) {
-        await Promise.all(
-          tags.map(async (tag) => {
-            let tagEntity = await queryRunner.manager.findOneBy(Tag, {
-              name: tag,
-            });
+      await manager.save(postEntity);
 
-            if (tagEntity === null) {
-              tagEntity = queryRunner.manager.create(Tag);
-              tagEntity.name = tag;
-              tagEntity = await queryRunner.manager.save(tagEntity);
-            }
-
-            const postToTagEntity = queryRunner.manager.create(PostToTag);
-            postToTagEntity.post = postEntity;
-            postToTagEntity.tag = tagEntity;
-            return queryRunner.manager.save(postToTagEntity);
-          }),
-        );
+      if (!tags) {
+        await queryRunner.commitTransaction();
+        return postEntity.id;
       }
+
+      await Promise.all(
+        tags.map(async (tag) => {
+          let tagEntity = await manager.findOneBy(Tag, {
+            name: tag,
+          });
+
+          if (tagEntity === null) {
+            tagEntity = new Tag();
+            tagEntity.name = tag;
+            await manager.save(tagEntity);
+          }
+
+          const postToTagEntity = new PostToTag();
+          postToTagEntity.post = postEntity;
+          postToTagEntity.tag = tagEntity;
+          return manager.save(postToTagEntity);
+        }),
+      );
 
       await queryRunner.commitTransaction();
       return postEntity.id;
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      throw new Error('글 작성에 실패했습니다.');
+
+      if (err instanceof UserNotFoundException) {
+        throw err;
+      }
+
+      throw new PostNotWrittenException();
     } finally {
       await queryRunner.release();
     }
   }
 
-  // TODO 코드 분리하기
   async loadPostList(
-    size: number,
-    lastId: number,
-    tags: string[],
-    users: string[],
-    category: Category,
-    likesCnt: number,
+    loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
-    const queryBuilder = this.postRepository
-      .createQueryBuilder('post')
-      .innerJoinAndSelect('post.user', 'user')
-      .leftJoinAndSelect('post.postToTags', 'postToTag')
-      .leftJoinAndSelect('post.images', 'image')
-      .where('post.isDeleted = 0');
-
-    // 이름으로 필터링
-    if (users.length !== 0) {
-      queryBuilder.andWhere('user.nickname in (:users)', {
-        users: users,
-      });
+    const { lastId, tags, authors, category, reviews, likesCnt, detail } =
+      loadPostListRequestDto;
+    let isLast = true;
+    const postInfosAfterFiltering = await Promise.all([
+      this.postRepository.findByIdLikesCntGreaterThan(likesCnt),
+      this.postToTagRepository.findByContainingTags(tags),
+      this.postRepository.findBySearchWord(detail),
+    ]);
+    const postIdsFiltered = this.returnPostIdByAllConditionPass(
+      postInfosAfterFiltering,
+    );
+    const result = await this.postRepository.findByIdUsingCondition(
+      lastId,
+      postIdsFiltered,
+      authors,
+      category,
+    );
+    if (this.canGetNextPost(result.length)) {
+      result.pop();
+      isLast = false;
     }
+    await this.addTagNamesEachPost(result);
+    return new LoadPostListResponseDto(result, isLast);
+  }
 
-    // 좋아요 개수로 필터링
-    if (likesCnt !== undefined && likesCnt >= 1) {
-      const postIdsFilteringLikesCnt = await this.findPostIdsFilteringLikesCnt(
-        likesCnt,
-      );
-      if (postIdsFilteringLikesCnt.length == 0) {
-        return new LoadPostListResponseDto([], true); // 결과가 없음. 이후 로직 실행할 필요 x
+  private async addTagNamesEachPost(result: Post[]) {
+    for (const each of result) {
+      const temp = [];
+      for (const tag of each.postToTags) {
+        temp.push(this.tagRepository.findById(tag.tagId));
       }
-      queryBuilder.andWhere('post.id in (:postIdsFilteringLikesCnt)', {
-        postIdsFilteringLikesCnt: postIdsFilteringLikesCnt,
-      });
+      const tags = await Promise.all(temp);
+      each.tagsNames = tags.map((obj) => obj.name);
     }
+  }
 
-    // TODO 리뷰 개수로 필터링
+  private canGetNextPost(resultCnt: number) {
+    return resultCnt === SEND_POST_CNT + 1;
+  }
 
-    // 태그를 보고 필터링
-    if (tags.length !== 0) {
-      const postIdsFilteringTags = await this.findPostIdsFilteringTags(tags);
-      if (postIdsFilteringTags.length == 0) {
-        return new LoadPostListResponseDto([], true); // 결과가 없음. 이후 로직 실행할 필요 x
+  /**
+   * 사용된 검색 조건이 한개도 없으면 -> null을 반환
+   * 조건을 만족시키는 사용자가 한 명도 없으면 -> 비어있는 배열 []을 반환
+   * 배열 안에 값이 있다면 -> 조건을 만족하는 사용자들의 id 리스트를 반환
+   */
+  public returnPostIdByAllConditionPass(postInfos: any[]) {
+    let result;
+    for (const postInfo of postInfos) {
+      if (postInfo === null) {
+        continue;
       }
-      queryBuilder.andWhere('post.id in (:postIdsFilteringTags)', {
-        postIdsFilteringTags: postIdsFilteringTags,
-      });
+      if (result === undefined) {
+        result = postInfo.map((obj) => obj.postId);
+      } else {
+        result = postInfo
+          .map((obj) => obj.postId)
+          .filter((each) => result.includes(each));
+      }
     }
-
-    // lastId로 필터링
-    if (lastId != this.WANT_NEW_DATA) {
-      queryBuilder.andWhere('post.id < :lastId', { lastId: lastId });
+    if (!result) {
+      return null;
     }
+    return result;
+  }
 
-    // 카테고리 필터링 (인덱스)
-    category = Category.QUESTION; //example
-    queryBuilder.andWhere('post.category = :category', {
-      category: category,
+  async addLikes(userId: number, postId: number) {
+    const likes = new Likes();
+    const [user, post] = await Promise.all([
+      this.userRepository.findOneBy({ id: userId }),
+      this.postRepository.findOneBy({ id: postId }),
+    ]);
+    if (post === null) {
+      throw new PostNotFoundException();
+    }
+    likes.user = user;
+    likes.post = post;
+    await this.likesRepository.save(likes);
+  }
+
+  async cancelLikes(userId: number, postId: number) {
+    await this.likesRepository.delete({
+      userId: userId,
+      postId: postId,
     });
-
-    const result = await queryBuilder
-      .take(size)
-      .orderBy('post.id', 'DESC')
-      .getMany();
-    return new LoadPostListResponseDto(result, size != result.length);
-  }
-
-  private async findPostIdsFilteringLikesCnt(likesCnt: number) {
-    const postsFilteringLikesCnt = await this.postRepository
-      .createQueryBuilder('post')
-      .innerJoin('likes', 'likes', 'post.id = likes.postId')
-      .where('likes.isDeleted = false')
-      .andWhere('post.isDeleted= false')
-      .select('post.id')
-      .addSelect('COUNT(*) AS likesCnt')
-      .groupBy('post.id')
-      .having('likesCnt > :likesCnt', { likesCnt: likesCnt })
-      .getRawMany();
-    return postsFilteringLikesCnt.map((obj) => obj['post_id']);
-  }
-
-  private async findPostIdsFilteringTags(tags: string[]) {
-    const postsFilteringTags = await this.postToTagRepository
-      .createQueryBuilder('pt')
-      .select('postId')
-      .leftJoin('tag', 'tag', 'pt.tagId = tag.id')
-      .where('tag.name in (:tags)', { tags: tags })
-      .groupBy('postId')
-      .having('COUNT(tag.id) >= :tagCnt', { tagCnt: tags.length })
-      .getRawMany();
-    return postsFilteringTags.map((obj) => obj['postId']);
   }
 }
