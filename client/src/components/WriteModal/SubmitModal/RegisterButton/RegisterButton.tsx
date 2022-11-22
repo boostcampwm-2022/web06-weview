@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import useWritingStore from "@/store/useWritingStore";
-import { getHashTags, preventXSS } from "@/utils/regExpression";
+import { preventXSS } from "@/utils/regExpression";
 import { postWritingsAPI } from "@/apis/post";
 import useModalStore from "@/store/useModalStore";
 import { isEmpty } from "@/utils/typeCheck";
@@ -45,7 +45,7 @@ const RegisterButton = (): JSX.Element => {
       images: [
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReFASlWHLC8RC6TAfXDIbMeUEqB3TfxvuFZg&usqp=CAU",
       ],
-      tags: tags,
+      tags,
     })
       .then((res) => {
         alert(res.message);
@@ -54,7 +54,7 @@ const RegisterButton = (): JSX.Element => {
         closeSubmitModal();
       })
       .catch((err: any) => console.error(err));
-  }, [title, content, code, language, images]);
+  }, [title, content, code, language, images, tags]);
 
   return (
     <button
