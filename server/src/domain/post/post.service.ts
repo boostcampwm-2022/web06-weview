@@ -66,6 +66,11 @@ export class PostService {
 
       await manager.save(postEntity);
 
+      if (!tags) {
+        await queryRunner.commitTransaction();
+        return postEntity.id;
+      }
+
       await Promise.all(
         tags.map(async (tag) => {
           let tagEntity = await manager.findOneBy(Tag, {

@@ -1,4 +1,5 @@
 import {
+  ArrayNotEmpty,
   IsArray,
   IsInt,
   IsOptional,
@@ -24,6 +25,7 @@ export class WriteDto {
   @IsString()
   language: string;
 
+  @ArrayNotEmpty()
   @IsString({ each: true })
   images: string[];
 
