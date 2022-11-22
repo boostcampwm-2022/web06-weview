@@ -33,11 +33,12 @@ export class WriteDto {
 }
 
 export class InqueryDto {
+  @IsOptional()
   @IsInt()
   @Min(-1, {
     message: 'lastId는 -1과 Post의 인덱스만 입력 가능합니다',
   })
-  lastId: number;
+  lastId?: number = -1;
 
   @IsOptional()
   @IsString()
