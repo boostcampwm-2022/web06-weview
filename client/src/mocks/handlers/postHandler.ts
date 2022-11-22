@@ -63,11 +63,6 @@ export const postHandlers = [
       )
       .slice(lastId, lastId + SIZE);
 
-    console.log(
-      { tags, authors, category, reviews, likes, detail },
-      filteredData.length
-    );
-
     return res(
       ctx.status(200),
       ctx.delay(1000),
