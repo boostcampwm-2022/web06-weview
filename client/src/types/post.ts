@@ -55,7 +55,7 @@ export interface SearchQuery {
   tags?: string[];
   authors?: string[];
   category?: string;
-  writtenAnswer?: number;
-  scores?: number;
-  search?: string;
+  reviews?: number;
+  likes?: number;
+  detail?: string;
 }

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
-import { isEnterKey, isSpaceKey, isSubmitKey } from "@/utils/pressedKeyCheck";
+import { isEnterKey, isSubmitKey } from "@/utils/pressedKeyCheck";
 import SearchLabel from "@/components/ModalContainer/SearchModal/SearchForm/SearchLabel/SearchLabel";
 import { Label } from "@/types/search";
 import { SEPARATOR } from "@/constants/search";
@@ -17,9 +17,9 @@ const SearchForm = (): JSX.Element => {
   const createLabel = (word: string): Label => {
     const separator = word[0];
     const value = word.slice(1);
-    const type = SEPARATOR[separator] ?? "search";
+    const type = SEPARATOR[separator] ?? "detail";
 
-    if (type === "search") {
+    if (type === "detail") {
       return { type, value: word };
     }
 
@@ -39,14 +39,14 @@ const SearchForm = (): JSX.Element => {
           case "author":
             prev.authors?.push(value);
             break;
-          case "writtenAnswer":
-            prev.writtenAnswer = Number(value);
+          case "reviews":
+            prev.reviews = Number(value);
             break;
-          case "scores":
-            prev.scores = Number(value);
+          case "likes":
+            prev.likes = Number(value);
             break;
-          case "search":
-            prev.search = value;
+          case "detail":
+            prev.detail = value;
             break;
         }
         return prev;
@@ -56,9 +56,9 @@ const SearchForm = (): JSX.Element => {
         tags: [],
         authors: [],
         category: "",
-        writtenAnswer: 0,
-        scores: 0,
-        search: "",
+        reviews: 0,
+        likes: 0,
+        detail: "",
       }
     );
   };

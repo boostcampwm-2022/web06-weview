@@ -9,12 +9,12 @@ $modal-border-radius: 10px;
 @mixin label($border-color) {
   display: table-cell;
   flex: none;
-  border-radius: 20px;
+  border-radius: 0.9rem;
   box-sizing: border-box;
-  font-size: 1rem;
+  font-size: 0.75rem;
   width: fit-content;
   height: fit-content;
-  padding: 0.25rem 1rem;
+  padding: 0.25rem 0.75rem;
   vertical-align: middle;
   color: $text-color;
   background-color: $weview-off-white;
@@ -53,13 +53,13 @@ $modal-border-radius: 10px;
     &--author {
       @include label($author-color);
     }
-    &--scores {
+    &--likes {
       @include label($likes-color);
     }
-    &--writtenAnswer {
+    &--reviews {
       @include label($reviews-color);
     }
-    &--search {
+    &--detail {
       @include label($line-color);
     }
   }
