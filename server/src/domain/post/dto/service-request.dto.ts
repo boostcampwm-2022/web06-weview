@@ -7,17 +7,17 @@ export class LoadPostListRequestDto {
     tags: string[],
     authors: string[],
     category: Category,
-    writtenAnswer: number,
+    reviews: number,
     likesCnt: number,
-    search: string,
+    detail: string,
   ) {
     this.lastId = lastId;
     this.tags = tags;
     this.authors = authors;
     this.category = category;
-    this.writtenAnswer = writtenAnswer;
+    this.reviews = reviews;
     this.likesCnt = likesCnt;
-    this.search = search;
+    this.detail = detail;
   }
 
   @IsInt()
@@ -34,12 +34,12 @@ export class LoadPostListRequestDto {
   @IsOptional()
   @IsInt()
   @Min(1)
-  writtenAnswer?: number;
+  reviews?: number;
 
   @IsOptional()
   @Min(1)
   likesCnt?: number;
 
   @IsOptional()
-  search?: string;
+  detail?: string;
 }

@@ -76,14 +76,14 @@ export class PostRepository extends Repository<Post> {
     return filteringCnt !== 0;
   }
 
-  findBySearchWord(search: string): Promise<any[]> {
-    if (search === undefined || search.length < 0) {
+  findBySearchWord(detail: string): Promise<any[]> {
+    if (detail === undefined || detail.length < 0) {
       return null; //해당 조건은 사용하지 않습니다
     }
     return this.createQueryBuilder('post')
       .select('post.id', 'postId')
-      .where('post.title like :search OR post.content like :search', {
-        search: `%${search}%`,
+      .where('post.title like :detail OR post.content like :detail', {
+        detail: `%${detail}%`,
       })
       .getRawMany();
   }
