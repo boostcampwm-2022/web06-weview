@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { BaseTimeEntity } from '../base-time.entity';
 import { Post } from '../post/post.entity';
 import { Tag } from '../tag/tag.entity';
@@ -11,9 +11,9 @@ export class PostToTag extends BaseTimeEntity {
   @PrimaryColumn()
   tagId: number;
 
-  @ManyToOne(() => Post)
+  @ManyToOne(() => Post, (post) => post.postToTags)
   post!: Post;
 
-  @ManyToOne(() => Tag)
+  @ManyToOne(() => Tag, (tag) => tag.postToTags, { cascade: ['insert'] })
   tag!: Tag;
 }

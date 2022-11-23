@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { Image } from '../image/image.entity';
 import { Tag } from '../tag/tag.entity';
@@ -15,13 +14,11 @@ import { Likes } from '../likes/likes.entity';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
 import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
-import { User } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class PostService {
   constructor(
-    private readonly dataSource: DataSource,
     private readonly postRepository: PostRepository,
     private readonly postToTagRepository: PostToTagRepository,
     private readonly tagRepository: TagRepository,
@@ -31,17 +28,10 @@ export class PostService {
 
   async write(
     userId: number,
-    { title, content, category, code, language, images, tags },
+    { title, content, category, code, language, lineCount, images, tags },
   ) {
-    const queryRunner = this.dataSource.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
     try {
-      const manager = queryRunner.manager;
-
-      const userEntity = await manager.findOneBy(User, {
+      const userEntity = await this.userRepository.findOneBy({
         id: userId,
       });
 
@@ -55,6 +45,7 @@ export class PostService {
         return imageEntity;
       });
 
+      const postToTagEntities = await this.toPostToTagEntities(tags);
       const postEntity = new Post();
       postEntity.title = title;
       postEntity.content = content;
@@ -62,47 +53,41 @@ export class PostService {
       postEntity.code = code;
       postEntity.language = language;
       postEntity.user = userEntity;
+      postEntity.lineCount = lineCount;
       postEntity.images = imageEntities;
+      postEntity.postToTags = postToTagEntities;
+      await this.postRepository.save(postEntity);
 
-      await manager.save(postEntity);
-
-      if (!tags) {
-        await queryRunner.commitTransaction();
-        return postEntity.id;
-      }
-
-      await Promise.all(
-        tags.map(async (tag) => {
-          let tagEntity = await manager.findOneBy(Tag, {
-            name: tag,
-          });
-
-          if (tagEntity === null) {
-            tagEntity = new Tag();
-            tagEntity.name = tag;
-            await manager.save(tagEntity);
-          }
-
-          const postToTagEntity = new PostToTag();
-          postToTagEntity.post = postEntity;
-          postToTagEntity.tag = tagEntity;
-          return manager.save(postToTagEntity);
-        }),
-      );
-
-      await queryRunner.commitTransaction();
       return postEntity.id;
     } catch (err) {
-      await queryRunner.rollbackTransaction();
-
       if (err instanceof UserNotFoundException) {
         throw err;
       }
 
       throw new PostNotWrittenException();
-    } finally {
-      await queryRunner.release();
     }
+  }
+
+  private toPostToTagEntities(tags: string[]): Promise<PostToTag[]> {
+    if (!tags) {
+      return undefined;
+    }
+
+    const postToTagEntities = Promise.all(
+      tags.map(async (name) => {
+        let tagEntity = await this.tagRepository.findOneBy({ name });
+        if (!tagEntity) {
+          tagEntity = new Tag();
+          tagEntity.name = name;
+        }
+
+        const postToTagEntity = new PostToTag();
+        postToTagEntity.tag = tagEntity;
+        return postToTagEntity;
+      }),
+    );
+
+    return postToTagEntities;
   }
 
   async loadPostList(
@@ -120,6 +105,7 @@ export class PostService {
     const postIdsFiltered = this.returnPostIdByAllConditionPass(
       postInfosAfterFiltering,
     );
+    // 개선
     const result = await this.postRepository.findByIdUsingCondition(
       lastId,
       postIdsFiltered,
