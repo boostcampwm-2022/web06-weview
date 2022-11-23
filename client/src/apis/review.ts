@@ -6,7 +6,8 @@ export const getReviewsAPI = async (
   lastId: string
 ): Promise<ReviewScroll> => {
   const { data } = await axiosInstance.get(
-    `/posts/${postId}?lastId=${lastId})}`
+    `/posts/${postId}/reviews?lastId=${lastId}`
   );
+  console.log("hihi", data);
   return data;
 };
