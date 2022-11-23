@@ -1,13 +1,16 @@
-@import "../../../../../constants/library";
-@import "CodeTheme";
+@import "../../constants/library";
+@import "@/styles/_global-styles";
+@import "@/components/CodeEditor/CodeTheme.scss";
+
 $line-width: 2.5rem;
 
 .code-editor {
   position: relative;
   display: flex;
   box-sizing: border-box;
-  width: 100%;
-  height: 90%;
+  width: $device-editor-width;
+  min-width: $device-editor-width; // review modal 에서 가로 정렬 기준 flex-shrink: 0 역할
+  height: 100%;
   border-radius: 0.25rem;
   &__textarea,
   &__present {

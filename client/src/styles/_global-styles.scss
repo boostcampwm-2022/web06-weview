@@ -17,6 +17,7 @@ $mobile-min-width: 480px; // 30rem
 $main-gap: 2rem; // nav 와 post-bar 사이 gap
 $post-bar-margin-side: 0.063rem; // post-bar 양 옆 마진 (테두리 여백)
 $post-gap: 2rem; // post 와 post 사이 gap
+$device-review-modal-gap: 1rem; // 에디터-리뷰 사이 갭
 
 /**
  * page Main
@@ -42,3 +43,11 @@ $modal-upper-z-index: 3;
  */
 
 $editing-form-width: 45rem;
+$device-editor-width: 40rem; // device 최대 너비가 69.5rem - 6:4정도 유지를 위해 40rem 선정
+
+/**
+ * review
+ */
+
+$device-review-max-width: $desktop-main-width - $device-editor-width -
+  $device-review-modal-gap;

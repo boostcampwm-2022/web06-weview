@@ -2,34 +2,35 @@
 @import "../../../styles/_global-styles";
 @import "../../../styles/_animation";
 
-
 .modal-container {
   // root 의 가운데 정렬
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
+  left: 0;
+  z-index: $modal-content-z-index;
 
   display: flex;
-  margin : 0 auto;
+  box-sizing: border-box;
   width: 100%;
   max-width: $desktop-main-width;
   height: 100%;
-  box-shadow: $button-shadow;
-  box-sizing: border-box;
-  border-radius: 1rem;
-  border: 0.25rem solid $line-color;
-  z-index: $modal-content-z-index;
+  margin: 0 auto;
+
+  // 모달 내용들은 공통으로 2rem 패딩 내에 존재
+  padding: 2rem;
   background-color: $weview-off-white;
+  border: 0.25rem solid $line-color;
+  border-radius: 1rem;
+  box-shadow: $button-shadow;
   animation: modal-fade-out 600ms cubic-bezier(0.86, 0, 0.3, 1);
 
-  &.open{
+  &.open {
     visibility: visible;
     animation: modal-fade-in 600ms cubic-bezier(0.86, 0, 0.3, 1);
   }
-  &.close{
+  &.close {
     z-index: -1;
     visibility: hidden;
   }
 }
-
