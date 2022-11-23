@@ -26,7 +26,9 @@ interface ReviewInfiniteScrollResults {
 /**
  * react-query 를 이용한 리뷰 정보에 대한 인피니티 스크롤 커스텀 훅 입니다.
  */
-const usePostInfiniteScroll = (postId: string): ReviewInfiniteScrollResults => {
+const useReviewInfiniteScroll = (
+  postId: string
+): ReviewInfiniteScrollResults => {
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
     [QUERY_KEYS.REVIEWS, postId],
     async ({ pageParam = -1 }: QueryFunctionContext) =>
@@ -59,4 +61,4 @@ const usePostInfiniteScroll = (postId: string): ReviewInfiniteScrollResults => {
   return { data, hasNextPage, isFetching, fetchNextPage, onIntersect };
 };
 
-export default usePostInfiniteScroll;
+export default useReviewInfiniteScroll;
