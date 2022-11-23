@@ -22,8 +22,6 @@ export class PostService {
     private readonly postRepository: PostRepository,
     private readonly postToTagRepository: PostToTagRepository,
     private readonly tagRepository: TagRepository,
-    private readonly likesRepository: LikesRepository,
-    private readonly userRepository: UserRepository,
   ) {}
 
   async write(
@@ -158,26 +156,5 @@ export class PostService {
       return null;
     }
     return result;
-  }
-
-  async addLikes(userId: number, postId: number) {
-    const likes = new Likes();
-    const [user, post] = await Promise.all([
-      this.userRepository.findOneBy({ id: userId }),
-      this.postRepository.findOneBy({ id: postId }),
-    ]);
-    if (post === null) {
-      throw new PostNotFoundException();
-    }
-    likes.user = user;
-    likes.post = post;
-    await this.likesRepository.save(likes);
-  }
-
-  async cancelLikes(userId: number, postId: number) {
-    await this.likesRepository.delete({
-      userId: userId,
-      postId: postId,
-    });
   }
 }
