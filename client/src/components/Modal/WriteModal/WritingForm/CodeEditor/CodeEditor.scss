@@ -1,33 +1,63 @@
 @import "../../../../../constants/library";
 @import "CodeTheme";
+$line-width: 2.5rem;
 
-.code-editor{
-    position: relative;
-    width: 100%;
-    height: 90%;
-    border-radius: 0.25rem;
-  &__textarea, &__present {
+.code-editor {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  height: 90%;
+  border-radius: 0.25rem;
+  &__textarea,
+  &__present {
+    left: $line-width;
+    width: calc(100% - $line-width);
     color: $weview-white;
-    font-size: 1.25rem;
+  }
+  &__textarea,
+  &__present,
+  &__lines {
     position: absolute;
+    box-sizing: border-box;
+    height: 100%;
     margin: 0;
-    width: calc(100% - 1em);
-    height: calc(100% - 1em);
-    padding: 0.5em;
+    padding: 0.5rem;
+    font-size: 1rem;
+    white-space: pre-wrap;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   &__textarea {
-    caret-color: $alert;
+    z-index: 1;
+    overflow-y: scroll;
     color: transparent;
     background-color: transparent;
-    z-index: 1;
     border: none;
     resize: none;
+    caret-color: $alert;
   }
-  &__present{
-    background-color: $codeblock-color;
-    color: #c9d1d9;
+  &__present {
     z-index: 0;
-    border-radius: 0.25rem;
-    text-overflow: ellipsis;
+    overflow-x: hidden;
+    overflow-y: auto;
+    color: #c9d1d9;
+    background-color: $codeblock-color;
+  }
+
+  &__lines {
+    top: 0;
+    left: 0;
+    z-index: 3;
+    display: flex;
+    width: $line-width;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    color: $weview-white;
+    text-align: end;
+    background-color: $codeblock-color;
+    border-right: 1px solid $line-color;
   }
 }

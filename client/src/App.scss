@@ -4,12 +4,13 @@
 @import "components/Modal/WriteModal/WriteModal.scss";
 @import "./pages/Main/Main.scss";
 @import "./src/components/Modal/ModalContainer/ModalContainer";
-@import "src/components/ModalWrapper/ModalWrapper.scss";
+@import "src/components/Modal/ModalWrapper/ModalWrapper.scss";
 
-html, body {
+html,
+body {
+  height: 100%;
   margin: 0;
   padding: 0;
-  height: 100%;
   overflow: hidden;
   font-size: $root-em; // rem
 }
@@ -25,7 +26,7 @@ body {
   font-family: GmarketSans;
 }
 
-input{
+input {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -35,12 +36,27 @@ input{
   outline: 0;
 }
 
-button{
+button {
   font-family: GmarketSans;
 }
 
-select{
+select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+
+::-webkit-scrollbar {
+  width: 0.65em;
+  &-thumb {
+    background-color: $text-color;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    border-radius: 10px;
+  }
+  &-track {
+    background-color: $line-color;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px white;
+  }
 }

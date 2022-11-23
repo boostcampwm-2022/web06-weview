@@ -25,7 +25,8 @@ $full-desktop-main-padding: 20rem;
 $main-nav-width: 20rem;
 $main-post-bar-width: 32rem;
 $main-post-height: $main-post-bar-width * 1.54;
-$desktop-main-width: $main-nav-width + $main-post-bar-width + $main-gap + $full-desktop-main-padding;
+$desktop-main-width: $main-nav-width + $main-post-bar-width + $main-gap +
+  $full-desktop-main-padding;
 
 /**
  * z-index
@@ -35,3 +36,9 @@ $default-z-index: 0;
 $modal-background-z-index: 1;
 $modal-content-z-index: 2;
 $modal-upper-z-index: 3;
+
+/**
+ * editor
+ */
+
+$editing-form-width: 45rem;
