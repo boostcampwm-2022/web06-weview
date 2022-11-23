@@ -39,7 +39,7 @@ export class EachPostResponseDto {
     this.images = post.images.map((image) => new EachImageResponseDto(image));
     this.updatedAt = post.updatedAt;
     this.author = new AuthorDto(post.user);
-    this.tags = post.tagsNames;
+    this.tags = post.postToTags.map((obj) => obj.tag.name);
     this.reviews = []; // TODO api에서 삭제될 예정
     this.isLiked = true; // TODO
   }

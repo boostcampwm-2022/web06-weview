@@ -114,19 +114,7 @@ export class PostService {
       result.pop();
       isLast = false;
     }
-    await this.addTagNamesEachPost(result);
     return new LoadPostListResponseDto(result, isLast);
-  }
-
-  private async addTagNamesEachPost(result: Post[]) {
-    for (const each of result) {
-      const temp = [];
-      for (const tag of each.postToTags) {
-        temp.push(this.tagRepository.findById(tag.tagId));
-      }
-      const tags = await Promise.all(temp);
-      each.tagsNames = tags.map((obj) => obj.name);
-    }
   }
 
   private canGetNextPost(resultCnt: number) {
