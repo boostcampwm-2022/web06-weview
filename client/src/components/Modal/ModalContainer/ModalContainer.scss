@@ -1,0 +1,35 @@
+@import "../../../constants/library";
+@import "../../../styles/_global-styles";
+@import "../../../styles/_animation";
+
+
+.modal-container {
+  // root 의 가운데 정렬
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  margin : 0 auto;
+  width: 100%;
+  max-width: $desktop-main-width;
+  height: 100%;
+  box-shadow: $button-shadow;
+  box-sizing: border-box;
+  border-radius: 1rem;
+  border: 0.25rem solid $line-color;
+  z-index: $modal-content-z-index;
+  background-color: $weview-off-white;
+  animation: modal-fade-out 600ms cubic-bezier(0.86, 0, 0.3, 1);
+
+  &.open{
+    visibility: visible;
+    animation: modal-fade-in 600ms cubic-bezier(0.86, 0, 0.3, 1);
+  }
+  &.close{
+    z-index: -1;
+    visibility: hidden;
+  }
+}
+
