@@ -1,5 +1,4 @@
 import { SearchQuery } from "@/types/search";
-import { Review } from "@/types/post";
 
 export const parsePostQueryString = (url: URL): any => {
   const searchQuery: SearchQuery = {
@@ -35,15 +34,3 @@ export const parsePostQueryString = (url: URL): any => {
 
   return searchQuery;
 };
-
-export const review = (id: number): Review => ({
-  id: String(id),
-  reviewer: {
-    id: String((id + 12345) % 100),
-    nickname: "reviewer-name",
-    profileUrl: "",
-    email: "",
-  },
-  content: "",
-  updatedAt: "2022-11-16 12:26:56.124939",
-});

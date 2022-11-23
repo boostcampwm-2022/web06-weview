@@ -1,41 +1,38 @@
-import { PostInfo } from "@/types/post";
 import { rest } from "msw";
 import { API_SERVER_URL } from "@/constants/env";
-import { parsePostQueryString, review } from "@/mocks/utils/postUtils";
+import { parsePostQueryString } from "@/mocks/utils/postUtils";
 
 // Backend API Server URL
 const baseUrl = API_SERVER_URL;
 
-const posts = Array.from(Array(1024).keys()).map(
-  (id): PostInfo => ({
-    id: `${id}`,
-    title: `title${id}`,
-    content: `post_contents_${id}`,
-    images: [
-      {
-        src: "http://placeimg.com/640/640/animals",
-        name: "image1",
-      },
-      {
-        src: "http://placeimg.com/640/640/animals",
-        name: "image1",
-      },
-    ],
-    author: {
-      id: `${id + 10000}`,
-      nickname: `sampleUser_${id + 10000}`,
-      profileUrl: "http://placeimg.com/640/640/animals",
-      email: `name_${id + 10000}@gmail.com`,
+const posts = Array.from(Array(1024).keys()).map((id) => ({
+  id: `${id}`,
+  title: `title${id}`,
+  content: `post_contents_${id}`,
+  images: [
+    {
+      src: "http://placeimg.com/640/640/animals",
+      name: "image1",
     },
-    tags: [`tag1`, `tag2`],
-    reviews: Array.from(Array(id % 3).keys()).map(review),
-    updatedAt: "2022-11-16 12:26:56.124939",
-    code: `sourcecode: ~~~~~~~~~~~~~~~~~~`,
-    language: `javascript`,
-    category: id % 2 === 0 ? "리뷰요청" : "질문",
-    likes: id % 10,
-  })
-);
+    {
+      src: "http://placeimg.com/640/640/animals",
+      name: "image1",
+    },
+  ],
+  author: {
+    id: `${id + 10000}`,
+    nickname: `sampleUser_${id + 10000}`,
+    profileUrl: "http://placeimg.com/640/640/animals",
+    email: `name_${id + 10000}@gmail.com`,
+  },
+  tags: [`tag1`, `tag2`],
+  reviews: Array.from(Array(id % 3).keys()),
+  updatedAt: "2022-11-16 12:26:56.124939",
+  code: `sourcecode: ~~~~~~~~~~~~~~~~~~`,
+  language: `javascript`,
+  category: id % 2 === 0 ? "리뷰요청" : "질문",
+  likes: id % 10,
+}));
 
 export const postHandler = [
   rest.get(`${baseUrl}/posts`, (req, res, ctx) => {
