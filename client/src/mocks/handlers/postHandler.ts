@@ -1,4 +1,4 @@
-import { PostInfo, Review } from "@/types/post";
+import { PostInfo } from "@/types/post";
 import { rest } from "msw";
 import { API_SERVER_URL } from "@/constants/env";
 import { parsePostQueryString, review } from "@/mocks/utils/postUtils";
@@ -37,7 +37,7 @@ const posts = Array.from(Array(1024).keys()).map(
   })
 );
 
-export const postHandlers = [
+export const postHandler = [
   rest.get(`${baseUrl}/posts`, (req, res, ctx) => {
     const lastId = Number(req.url.searchParams.get("lastId")) + 1;
     const { tags, authors, category, reviews, likes, detail } =
