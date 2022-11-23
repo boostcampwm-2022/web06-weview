@@ -5,8 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { isEmpty } from "@/utils/typeCheck";
 import ReactRouter from "@/ReactRouter";
-import CommonModalWrapper from "@/components/ModalWrapper/CommonModalWrapper";
-import OtherModalWrapper from "@/components/ModalWrapper/OtherModalWrapper";
+import CommonModalWrapper from "@/components/Modal/ModalWrapper/CommonModalWrapper";
+import OtherModalWrapper from "@/components/Modal/ModalWrapper/OtherModalWrapper";
 
 function App(): JSX.Element {
   const queryClientRef = useRef<QueryClient>();
