@@ -14,7 +14,6 @@ export const defaultPostInfo: PostInfo = {
   images: [],
   language: "",
   likes: 0,
-  reviews: [],
   tags: [],
   title: "",
   updatedAt: "",
