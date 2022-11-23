@@ -1,46 +1,46 @@
 @import "@/constants/_library.scss";
 @import "@/styles/_global-styles.scss";
 
+$post-inline-padding: 0.75rem;
+
 .post {
-  width: 100%;
-  height: $main-post-height;
-
-  background-color: $weview-off-white;
-
-  border-radius: 0.35rem;
-  border: 1px solid $line-color;
+  // 반응형 레이아웃
+  display: grid;
+  grid-template-rows: 12fr 100fr 25fr 18fr; // 가로:세로 = 1:1.54 비율 기준
 
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  width: 100%;
+  height: $main-post-height;
+
+  background-color: $weview-off-white;
+  border: 1px solid $line-color;
+
+  border-radius: 0.35rem;
 
   // 그림자
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
-  // 반응형 레이아웃
-  display: grid;
-  grid-template-rows: 12fr 8fr 100fr 25fr 10fr; // 가로:세로 = 1:1.54 비율 기준
-
   &__title {
+    display: flex;
+    grid-row: 1;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    grid-row: 1;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    box-sizing:border-box;
-    padding-inline: 0.75rem 0.75rem;
 
     // 아래 구분선
     border-bottom: 1px solid $line-color;
+    padding-inline: 0.75rem 0.75rem;
 
     &__author-profile {
       display: flex;
-      align-items: center;
       gap: 0.35rem;
+      align-items: center;
 
       width: fit-content;
       height: 100%;
@@ -55,42 +55,16 @@
       }
     }
 
-    &__timestamp {
-      font-size: 0.75rem;
-      width: fit-content;
-      white-space: nowrap;
-      text-align: left;
-    }
-  }
-
-  &__info {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    grid-row: 2;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    box-sizing:border-box;
-    padding-inline: 0.75rem 0.75rem;
-
-    &__type-toggle {
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    &__code-info {
+    &--code-info {
       font-size: 0.65rem;
     }
   }
 
   &__image-slider {
+    grid-row: 2;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    grid-row: 3;
     background-color: black;
 
     &--image {
@@ -101,26 +75,39 @@
   }
 
   &__body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    grid-row: 4;
-    background-color: white;
-
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    grid-row: 3;
     gap: 0.35rem;
+    align-items: flex-start;
+    justify-content: flex-start;
 
-    box-sizing:border-box;
-    padding: 0.75rem 0.75rem 0.35rem 0.35rem;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: $post-inline-padding;
+    overflow: hidden;
+    background-color: white;
 
     // 아래 구분선
     border-bottom: 1px solid $line-color;
 
-    &--title {
-      font-size: 1rem;
+    &__title {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      &--title {
+        flex-grow: 1;
+        font-size: 1rem;
+      }
+
+      &--time-stamp {
+        width: fit-content;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        text-align: left;
+      }
     }
 
     &--content {
@@ -129,25 +116,24 @@
   }
 
   &__footer {
+    display: flex;
+    grid-row: 4;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    grid-row: 5;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    box-sizing:border-box;
-    padding-inline: 0.75rem 0.75rem;
+    padding-inline: $post-inline-padding $post-inline-padding;
 
     &__left-block {
-      display:flex;
+      display: flex;
       gap: 0.75rem;
     }
 
     &__right-block {
-      display:flex;
+      display: flex;
       flex-direction: row-reverse;
       gap: 0.75rem;
     }

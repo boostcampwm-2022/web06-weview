@@ -45,7 +45,7 @@ const TimeStamp = (): JSX.Element => {
 
   return (
     <time
-      className="post__title__timestamp"
+      className="post__body__title--time-stamp"
       dateTime={updatedAt}
       title={timeTagTitle}
     >
