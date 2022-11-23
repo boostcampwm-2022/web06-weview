@@ -14,6 +14,12 @@ export class AuthService {
     private httpService: HttpService,
   ) {}
 
+  authenticate(token) {
+    const payload = this.jwtService.decode(token.split(' ')[1]);
+    // TODO 날짜를 확인하고 이상없는지 확인
+    return payload['id'];
+  }
+
   async authorize({ email, nickname, profileUrl }) {
     let user = await this.userRepository.findOneBy({ email });
     if (user == null) {
