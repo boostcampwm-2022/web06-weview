@@ -59,7 +59,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "eslint --fix --allow-empty",
+      "eslint --fix",
       "prettier --write"
     ],
     "*.{md,json,css,scss}": [
