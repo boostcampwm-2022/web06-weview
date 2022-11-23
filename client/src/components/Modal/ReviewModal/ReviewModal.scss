@@ -1,0 +1,14 @@
+@import "@/styles/_global-styles.scss";
+
+.review-modal {
+  display: flex;
+  gap: $device-review-modal-gap;
+  width: 100%;
+  height: 100%;
+
+  &__reviews {
+    width: 100%;
+    max-width: $device-review-max-width;
+    background-color: yellow;
+  }
+}
