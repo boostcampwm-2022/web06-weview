@@ -34,7 +34,8 @@ const useReviewInfiniteScroll = (
     async ({ pageParam = -1 }: QueryFunctionContext) =>
       await getReviewsAPI(postId, pageParam),
     {
-      getNextPageParam: (lastReview) => lastReview.isLast || undefined,
+      getNextPageParam: (lastReview) =>
+        lastReview.isLast ? undefined : lastReview.lastId,
     }
   );
 
