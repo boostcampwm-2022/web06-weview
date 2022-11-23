@@ -36,8 +36,8 @@ export class AuthService {
     const accessToken = this.jwtService.sign(
       { id },
       {
-        secret: this.configService.get<string>('JWT_SECRET'),
-        expiresIn: '30m',
+        secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+        expiresIn: this.configService.get<string>('JWT_ACCESS_TIME'),
       },
     );
 
@@ -45,7 +45,7 @@ export class AuthService {
       { id },
       {
         secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-        expiresIn: '14d',
+        expiresIn: this.configService.get<string>('JWT_REFRESH_TIME'),
       },
     );
 
