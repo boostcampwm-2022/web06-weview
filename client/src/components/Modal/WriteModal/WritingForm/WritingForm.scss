@@ -3,19 +3,20 @@
 @import "PrettifyButton/PrettifyButton";
 @import "SubmitButton/SubmitButton";
 @import "LanguageSelector/LanguageSelector";
+@import "src/styles/_global-styles.scss";
 
-.writing-form{
+.writing-form {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 100%;
+  width: $editing-form-width;
   padding: 2em;
-  &__buttons{
+  &__buttons {
     display: flex;
     justify-content: flex-end;
   }
-  @media screen and (max-width: 720px){
-    height: 100%;
+  @media screen and (max-width: 720px) {
     width: calc(100% - 4rem);
+    height: 100%;
   }
 }

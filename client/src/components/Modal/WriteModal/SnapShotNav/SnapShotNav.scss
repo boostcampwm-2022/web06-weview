@@ -1,39 +1,40 @@
 @import "../../../../constants/library";
 
-.snapshot{
+.snapshot {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   align-items: center;
   width: 40%;
   height: 100%;
-  box-shadow: $box-shadow;
+  overflow-x: hidden;
+  overflow-y: auto;
   border: 1px solid $line-color;
   border-radius: 0.25rem;
-  overflow-y: auto;
-  overflow-x: hidden;
-  &__item{
-    margin: 1em 0;
+  box-shadow: $box-shadow;
+  &__item {
     width: 15em;
     height: 15em;
-    &--img{
+    margin: 1em 0;
+    &--img {
       width: 15em;
       height: 15em;
+      object-fit: cover;
       border-radius: 0.25rem;
       cursor: pointer;
-      object-fit: cover;
     }
   }
   @media screen and (max-width: 720px) {
     flex-direction: row;
     width: 100%;
     height: 10rem;
-    overflow-y: hidden;
     overflow-x: auto;
-    &__item{
+    overflow-y: hidden;
+    &__item {
       width: 10rem;
       height: 100%;
       margin: 0 1em;
-      &--img{
+      &--img {
         width: 10rem;
         height: 100%;
       }
@@ -41,16 +42,15 @@
   }
 }
 
-
 ::-webkit-scrollbar {
   width: 0.65em;
-  &-thumb{
+  &-thumb {
     background-color: $text-color;
-    border-radius: 10px;
     background-clip: padding-box;
     border: 2px solid transparent;
+    border-radius: 10px;
   }
-  &-track{
+  &-track {
     background-color: $line-color;
     border-radius: 10px;
     box-shadow: inset 0 0 5px white;

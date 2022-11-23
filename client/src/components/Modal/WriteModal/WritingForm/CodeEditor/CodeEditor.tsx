@@ -7,18 +7,23 @@ import React, {
 } from "react";
 import useWritingStore from "@/store/useWritingStore";
 import hljs from "highlight.js";
+import useLineNumbers from "@/hooks/useLineNumbers";
 
-const CodeEditor = (): JSX.Element => {
+interface CodeEditorProps {
+  isEditable?: boolean;
+}
+
+const CodeEditor = ({ isEditable = true }: CodeEditorProps): JSX.Element => {
   const [highlightedHTML, setHighlightedHTML] = useState("");
   const { code, setCode, language } = useWritingStore((state) => ({
     code: state.code,
     setCode: state.setCode,
     language: state.language,
   }));
-
+  const { setLines } = useLineNumbers();
+  const lineRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
-
   useEffect(() => {
     setHighlightedHTML(
       hljs
@@ -26,6 +31,7 @@ const CodeEditor = (): JSX.Element => {
         .value.replace(/" "/g, "&nbsp;")
         .replace(/"\n"/g, "<br/>")
     );
+    setLines(code);
   }, [code]);
 
   const changeCode = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -40,14 +46,22 @@ const CodeEditor = (): JSX.Element => {
   );
 
   const handleScrollChange = useCallback((): void => {
-    if (textRef.current !== null && preRef.current !== null) {
+    if (
+      lineRef.current !== null &&
+      textRef.current !== null &&
+      preRef.current !== null
+    ) {
       preRef.current.style.height = textRef.current.style.height;
-      preRef.current.scrollTop = textRef.current.scrollTop;
+      preRef.current.scrollTop = lineRef.current.scrollTop =
+        textRef.current.scrollTop;
     }
-  }, [textRef, preRef]);
+  }, [textRef, preRef, lineRef]);
 
   return (
     <div className="code-editor">
+      <div className="code-editor__lines" ref={lineRef}>
+        {Array.from(Array(100).keys()).slice(1).join("\n")}
+      </div>
       <textarea
         ref={textRef}
         onScroll={handleScrollChange}
@@ -56,6 +70,7 @@ const CodeEditor = (): JSX.Element => {
         className="code-editor__textarea"
         autoComplete="false"
         spellCheck="false"
+        disabled={!isEditable}
       />
       <pre ref={preRef} className="code-editor__present">
         <code
