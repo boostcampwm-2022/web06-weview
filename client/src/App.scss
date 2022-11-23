@@ -1,9 +1,10 @@
 @import url("https://webfontworld.github.io/gmarket/GmarketSans.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/styles/github.min.css");
 @import "./src/components/MainNav/MainNav.scss";
-@import "./src/components/WriteModal/WriteModal.scss";
-@import "./src/components/ModalContainer/ModalContainer.scss";
+@import "components/Modal/WriteModal/WriteModal.scss";
 @import "./pages/Main/Main.scss";
+@import "./src/components/Modal/ModalContainer/ModalContainer";
+@import "src/components/ModalWrapper/ModalWrapper.scss";
 
 html, body {
   margin: 0;

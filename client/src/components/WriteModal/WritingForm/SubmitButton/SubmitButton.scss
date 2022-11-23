@@ -1,9 +1,0 @@
-@import "../../../CommonButtons/CommonButtons.scss";
-
-.submit-button{
-  @include nav-button;
-  background-color: $codeblock-color;
-  color: $weview-off-white;
-  width: 4rem;
-  margin-top: 0.5rem;
-}
