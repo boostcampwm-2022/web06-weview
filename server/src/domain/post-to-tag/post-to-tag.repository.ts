@@ -12,7 +12,6 @@ export class PostToTagRepository extends Repository<PostToTag> {
     if (tags === undefined || tags.length == 0) {
       return null; //해당 조건은 사용하지 않습니다
     }
-    console.log('here~~~~');
     return this.createQueryBuilder('pt')
       .leftJoin('tag', 'tag', 'pt.tagId = tag.id')
       .select('postId')

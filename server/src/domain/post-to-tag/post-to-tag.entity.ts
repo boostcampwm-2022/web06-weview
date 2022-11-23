@@ -11,11 +11,9 @@ export class PostToTag extends BaseTimeEntity {
   @PrimaryColumn()
   tagId: number;
 
-  @ManyToOne(() => Post, (post) => post.postToTags)
-  @JoinColumn({ name: 'postId' })
+  @ManyToOne(() => Post)
   post!: Post;
 
-  @ManyToOne(() => Tag, (tag) => tag.postToTags)
-  @JoinColumn({ name: 'tagId' })
+  @ManyToOne(() => Tag)
   tag!: Tag;
 }
