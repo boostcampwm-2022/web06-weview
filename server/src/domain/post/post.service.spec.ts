@@ -553,59 +553,60 @@ describe('PostService', () => {
       });
     });
 
-  describe('글 작성', () => {
-    const writeDto: WriteDto = {
-      title: '제목',
-      content: '내용',
-      code: 'console.log("test")',
-      language: 'javascript',
-      lineCount: 30,
-      category: Category.QUESTION,
-      images: [
-        'http://localhost:8080/test.png',
-        'http://localhost:8080/abc.jpg',
-      ],
-      tags: ['알고리즘', '정렬'],
-    };
+    describe('글 작성', () => {
+      const writeDto: WriteDto = {
+        title: '제목',
+        content: '내용',
+        code: 'console.log("test")',
+        language: 'javascript',
+        lineCount: 30,
+        category: Category.QUESTION,
+        images: [
+          'http://localhost:8080/test.png',
+          'http://localhost:8080/abc.jpg',
+        ],
+        tags: ['알고리즘', '정렬'],
+      };
 
-    beforeEach(async () => {
-      userRepository.findOneBy = jest.fn();
-      postRepository.save = jest.fn();
-      tagRepository.findOneBy = jest.fn();
-      postToTagRepository.save = jest.fn();
-    });
-
-    it('글 작성 성공', async () => {
-      console.log(userRepository.findOneBy());
-      await service.write(1, writeDto);
-
-      expect(postRepository.save).toBeCalledTimes(1);
-    });
-
-    it('유저를 찾지 못해서 글 작성 실패', async () => {
-      userRepository.findOneBy = jest.fn(() => null);
-
-      try {
-        await service.write(1, writeDto);
-        throw new Error();
-      } catch (err) {
-        expect(err).toBeInstanceOf(UserNotFoundException);
-      }
-    });
-
-    it('그 외 에러로 글 작성 실패', async () => {
-      userRepository.findOneBy = jest.fn(() => new User());
-
-      postRepository.save = jest.fn(() => {
-        throw new PostNotWrittenException();
+      beforeEach(async () => {
+        userRepository.findOneBy = jest.fn();
+        postRepository.save = jest.fn();
+        tagRepository.findOneBy = jest.fn();
+        postToTagRepository.save = jest.fn();
       });
 
-      try {
+      it('글 작성 성공', async () => {
+        console.log(userRepository.findOneBy());
         await service.write(1, writeDto);
-        throw new Error();
-      } catch (err) {
-        expect(err).toBeInstanceOf(PostNotWrittenException);
-      }
+
+        expect(postRepository.save).toBeCalledTimes(1);
+      });
+
+      it('유저를 찾지 못해서 글 작성 실패', async () => {
+        userRepository.findOneBy = jest.fn(() => null);
+
+        try {
+          await service.write(1, writeDto);
+          throw new Error();
+        } catch (err) {
+          expect(err).toBeInstanceOf(UserNotFoundException);
+        }
+      });
+
+      it('그 외 에러로 글 작성 실패', async () => {
+        userRepository.findOneBy = jest.fn(() => new User());
+
+        postRepository.save = jest.fn(() => {
+          throw new PostNotWrittenException();
+        });
+
+        try {
+          await service.write(1, writeDto);
+          throw new Error();
+        } catch (err) {
+          expect(err).toBeInstanceOf(PostNotWrittenException);
+        }
+      });
     });
   });
 });

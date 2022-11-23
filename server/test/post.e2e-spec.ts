@@ -9,6 +9,8 @@ import { WriteDto } from '../src/domain/post/dto/controller-request.dto';
 import { AuthModule } from '../src/domain/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { Category } from 'src/domain/post/category';
+import { ReviewModule } from '../src/domain/review/review.module';
+import { LikesModule } from '../src/domain/likes/likes.module';
 
 describe('Post e2e', () => {
   let app: INestApplication;
@@ -17,7 +19,6 @@ describe('Post e2e', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        PostModule,
         ConfigModule.forRoot({
           isGlobal: true,
         }),
@@ -30,6 +31,7 @@ describe('Post e2e', () => {
         }),
         JwtModule.register({}),
         AuthModule,
+        PostModule,
       ],
     }).compile();
 
