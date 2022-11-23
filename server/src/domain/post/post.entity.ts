@@ -44,8 +44,4 @@ export class Post extends BaseTimeEntity {
     cascade: ['insert'],
   })
   postToTags: PostToTag[];
-
-  // TODO 구조 바꾼 뒤 삭제
-  // tag들의 이름을 저장하기 위해 사용하는 변수
-  tagsNames: string[];
 }

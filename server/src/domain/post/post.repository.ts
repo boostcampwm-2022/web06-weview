@@ -9,6 +9,8 @@ export class PostRepository extends Repository<Post> {
     super(Post, dataSource.createEntityManager());
   }
 
+  // TODO 좋아요 눌렀는지 보내주기
+  // TODO 태그 같이 보내주기
   async findByIdUsingCondition(
     lastId: number,
     postIdsFiltered: number[],
@@ -18,6 +20,7 @@ export class PostRepository extends Repository<Post> {
     const queryBuilder = this.createQueryBuilder('post')
       .innerJoinAndSelect('post.user', 'user')
       .leftJoinAndSelect('post.postToTags', 'postToTag')
+      .leftJoinAndSelect('postToTag.tag', 'tag')
       .leftJoinAndSelect('post.images', 'image')
       .where('post.isDeleted = 0');
 

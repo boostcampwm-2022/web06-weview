@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './domain/auth/auth.module';
 import { PostModule } from './domain/post/post.module';
 import { ReviewModule } from './domain/review/review.module';
+import { LikesModule } from './domain/likes/likes.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ReviewModule } from './domain/review/review.module';
     AuthModule,
     PostModule,
     ReviewModule,
+    LikesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

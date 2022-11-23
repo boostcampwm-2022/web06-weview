@@ -9,9 +9,6 @@ import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
 import { SEND_POST_CNT } from './post.controller';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { TagRepository } from '../tag/tag.repository';
-import { LikesRepository } from '../likes/likes.repository';
-import { Likes } from '../likes/likes.entity';
-import { PostNotFoundException } from '../../exception/post-not-found.exception';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
 import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
 import { UserRepository } from '../user/user.repository';
@@ -22,7 +19,6 @@ export class PostService {
     private readonly postRepository: PostRepository,
     private readonly postToTagRepository: PostToTagRepository,
     private readonly tagRepository: TagRepository,
-    private readonly likesRepository: LikesRepository,
     private readonly userRepository: UserRepository,
   ) {}
 
@@ -116,19 +112,7 @@ export class PostService {
       result.pop();
       isLast = false;
     }
-    await this.addTagNamesEachPost(result);
     return new LoadPostListResponseDto(result, isLast);
-  }
-
-  private async addTagNamesEachPost(result: Post[]) {
-    for (const each of result) {
-      const temp = [];
-      for (const tag of each.postToTags) {
-        temp.push(this.tagRepository.findById(tag.tagId));
-      }
-      const tags = await Promise.all(temp);
-      each.tagsNames = tags.map((obj) => obj.name);
-    }
   }
 
   private canGetNextPost(resultCnt: number) {
@@ -158,26 +142,5 @@ export class PostService {
       return null;
     }
     return result;
-  }
-
-  async addLikes(userId: number, postId: number) {
-    const likes = new Likes();
-    const [user, post] = await Promise.all([
-      this.userRepository.findOneBy({ id: userId }),
-      this.postRepository.findOneBy({ id: postId }),
-    ]);
-    if (post === null) {
-      throw new PostNotFoundException();
-    }
-    likes.user = user;
-    likes.post = post;
-    await this.likesRepository.save(likes);
-  }
-
-  async cancelLikes(userId: number, postId: number) {
-    await this.likesRepository.delete({
-      userId: userId,
-      postId: postId,
-    });
   }
 }
