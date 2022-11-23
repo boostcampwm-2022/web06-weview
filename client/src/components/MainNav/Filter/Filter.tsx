@@ -11,6 +11,7 @@ const Filter = (): JSX.Element => {
     e.stopPropagation();
     openSearchModal();
   };
+
   return (
     <section className="filter">
       <h4 className="filter__header">검색 필터</h4>
