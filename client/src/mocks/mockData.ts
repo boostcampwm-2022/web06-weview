@@ -1,6 +1,6 @@
-import { UserInfo } from "@/types/auth";
+import { MyInfo } from "@/types/auth";
 
-export const mockUser: UserInfo = {
+export const mockUser: MyInfo = {
   id: "1",
   nickname: "test",
   accessToken: "1234",
