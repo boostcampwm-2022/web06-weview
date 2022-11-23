@@ -1,14 +1,14 @@
 import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { UserInfo } from "@/types/auth";
+import { MyInfo } from "@/types/auth";
 
 interface AuthStates {
   isLoggedIn: boolean;
-  myInfo: UserInfo | null;
+  myInfo: MyInfo | null;
 }
 
 interface AuthActions {
-  login: (userInfo: UserInfo) => void;
+  login: (userInfo: MyInfo) => void;
   logout: () => void;
 }
 

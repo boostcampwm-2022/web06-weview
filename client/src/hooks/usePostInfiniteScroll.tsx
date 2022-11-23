@@ -3,18 +3,14 @@ import {
   InfiniteData,
   InfiniteQueryObserverResult,
   QueryFunctionContext,
-  QueryObserverBaseResult,
-  QueryObserverResult,
-  RefetchOptions,
-  RefetchQueryFilters,
   useInfiniteQuery,
 } from "@tanstack/react-query";
 import { fetchPost } from "@/apis/post";
 import { PostScroll } from "@/types/post";
 import { useCallback, useEffect } from "react";
 import useSearchStore from "@/store/useSearchStore";
-import { SearchQuery } from "@/types/search";
 import { queryClient } from "@/react-query/queryClient";
+import { QUERY_KEYS } from "@/react-query/queryKeys";
 
 interface PostInfiniteScrollResults {
   data: InfiniteData<PostScroll> | undefined;
@@ -36,7 +32,7 @@ const usePostInfiniteScroll = (): PostInfiniteScrollResults => {
   const [searchQuery] = useSearchStore((state) => [state.searchQuery]);
 
   const { data, hasNextPage, isFetching, fetchNextPage } = useInfiniteQuery(
-    ["posts"],
+    [QUERY_KEYS.POSTS],
     async ({ pageParam = -1 }: QueryFunctionContext) =>
       await fetchPost(pageParam),
     {

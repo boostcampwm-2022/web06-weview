@@ -1,17 +1,5 @@
 // GET /api/post API 명세를 보고 만든 타입
-export interface User {
-  id: string;
-  nickname: string;
-  profileUrl: string;
-  email: string;
-}
-
-export interface Review {
-  id: string;
-  reviewer: User;
-  content: string;
-  updatedAt: string;
-}
+import { UserInfo } from "@/types/auth";
 
 export interface Image {
   src: string;
@@ -31,9 +19,8 @@ export interface PostInfo extends AdditionalPostInfo {
   language: string;
   images: Image[];
   updatedAt: string;
-  author: User;
+  author: UserInfo;
   tags: string[];
-  reviews: Review[];
 }
 
 export interface PostScroll {
