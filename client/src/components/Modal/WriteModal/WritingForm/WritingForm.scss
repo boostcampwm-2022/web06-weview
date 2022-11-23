@@ -1,0 +1,21 @@
+@import "../SubmitModal/TitleInput/TitleInput";
+@import "CodeEditor/CodeEditor";
+@import "PrettifyButton/PrettifyButton";
+@import "SubmitButton/SubmitButton";
+@import "LanguageSelector/LanguageSelector";
+
+.writing-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  padding: 2em;
+  &__buttons{
+    display: flex;
+    justify-content: flex-end;
+  }
+  @media screen and (max-width: 720px){
+    height: 100%;
+    width: calc(100% - 4rem);
+  }
+}
