@@ -1,11 +1,9 @@
 import {
   ArrayNotEmpty,
-  IsArray,
   IsInt,
   IsOptional,
   IsString,
   Min,
-  ValidateNested,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 
@@ -32,6 +30,11 @@ export class WriteDto {
   @IsOptional()
   @IsString({ each: true })
   tags: string[];
+
+  @IsInt({
+    message: '라인 정보가 없습니다.',
+  })
+  lineCount: number;
 }
 
 export class InqueryDto {

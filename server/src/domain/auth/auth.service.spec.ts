@@ -9,12 +9,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 // TODO 의문 : 서비스 계층 테스트를 할 때 Repository를 Mocking 해야하나?
 //  Mocking에 대해 학습해보기
 
-const mockConfigService = {
-  get: jest.fn((key: string) => {
-    return key;
-  }),
-};
-
 const mockRepository = {
   findOneBy: jest.fn(({ email }) => {
     const user = new User();
@@ -43,10 +37,6 @@ describe('AuthService', () => {
       imports: [HttpModule, ConfigModule.forRoot({})],
       providers: [
         AuthService,
-        {
-          provide: ConfigService,
-          useValue: mockConfigService,
-        },
         {
           provide: UserRepository,
           useValue: mockRepository,

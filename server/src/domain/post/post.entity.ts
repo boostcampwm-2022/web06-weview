@@ -34,11 +34,15 @@ export class Post extends BaseTimeEntity {
   @Column()
   language!: string; //enum??
 
-  @OneToMany(() => Image, (image) => image.post, { cascade: true })
+  @Column()
+  lineCount: string;
+
+  @OneToMany(() => Image, (image) => image.post, { cascade: ['insert'] })
   images: Image[];
 
-  // TODO 구조 바꾼 뒤 삭제
-  @OneToMany(() => PostToTag, (postToTag) => postToTag.post)
+  @OneToMany(() => PostToTag, (postToTag) => postToTag.post, {
+    cascade: ['insert'],
+  })
   postToTags: PostToTag[];
 
   // TODO 구조 바꾼 뒤 삭제

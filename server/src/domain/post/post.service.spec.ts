@@ -6,13 +6,12 @@ import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { Category } from './category';
 import { TagRepository } from '../tag/tag.repository';
-import { DataSource, QueryRunner } from 'typeorm';
 import { LikesRepository } from '../likes/likes.repository';
-import { Tag } from '../tag/tag.entity';
-import { User } from '../user/user.entity';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
 import { PostNotWrittenException } from '../../exception/post-not-written.exception';
 import { UserRepository } from '../user/user.repository';
+import { DataSource } from 'typeorm';
+import { User } from '../user/user.entity';
 
 describe('PostService', () => {
   let service: PostService;
@@ -46,10 +45,6 @@ describe('PostService', () => {
     tagRepository = module.get<TagRepository>(TagRepository);
     likesRepository = module.get<LikesRepository>(LikesRepository);
     userRepository = module.get<UserRepository>(UserRepository);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
   });
 
   describe('게시물 조회', () => {
@@ -601,23 +596,12 @@ describe('PostService', () => {
   });
 
   describe('글 작성', () => {
-    const qr = {} as QueryRunner;
-
-    class mockDatasource {
-      createQueryRunner() {
-        return qr;
-      }
-
-      createEntityManager() {
-        return {};
-      }
-    }
-
     const writeDto: WriteDto = {
       title: '제목',
       content: '내용',
       code: 'console.log("test")',
       language: 'javascript',
+      lineCount: 30,
       category: Category.QUESTION,
       images: [
         'http://localhost:8080/test.png',
@@ -627,78 +611,34 @@ describe('PostService', () => {
     };
 
     beforeEach(async () => {
-      const module: TestingModule = await Test.createTestingModule({
-        providers: [
-          PostService,
-          PostRepository,
-          PostToTagRepository,
-          TagRepository,
-          LikesRepository,
-          UserRepository,
-          {
-            provide: DataSource,
-            useClass: mockDatasource,
-          },
-        ],
-      }).compile();
-
-      service = module.get<PostService>(PostService);
-      Object.assign(qr, {
-        manager: {
-          save: jest.fn(),
-          findOneBy: jest.fn(() => {
-            return {};
-          }),
-        },
-        connect: jest.fn(),
-        startTransaction: jest.fn(),
-        commitTransaction: jest.fn(),
-        rollbackTransaction: jest.fn(),
-        release: jest.fn(),
-      });
+      userRepository.findOneBy = jest.fn();
+      postRepository.save = jest.fn();
+      tagRepository.findOneBy = jest.fn();
+      postToTagRepository.save = jest.fn();
     });
 
     it('글 작성 성공', async () => {
+      console.log(userRepository.findOneBy());
       await service.write(1, writeDto);
 
-      expect(qr.commitTransaction).toBeCalledTimes(1);
-    });
-
-    it('처음 작성된 태그로 글 작성', async () => {
-      jest.spyOn(qr.manager, 'findOneBy').mockImplementation(async (entity) => {
-        if (entity instanceof Tag) {
-          return null;
-        }
-
-        return {};
-      });
-
-      await service.write(1, writeDto);
-
-      expect(qr.commitTransaction).toBeCalledTimes(1);
+      expect(postRepository.save).toBeCalledTimes(1);
     });
 
     it('유저를 찾지 못해서 글 작성 실패', async () => {
-      jest.spyOn(qr.manager, 'findOneBy').mockImplementation(async (entity) => {
-        if (entity === User) {
-          return null;
-        }
-
-        return {};
-      });
+      userRepository.findOneBy = jest.fn(() => null);
 
       try {
         await service.write(1, writeDto);
         throw new Error();
       } catch (err) {
         expect(err).toBeInstanceOf(UserNotFoundException);
-        expect(qr.rollbackTransaction).toBeCalledTimes(1);
-        expect(qr.release).toBeCalledTimes(1);
       }
     });
 
     it('그 외 에러로 글 작성 실패', async () => {
-      jest.spyOn(qr.manager, 'save').mockImplementationOnce(() => {
+      userRepository.findOneBy = jest.fn(() => new User());
+
+      postRepository.save = jest.fn(() => {
         throw new PostNotWrittenException();
       });
 
@@ -707,8 +647,6 @@ describe('PostService', () => {
         throw new Error();
       } catch (err) {
         expect(err).toBeInstanceOf(PostNotWrittenException);
-        expect(qr.rollbackTransaction).toBeCalledTimes(1);
-        expect(qr.release).toBeCalledTimes(1);
       }
     });
   });

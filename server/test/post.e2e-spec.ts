@@ -69,6 +69,7 @@ describe('Post e2e', () => {
         content: '내용',
         code: 'console.log("test")',
         language: 'javascript',
+        lineCount: 30,
         category: Category.QUESTION,
         images: [
           'http://localhost:8080/test.png',
