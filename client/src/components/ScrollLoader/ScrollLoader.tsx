@@ -8,14 +8,22 @@ interface PostLoaderProps {
     entry: IntersectionObserverEntry,
     observer: IntersectionObserver
   ) => void;
+  spinner?: boolean;
+  onLoad?: boolean;
 }
 
-const ScrollLoader = ({ onIntersect }: PostLoaderProps): JSX.Element => {
+const ScrollLoader = ({
+  onIntersect,
+  spinner = true,
+  onLoad = true,
+}: PostLoaderProps): JSX.Element => {
   const intersectRef = useIntersect(onIntersect);
 
   return (
     <div className="scroll-loader">
-      <LoadingSpinner className="scroll-loader__spinner" />
+      {spinner && onLoad && (
+        <LoadingSpinner className="scroll-loader__spinner" />
+      )}
       <div className="scroll-loader__target" ref={intersectRef}></div>
     </div>
   );
