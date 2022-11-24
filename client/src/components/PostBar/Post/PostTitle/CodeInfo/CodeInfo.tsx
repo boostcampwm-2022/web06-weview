@@ -11,7 +11,7 @@ const CodeInfo = (): JSX.Element => {
   }, [code]);
 
   return (
-    <div className="post__info__code-info">
+    <div className="post__title--code-info">
       {lineCount ?? 0} Lines, {images.length} Images
     </div>
   );

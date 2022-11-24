@@ -25,7 +25,7 @@ export const reviewHandler = [
       ctx.status(200),
       ctx.delay(1000),
       ctx.json({
-        reviews: reviews.slice(lastId + ONE_REQUEST_REVIEWS_COUNT),
+        reviews: reviews.slice(lastId, lastId + ONE_REQUEST_REVIEWS_COUNT),
         lastId: lastId + ONE_REQUEST_REVIEWS_COUNT - 1,
         isLast: reviews.length <= lastId + ONE_REQUEST_REVIEWS_COUNT,
       })
