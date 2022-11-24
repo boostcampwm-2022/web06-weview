@@ -15,7 +15,7 @@ export const refreshInterceptor = async (
     return config;
   }
   const nowDate = new Date();
-  const expiresDate = new Date(expiresIn);
+  const expiresDate = new Date(Number(expiresIn));
   if (nowDate <= expiresDate) return config;
   await refreshAndSetAccessTokenInHeader(config);
   return config;
@@ -44,5 +44,5 @@ export const refreshAndSetAccessTokenInHeader = async (
   if (config.headers !== undefined) {
     config.headers.Authorization = `Bearer ${String(accessToken)}`;
   }
-  customLocalStorage.setItem("expiresIn", newExpiresIn);
+  customLocalStorage.setItem("expiresIn", String(newExpiresIn));
 };
