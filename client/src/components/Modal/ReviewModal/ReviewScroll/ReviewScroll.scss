@@ -1,9 +1,9 @@
-@import "Review/Review.scss";
+@import "@/components/Modal/ReviewModal/ReviewScroll/Review/Review.scss";
 
 .review-list {
   display: flex;
   flex-direction: column;
-  height: 60%;
+  height: 100%;
   min-height: 15rem;
   margin-top: 0;
   padding: 0;
