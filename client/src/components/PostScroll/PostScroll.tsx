@@ -6,7 +6,7 @@ import usePostInfiniteScroll from "@/hooks/usePostInfiniteScroll";
 import ScrollLoader from "@/components/ScrollLoader/ScrollLoader";
 import { PostInfo, PostPages } from "@/types/post";
 const PostScroll = (): JSX.Element => {
-  const { data, onIntersect } = usePostInfiniteScroll();
+  const { data, onIntersect, hasNextPage } = usePostInfiniteScroll();
 
   // 포스트 바에 표시할 포스트 정보 목록
   const postInfos = useMemo(
@@ -20,7 +20,7 @@ const PostScroll = (): JSX.Element => {
       {postInfos.map((postInfo) => (
         <Post key={postInfo.id} postInfo={postInfo} />
       ))}
-      <ScrollLoader onIntersect={onIntersect} />
+      <ScrollLoader onIntersect={onIntersect} onLoad={hasNextPage} />
     </div>
   );
 };
