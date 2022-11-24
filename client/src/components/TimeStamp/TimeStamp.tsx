@@ -1,9 +1,12 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import { PostContext } from "@/components/PostBar/Post/Post";
+import React, { useCallback, useEffect, useState } from "react";
 import { diff } from "@/utils/timeUtils";
 
-const TimeStamp = (): JSX.Element => {
-  const { updatedAt } = useContext(PostContext);
+interface TimeStampProps {
+  updatedAt: string;
+  className?: string;
+}
+
+const TimeStamp = ({ updatedAt, className }: TimeStampProps): JSX.Element => {
   const [timeTagTitle, setTimeTagTitle] = useState("");
   const [history, setHistory] = useState("");
 
@@ -44,11 +47,7 @@ const TimeStamp = (): JSX.Element => {
   }, [updatedAt]);
 
   return (
-    <time
-      className="post__body__title--time-stamp"
-      dateTime={updatedAt}
-      title={timeTagTitle}
-    >
+    <time className={className ?? ""} dateTime={updatedAt} title={timeTagTitle}>
       {history}
     </time>
   );

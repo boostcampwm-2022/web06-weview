@@ -1,5 +1,5 @@
 import React from "react";
-import "./PostLoader.scss";
+import "./ScrollLoader.scss";
 import useIntersect from "@/hooks/useIntersect";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
@@ -10,15 +10,15 @@ interface PostLoaderProps {
   ) => void;
 }
 
-const PostLoader = ({ onIntersect }: PostLoaderProps): JSX.Element => {
+const ScrollLoader = ({ onIntersect }: PostLoaderProps): JSX.Element => {
   const intersectRef = useIntersect(onIntersect);
 
   return (
-    <div className="post-loader">
-      <LoadingSpinner className="post-loader__spinner" />
-      <div className="post-loader__target" ref={intersectRef}></div>
+    <div className="scroll-loader">
+      <LoadingSpinner className="scroll-loader__spinner" />
+      <div className="scroll-loader__target" ref={intersectRef}></div>
     </div>
   );
 };
 
-export default PostLoader;
+export default ScrollLoader;

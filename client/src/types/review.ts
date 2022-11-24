@@ -8,7 +8,7 @@ export interface ReviewInfo {
 }
 export interface Reviewer extends UserInfo {}
 
-export interface ReviewScroll {
+export interface ReviewPages {
   reviews: ReviewInfo[];
   lastId: number;
   isLast: boolean;

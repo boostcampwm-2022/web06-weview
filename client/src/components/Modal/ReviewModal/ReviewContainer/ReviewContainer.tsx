@@ -1,7 +1,5 @@
-import React, { useMemo } from "react";
-import useReviewInfiniteScroll from "@/hooks/useReviewInfiniteScroll";
-import { ReviewInfo, ReviewScroll } from "@/types/review";
-import PostLoader from "@/components/PostBar/PostLoader/PostLoader";
+import React from "react";
+import ReviewScroll from "@/components/Modal/ReviewModal/ReviewContainer/ReviewScroll/ReviewScroll";
 import ReviewForm from "@/components/Modal/ReviewModal/ReviewContainer/ReviewForm/ReviewForm";
 
 interface ReviewContainerProps {
@@ -9,21 +7,9 @@ interface ReviewContainerProps {
 }
 
 const ReviewContainer = ({ postId }: ReviewContainerProps): JSX.Element => {
-  const { data, onIntersect } = useReviewInfiniteScroll(postId);
-  const reviewInfos = useMemo(
-    (): ReviewInfo[] =>
-      data?.pages.flatMap(
-        (reviewScroll: ReviewScroll) => reviewScroll.reviews
-      ) ?? [],
-    [data]
-  );
-
   return (
     <div className="review-modal__review-container">
-      {reviewInfos.map((reviewInfo: ReviewInfo) => (
-        <div key={reviewInfo.id}>hi</div>
-      ))}
-      <PostLoader onIntersect={onIntersect} />
+      <ReviewScroll postId={postId} />
       <ReviewForm postId={postId} />
     </div>
   );
