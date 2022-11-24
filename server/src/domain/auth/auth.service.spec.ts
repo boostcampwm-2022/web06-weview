@@ -6,9 +6,6 @@ import { HttpModule } from '@nestjs/axios';
 import { UserRepository } from '../user/user.repository';
 import { ConfigService } from '@nestjs/config';
 
-// TODO 의문 : 서비스 계층 테스트를 할 때 Repository를 Mocking 해야하나?
-//  Mocking에 대해 학습해보기
-
 const mockConfigService = {
   get: jest.fn((key: string) => {
     if (new RegExp('TIME').test(key)) {

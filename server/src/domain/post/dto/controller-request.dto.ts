@@ -50,12 +50,12 @@ export class InqueryDto {
   category: string;
 
   @IsOptional()
-  @Transform(({ value }) => value.split(','))
-  tags?: string[];
+  @Transform(({ value }) => value.split(',').map((each) => each.trim()))
+  tags?: string[] = [];
 
   @IsOptional()
-  @Transform(({ value }) => value.split(','))
-  authors?: string[];
+  @Transform(({ value }) => value.split(',').map((each) => each.trim()))
+  authors?: string[] = [];
 
   @IsOptional()
   @IsInt({

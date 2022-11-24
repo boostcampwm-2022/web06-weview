@@ -12,6 +12,8 @@ import { TagRepository } from '../tag/tag.repository';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
 import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
 import { UserRepository } from '../user/user.repository';
+import { UnauthorizeException } from '../../exception/unauthorize.exception';
+import { PostNotFoundException } from '../../exception/post-not-found.exception';
 
 @Injectable()
 export class PostService {
@@ -90,7 +92,7 @@ export class PostService {
     loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
     const { lastId, tags, authors, category, reviews, likesCnt, detail } =
-      loadPostListRequestDto;
+      loadPostListRequestDto; // TODO reviews (개수) 로 필터링하기
     let isLast = true;
     const postInfosAfterFiltering = await Promise.all([
       this.postRepository.findByIdLikesCntGreaterThan(likesCnt),
@@ -101,7 +103,7 @@ export class PostService {
     const postIdsFiltered = this.returnPostIdByAllConditionPass(
       postInfosAfterFiltering,
     );
-    // 개선
+
     const result = await this.postRepository.findByIdUsingCondition(
       lastId,
       postIdsFiltered,
@@ -142,5 +144,25 @@ export class PostService {
       return null;
     }
     return result;
+  }
+
+  async delete(userId: number, postId: number) {
+    const post = await this.postRepository.findOne({
+      where: {
+        id: postId,
+      },
+      relations: ['user'],
+    });
+    if (!post || post.isDeleted) {
+      throw new PostNotFoundException();
+    }
+    if (!post.user || post.user.isDeleted) {
+      throw new UserNotFoundException();
+    }
+    if (post.user.id !== userId) {
+      throw new UnauthorizeException();
+    }
+    post.isDeleted = true;
+    await this.postRepository.deleteUsingPost(post);
   }
 }

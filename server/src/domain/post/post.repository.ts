@@ -9,8 +9,6 @@ export class PostRepository extends Repository<Post> {
     super(Post, dataSource.createEntityManager());
   }
 
-  // TODO 좋아요 눌렀는지 보내주기
-  // TODO 태그 같이 보내주기
   async findByIdUsingCondition(
     lastId: number,
     postIdsFiltered: number[],
@@ -89,5 +87,13 @@ export class PostRepository extends Repository<Post> {
         detail: `%${detail}%`,
       })
       .getRawMany();
+  }
+
+  async deleteUsingPost(post: Post) {
+    await this.createQueryBuilder()
+      .update(Post)
+      .set(post)
+      .where('id=:id', { id: post.id })
+      .execute();
   }
 }
