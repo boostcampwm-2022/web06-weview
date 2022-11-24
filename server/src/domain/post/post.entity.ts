@@ -32,10 +32,10 @@ export class Post extends BaseTimeEntity {
   code!: string;
 
   @Column()
-  language!: string; //enum??
+  language!: string; // TODO enum 적용 고민하기
 
   @Column()
-  lineCount: string;
+  lineCount: number;
 
   @OneToMany(() => Image, (image) => image.post, { cascade: ['insert'] })
   images: Image[];

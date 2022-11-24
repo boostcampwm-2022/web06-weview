@@ -1,5 +1,5 @@
 import axiosInstance from "@/apis/axios";
-import { PostPages, Writing, WritingResponse } from "@/types/post";
+import { PostPages, WritingRequest, WritingResponse } from "@/types/post";
 import { setQueryString } from "@/utils/queryString";
 import useSearchStore from "@/store/useSearchStore";
 
@@ -12,7 +12,7 @@ export const fetchPost = async (pageParam: string): Promise<PostPages> => {
 };
 
 export const postWritingsAPI = async (
-  writing: Writing
+  writing: WritingRequest
 ): Promise<WritingResponse> => {
   const { data } = await axiosInstance.post("/posts", writing);
   return data;

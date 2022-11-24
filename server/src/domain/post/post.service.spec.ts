@@ -12,6 +12,9 @@ import { PostNotWrittenException } from '../../exception/post-not-written.except
 import { UserRepository } from '../user/user.repository';
 import { DataSource } from 'typeorm';
 import { User } from '../user/user.entity';
+import { PostNotFoundException } from '../../exception/post-not-found.exception';
+import { UnauthorizeException } from '../../exception/unauthorize.exception';
+import { Post } from './post.entity';
 
 describe('PostService', () => {
   let service: PostService;
@@ -469,23 +472,10 @@ describe('PostService', () => {
 
     it('이미지가 있을때, 결과를 정상적으로 반환한다', async () => {
       // TODO
-      // jest
-      //   .spyOn(postRepository, 'findByIdUsingCondition')
-      //   .mockResolvedValue(postList);
-      //
-      // const result = await service.loadPostList(searchCondition);
-      // expect(result).toEqual(inqueryResult);
     });
 
     it('태그들이 있을 때, 정상적으로 결과를 반환한다', async () => {
       // TODO
-      //   jest
-      //     .spyOn(postRepository, 'findByIdUsingCondition')
-      //     .mockResolvedValue(postList);
-      //
-      //   const result = await service.loadPostList(searchCondition);
-      //   expect(result).toEqual(inqueryResult);
-      // });
     });
 
     describe('returnPostIdByAllConditionPass 테스트: 여러 조건(좋아요, 태그, 검색어)로 post를 필터링한다', () => {
@@ -550,6 +540,7 @@ describe('PostService', () => {
         const result = service.returnPostIdByAllConditionPass([
           resultFilteringLikesCnt,
           resultFilteringTag,
+          resultFilteringSearchWord,
         ]);
 
         expect(result).toBeNull();
@@ -607,6 +598,125 @@ describe('PostService', () => {
           throw new Error();
         } catch (err) {
           expect(err).toBeInstanceOf(PostNotWrittenException);
+        }
+      });
+    });
+
+    describe('글 삭제', () => {
+      let user;
+      let post;
+
+      beforeEach(async () => {
+        user = new User();
+        post = new Post();
+
+        postRepository.findOne = jest.fn();
+        postRepository.deleteUsingPost = jest.fn();
+      });
+
+      it('(성공)', async () => {
+        user.id = 1;
+        user.isDeleted = false;
+        post.user = user;
+        post.isDeleted = false;
+
+        postRepository.findOne = jest.fn(() => post);
+
+        await service.delete(1, 1);
+      });
+
+      it('(실패) user.isDeleted가 true인 경우', async () => {
+        try {
+          user.id = 1;
+          user.isDeleted = true;
+          post.user = user;
+          post.isDeleted = false;
+
+          postRepository.findOne = jest.fn(() => post);
+          await service.delete(1, 1);
+          throw new Error();
+        } catch (err) {
+          expect(err).toBeInstanceOf(UserNotFoundException);
+        }
+      });
+
+      it('(실패) user가 undefined인 경우', async () => {
+        try {
+          user = undefined;
+          post.user = user;
+          post.isDeleted = false;
+
+          postRepository.findOne = jest.fn(() => post);
+          await service.delete(1, 1);
+          throw new Error();
+        } catch (err) {
+          expect(err).toBeInstanceOf(UserNotFoundException);
+        }
+      });
+
+      it('(실패) user가 null인 경우', async () => {
+        try {
+          user = null;
+          post.user = user;
+          post.isDeleted = false;
+
+          postRepository.findOne = jest.fn(() => post);
+          await service.delete(1, 1);
+          throw new Error();
+        } catch (err) {
+          expect(err).toBeInstanceOf(UserNotFoundException);
+        }
+      });
+
+      it('(실패) 권한이 존재하지 않는 경우', async () => {
+        try {
+          user.id = 1;
+          user.isDeleted = false;
+          post.user = user;
+          post.isDeleted = false;
+
+          postRepository.findOne = jest.fn(() => post);
+
+          const differentUserId = 2;
+          await service.delete(differentUserId, 1);
+          throw new Error();
+        } catch (err) {
+          expect(err).toBeInstanceOf(UnauthorizeException);
+        }
+      });
+
+      it('(실패) post.isDeleted가 true인 경우', async () => {
+        try {
+          user.id = 1;
+          user.isDeleted = false;
+
+          post.user = user;
+          post.isDeleted = true;
+          postRepository.findOne = jest.fn(() => post);
+          await service.delete(1, 1);
+          throw new Error();
+        } catch (err) {
+          expect(err).toBeInstanceOf(PostNotFoundException);
+        }
+      });
+
+      it('(실패) post가 undefined인 경우', async () => {
+        try {
+          postRepository.findOne = jest.fn(() => undefined);
+          await service.delete(1, 1);
+          throw new Error();
+        } catch (err) {
+          expect(err).toBeInstanceOf(PostNotFoundException);
+        }
+      });
+
+      it('(실패) post가 null인 경우', async () => {
+        try {
+          postRepository.findOne = jest.fn(() => null);
+          await service.delete(1, 1);
+          throw new Error();
+        } catch (err) {
+          expect(err).toBeInstanceOf(PostNotFoundException);
         }
       });
     });

@@ -17,6 +17,8 @@ async function bootstrap() {
         enableImplicitConversion: true,
       },
       forbidUnknownValues: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
     }),
   );
   app.use(cookieParser());

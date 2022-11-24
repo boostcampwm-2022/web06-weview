@@ -10,6 +10,8 @@ import {
   Query,
   InternalServerErrorException,
   Headers,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
@@ -37,15 +39,15 @@ export class PostController {
     @Query() inqueryDto: InqueryDto,
     @Headers() headers,
   ): Promise<LoadPostListResponseDto> {
-    const { lastId, category, reviews, likes: likesCnt, detail } = inqueryDto;
-    let { authors, tags } = inqueryDto;
-    // TODO 35-39 덜 깔끔해보임
-    if (authors === undefined) {
-      authors = [];
-    }
-    if (tags === undefined) {
-      tags = [];
-    }
+    const {
+      lastId,
+      category,
+      reviews,
+      likes: likesCnt,
+      detail,
+      authors,
+      tags,
+    } = inqueryDto;
 
     const returnValue = await this.postService.loadPostList(
       new LoadPostListRequestDto(
@@ -82,7 +84,7 @@ export class PostController {
   private async addLikesCntColumnEveryPosts(result: LoadPostListResponseDto) {
     const ary = [];
     for (const post of result.posts) {
-      ary.push(this.likesService.countLikeCntByPostId(post.id));
+      ary.push(this.likesService.countLikesCntByPostId(post.id));
     }
     const likesCntStore = await Promise.all(ary);
     for (let i = 0; i < result.posts.length; i++) {
@@ -105,5 +107,13 @@ export class PostController {
     return {
       message: '글 작성에 성공했습니다.',
     };
+  }
+
+  @Delete(':postId')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deletePost(@Req() req: Request, @Param('postId') postId: number) {
+    const userId = req.user['id'];
+    await this.postService.delete(userId, postId);
   }
 }
