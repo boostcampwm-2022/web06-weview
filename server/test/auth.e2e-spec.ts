@@ -147,8 +147,6 @@ describe('Auth E2E', () => {
         .expect(HttpStatus.OK)
         .expect((res) => {
           const newAccessToken = res.body.accessToken;
-          console.log('예상', accessToken);
-          console.log('real', newAccessToken);
 
           expect(accessToken).not.toEqual(newAccessToken);
         });
