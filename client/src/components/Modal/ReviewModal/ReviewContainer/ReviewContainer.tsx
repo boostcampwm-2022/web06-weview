@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import useReviewInfiniteScroll from "@/hooks/useReviewInfiniteScroll";
 import { ReviewInfo, ReviewScroll } from "@/types/review";
 import PostLoader from "@/components/PostBar/PostLoader/PostLoader";
+import ReviewForm from "@/components/Modal/ReviewModal/ReviewContainer/ReviewForm/ReviewForm";
 
 interface ReviewContainerProps {
   postId: string;
@@ -23,6 +24,7 @@ const ReviewContainer = ({ postId }: ReviewContainerProps): JSX.Element => {
         <div key={reviewInfo.id}>hi</div>
       ))}
       <PostLoader onIntersect={onIntersect} />
+      <ReviewForm postId={postId} />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 @import "@/styles/_global-styles.scss";
+@import "ReviewContainer/ReviewForm/ReviewForm.scss";
 
 .review-modal {
   display: flex;
@@ -9,6 +10,6 @@
   &__review-container {
     width: 100%;
     max-width: $device-review-max-width;
-    background-color: yellow;
+    height: 100%;
   }
 }
