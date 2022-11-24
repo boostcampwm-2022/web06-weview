@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import { postReviewAPI } from "@/apis/review";
 import useAuthStore from "@/store/useAuthStore";
-import NotLoggedInReviewForm from "@/components/Modal/ReviewModal/ReviewContainer/ReviewForm/NotLoggedInReviewForm";
+import NotLoggedInReviewForm from "@/components/Modal/ReviewModal/ReviewForm/NotLoggedInReviewForm";
 
 interface ReviewFormProps {
   postId: string;
