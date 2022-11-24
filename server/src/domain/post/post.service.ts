@@ -12,6 +12,8 @@ import { TagRepository } from '../tag/tag.repository';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
 import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
 import { UserRepository } from '../user/user.repository';
+import { UnauthorizeException } from '../../exception/unauthorize.exception';
+import { PostNotFoundException } from '../../exception/post-not-found.exception';
 
 @Injectable()
 export class PostService {
@@ -142,5 +144,22 @@ export class PostService {
       return null;
     }
     return result;
+  }
+
+  async delete(userId: number, postId: number) {
+    const post = await this.postRepository.findOneBy({
+      id: postId,
+    });
+    if (!post || post.isDeleted) {
+      throw new PostNotFoundException();
+    }
+    if (!post.user || post.user.isDeleted) {
+      throw new UserNotFoundException();
+    }
+    if (post.user.id !== userId) {
+      throw new UnauthorizeException();
+    }
+    post.isDeleted = true;
+    await this.postRepository.deleteUsingPost(post);
   }
 }

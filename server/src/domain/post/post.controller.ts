@@ -10,6 +10,8 @@ import {
   Query,
   InternalServerErrorException,
   Headers,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
@@ -105,5 +107,13 @@ export class PostController {
     return {
       message: '글 작성에 성공했습니다.',
     };
+  }
+
+  @Delete(':postId')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deletePost(@Req() req: Request, @Param('postId') postId: number) {
+    const userId = req.user['id'];
+    await this.postService.delete(userId, postId);
   }
 }

@@ -90,4 +90,12 @@ export class PostRepository extends Repository<Post> {
       })
       .getRawMany();
   }
+
+  async deleteUsingPost(post: Post) {
+    await this.createQueryBuilder()
+      .update(Post)
+      .set(post)
+      .where('id=:id', { id: post.id })
+      .execute();
+  }
 }
