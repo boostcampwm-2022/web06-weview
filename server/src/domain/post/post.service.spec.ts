@@ -293,13 +293,16 @@ describe('PostService', () => {
     beforeEach(async () => {
       // given
       jest
-        .spyOn(postRepository, 'findByIdLikesCntGreaterThan')
+        .spyOn(postRepository, 'findByIdLikesCntGreaterThanOrEqual')
         .mockResolvedValue(resultFilteringLikesCnt);
       jest
         .spyOn(postToTagRepository, 'findByContainingTags')
         .mockResolvedValue(resultFilteringTag);
       jest
         .spyOn(postRepository, 'findBySearchWord')
+        .mockResolvedValue(resultFilteringTag);
+      jest
+        .spyOn(postRepository, 'findByReviewCntGreaterThanOrEqual')
         .mockResolvedValue(resultFilteringTag);
       jest.spyOn(tagRepository, 'findById').mockResolvedValue({ name: 'java' });
     });
