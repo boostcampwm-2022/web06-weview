@@ -13,3 +13,7 @@ export interface ReviewScroll {
   lastId: number;
   isLast: boolean;
 }
+
+export interface ReviewResponse {
+  message: string;
+}
