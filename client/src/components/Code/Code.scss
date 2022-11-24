@@ -1,10 +1,11 @@
 @import "../../constants/library";
 @import "@/styles/_global-styles";
-@import "@/components/CodeEditor/CodeTheme.scss";
+@import "@/components/Code/CodeTheme.scss";
 
 $line-width: 2.5rem;
+$github-dark-font-color: #c9d1d9;
 
-.code-editor {
+.code {
   position: relative;
   display: flex;
   box-sizing: border-box;
@@ -26,7 +27,7 @@ $line-width: 2.5rem;
     height: 100%;
     margin: 0;
     padding: 0.5rem;
-    font-size: 1rem;
+    font-size: 0.75rem;
     white-space: pre-wrap;
     &::-webkit-scrollbar {
       display: none;
@@ -45,7 +46,7 @@ $line-width: 2.5rem;
     z-index: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    color: #c9d1d9;
+    color: $github-dark-font-color;
     background-color: $codeblock-color;
   }
 
