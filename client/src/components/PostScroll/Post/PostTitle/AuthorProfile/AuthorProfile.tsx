@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { PostContext } from "@/components/PostBar/Post/Post";
-import FollowButton from "@/components/PostBar/Post/PostTitle/AuthorProfile/FollowButton/FollowButton";
+import { PostContext } from "@/components/PostScroll/Post/Post";
+import FollowButton from "@/components/PostScroll/Post/PostTitle/AuthorProfile/FollowButton/FollowButton";
 
 const AuthorProfile = (): JSX.Element => {
   const { author } = useContext(PostContext);

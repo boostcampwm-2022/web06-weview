@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { PostContext } from "@/components/PostBar/Post/Post";
+import { PostContext } from "@/components/PostScroll/Post/Post";
 import TimeStamp from "@/components/TimeStamp/TimeStamp";
 
 const PostBody = (): JSX.Element => {

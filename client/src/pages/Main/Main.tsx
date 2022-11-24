@@ -1,6 +1,6 @@
 import React from "react";
 import MainNav from "@/components/MainNav/MainNav";
-import PostBar from "@/components/PostBar/PostBar";
+import PostScroll from "@/components/PostScroll/PostScroll";
 import useModalStore from "@/store/useModalStore";
 
 const Main = (): JSX.Element => {
@@ -11,7 +11,7 @@ const Main = (): JSX.Element => {
   return (
     <div className={isWritingModalOpened ? "hidden-main" : "main"}>
       <MainNav />
-      <PostBar />
+      <PostScroll />
     </div>
   );
 };
