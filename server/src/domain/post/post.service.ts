@@ -95,11 +95,13 @@ export class PostService {
       loadPostListRequestDto; // TODO reviews (개수) 로 필터링하기
     let isLast = true;
     const postInfosAfterFiltering = await Promise.all([
-      this.postRepository.findByIdLikesCntGreaterThan(likesCnt),
+      this.postRepository.findByIdLikesCntGreaterThanOrEqual(likesCnt),
       this.postToTagRepository.findByContainingTags(tags),
       this.postRepository.findBySearchWord(detail),
+      this.postRepository.findByReviewCntGreaterThanOrEqual(reviews),
     ]);
 
+    console.log(postInfosAfterFiltering);
     const postIdsFiltered = this.returnPostIdByAllConditionPass(
       postInfosAfterFiltering,
     );
