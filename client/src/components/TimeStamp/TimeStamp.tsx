@@ -47,11 +47,7 @@ const TimeStamp = ({ updatedAt, className }: TimeStampProps): JSX.Element => {
   }, [updatedAt]);
 
   return (
-    <time
-      className={className !== undefined ? className : ""}
-      dateTime={updatedAt}
-      title={timeTagTitle}
-    >
+    <time className={className ?? ""} dateTime={updatedAt} title={timeTagTitle}>
       {history}
     </time>
   );
