@@ -1,5 +1,6 @@
 import axiosInstance from "./axios";
 import { AccessTokenInfo, MyInfo } from "@/types/auth";
+import axios from "axios";
 
 export const githubLogInAPI = async (code: string): Promise<MyInfo> => {
   const { data } = await axiosInstance(`/auth/github?code=${code}`);
@@ -7,7 +8,7 @@ export const githubLogInAPI = async (code: string): Promise<MyInfo> => {
 };
 
 export const tokenRefreshAPI = async (): Promise<AccessTokenInfo> => {
-  const { data } = await axiosInstance.get("/auth/refresh");
+  const { data } = await axios.get("/auth/refresh");
   return data;
 };
 
