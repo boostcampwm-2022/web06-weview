@@ -1,22 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
-import { Repository } from 'typeorm';
-import { Post } from '../post/post.entity';
-import { User } from '../user/user.entity';
-import { ReviewWriteRequestDto } from './dto/controller-request.dto';
+import {
+  ReviewGetAllRequestDto,
+  ReviewWriteRequestDto,
+} from './dto/controller-request.dto';
 import { Review } from './review.entity';
+import { PostRepository } from '../post/post.repository';
+import { UserRepository } from '../user/user.repository';
+import { ReviewRepository } from './review.repository';
+import { MoreThan } from 'typeorm';
+import { ReviewListResponseDto } from './dto/controller-response.dto';
 
 @Injectable()
 export class ReviewService {
   constructor(
-    @InjectRepository(Review)
-    private readonly reviewRepository: Repository<Review>,
-    @InjectRepository(Post)
-    private readonly postRepository: Repository<Post>,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly reviewRepository: ReviewRepository,
+    private readonly postRepository: PostRepository,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async write(userId: number, { postId, content }: ReviewWriteRequestDto) {
@@ -42,5 +43,29 @@ export class ReviewService {
     reviewEntity.content = content;
 
     await this.reviewRepository.save(reviewEntity);
+  }
+
+  async getReviewsOfPost(postId: number, { lastId }: ReviewGetAllRequestDto) {
+    const REQUEST_CNT = 3;
+    let reviews =
+      (await this.reviewRepository.find({
+        relations: ['post', 'user'],
+        where: {
+          post: {
+            id: postId,
+          },
+          id: MoreThan(lastId),
+        },
+        take: REQUEST_CNT + 1,
+      })) || [];
+
+    const isLast = reviews.length < REQUEST_CNT + 1;
+    if (!isLast) {
+      reviews = reviews.slice(0, -1);
+    }
+
+    const reviewDtos = new ReviewListResponseDto(reviews, lastId, isLast);
+
+    return reviewDtos;
   }
 }
