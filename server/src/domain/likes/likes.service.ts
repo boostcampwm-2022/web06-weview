@@ -46,7 +46,7 @@ export class LikesService {
     return postsYouLiked.map((likesInfo) => likesInfo.postId);
   }
 
-  async countLikeCntByPostId(postId: number) {
+  async countLikesCntByPostId(postId: number) {
     return this.likesRepository.count({
       where: {
         postId: postId,
