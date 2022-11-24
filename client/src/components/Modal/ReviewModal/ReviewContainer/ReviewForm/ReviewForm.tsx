@@ -32,7 +32,6 @@ const ReviewForm = ({ postId }: ReviewFormProps): JSX.Element => {
     (e: SyntheticEvent): void => {
       e.preventDefault(); // 새로고침 방지
       if (content === "") {
-        console.log("empty content"); // 빈 문자열 방지
         return;
       }
       postReviewAPI(postId, content)
