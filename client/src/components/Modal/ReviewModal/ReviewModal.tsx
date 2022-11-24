@@ -1,6 +1,7 @@
 import React from "react";
 import CodeEditor from "@/components/CodeEditor/CodeEditor";
-import ReviewContainer from "@/components/Modal/ReviewModal/ReviewContainer/ReviewContainer";
+import ReviewScroll from "@/components/Modal/ReviewModal/ReviewScroll/ReviewScroll";
+import ReviewForm from "@/components/Modal/ReviewModal/ReviewForm/ReviewForm";
 
 interface ReviewModalProps {
   postId: string;
@@ -11,7 +12,10 @@ const ReviewModal = ({ postId, code }: ReviewModalProps): JSX.Element => {
   return (
     <div className="review-modal">
       <CodeEditor />
-      <ReviewContainer postId={postId} />
+      <div className="review-modal__review-container">
+        <ReviewScroll postId={postId} />
+        <ReviewForm postId={postId} />
+      </div>
     </div>
   );
 };

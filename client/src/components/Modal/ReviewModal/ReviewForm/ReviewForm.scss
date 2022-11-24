@@ -22,6 +22,7 @@ $review-form-font-size: 0.75rem;
 @mixin review-form-common-style {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   gap: $review-form-padding;
 
   box-sizing: border-box;
@@ -67,12 +68,15 @@ $review-form-font-size: 0.75rem;
     // textarea 텍스트 스타일
     font-size: $review-form-font-size;
     font-family: GmarketSans;
+
+    background-color: $light-gray;
     border: 2px solid $line-color;
     border-radius: $review-form-radius;
     resize: vertical; // 세로로만 크기 변경 (최대 2배)
 
     &:focus {
       // 텍스트 입력 중일때 스타일 처리
+      background-color: $weview-off-white;
       border: 2px solid $primary;
     }
   }

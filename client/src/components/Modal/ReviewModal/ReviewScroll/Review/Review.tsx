@@ -26,7 +26,7 @@ const Review = ({ reviewInfo }: ReviewProps): JSX.Element => {
           />
         </div>
         <p
-          className="review__content"
+          className="review__balloon__content"
           dangerouslySetInnerHTML={{ __html: reviewInfo.content }}
         ></p>
       </div>

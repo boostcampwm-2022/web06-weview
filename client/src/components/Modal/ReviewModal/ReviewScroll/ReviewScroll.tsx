@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import useReviewInfiniteScroll from "@/hooks/useReviewInfiniteScroll";
 import { ReviewInfo, ReviewPages } from "@/types/review";
-import Review from "@/components/Modal/ReviewModal/ReviewContainer/ReviewScroll/Review/Review";
+import Review from "@/components/Modal/ReviewModal/ReviewScroll/Review/Review";
 import ScrollLoader from "@/components/ScrollLoader/ScrollLoader";
 
 interface ReviewScrollProps {

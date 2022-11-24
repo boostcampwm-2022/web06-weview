@@ -1,21 +1,24 @@
-@import "src/constants/_library.scss";
+@import "@/constants/_library.scss";
+
+$review-border-line-size: 1.25px;
+$review-padding: 0.5rem;
+$review-radius: 0.35rem;
+$review-font-size: 0.75rem;
+
+$review-form-header-height: 2.5rem;
 
 .review {
   position: relative;
   display: flex;
-  width: 20rem;
+  gap: 1rem;
+
+  box-sizing: border-box;
+
+  width: 100%;
   height: auto;
   margin-bottom: 1rem;
   list-style: none;
-  &:after {
-    position: absolute;
-    bottom: 0;
-    left: 1.5rem;
-    width: 2rem;
-    height: 1px;
-    background-color: $line-color;
-    content: "";
-  }
+
   &__reviewer-image {
     position: relative;
     flex-basis: 1.5rem;
@@ -31,13 +34,26 @@
   }
   &__balloon {
     position: relative;
+
     box-sizing: border-box;
     width: 100%;
-    padding-left: 0.3rem;
+    border: 1px solid $line-color;
+    border-radius: $review-radius;
+
     &__top {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      padding-top: 0.2rem;
+
+      box-sizing: border-box;
+
+      width: 100%;
+      height: $review-form-header-height;
+      padding: $review-padding;
+
+      background-color: $light-gray;
+      border-bottom: 1px solid $line-color;
+
       &--nickname,
       &--time {
         font-size: 0.75rem;
@@ -45,6 +61,9 @@
       &--nickname {
         font-weight: bold;
       }
+    }
+    &__content {
+      padding: $review-padding;
     }
   }
 }
