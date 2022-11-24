@@ -15,4 +15,13 @@ export const authHandler = [
   rest.delete(`${baseUrl}/auth/logout`, (req, res, ctx) => {
     return res(ctx.status(200));
   }),
+  rest.get(`${baseUrl}/auth/refresh`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        expiresIn: 1669293441000,
+        accessToken: 123545,
+      })
+    );
+  }),
 ];

@@ -1,6 +1,6 @@
 export interface AccessTokenInfo {
   accessToken: string;
-  expiresIn: string;
+  expiresIn: number;
 }
 
 export interface UserInfo {
