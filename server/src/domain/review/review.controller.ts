@@ -31,6 +31,10 @@ export class ReviewController {
     } catch (err) {
       throw new BadRequestException(err.message);
     }
+
+    return {
+      message: '리뷰 작성에 성공했습니다.',
+    };
   }
 
   @Get('posts/:postId/reviews')
@@ -38,6 +42,10 @@ export class ReviewController {
     @Param('postId') postId: number,
     @Query() requestDto: ReviewGetAllRequestDto,
   ) {
-    return await this.reviewService.getReviewsOfPost(postId, requestDto);
+    try {
+      return await this.reviewService.getReviewsOfPost(postId, requestDto);
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
   }
 }
