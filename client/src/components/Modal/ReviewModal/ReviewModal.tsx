@@ -1,17 +1,22 @@
 import React from "react";
-import CodeEditor from "@/components/CodeEditor/CodeEditor";
 import ReviewScroll from "@/components/Modal/ReviewModal/ReviewScroll/ReviewScroll";
 import ReviewForm from "@/components/Modal/ReviewModal/ReviewForm/ReviewForm";
+import CodeViewer from "@/components/Code/CodeViewer";
 
 interface ReviewModalProps {
   postId: string;
   code: string;
+  language: string;
 }
 
-const ReviewModal = ({ postId, code }: ReviewModalProps): JSX.Element => {
+const ReviewModal = ({
+  postId,
+  code,
+  language,
+}: ReviewModalProps): JSX.Element => {
   return (
     <div className="review-modal">
-      <CodeEditor />
+      <CodeViewer code={code} language={language} />
       <div className="review-modal__review-container">
         <ReviewScroll postId={postId} />
         <ReviewForm postId={postId} />
