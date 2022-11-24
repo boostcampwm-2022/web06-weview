@@ -1,5 +1,5 @@
 import axiosInstance from "./axios";
-import { ReviewPages } from "@/types/review";
+import { ReviewResponse, ReviewPages } from "@/types/review";
 
 export const getReviewsAPI = async (
   postId: string,
@@ -8,5 +8,13 @@ export const getReviewsAPI = async (
   const { data } = await axiosInstance.get(
     `/posts/${postId}/reviews?lastId=${lastId}`
   );
+  return data;
+};
+
+export const postReviewAPI = async (
+  postId: string,
+  content: string
+): Promise<ReviewResponse> => {
+  const { data } = await axiosInstance.post(`/reviews`, { postId, content });
   return data;
 };
