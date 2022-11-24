@@ -9,13 +9,13 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import {
   AuthorizeWithGithubDto,
   RefreshTokensDto,
 } from './dto/controller-response.dto';
+import { RefreshTokenGuard } from './refresh-token.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -48,15 +48,15 @@ export class AuthController {
   }
 
   @Get('refresh')
-  @UseGuards(AuthGuard('jwt-refresh'))
+  @UseGuards(RefreshTokenGuard)
   refreshTokens(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): RefreshTokensDto {
-    const email = req.user['email'];
+    const id = req.user['id'];
 
     const { accessToken, refreshToken, expiresIn } =
-      this.authService.createTokens(email);
+      this.authService.createTokens(id);
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
