@@ -3,6 +3,7 @@ import { GITHUB_AUTH_SERVER_URL } from "@/constants/env";
 import { githubLogInAPI } from "@/apis/auth";
 import axiosInstance from "@/apis/axios";
 import useAuthStore from "@/store/useAuthStore";
+import customLocalStorage from "@/utils/localStorage";
 
 interface OAuthPopup {
   popup: Window | null;
@@ -59,6 +60,7 @@ const useOAuthPopup = (): OAuthPopup => {
         .then((userData) => {
           login(userData);
           axiosInstance.defaults.headers.common.Authorization = `Bearer ${userData.accessToken}`;
+          customLocalStorage.setItem("expiresIn", userData.expiresIn);
         })
         .catch((e) => {
           console.log("서버에 요청을 보내는 데 실패했습니다.", e);
