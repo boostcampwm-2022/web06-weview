@@ -1,6 +1,6 @@
 import React from "react";
-import AuthorProfile from "@/components/PostBar/Post/PostTitle/AuthorProfile/AuthorProfile";
-import CodeInfo from "@/components/PostBar/Post/PostTitle/CodeInfo/CodeInfo";
+import AuthorProfile from "@/components/PostScroll/Post/PostTitle/AuthorProfile/AuthorProfile";
+import CodeInfo from "@/components/PostScroll/Post/PostTitle/CodeInfo/CodeInfo";
 
 const PostTitle = (): JSX.Element => {
   return (

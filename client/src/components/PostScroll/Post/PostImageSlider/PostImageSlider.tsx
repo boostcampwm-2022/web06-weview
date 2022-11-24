@@ -1,5 +1,5 @@
 import React, { useContext, useLayoutEffect, useState } from "react";
-import { PostContext } from "@/components/PostBar/Post/Post";
+import { PostContext } from "@/components/PostScroll/Post/Post";
 import { isEmpty } from "@/utils/typeCheck";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 

@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 
-import "./PostBar.scss";
-import Post from "@/components/PostBar/Post/Post";
+import "./PostScroll.scss";
+import Post from "@/components/PostScroll/Post/Post";
 import usePostInfiniteScroll from "@/hooks/usePostInfiniteScroll";
 import ScrollLoader from "@/components/ScrollLoader/ScrollLoader";
 import { PostInfo, PostPages } from "@/types/post";
-const PostBar = (): JSX.Element => {
+const PostScroll = (): JSX.Element => {
   const { data, onIntersect } = usePostInfiniteScroll();
 
   // 포스트 바에 표시할 포스트 정보 목록
@@ -16,7 +16,7 @@ const PostBar = (): JSX.Element => {
   );
 
   return (
-    <div className="post-bar">
+    <div className="post-scroll">
       {postInfos.map((postInfo) => (
         <Post key={postInfo.id} postInfo={postInfo} />
       ))}
@@ -25,4 +25,4 @@ const PostBar = (): JSX.Element => {
   );
 };
 
-export default PostBar;
+export default PostScroll;

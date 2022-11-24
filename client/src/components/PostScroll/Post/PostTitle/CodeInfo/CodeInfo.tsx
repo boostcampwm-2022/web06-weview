@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { PostContext } from "@/components/PostBar/Post/Post";
+import { PostContext } from "@/components/PostScroll/Post/Post";
 import { LINE_COUNT_REGEX } from "@/utils/regExpression";
 
 const CodeInfo = (): JSX.Element => {
