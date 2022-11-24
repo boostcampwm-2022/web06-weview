@@ -10,12 +10,12 @@ async function bootstrap() {
   if (process.env.NODE_ENV !== 'local') {
     app.set('trust proxy', 1);
   }
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
+      whitelist: true,
+      forbidNonWhitelisted: true,
       forbidUnknownValues: true,
     }),
   );

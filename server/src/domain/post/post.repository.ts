@@ -18,6 +18,7 @@ export class PostRepository extends Repository<Post> {
     const queryBuilder = this.createQueryBuilder('post')
       .innerJoinAndSelect('post.user', 'user')
       .leftJoinAndSelect('post.postToTags', 'postToTag')
+      .leftJoinAndSelect('postToTag.tag', 'tag')
       .leftJoinAndSelect('post.images', 'image')
       .where('post.isDeleted = 0');
 
@@ -55,7 +56,7 @@ export class PostRepository extends Repository<Post> {
       .getMany();
   }
 
-  async findByIdLikesCntGreaterThan(likesCnt: number): Promise<any> {
+  async findByIdLikesCntGreaterThanOrEqual(likesCnt: number): Promise<any> {
     if (likesCnt === undefined || likesCnt <= 0) {
       return null; //해당 조건은 사용하지 않습니다
     }
@@ -65,6 +66,19 @@ export class PostRepository extends Repository<Post> {
       .addSelect('COUNT(*) AS likesCnt')
       .groupBy('post.id')
       .having('likesCnt >= :likesCnt', { likesCnt: likesCnt })
+      .getRawMany();
+  }
+
+  async findByReviewCntGreaterThanOrEqual(reviewCnt: number) {
+    if (reviewCnt === undefined || reviewCnt <= 0) {
+      return null; //해당 조건은 사용하지 않습니다
+    }
+    return this.createQueryBuilder('post')
+      .innerJoin('review', 'review', 'post.id = review.postId')
+      .select('post.id', 'postId')
+      .addSelect('COUNT(*) AS reviewCnt')
+      .groupBy('post.id')
+      .having('reviewCnt >= :reviewCnt', { reviewCnt: reviewCnt })
       .getRawMany();
   }
 
@@ -86,5 +100,13 @@ export class PostRepository extends Repository<Post> {
         detail: `%${detail}%`,
       })
       .getRawMany();
+  }
+
+  async deleteUsingPost(post: Post) {
+    await this.createQueryBuilder()
+      .update(Post)
+      .set(post)
+      .where('id=:id', { id: post.id })
+      .execute();
   }
 }

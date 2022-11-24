@@ -1,13 +1,14 @@
 import axiosInstance from "./axios";
-import { AccessTokenInfo, UserInfo } from "@/types/auth";
-
-export const githubLogInAPI = async (code: string): Promise<UserInfo> => {
+import { AccessTokenInfo, MyInfo } from "@/types/auth";
+import axios from "axios";
+import { API_SERVER_URL } from "@/constants/env";
+export const githubLogInAPI = async (code: string): Promise<MyInfo> => {
   const { data } = await axiosInstance(`/auth/github?code=${code}`);
   return data;
 };
 
 export const tokenRefreshAPI = async (): Promise<AccessTokenInfo> => {
-  const { data } = await axiosInstance.get("/auth/refresh");
+  const { data } = await axios.get(`${API_SERVER_URL}/auth/refresh`);
   return data;
 };
 

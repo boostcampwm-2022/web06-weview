@@ -8,9 +8,6 @@ import {
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Image } from '../image/image.entity';
-import { Likes } from '../likes/likes.entity';
-import { Report } from '../report/report.entity';
-import { Review } from '../review/review.entity';
 import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 import { Category } from './category';
 
@@ -19,7 +16,7 @@ export class Post extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User)
   user: User;
 
   @Column({ default: Category.QUESTION })
@@ -35,23 +32,16 @@ export class Post extends BaseTimeEntity {
   code!: string;
 
   @Column()
-  language!: string; //enum??
+  language!: string; // TODO enum 적용 고민하기
 
-  @OneToMany(() => Image, (image) => image.post, { cascade: true })
+  @Column()
+  lineCount: number;
+
+  @OneToMany(() => Image, (image) => image.post, { cascade: ['insert'] })
   images: Image[];
 
-  @OneToMany(() => Likes, (likes) => likes.post)
-  likesList: Likes[];
-
-  @OneToMany(() => PostToTag, (postToTag) => postToTag.post)
+  @OneToMany(() => PostToTag, (postToTag) => postToTag.post, {
+    cascade: ['insert'],
+  })
   postToTags: PostToTag[];
-
-  @OneToMany(() => Report, (report) => report.post)
-  reports: Report[];
-
-  @OneToMany(() => Review, (review) => review.post)
-  reviews: Review[];
-
-  // tag들의 이름을 저장하기 위해 사용하는 변수
-  tagsNames: string[];
 }

@@ -1,14 +1,17 @@
 @import url("https://webfontworld.github.io/gmarket/GmarketSans.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/styles/github.min.css");
 @import "./src/components/MainNav/MainNav.scss";
-@import "./src/components/WriteModal/WriteModal.scss";
-@import "./src/components/ModalContainer/ModalContainer.scss";
+@import "components/Modal/WriteModal/WriteModal.scss";
 @import "./pages/Main/Main.scss";
+@import "./src/components/Modal/ModalContainer/ModalContainer";
+@import "src/components/Modal/ModalWrapper/ModalWrapper.scss";
+@import "@/styles/_modal.scss";
 
-html, body {
+html,
+body {
+  height: 100%;
   margin: 0;
   padding: 0;
-  height: 100%;
   overflow: hidden;
   font-size: $root-em; // rem
 }
@@ -24,7 +27,7 @@ body {
   font-family: GmarketSans;
 }
 
-input{
+input {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -34,12 +37,27 @@ input{
   outline: 0;
 }
 
-button{
+button {
   font-family: GmarketSans;
 }
 
-select{
+select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+
+::-webkit-scrollbar {
+  width: 0.65em;
+  &-thumb {
+    background-color: $text-color;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    border-radius: 10px;
+  }
+  &-track {
+    background-color: $line-color;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px white;
+  }
 }

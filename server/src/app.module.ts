@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './domain/auth/auth.module';
 import { PostModule } from './domain/post/post.module';
 import { ReviewModule } from './domain/review/review.module';
+import { LikesModule } from './domain/likes/likes.module';
+import { ReportModule } from './domain/report/report.module';
 
 @Module({
   imports: [
@@ -24,12 +26,14 @@ import { ReviewModule } from './domain/review/review.module';
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/domain/**/*.entity.{js,ts}'],
         synchronize: true,
-        logging: true,
+        logging: configService.get('NODE_ENV') !== 'prod',
       }),
     }),
     AuthModule,
     PostModule,
     ReviewModule,
+    LikesModule,
+    ReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

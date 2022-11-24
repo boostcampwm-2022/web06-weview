@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { Image } from '../image/image.entity';
 import { Tag } from '../tag/tag.entity';
@@ -10,38 +9,27 @@ import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
 import { SEND_POST_CNT } from './post.controller';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { TagRepository } from '../tag/tag.repository';
-import { LikesRepository } from '../likes/likes.repository';
-import { Likes } from '../likes/likes.entity';
-import { PostNotFoundException } from '../../exception/post-not-found.exception';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
 import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
-import { User } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
+import { UnauthorizeException } from '../../exception/unauthorize.exception';
+import { PostNotFoundException } from '../../exception/post-not-found.exception';
 
 @Injectable()
 export class PostService {
   constructor(
-    private readonly dataSource: DataSource,
     private readonly postRepository: PostRepository,
     private readonly postToTagRepository: PostToTagRepository,
     private readonly tagRepository: TagRepository,
-    private readonly likesRepository: LikesRepository,
     private readonly userRepository: UserRepository,
   ) {}
 
   async write(
     userId: number,
-    { title, content, category, code, language, images, tags },
+    { title, content, category, code, language, lineCount, images, tags },
   ) {
-    const queryRunner = this.dataSource.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
     try {
-      const manager = queryRunner.manager;
-
-      const userEntity = await manager.findOneBy(User, {
+      const userEntity = await this.userRepository.findOneBy({
         id: userId,
       });
 
@@ -55,6 +43,7 @@ export class PostService {
         return imageEntity;
       });
 
+      const postToTagEntities = await this.toPostToTagEntities(tags);
       const postEntity = new Post();
       postEntity.title = title;
       postEntity.content = content;
@@ -62,63 +51,60 @@ export class PostService {
       postEntity.code = code;
       postEntity.language = language;
       postEntity.user = userEntity;
+      postEntity.lineCount = lineCount;
       postEntity.images = imageEntities;
+      postEntity.postToTags = postToTagEntities;
+      await this.postRepository.save(postEntity);
 
-      await manager.save(postEntity);
-
-      if (!tags) {
-        await queryRunner.commitTransaction();
-        return postEntity.id;
-      }
-
-      await Promise.all(
-        tags.map(async (tag) => {
-          let tagEntity = await manager.findOneBy(Tag, {
-            name: tag,
-          });
-
-          if (tagEntity === null) {
-            tagEntity = new Tag();
-            tagEntity.name = tag;
-            await manager.save(tagEntity);
-          }
-
-          const postToTagEntity = new PostToTag();
-          postToTagEntity.post = postEntity;
-          postToTagEntity.tag = tagEntity;
-          return manager.save(postToTagEntity);
-        }),
-      );
-
-      await queryRunner.commitTransaction();
       return postEntity.id;
     } catch (err) {
-      await queryRunner.rollbackTransaction();
-
       if (err instanceof UserNotFoundException) {
         throw err;
       }
 
       throw new PostNotWrittenException();
-    } finally {
-      await queryRunner.release();
     }
+  }
+
+  private toPostToTagEntities(tags: string[]): Promise<PostToTag[]> {
+    if (!tags) {
+      return undefined;
+    }
+
+    const postToTagEntities = Promise.all(
+      tags.map(async (name) => {
+        let tagEntity = await this.tagRepository.findOneBy({ name });
+        if (!tagEntity) {
+          tagEntity = new Tag();
+          tagEntity.name = name;
+        }
+
+        const postToTagEntity = new PostToTag();
+        postToTagEntity.tag = tagEntity;
+        return postToTagEntity;
+      }),
+    );
+
+    return postToTagEntities;
   }
 
   async loadPostList(
     loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
     const { lastId, tags, authors, category, reviews, likesCnt, detail } =
-      loadPostListRequestDto;
+      loadPostListRequestDto; // TODO reviews (개수) 로 필터링하기
     let isLast = true;
     const postInfosAfterFiltering = await Promise.all([
-      this.postRepository.findByIdLikesCntGreaterThan(likesCnt),
+      this.postRepository.findByIdLikesCntGreaterThanOrEqual(likesCnt),
       this.postToTagRepository.findByContainingTags(tags),
       this.postRepository.findBySearchWord(detail),
+      this.postRepository.findByReviewCntGreaterThanOrEqual(reviews),
     ]);
+
     const postIdsFiltered = this.returnPostIdByAllConditionPass(
       postInfosAfterFiltering,
     );
+
     const result = await this.postRepository.findByIdUsingCondition(
       lastId,
       postIdsFiltered,
@@ -129,19 +115,7 @@ export class PostService {
       result.pop();
       isLast = false;
     }
-    await this.addTagNamesEachPost(result);
     return new LoadPostListResponseDto(result, isLast);
-  }
-
-  private async addTagNamesEachPost(result: Post[]) {
-    for (const each of result) {
-      const temp = [];
-      for (const tag of each.postToTags) {
-        temp.push(this.tagRepository.findById(tag.tagId));
-      }
-      const tags = await Promise.all(temp);
-      each.tagsNames = tags.map((obj) => obj.name);
-    }
   }
 
   private canGetNextPost(resultCnt: number) {
@@ -173,24 +147,23 @@ export class PostService {
     return result;
   }
 
-  async addLikes(userId: number, postId: number) {
-    const likes = new Likes();
-    const [user, post] = await Promise.all([
-      this.userRepository.findOneBy({ id: userId }),
-      this.postRepository.findOneBy({ id: postId }),
-    ]);
-    if (post === null) {
+  async delete(userId: number, postId: number) {
+    const post = await this.postRepository.findOne({
+      where: {
+        id: postId,
+      },
+      relations: ['user'],
+    });
+    if (!post || post.isDeleted) {
       throw new PostNotFoundException();
     }
-    likes.user = user;
-    likes.post = post;
-    await this.likesRepository.save(likes);
-  }
-
-  async cancelLikes(userId: number, postId: number) {
-    await this.likesRepository.delete({
-      userId: userId,
-      postId: postId,
-    });
+    if (!post.user || post.user.isDeleted) {
+      throw new UserNotFoundException();
+    }
+    if (post.user.id !== userId) {
+      throw new UnauthorizeException();
+    }
+    post.isDeleted = true;
+    await this.postRepository.deleteUsingPost(post);
   }
 }

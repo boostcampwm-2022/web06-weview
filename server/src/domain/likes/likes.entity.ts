@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Post } from '../post/post.entity';
 
@@ -10,13 +10,11 @@ export class Likes {
   @PrimaryColumn()
   postId: number;
 
-  @ManyToOne(() => User, (user) => user.likesList)
-  @JoinColumn({ name: 'userId' })
+  @ManyToOne(() => User)
   user!: User;
 
-  @ManyToOne(() => Post, (post) => post.likesList, {
+  @ManyToOne(() => Post, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'postId' })
   post!: Post;
 }

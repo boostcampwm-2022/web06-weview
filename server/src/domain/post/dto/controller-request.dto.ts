@@ -1,13 +1,11 @@
 import {
   ArrayNotEmpty,
-  IsArray,
   IsInt,
   IsOptional,
   IsString,
   Min,
-  ValidateNested,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class WriteDto {
   @IsString()
@@ -32,10 +30,16 @@ export class WriteDto {
   @IsOptional()
   @IsString({ each: true })
   tags: string[];
+
+  @IsInt({
+    message: '라인 정보가 없습니다.',
+  })
+  lineCount: number;
 }
 
 export class InqueryDto {
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   @Min(-1, {
     message: 'lastId는 -1과 Post의 인덱스만 입력 가능합니다',
@@ -47,14 +51,15 @@ export class InqueryDto {
   category: string;
 
   @IsOptional()
-  @Transform(({ value }) => value.split(','))
-  tags?: string[];
+  @Transform(({ value }) => value.split(',').map((each) => each.trim()))
+  tags?: string[] = [];
 
   @IsOptional()
-  @Transform(({ value }) => value.split(','))
-  authors?: string[];
+  @Transform(({ value }) => value.split(',').map((each) => each.trim()))
+  authors?: string[] = [];
 
   @IsOptional()
+  @Type(() => Number)
   @IsInt({
     message: '정수만 입력 가능합니다',
   })
@@ -64,6 +69,7 @@ export class InqueryDto {
   reviews?: number;
 
   @IsOptional()
+  @Type(() => Number)
   @Min(1, {
     message: '추천수 1개 이상부터 검색 가능합니다',
   }) //0인 경우는 해당 옵션을 쓸 필요가 없음

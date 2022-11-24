@@ -4,13 +4,14 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../user/user.entity';
 import { HttpModule } from '@nestjs/axios';
 import { UserRepository } from '../user/user.repository';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-
-// TODO 의문 : 서비스 계층 테스트를 할 때 Repository를 Mocking 해야하나?
-//  Mocking에 대해 학습해보기
+import { ConfigService } from '@nestjs/config';
 
 const mockConfigService = {
   get: jest.fn((key: string) => {
+    if (new RegExp('TIME').test(key)) {
+      return '30d';
+    }
+
     return key;
   }),
 };
@@ -40,18 +41,18 @@ describe('AuthService', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [HttpModule, ConfigModule.forRoot({})],
+      imports: [HttpModule],
       providers: [
         AuthService,
-        {
-          provide: ConfigService,
-          useValue: mockConfigService,
-        },
         {
           provide: UserRepository,
           useValue: mockRepository,
         },
         JwtService,
+        {
+          provide: ConfigService,
+          useValue: mockConfigService,
+        },
       ],
     }).compile();
 
@@ -87,17 +88,14 @@ describe('AuthService', () => {
     });
 
     it('User에게 JWT토큰을 발행한다', async () => {
-      const REFRESH_EXPIRES_TIME = 60 * 60 * 24 * 14;
-      const ACCESS_EXPIRES_TIME = 60 * 30;
       const { accessToken, refreshToken } = service.createTokens(12311);
       const accessPayload = jwtService.decode(accessToken);
       const refreshPayload = jwtService.decode(refreshToken);
 
       expect(accessPayload['id']).toBe(12311);
       expect(refreshPayload['id']).toBe(12311);
-      expect(refreshPayload['exp'] - accessPayload['exp']).toBe(
-        REFRESH_EXPIRES_TIME - ACCESS_EXPIRES_TIME,
-      );
+      expect(typeof accessPayload['exp']).toBe('number');
+      expect(typeof refreshPayload['exp']).toBe('number');
       expect(accessPayload['iat']).not.toBeUndefined();
       expect(refreshPayload['iat']).not.toBeUndefined();
     });

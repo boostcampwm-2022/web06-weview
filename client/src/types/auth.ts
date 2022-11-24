@@ -1,11 +1,13 @@
 export interface AccessTokenInfo {
   accessToken: string;
-  expiresIn: string;
+  expiresIn: number;
 }
 
-export interface UserInfo extends AccessTokenInfo {
+export interface UserInfo {
   id: string;
   nickname: string;
   profileUrl: string;
   email: string;
 }
+
+export interface MyInfo extends AccessTokenInfo, UserInfo {}

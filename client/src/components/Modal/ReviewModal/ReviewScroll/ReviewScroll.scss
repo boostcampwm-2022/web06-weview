@@ -1,0 +1,14 @@
+@import "@/components/Modal/ReviewModal/ReviewScroll/Review/Review.scss";
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 15rem;
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

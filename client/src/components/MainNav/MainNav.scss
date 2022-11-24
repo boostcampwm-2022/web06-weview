@@ -1,6 +1,6 @@
 @import 'src/constants/_library.scss';
-@import "src/styles/commons/_global-styles.scss";
-@import "src/styles/commons/_responsive.scss";
+@import "@/styles/_global-styles.scss";
+@import "@/styles/_responsive.scss";
 
 @import "./Menu/Menu.scss";
 @import "./Filter/Filter.scss";

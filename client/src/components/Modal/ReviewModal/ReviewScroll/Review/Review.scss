@@ -1,0 +1,69 @@
+@import "@/constants/_library.scss";
+
+$review-border-line-size: 1.25px;
+$review-padding: 0.5rem;
+$review-radius: 0.35rem;
+$review-font-size: 0.75rem;
+
+$review-form-header-height: 2.5rem;
+
+.review {
+  position: relative;
+  display: flex;
+  gap: 1rem;
+
+  box-sizing: border-box;
+
+  width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+  list-style: none;
+
+  &__reviewer-image {
+    position: relative;
+    flex-basis: 1.5rem;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    &--item {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      border-radius: 9999px;
+    }
+  }
+  &__balloon {
+    position: relative;
+
+    box-sizing: border-box;
+    width: 100%;
+    border: 1px solid $line-color;
+    border-radius: $review-radius;
+
+    &__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      box-sizing: border-box;
+
+      width: 100%;
+      height: $review-form-header-height;
+      padding: $review-padding;
+
+      background-color: $light-gray;
+      border-bottom: 1px solid $line-color;
+
+      &--nickname,
+      &--time {
+        font-size: 0.75rem;
+      }
+      &--nickname {
+        font-weight: bold;
+      }
+    }
+    &__content {
+      padding: $review-padding;
+    }
+  }
+}

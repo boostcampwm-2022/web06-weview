@@ -1,24 +1,17 @@
 // GET /api/post API 명세를 보고 만든 타입
-export interface User {
-  id: string;
-  nickname: string;
-  profileUrl: string;
-  email: string;
-}
-
-export interface Review {
-  id: string;
-  reviewer: User;
-  content: string;
-  updatedAt: string;
-}
+import { UserInfo } from "@/types/auth";
 
 export interface Image {
   src: string;
   name: string;
 }
 
-export interface PostInfo {
+interface AdditionalPostInfo {
+  category?: string;
+  likes?: number;
+}
+
+export interface PostInfo extends AdditionalPostInfo {
   id: string;
   title: string;
   content: string;
@@ -26,12 +19,11 @@ export interface PostInfo {
   language: string;
   images: Image[];
   updatedAt: string;
-  author: User;
+  author: UserInfo;
   tags: string[];
-  reviews: Review[];
 }
 
-export interface PostScroll {
+export interface PostPages {
   posts: PostInfo[];
   lastId: number;
   isLast: boolean;
@@ -41,7 +33,7 @@ export interface WritingResponse {
   message: string;
 }
 
-export interface Writing {
+export interface WritingRequest {
   title: string;
   category: string;
   content: string;
@@ -49,4 +41,5 @@ export interface Writing {
   language: string;
   images: string[];
   tags?: string[];
+  lineCount: number;
 }

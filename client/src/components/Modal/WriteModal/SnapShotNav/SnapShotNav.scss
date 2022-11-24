@@ -1,0 +1,43 @@
+@import "../../../../constants/library";
+
+.snapshot {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  width: 40%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid $line-color;
+  border-radius: 0.25rem;
+  box-shadow: $box-shadow;
+  &__item {
+    width: 15em;
+    height: 15em;
+    margin: 1em 0;
+    &--img {
+      width: 15em;
+      height: 15em;
+      object-fit: cover;
+      border-radius: 0.25rem;
+      cursor: pointer;
+    }
+  }
+  @media screen and (max-width: 720px) {
+    flex-direction: row;
+    width: 100%;
+    height: 10rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    &__item {
+      width: 10rem;
+      height: 100%;
+      margin: 0 1em;
+      &--img {
+        width: 10rem;
+        height: 100%;
+      }
+    }
+  }
+}

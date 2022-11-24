@@ -9,40 +9,47 @@ import {
   Get,
   Query,
   InternalServerErrorException,
-  Param,
+  Headers,
   Delete,
+  Param,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { PostService } from './post.service';
-import { InqueryUsingFilterDto } from './dto/controller-response.dto';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
 import { InqueryDto, WriteDto } from './dto/controller-request.dto';
 import { Category } from './category';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
+import { LikesService } from '../likes/likes.service';
+import { AuthService } from '../auth/auth.service';
+import { AccessTokenGuard } from '../auth/access-token.guard';
 
 export const SEND_POST_CNT = 3;
 export const LATEST_DATA_CONDITION = -1;
 
 @Controller('posts')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(
+    private readonly postService: PostService,
+    private readonly likesService: LikesService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Get()
   async inqueryUsingFilter(
     @Query() inqueryDto: InqueryDto,
+    @Headers() headers,
   ): Promise<LoadPostListResponseDto> {
-    const { lastId, category, reviews, likes: likesCnt, detail } = inqueryDto;
-    let { authors, tags } = inqueryDto;
-    // TODO 35-39 덜 깔끔해보임
-    if (authors === undefined) {
-      authors = [];
-    }
-    if (tags === undefined) {
-      tags = [];
-    }
+    const {
+      lastId,
+      category,
+      reviews,
+      likes: likesCnt,
+      detail,
+      authors,
+      tags,
+    } = inqueryDto;
 
-    return await this.postService.loadPostList(
+    const returnValue = await this.postService.loadPostList(
       new LoadPostListRequestDto(
         lastId,
         tags,
@@ -53,10 +60,40 @@ export class PostController {
         detail,
       ),
     );
+    await this.addLikesCntColumnEveryPosts(returnValue);
+    await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
+    return returnValue;
+  }
+
+  private async addLikesToPostIfLogin(token, result: LoadPostListResponseDto) {
+    if (token) {
+      const userId = this.authService.authenticate(token);
+      if (userId) {
+        const postIdsYouLike = await this.likesService.findPostIdsByUserId(
+          userId,
+        );
+        result.posts.forEach((post) => {
+          if (postIdsYouLike.includes(post.id)) {
+            post.isLiked = true;
+          }
+        });
+      }
+    }
+  }
+
+  private async addLikesCntColumnEveryPosts(result: LoadPostListResponseDto) {
+    const ary = [];
+    for (const post of result.posts) {
+      ary.push(this.likesService.countLikesCntByPostId(post.id));
+    }
+    const likesCntStore = await Promise.all(ary);
+    for (let i = 0; i < result.posts.length; i++) {
+      result.posts[i].likesCount = likesCntStore[i];
+    }
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.CREATED)
   async write(@Req() req: Request, @Body() writeDto: WriteDto) {
     const userId = req.user['id'];
@@ -72,19 +109,11 @@ export class PostController {
     };
   }
 
-  @Post(':postId/likes')
-  @UseGuards(AuthGuard('jwt'))
-  @HttpCode(HttpStatus.CREATED)
-  async likes(@Req() req: Request, @Param('postId') postId: number) {
-    const userId = req.user['id'];
-    await this.postService.addLikes(userId, postId);
-  }
-
-  @Delete(':postId/likes')
-  @UseGuards(AuthGuard('jwt'))
+  @Delete(':postId')
+  @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async cancelLikes(@Req() req: Request, @Param('postId') postId: number) {
+  async deletePost(@Req() req: Request, @Param('postId') postId: number) {
     const userId = req.user['id'];
-    await this.postService.cancelLikes(userId, postId);
+    await this.postService.delete(userId, postId);
   }
 }

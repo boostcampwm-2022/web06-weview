@@ -14,6 +14,12 @@ export class AuthService {
     private httpService: HttpService,
   ) {}
 
+  authenticate(token) {
+    const payload = this.jwtService.decode(token.split(' ')[1]);
+    // TODO 날짜를 확인하고 이상없는지 확인
+    return payload['id'];
+  }
+
   async authorize({ email, nickname, profileUrl }) {
     let user = await this.userRepository.findOneBy({ email });
     if (user == null) {
@@ -36,8 +42,8 @@ export class AuthService {
     const accessToken = this.jwtService.sign(
       { id },
       {
-        secret: this.configService.get<string>('JWT_SECRET'),
-        expiresIn: '30m',
+        secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+        expiresIn: this.configService.get<string>('JWT_ACCESS_TIME'),
       },
     );
 
@@ -45,7 +51,7 @@ export class AuthService {
       { id },
       {
         secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-        expiresIn: '14d',
+        expiresIn: this.configService.get<string>('JWT_REFRESH_TIME'),
       },
     );
 

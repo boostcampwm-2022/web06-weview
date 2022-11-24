@@ -1,9 +1,9 @@
 import axiosInstance from "@/apis/axios";
-import { PostScroll, Writing, WritingResponse } from "@/types/post";
+import { PostPages, WritingRequest, WritingResponse } from "@/types/post";
 import { setQueryString } from "@/utils/queryString";
 import useSearchStore from "@/store/useSearchStore";
 
-export const fetchPost = async (pageParam: string): Promise<PostScroll> => {
+export const fetchPost = async (pageParam: string): Promise<PostPages> => {
   const { searchQuery } = useSearchStore.getState();
   const { data } = await axiosInstance.get(
     `/posts?${setQueryString({ ...searchQuery, lastId: pageParam })}`
@@ -12,7 +12,7 @@ export const fetchPost = async (pageParam: string): Promise<PostScroll> => {
 };
 
 export const postWritingsAPI = async (
-  writing: Writing
+  writing: WritingRequest
 ): Promise<WritingResponse> => {
   const { data } = await axiosInstance.post("/posts", writing);
   return data;

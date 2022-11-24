@@ -17,7 +17,6 @@ describe('Post e2e', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        PostModule,
         ConfigModule.forRoot({
           isGlobal: true,
         }),
@@ -30,10 +29,12 @@ describe('Post e2e', () => {
         }),
         JwtModule.register({}),
         AuthModule,
+        PostModule,
       ],
     }).compile();
 
     app = module.createNestApplication();
+
     app.useGlobalPipes(
       new ValidationPipe({
         transform: true,
@@ -42,8 +43,8 @@ describe('Post e2e', () => {
         },
       }),
     );
-    authService = module.get<AuthService>(AuthService);
 
+    authService = module.get<AuthService>(AuthService);
     await app.init();
   });
 
@@ -56,10 +57,8 @@ describe('Post e2e', () => {
         nickname: 'nickname',
         profileUrl: 'https://avatars.githubusercontent.com/u/67636607?v=4',
       };
-
       await authService.authorize(mockUserInfo);
       const { accessToken: newAccessToken } = authService.createTokens(1);
-
       accessToken = newAccessToken;
     });
 
@@ -69,6 +68,7 @@ describe('Post e2e', () => {
         content: '내용',
         code: 'console.log("test")',
         language: 'javascript',
+        lineCount: 30,
         category: Category.QUESTION,
         images: [
           'http://localhost:8080/test.png',
@@ -123,14 +123,15 @@ describe('Post e2e', () => {
       expect(res.body.posts).not.toBeUndefined();
       expect(res.body.lastId).not.toBeUndefined();
       expect(res.body.isLast).not.toBeUndefined();
+
       for (const post of res.body.posts) {
         expect(post).toHaveProperty('id');
         expect(post).toHaveProperty('title');
         expect(post).toHaveProperty('content');
         expect(post).toHaveProperty('code');
         expect(post).toHaveProperty('language');
-
         expect(post).toHaveProperty('images');
+
         for (const image of post.images) {
           expect(image).toHaveProperty('url');
           expect(image).toHaveProperty('name');
@@ -142,7 +143,6 @@ describe('Post e2e', () => {
         expect(post.author).toHaveProperty('nickname');
         expect(post.author).toHaveProperty('profileUrl');
         expect(post.author).toHaveProperty('email');
-
         expect(post).toHaveProperty('tags');
         expect(post).toHaveProperty('reviews');
         expect(post).toHaveProperty('isLiked');
@@ -166,14 +166,15 @@ describe('Post e2e', () => {
       expect(res.body.posts).not.toBeUndefined();
       expect(res.body.lastId).not.toBeUndefined();
       expect(res.body.isLast).not.toBeUndefined();
+
       for (const post of res.body.posts) {
         expect(post).toHaveProperty('id');
         expect(post).toHaveProperty('title');
         expect(post).toHaveProperty('content');
         expect(post).toHaveProperty('code');
         expect(post).toHaveProperty('language');
-
         expect(post).toHaveProperty('images');
+
         for (const image of post.images) {
           expect(image).toHaveProperty('url');
           expect(image).toHaveProperty('name');
@@ -185,7 +186,6 @@ describe('Post e2e', () => {
         expect(post.author).toHaveProperty('nickname');
         expect(post.author).toHaveProperty('profileUrl');
         expect(post.author).toHaveProperty('email');
-
         expect(post).toHaveProperty('tags');
         expect(post).toHaveProperty('reviews');
         expect(post).toHaveProperty('isLiked');
@@ -209,14 +209,15 @@ describe('Post e2e', () => {
       expect(res.body.posts).not.toBeUndefined();
       expect(res.body.lastId).not.toBeUndefined();
       expect(res.body.isLast).not.toBeUndefined();
+
       for (const post of res.body.posts) {
         expect(post).toHaveProperty('id');
         expect(post).toHaveProperty('title');
         expect(post).toHaveProperty('content');
         expect(post).toHaveProperty('code');
         expect(post).toHaveProperty('language');
-
         expect(post).toHaveProperty('images');
+
         for (const image of post.images) {
           expect(image).toHaveProperty('url');
           expect(image).toHaveProperty('name');
@@ -228,7 +229,6 @@ describe('Post e2e', () => {
         expect(post.author).toHaveProperty('nickname');
         expect(post.author).toHaveProperty('profileUrl');
         expect(post.author).toHaveProperty('email');
-
         expect(post).toHaveProperty('tags');
         expect(post).toHaveProperty('reviews');
         expect(post).toHaveProperty('isLiked');

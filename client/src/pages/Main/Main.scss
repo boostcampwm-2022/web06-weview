@@ -1,6 +1,6 @@
 @import 'src/constants/_library.scss';
-@import "src/styles/commons/global-styles.scss";
-@import "src/styles/commons/_responsive.scss";
+@import "../../styles/global-styles";
+@import "@/styles/_responsive.scss";
 
 @mixin main-responsive($width, $gap) {
   width: $width;
