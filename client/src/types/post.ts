@@ -23,7 +23,7 @@ export interface PostInfo extends AdditionalPostInfo {
   tags: string[];
 }
 
-export interface PostScroll {
+export interface PostPages {
   posts: PostInfo[];
   lastId: number;
   isLast: boolean;

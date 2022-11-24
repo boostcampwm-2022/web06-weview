@@ -8,15 +8,15 @@ import {
 import { useCallback } from "react";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
 import { getReviewsAPI } from "@/apis/review";
-import { ReviewScroll } from "@/types/review";
+import { ReviewPages } from "@/types/review";
 
 interface ReviewInfiniteScrollResults {
-  data: InfiniteData<ReviewScroll> | undefined;
+  data: InfiniteData<ReviewPages> | undefined;
   hasNextPage: boolean | undefined;
   isFetching: boolean;
   fetchNextPage: (
     options?: FetchNextPageOptions | undefined
-  ) => Promise<InfiniteQueryObserverResult<ReviewScroll, unknown>>;
+  ) => Promise<InfiniteQueryObserverResult<ReviewPages, unknown>>;
   onIntersect: (
     entry: IntersectionObserverEntry,
     observer: IntersectionObserver
