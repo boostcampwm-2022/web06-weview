@@ -10,7 +10,8 @@ interface ReviewScrollProps {
 }
 
 const ReviewScroll = ({ postId }: ReviewScrollProps): JSX.Element => {
-  const { data, onIntersect, refetch } = useReviewInfiniteScroll(postId);
+  const { data, onIntersect, refetch, hasNextPage } =
+    useReviewInfiniteScroll(postId);
   const reviewInfos = useMemo(
     (): ReviewInfo[] =>
       data?.pages.flatMap(
@@ -25,7 +26,11 @@ const ReviewScroll = ({ postId }: ReviewScrollProps): JSX.Element => {
         {reviewInfos.map((reviewInfo: ReviewInfo) => (
           <Review key={reviewInfo.id} reviewInfo={reviewInfo} />
         ))}
-        <ScrollLoader onIntersect={onIntersect} spinner={false} />
+        <ScrollLoader
+          onIntersect={onIntersect}
+          spinner={false}
+          onLoad={hasNextPage}
+        />
       </ul>
       <ReviewForm postId={postId} refetch={refetch} />
     </div>
