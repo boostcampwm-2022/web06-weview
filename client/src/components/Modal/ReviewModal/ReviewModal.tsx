@@ -1,6 +1,5 @@
 import React from "react";
 import ReviewScroll from "@/components/Modal/ReviewModal/ReviewScroll/ReviewScroll";
-import ReviewForm from "@/components/Modal/ReviewModal/ReviewForm/ReviewForm";
 import CodeViewer from "@/components/Code/CodeViewer";
 
 interface ReviewModalProps {
@@ -17,10 +16,7 @@ const ReviewModal = ({
   return (
     <div className="review-modal">
       <CodeViewer code={code} language={language} />
-      <div className="review-modal__review-container">
-        <ReviewScroll postId={postId} />
-        <ReviewForm postId={postId} />
-      </div>
+      <ReviewScroll postId={postId} />
     </div>
   );
 };
