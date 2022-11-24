@@ -33,7 +33,7 @@ export interface WritingResponse {
   message: string;
 }
 
-export interface Writing {
+export interface WritingRequest {
   title: string;
   category: string;
   content: string;
@@ -41,4 +41,5 @@ export interface Writing {
   language: string;
   images: string[];
   tags?: string[];
+  lineCount: number;
 }

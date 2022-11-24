@@ -4,6 +4,7 @@ import { preventXSS } from "@/utils/regExpression";
 import { postWritingsAPI } from "@/apis/post";
 import useModalStore from "@/store/useModalStore";
 import { isEmpty } from "@/utils/typeCheck";
+import { getLineCount } from "@/utils/code";
 
 const RegisterButton = (): JSX.Element => {
   const { title, language, code, content, images, tags, resetWritingStore } =
@@ -46,6 +47,7 @@ const RegisterButton = (): JSX.Element => {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReFASlWHLC8RC6TAfXDIbMeUEqB3TfxvuFZg&usqp=CAU",
       ],
       tags,
+      lineCount: getLineCount(code),
     })
       .then((res) => {
         alert(res.message);
