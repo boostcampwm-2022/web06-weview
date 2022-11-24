@@ -1,0 +1,14 @@
+@import "./ReviewItem/ReviewItem.scss";
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 80%;
+  margin-top: 0;
+  padding: 0;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
