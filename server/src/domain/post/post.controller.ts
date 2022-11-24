@@ -13,7 +13,6 @@ import {
   Delete,
   Param,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { PostService } from './post.service';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
@@ -22,6 +21,7 @@ import { Category } from './category';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { LikesService } from '../likes/likes.service';
 import { AuthService } from '../auth/auth.service';
+import { AccessTokenGuard } from '../auth/access-token.guard';
 
 export const SEND_POST_CNT = 3;
 export const LATEST_DATA_CONDITION = -1;
@@ -93,7 +93,7 @@ export class PostController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.CREATED)
   async write(@Req() req: Request, @Body() writeDto: WriteDto) {
     const userId = req.user['id'];
@@ -110,7 +110,7 @@ export class PostController {
   }
 
   @Delete(':postId')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deletePost(@Req() req: Request, @Param('postId') postId: number) {
     const userId = req.user['id'];

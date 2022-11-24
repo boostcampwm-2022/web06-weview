@@ -1,25 +1,22 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, HttpStatus } from '@nestjs/common';
+import { INestApplication, HttpStatus, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
+import { JwtModule } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PostModule } from '../src/domain/post/post.module';
+import { AuthService } from '../src/domain/auth/auth.service';
+import { WriteDto } from '../src/domain/post/dto/controller-request.dto';
 import { AuthModule } from '../src/domain/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { HttpModule } from '@nestjs/axios';
-import { JwtModule } from '@nestjs/jwt';
-import { AuthService } from '../src/domain/auth/auth.service';
-import * as cookieParser from 'cookie-parser';
-const mockUserInfo = {
-  email: 'alreadyRegister@naver.com',
-  nickname: 'nickname',
-  profileUrl: 'https://avatars.githubusercontent.com/u/67636607?v=4',
-};
-describe('Auth E2E', () => {
+import { Category } from 'src/domain/post/category';
+
+describe('Post e2e', () => {
   let app: INestApplication;
   let authService: AuthService;
+
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const module: TestingModule = await Test.createTestingModule({
       imports: [
-        AuthModule,
         ConfigModule.forRoot({
           isGlobal: true,
         }),
@@ -31,106 +28,219 @@ describe('Auth E2E', () => {
           synchronize: true,
         }),
         JwtModule.register({}),
-        HttpModule,
+        AuthModule,
+        PostModule,
       ],
     }).compile();
-    app = moduleFixture.createNestApplication();
-    authService = moduleFixture.get<AuthService>(AuthService);
-    app.use(cookieParser());
+
+    app = module.createNestApplication();
+
+    app.useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
+      }),
+    );
+
+    authService = module.get<AuthService>(AuthService);
     await app.init();
-    // 해당 메서드만 모킹을 한다.(OAuth가 엮여 복잡)
-    jest
-      .spyOn(authService, 'getUserInfoUsingGithub')
-      .mockImplementation(async () => mockUserInfo);
   });
-  describe('인증', () => {
-    it('가입하지 않은 유저가 Github 로그인을 한다.', () => {
-      return request(app.getHttpServer())
-        .get('/auth/github')
-        .expect(HttpStatus.OK)
-        .then((res) => {
-          expect(res.body.id).toBe(1);
-          expect(res.body.nickname).toBe(mockUserInfo.nickname);
-        });
-    });
-    it('가입하지 않은 또 다른 유저가 Github 로그인을 한다.', async () => {
-      await authService.authorize(mockUserInfo);
-      const mockUserInfo2 = {
-        email: 'email@naver.com',
-        nickname: 'nick',
+
+  describe('게시글 작성', () => {
+    let accessToken;
+
+    beforeEach(async () => {
+      const mockUserInfo = {
+        email: 'alreadyRegister@naver.com',
+        nickname: 'nickname',
         profileUrl: 'https://avatars.githubusercontent.com/u/67636607?v=4',
       };
-      // 이번 호출에서만 새로운 유저를 반환하도록 한다.
-      jest
-        .spyOn(authService, 'getUserInfoUsingGithub')
-        .mockImplementationOnce(async () => mockUserInfo2);
-      return request(app.getHttpServer())
-        .get('/auth/github')
-        .expect(HttpStatus.OK)
-        .then((res) => {
-          expect(res.body.id).toBe(2);
-          expect(res.body.nickname).toBe(mockUserInfo2.nickname);
-        });
-    });
-    it('가입한 유저가 Github 로그인을 한다.', () => {
-      return request(app.getHttpServer())
-        .get('/auth/github')
-        .expect(HttpStatus.OK)
-        .then((res) => {
-          expect(res.body.id).toBe(1);
-          expect(res.body.nickname).toBe(mockUserInfo.nickname);
-        });
-    });
-  });
-  describe('로그아웃', () => {
-    let refreshToken;
-    beforeAll(() => {
-      const { refreshToken: newRefreshToken } = authService.createTokens(1);
-      refreshToken = newRefreshToken;
-    });
-    it('액세스 토큰이 없어도 로그아웃시 성공해야 한다.(204)', () => {
-      return request(app.getHttpServer())
-        .delete('/auth/logout')
-        .expect(HttpStatus.NO_CONTENT);
-    });
-    it('쿠키에 있던 리프레쉬 토큰이 삭제된다(204)', () => {
-      return request(app.getHttpServer())
-        .delete('/auth/logout')
-        .set('Cookie', [`refreshToken=${refreshToken}`])
-        .expect(HttpStatus.NO_CONTENT)
-        .expect((res) => {
-          const header: string = res.get('Set-Cookie')[0];
-          const refreshToken = header.match(/refreshToken=(.*?)(?=\;)/)[1];
-          expect(refreshToken).toEqual('');
-        });
-    });
-  });
-  describe('토큰 갱신', () => {
-    let accessToken;
-    let refreshToken;
-    beforeAll(() => {
-      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-        authService.createTokens(1);
+      await authService.authorize(mockUserInfo);
+      const { accessToken: newAccessToken } = authService.createTokens(1);
       accessToken = newAccessToken;
-      refreshToken = newRefreshToken;
     });
-    it('리프레쉬 토큰이 없으면 갱신시 실패(401)', () => {
+
+    it('올바른 양식으로 게시글 작성', () => {
+      const writeDto: WriteDto = {
+        title: '제목',
+        content: '내용',
+        code: 'console.log("test")',
+        language: 'javascript',
+        lineCount: 30,
+        category: Category.QUESTION,
+        images: [
+          'http://localhost:8080/test.png',
+          'http://localhost:8080/abc.jpg',
+        ],
+        tags: ['알고리즘', '정렬'],
+      };
+
       return request(app.getHttpServer())
-        .get('/auth/refresh')
-        .expect(HttpStatus.UNAUTHORIZED);
+        .post('/posts')
+        .auth(accessToken, { type: 'bearer' })
+        .send(writeDto)
+        .expect(HttpStatus.CREATED)
+        .then((res) => {
+          expect(res.body.message).toBe('글 작성에 성공했습니다.');
+        });
     });
-    // it('리프레쉬 토큰이 있으면 갱신시 쿠키에 refreshToken, 응답으로 accessToken과 expiresIn 반환(200)', () => {
-    // TODO 테스트 확인하기
-    // return request(app.getHttpServer())
-    //   .get('/auth/refresh')
-    //   .set('Cookie', [`refreshToken=${refreshToken}`])
-    //   .expect(HttpStatus.OK)
-    //   .expect((res) => {
-    //     const newAccessToken = res.body.accessToken;
-    //     expect(accessToken).not.toEqual(newAccessToken);
-    //   });
-    // });
+
+    it('양식이 맞지 않는 요청', () => {
+      const writeDto = {
+        title: '제목',
+        code: 'console.log("test")',
+        language: 'javascript',
+        category: '리뷰요청',
+        images: [
+          'http://localhost:8080/test.png',
+          'http://localhost:8080/abc.jpg',
+        ],
+        tags: ['알고리즘', '정렬'],
+      };
+
+      return request(app.getHttpServer())
+        .post('/posts')
+        .auth(accessToken, { type: 'bearer' })
+        .send(writeDto)
+        .expect(HttpStatus.BAD_REQUEST)
+        .then((res) => {
+          expect(res.body.message).not.toBeNull();
+        });
+    });
   });
+
+  describe('게시물 목록 조회', () => {
+    it('모든 프로퍼티가 잘 넘어가는지 확인한다', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/posts')
+        .query({
+          lastId: -1,
+        })
+        .expect(200);
+
+      expect(res.body.posts).not.toBeUndefined();
+      expect(res.body.lastId).not.toBeUndefined();
+      expect(res.body.isLast).not.toBeUndefined();
+
+      for (const post of res.body.posts) {
+        expect(post).toHaveProperty('id');
+        expect(post).toHaveProperty('title');
+        expect(post).toHaveProperty('content');
+        expect(post).toHaveProperty('code');
+        expect(post).toHaveProperty('language');
+        expect(post).toHaveProperty('images');
+
+        for (const image of post.images) {
+          expect(image).toHaveProperty('url');
+          expect(image).toHaveProperty('name');
+        }
+
+        expect(post).toHaveProperty('updatedAt');
+        expect(post).toHaveProperty('author');
+        expect(post.author).toHaveProperty('id');
+        expect(post.author).toHaveProperty('nickname');
+        expect(post.author).toHaveProperty('profileUrl');
+        expect(post.author).toHaveProperty('email');
+        expect(post).toHaveProperty('tags');
+        expect(post).toHaveProperty('reviews');
+        expect(post).toHaveProperty('isLiked');
+      }
+    });
+
+    it('(정상)여러 조건을 넣어 게시물 목록 조회', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/posts')
+        .query({
+          lastId: -1,
+          tags: '["sort", "greedy"]',
+          authors: '["taehoon1229"]',
+          category: 'question',
+          reviews: 3,
+          likes: 2,
+          detail: '어떻게',
+        })
+        .expect(200);
+
+      expect(res.body.posts).not.toBeUndefined();
+      expect(res.body.lastId).not.toBeUndefined();
+      expect(res.body.isLast).not.toBeUndefined();
+
+      for (const post of res.body.posts) {
+        expect(post).toHaveProperty('id');
+        expect(post).toHaveProperty('title');
+        expect(post).toHaveProperty('content');
+        expect(post).toHaveProperty('code');
+        expect(post).toHaveProperty('language');
+        expect(post).toHaveProperty('images');
+
+        for (const image of post.images) {
+          expect(image).toHaveProperty('url');
+          expect(image).toHaveProperty('name');
+        }
+
+        expect(post).toHaveProperty('updatedAt');
+        expect(post).toHaveProperty('author');
+        expect(post.author).toHaveProperty('id');
+        expect(post.author).toHaveProperty('nickname');
+        expect(post.author).toHaveProperty('profileUrl');
+        expect(post.author).toHaveProperty('email');
+        expect(post).toHaveProperty('tags');
+        expect(post).toHaveProperty('reviews');
+        expect(post).toHaveProperty('isLiked');
+      }
+    });
+
+    it('(정상)검색 조건에서 앞뒤 공백을 제거해주는지 확인한다', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/posts')
+        .query({
+          lastId: -1,
+          tags: '["sort", "greedy"]',
+          authors: '["taehoon1229"]',
+          category: 'question',
+          reviews: 3,
+          likes: 2,
+          detail: '           어떻게            ',
+        })
+        .expect(200);
+
+      expect(res.body.posts).not.toBeUndefined();
+      expect(res.body.lastId).not.toBeUndefined();
+      expect(res.body.isLast).not.toBeUndefined();
+
+      for (const post of res.body.posts) {
+        expect(post).toHaveProperty('id');
+        expect(post).toHaveProperty('title');
+        expect(post).toHaveProperty('content');
+        expect(post).toHaveProperty('code');
+        expect(post).toHaveProperty('language');
+        expect(post).toHaveProperty('images');
+
+        for (const image of post.images) {
+          expect(image).toHaveProperty('url');
+          expect(image).toHaveProperty('name');
+        }
+
+        expect(post).toHaveProperty('updatedAt');
+        expect(post).toHaveProperty('author');
+        expect(post.author).toHaveProperty('id');
+        expect(post.author).toHaveProperty('nickname');
+        expect(post.author).toHaveProperty('profileUrl');
+        expect(post.author).toHaveProperty('email');
+        expect(post).toHaveProperty('tags');
+        expect(post).toHaveProperty('reviews');
+        expect(post).toHaveProperty('isLiked');
+      }
+    });
+
+    // TODO 카테고리 필수로 처리해야 하는지 고민해보기
+    it('필수 파라미터 lastId 없어도 검색 가능', async () => {
+      const res = await request(app.getHttpServer()).get('/posts').expect(200);
+    });
+  });
+
   afterAll(async () => {
     await app.close();
   });

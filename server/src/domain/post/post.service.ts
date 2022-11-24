@@ -101,7 +101,6 @@ export class PostService {
       this.postRepository.findByReviewCntGreaterThanOrEqual(reviews),
     ]);
 
-    console.log(postInfosAfterFiltering);
     const postIdsFiltered = this.returnPostIdByAllConditionPass(
       postInfosAfterFiltering,
     );

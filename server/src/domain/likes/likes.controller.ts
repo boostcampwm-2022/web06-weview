@@ -8,8 +8,8 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
+import { AccessTokenGuard } from '../auth/access-token.guard';
 import { LikesService } from './likes.service';
 
 @Controller()
@@ -17,7 +17,7 @@ export class LikesController {
   constructor(private readonly likesService: LikesService) {}
 
   @Post('posts/:postId/likes')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.CREATED)
   async likes(@Req() req: Request, @Param('postId') postId: number) {
     const userId = req.user['id'];
@@ -25,7 +25,7 @@ export class LikesController {
   }
 
   @Delete('posts/:postId/likes')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async cancelLikes(@Req() req: Request, @Param('postId') postId: number) {
     const userId = req.user['id'];
