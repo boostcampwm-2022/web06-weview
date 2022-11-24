@@ -576,7 +576,6 @@ describe('PostService', () => {
       });
 
       it('글 작성 성공', async () => {
-        console.log(userRepository.findOneBy());
         await service.write(1, writeDto);
 
         expect(postRepository.save).toBeCalledTimes(1);
