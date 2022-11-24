@@ -1,5 +1,5 @@
 import React, { FormEvent, useCallback } from "react";
-import CodeEditor from "../../../CodeEditor/CodeEditor";
+import CodeEditor from "../../../Code/CodeEditor";
 import SubmitButton from "./SubmitButton/SubmitButton";
 import useModalStore from "@/store/useModalStore";
 import LanguageSelector from "@/components/Modal/WriteModal/WritingForm/LanguageSelector/LanguageSelector";

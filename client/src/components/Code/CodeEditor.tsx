@@ -8,12 +8,9 @@ import React, {
 import useWritingStore from "@/store/useWritingStore";
 import hljs from "highlight.js";
 import useLineNumbers from "@/hooks/useLineNumbers";
+import CodeLines from "@/components/Code/CodeLines";
 
-interface CodeEditorProps {
-  isEditable?: boolean;
-}
-
-const CodeEditor = ({ isEditable = true }: CodeEditorProps): JSX.Element => {
+const CodeEditor = (): JSX.Element => {
   const [highlightedHTML, setHighlightedHTML] = useState("");
   const { code, setCode, language } = useWritingStore((state) => ({
     code: state.code,
@@ -58,21 +55,18 @@ const CodeEditor = ({ isEditable = true }: CodeEditorProps): JSX.Element => {
   }, [textRef, preRef, lineRef]);
 
   return (
-    <div className="code-editor">
-      <div className="code-editor__lines" ref={lineRef}>
-        {Array.from(Array(100).keys()).slice(1).join("\n")}
-      </div>
+    <div className="code">
+      <CodeLines code={code} lineRef={lineRef} />
       <textarea
         ref={textRef}
         onScroll={handleScrollChange}
         value={code}
         onChange={changeCode}
-        className="code-editor__textarea"
+        className="code__textarea"
         autoComplete="false"
         spellCheck="false"
-        disabled={!isEditable}
       />
-      <pre ref={preRef} className="code-editor__present">
+      <pre ref={preRef} className="code__present">
         <code
           dangerouslySetInnerHTML={createMarkUpCode(highlightedHTML)}
         ></code>
