@@ -31,4 +31,10 @@ export const reviewHandler = [
       })
     );
   }),
+  rest.post(`${baseUrl}/reviews`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({ message: "리뷰 작성에 성공했습니다." })
+    );
+  }),
 ];
