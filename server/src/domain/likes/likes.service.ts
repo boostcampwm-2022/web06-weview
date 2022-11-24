@@ -38,7 +38,6 @@ export class LikesService {
     });
   }
 
-  // TODO 게시물 들어왔을 때 좋아요 몇 개찍혀있는지 가르쳐주는 기능 구현
   async findPostIdsByUserId(userId: number) {
     const postsYouLiked = await this.likesRepository.findBy({
       userId: userId,

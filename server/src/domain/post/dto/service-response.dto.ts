@@ -26,6 +26,7 @@ export class EachPostResponseDto {
   tags: string[];
   isLiked: boolean;
   likesCount: number;
+  lineCount: number;
 
   constructor(post: Post) {
     this.id = post.id;
@@ -41,7 +42,7 @@ export class EachPostResponseDto {
     this.author = new AuthorDto(post.user);
     this.tags = post.postToTags.map((obj) => obj.tag.name);
     this.isLiked = false;
-    // TODO lineCount 추가
+    this.lineCount = post.lineCount;
   }
 }
 

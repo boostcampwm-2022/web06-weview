@@ -607,7 +607,7 @@ describe('PostService', () => {
         user = new User();
         post = new Post();
 
-        postRepository.findOneBy = jest.fn();
+        postRepository.findOne = jest.fn();
         postRepository.deleteUsingPost = jest.fn();
       });
 
@@ -617,7 +617,7 @@ describe('PostService', () => {
         post.user = user;
         post.isDeleted = false;
 
-        postRepository.findOneBy = jest.fn(() => post);
+        postRepository.findOne = jest.fn(() => post);
 
         await service.delete(1, 1);
       });
@@ -629,7 +629,7 @@ describe('PostService', () => {
           post.user = user;
           post.isDeleted = false;
 
-          postRepository.findOneBy = jest.fn(() => post);
+          postRepository.findOne = jest.fn(() => post);
           await service.delete(1, 1);
           throw new Error();
         } catch (err) {
@@ -643,7 +643,7 @@ describe('PostService', () => {
           post.user = user;
           post.isDeleted = false;
 
-          postRepository.findOneBy = jest.fn(() => post);
+          postRepository.findOne = jest.fn(() => post);
           await service.delete(1, 1);
           throw new Error();
         } catch (err) {
@@ -657,7 +657,7 @@ describe('PostService', () => {
           post.user = user;
           post.isDeleted = false;
 
-          postRepository.findOneBy = jest.fn(() => post);
+          postRepository.findOne = jest.fn(() => post);
           await service.delete(1, 1);
           throw new Error();
         } catch (err) {
@@ -672,7 +672,7 @@ describe('PostService', () => {
           post.user = user;
           post.isDeleted = false;
 
-          postRepository.findOneBy = jest.fn(() => post);
+          postRepository.findOne = jest.fn(() => post);
 
           const differentUserId = 2;
           await service.delete(differentUserId, 1);
@@ -689,7 +689,7 @@ describe('PostService', () => {
 
           post.user = user;
           post.isDeleted = true;
-          postRepository.findOneBy = jest.fn(() => post);
+          postRepository.findOne = jest.fn(() => post);
           await service.delete(1, 1);
           throw new Error();
         } catch (err) {
@@ -699,7 +699,7 @@ describe('PostService', () => {
 
       it('(실패) post가 undefined인 경우', async () => {
         try {
-          postRepository.findOneBy = jest.fn(() => undefined);
+          postRepository.findOne = jest.fn(() => undefined);
           await service.delete(1, 1);
           throw new Error();
         } catch (err) {
@@ -709,7 +709,7 @@ describe('PostService', () => {
 
       it('(실패) post가 null인 경우', async () => {
         try {
-          postRepository.findOneBy = jest.fn(() => null);
+          postRepository.findOne = jest.fn(() => null);
           await service.delete(1, 1);
           throw new Error();
         } catch (err) {

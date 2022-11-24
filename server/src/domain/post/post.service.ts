@@ -92,7 +92,7 @@ export class PostService {
     loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
     const { lastId, tags, authors, category, reviews, likesCnt, detail } =
-      loadPostListRequestDto;
+      loadPostListRequestDto; // TODO reviews (개수) 로 필터링하기
     let isLast = true;
     const postInfosAfterFiltering = await Promise.all([
       this.postRepository.findByIdLikesCntGreaterThan(likesCnt),
@@ -103,7 +103,7 @@ export class PostService {
     const postIdsFiltered = this.returnPostIdByAllConditionPass(
       postInfosAfterFiltering,
     );
-    // 개선
+
     const result = await this.postRepository.findByIdUsingCondition(
       lastId,
       postIdsFiltered,
@@ -147,8 +147,11 @@ export class PostService {
   }
 
   async delete(userId: number, postId: number) {
-    const post = await this.postRepository.findOneBy({
-      id: postId,
+    const post = await this.postRepository.findOne({
+      where: {
+        id: postId,
+      },
+      relations: ['user'],
     });
     if (!post || post.isDeleted) {
       throw new PostNotFoundException();
