@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import useReviewInfiniteScroll from "@/hooks/useReviewInfiniteScroll";
 import { ReviewInfo, ReviewPages } from "@/types/review";
-import ReviewItem from "@/components/Modal/ReviewModal/ReviewContainer/ReviewScroll/ReviewItem/ReviewItem";
-import PostLoader from "@/components/PostBar/PostLoader/PostLoader";
+import Review from "@/components/Modal/ReviewModal/ReviewContainer/ReviewScroll/Review/Review";
+import ScrollLoader from "@/components/ScrollLoader/ScrollLoader";
 
 interface ReviewScrollProps {
   postId: string;
@@ -21,9 +21,9 @@ const ReviewScroll = ({ postId }: ReviewScrollProps): JSX.Element => {
   return (
     <ul className="review-list">
       {reviewInfos.map((reviewInfo: ReviewInfo) => (
-        <ReviewItem key={reviewInfo.id} info={reviewInfo} />
+        <Review key={reviewInfo.id} reviewInfo={reviewInfo} />
       ))}
-      <PostLoader onIntersect={onIntersect} />
+      <ScrollLoader onIntersect={onIntersect} />
     </ul>
   );
 };
