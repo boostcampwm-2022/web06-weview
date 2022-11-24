@@ -1,4 +1,5 @@
 import React, { useEffect, useState, RefObject } from "react";
+import { getLineCount } from "@/utils/code";
 
 interface CodeLinesProps {
   code: string;
@@ -8,7 +9,7 @@ interface CodeLinesProps {
 const CodeLines = ({ code, lineRef }: CodeLinesProps): JSX.Element => {
   const [lineCount, setLineCount] = useState(0);
   useEffect(() => {
-    setLineCount(code.split("\n").length + 1);
+    setLineCount(getLineCount(code));
   }, [code]);
 
   return (
