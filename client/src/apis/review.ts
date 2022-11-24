@@ -8,6 +8,5 @@ export const getReviewsAPI = async (
   const { data } = await axiosInstance.get(
     `/posts/${postId}/reviews?lastId=${lastId}`
   );
-  console.log("hihi", data);
   return data;
 };
