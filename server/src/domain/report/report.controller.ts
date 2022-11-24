@@ -8,9 +8,9 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { PostAlreadyReportedException } from 'src/exception/post-already-reported.exception';
+import { AccessTokenGuard } from '../auth/access-token.guard';
 import { ReportCreateRequestDto } from './dto/controller-request.dto';
 import { ReportService } from './report.service';
 
@@ -19,7 +19,7 @@ export class ReportController {
   constructor(private reportService: ReportService) {}
 
   @Post('posts/:postId/report')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AccessTokenGuard)
   async create(
     @Req() req: Request,
     @Param('postId') postId: number,

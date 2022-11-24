@@ -9,8 +9,8 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
+import { AccessTokenGuard } from '../auth/access-token.guard';
 import {
   ReviewGetAllRequestDto,
   ReviewWriteRequestDto,
@@ -22,7 +22,7 @@ export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Post('reviews')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AccessTokenGuard)
   async write(@Req() req: Request, @Body() requestDto: ReviewWriteRequestDto) {
     const userId = req.user['id'];
 
