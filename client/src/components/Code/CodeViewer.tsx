@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import hljs from "highlight.js";
+import React, { useCallback, useEffect, useRef } from "react";
+
 import useLineNumbers from "@/hooks/useLineNumbers";
 import CodeLines from "@/components/Code/CodeLines";
+import useHighlight from "@/hooks/useHighlight";
 
 interface CodeViewerProps {
   code: string;
@@ -9,27 +10,15 @@ interface CodeViewerProps {
 }
 
 const CodeViewer = ({ code, language }: CodeViewerProps): JSX.Element => {
-  const [highlightedHTML, setHighlightedHTML] = useState("");
   const { setLines } = useLineNumbers();
+  const highlightedHTML = useHighlight(code, language);
   const lineRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
+
   useEffect(() => {
-    setHighlightedHTML(
-      hljs
-        .highlight(code, { language })
-        .value.replace(/" "/g, "&nbsp;")
-        .replace(/"\n"/g, "<br/>")
-    );
     setLines(code);
   }, [code]);
-
-  const createMarkUpCode = useCallback(
-    (code: string): { __html: string } => ({
-      __html: code,
-    }),
-    [code]
-  );
 
   const handleScrollChange = useCallback((): void => {
     if (
@@ -56,9 +45,7 @@ const CodeViewer = ({ code, language }: CodeViewerProps): JSX.Element => {
         disabled
       />
       <pre ref={preRef} className="code__present">
-        <code
-          dangerouslySetInnerHTML={createMarkUpCode(highlightedHTML)}
-        ></code>
+        <code dangerouslySetInnerHTML={{ __html: highlightedHTML }}></code>
       </pre>
     </div>
   );

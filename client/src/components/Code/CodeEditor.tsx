@@ -1,46 +1,27 @@
-import React, {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
 import useWritingStore from "@/store/useWritingStore";
-import hljs from "highlight.js";
 import useLineNumbers from "@/hooks/useLineNumbers";
 import CodeLines from "@/components/Code/CodeLines";
+import useHighlight from "@/hooks/useHighlight";
 
 const CodeEditor = (): JSX.Element => {
-  const [highlightedHTML, setHighlightedHTML] = useState("");
   const { code, setCode, language } = useWritingStore((state) => ({
     code: state.code,
     setCode: state.setCode,
     language: state.language,
   }));
+  const highlightedHTML = useHighlight(code, language);
   const { setLines } = useLineNumbers();
   const lineRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
   useEffect(() => {
-    setHighlightedHTML(
-      hljs
-        .highlight(code, { language })
-        .value.replace(/" "/g, "&nbsp;")
-        .replace(/"\n"/g, "<br/>")
-    );
     setLines(code);
   }, [code]);
 
   const changeCode = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     setCode(e.target.value);
   }, []);
-
-  const createMarkUpCode = useCallback(
-    (code: string): { __html: string } => ({
-      __html: code,
-    }),
-    [code]
-  );
 
   const handleScrollChange = useCallback((): void => {
     if (
@@ -67,9 +48,7 @@ const CodeEditor = (): JSX.Element => {
         spellCheck="false"
       />
       <pre ref={preRef} className="code__present">
-        <code
-          dangerouslySetInnerHTML={createMarkUpCode(highlightedHTML)}
-        ></code>
+        <code dangerouslySetInnerHTML={{ __html: highlightedHTML }}></code>
       </pre>
     </div>
   );
