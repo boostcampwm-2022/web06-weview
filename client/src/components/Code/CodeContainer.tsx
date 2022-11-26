@@ -1,34 +1,30 @@
 import React, { createContext } from "react";
 import useWritingStore from "@/store/useWritingStore";
-import { CodeInfo } from "@/types/post";
+import { CodeInfo, CodeStore } from "@/types/post";
 import { defaultCodeInfo } from "@/constants/defaultObject";
 import CodePresenter from "@/components/Code/CodePresenter";
 
 interface CodeProps {
-  code?: string;
-  language?: string;
+  codeStore?: CodeStore;
   isEditable?: boolean;
-  setCode?: ((code: string) => void) | null;
 }
 
 export const CodeContext = createContext<CodeInfo>(defaultCodeInfo);
 
 const CodeContainer = ({
-  code,
-  setCode,
-  language,
+  codeStore,
   isEditable = false,
 }: CodeProps): JSX.Element => {
-  if (code === undefined || language === undefined || setCode === undefined) {
-    ({ code, language, setCode } = useWritingStore((state) => ({
+  if (codeStore === undefined) {
+    codeStore = useWritingStore((state) => ({
       code: state.code,
       setCode: state.setCode,
       language: state.language,
-    })));
+    }));
   }
 
   return (
-    <CodeContext.Provider value={{ code, language, isEditable, setCode }}>
+    <CodeContext.Provider value={{ ...codeStore, isEditable }}>
       <CodePresenter />
     </CodeContext.Provider>
   );

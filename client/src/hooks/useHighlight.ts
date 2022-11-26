@@ -8,18 +8,18 @@ interface HighlightArgs {
   language: string;
 }
 
-const useHighlight = (code: string, language: string): string => {
+const useHighlight = (highlightArgs: HighlightArgs): string => {
   const [highlightedHTML, setHighlightedHTML] = useState("");
 
   useEffect(() => {
     pipe(
-      { code, language },
+      highlightArgs,
       ({ code, language }: HighlightArgs) =>
         hljs.highlight(code, { language }).value,
       formatHighlightedHTML,
       setHighlightedHTML
     );
-  }, [code]);
+  }, [highlightArgs]);
 
   return highlightedHTML;
 };

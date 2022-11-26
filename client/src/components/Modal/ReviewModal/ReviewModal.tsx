@@ -15,7 +15,7 @@ const ReviewModal = ({
 }: ReviewModalProps): JSX.Element => {
   return (
     <div className="review-modal">
-      <CodeContainer code={code} language={language} />
+      <CodeContainer codeStore={{ code, language }} />
       <div className="review-modal__review-container">
         <ReviewScroll postId={postId} />
       </div>

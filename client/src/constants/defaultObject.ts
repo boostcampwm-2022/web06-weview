@@ -24,5 +24,5 @@ export const defaultCodeInfo: CodeInfo = {
   code: "",
   language: DEFAULT_LANGUAGE,
   isEditable: false,
-  setCode: null,
+  setCode: undefined,
 };

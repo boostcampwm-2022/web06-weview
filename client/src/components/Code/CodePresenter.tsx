@@ -7,7 +7,7 @@ import { CodeContext } from "@/components/Code/CodeContainer";
 
 const CodePresenter = (): JSX.Element => {
   const { code, setCode, language, isEditable } = useContext(CodeContext);
-  const highlightedHTML = useHighlight(code, language);
+  const highlightedHTML = useHighlight({ code, language });
   const { lineRef, textRef, preRef, handleScrollChange } = useEditorScroll();
   const { setLines } = useLineNumbers();
 
@@ -17,7 +17,7 @@ const CodePresenter = (): JSX.Element => {
 
   const handleCodeChange = isEditable
     ? useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
-        if (setCode !== null) {
+        if (setCode !== undefined) {
           setCode(e.target.value);
         }
       }, [])
