@@ -1,19 +1,13 @@
-import React, { ChangeEvent, useCallback, useContext, useEffect } from "react";
+import React, { ChangeEvent, useCallback, useContext } from "react";
 import CodeLines from "@/components/Code/CodeLines";
 import useHighlight from "@/hooks/useHighlight";
 import useEditorScroll from "@/hooks/useEditorScroll";
-import useLineNumbers from "@/hooks/useLineNumbers";
 import { CodeContext } from "@/components/Code/CodeContainer";
 
 const CodePresenter = (): JSX.Element => {
   const { code, setCode, language, isEditable } = useContext(CodeContext);
   const highlightedHTML = useHighlight({ code, language });
   const { lineRef, textRef, preRef, handleScrollChange } = useEditorScroll();
-  const { setLines } = useLineNumbers();
-
-  useEffect(() => {
-    setLines(code);
-  }, [code]);
 
   const handleCodeChange = isEditable
     ? useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
