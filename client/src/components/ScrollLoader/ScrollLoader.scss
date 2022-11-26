@@ -2,7 +2,7 @@
 @import "@/styles/_global-styles.scss";
 
 $spinner-height: $main-post-height * 0.2; // 9:1비율
-$target-height: $spinner-height / 9;
+$target-height: calc($spinner-height / 9);
 
 .scroll-loader {
   display: flex;
