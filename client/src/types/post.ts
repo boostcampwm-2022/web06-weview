@@ -11,6 +11,13 @@ interface AdditionalPostInfo {
   likes?: number;
 }
 
+export interface CodeInfo {
+  code: string;
+  language: string;
+  isEditable: boolean;
+  setCode: ((code: string) => void) | null;
+}
+
 export interface PostInfo extends AdditionalPostInfo {
   id: string;
   title: string;
