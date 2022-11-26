@@ -12,25 +12,25 @@ export const parsePostQueryString = (url: URL): any => {
 
   const tags = url.searchParams.get("tags");
   if (tags !== null) {
-    searchQuery.tags?.push(...tags.split(","));
+    searchQuery.tags?.push(...decodeURI(tags).split(","));
   }
 
   const authors = url.searchParams.get("authors");
   if (authors !== null) {
-    searchQuery.authors?.push(...authors.split(","));
+    searchQuery.authors?.push(...decodeURI(authors).split(","));
   }
 
   const category = url.searchParams.get("category") ?? "";
-  searchQuery.category = category;
+  searchQuery.category = decodeURI(category);
 
-  const reviews = url.searchParams.get("reviews") ?? 0;
-  searchQuery.reviews = Number(reviews);
+  const reviews = url.searchParams.get("reviews") ?? "0";
+  searchQuery.reviews = Number(decodeURI(reviews));
 
-  const likes = url.searchParams.get("likes") ?? 0;
-  searchQuery.likes = Number(likes);
+  const likes = url.searchParams.get("likes") ?? "0";
+  searchQuery.likes = Number(decodeURI(likes));
 
-  const detail = url.searchParams.get("") ?? "";
-  searchQuery.detail = detail;
+  const detail = url.searchParams.get("detail") ?? "";
+  searchQuery.detail = decodeURI(detail);
 
   return searchQuery;
 };
