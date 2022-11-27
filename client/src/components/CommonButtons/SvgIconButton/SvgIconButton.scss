@@ -1,0 +1,54 @@
+@import "@/styles/_global-styles.scss";
+
+$icon-default-size: 2rem;
+$icon-hover-size: 2.5rem;
+$detail-font-size: 0.75rem;
+
+.svg-icon-button {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+  justify-content: center;
+
+  &__icon {
+    font-size: $icon-default-size !important;
+    transition: 200ms !important;
+  }
+
+  &__detail {
+    font-size: $detail-font-size;
+    transition: 100ms;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    & .svg-icon-button__icon {
+      font-size: $icon-hover-size !important;
+      animation: fade-in-icon;
+    }
+    & .svg-icon-button__detail {
+      opacity: 0;
+      animation: fade-out-text;
+    }
+  }
+}
+
+@keyframes fade-in-icon {
+  from {
+    font-size: $icon-default-size;
+  }
+  to {
+    font-size: $icon-hover-size;
+  }
+}
+
+@keyframes fade-out-text {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
