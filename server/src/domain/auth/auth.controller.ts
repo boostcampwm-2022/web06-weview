@@ -42,7 +42,7 @@ export class AuthController {
     summary: '인증',
     description: '깃허브 코드를 사용해 사용자를 인증합니다',
   })
-  @ApiCreatedResponse({ description: 'accessToken과 로그인 정보를 받아옵니다' })
+  @ApiOkResponse({ description: 'accessToken과 로그인 정보를 받아옵니다' })
   @ApiBadRequestResponse({ description: 'Github 관련 인증에 문제가 있습니다' })
   async authorizeWithGithub(
     @Res({ passthrough: true }) res: Response,
@@ -58,7 +58,6 @@ export class AuthController {
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
       });
-      res.status(HttpStatus.CREATED);
       return {
         accessToken: accessToken,
         expiresIn: expiresIn,

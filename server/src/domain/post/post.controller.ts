@@ -62,7 +62,6 @@ export class PostController {
   async inqueryUsingFilter(
     @Query() inqueryDto: InqueryDto,
     @Headers() headers,
-    @Res({ passthrough: true }) res,
   ): Promise<LoadPostListResponseDto> {
     const {
       lastId,
@@ -87,8 +86,6 @@ export class PostController {
     );
     await this.addLikesCntColumnEveryPosts(returnValue);
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
-    res.status(HttpStatus.ACCEPTED);
-
     return returnValue;
   }
 
@@ -132,25 +129,20 @@ export class PostController {
   @ApiNotFoundResponse({
     description: '해당 유저는 존재하지 않습니다',
   })
-  async write(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Body() writeDto: WriteDto,
-  ) {
+  async write(@Req() req: Request, @Body() writeDto: WriteDto) {
     try {
       const userId = req.user['id'];
       await this.postService.write(userId, writeDto);
-      res.status(HttpStatus.CREATED);
+
+      return {
+        message: '글 작성에 성공했습니다.',
+      };
     } catch (err) {
       if (err instanceof UserNotFoundException) {
         throw new NotFoundException(err.message);
       }
       throw new InternalServerErrorException(err.message);
     }
-
-    return {
-      message: '글 작성에 성공했습니다.',
-    };
   }
 
   @Delete(':postId')
