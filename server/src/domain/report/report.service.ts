@@ -38,7 +38,6 @@ export class ReportService {
       if (!postEntity) {
         throw new PostNotFoundException();
       }
-
       const report = new Report();
       report.user = userEntity;
       report.post = postEntity;

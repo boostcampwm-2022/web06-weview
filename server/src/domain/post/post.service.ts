@@ -12,7 +12,7 @@ import { TagRepository } from '../tag/tag.repository';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
 import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
 import { UserRepository } from '../user/user.repository';
-import { UnauthorizeException } from '../../exception/unauthorize.exception';
+import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
 
 @Injectable()
@@ -28,42 +28,34 @@ export class PostService {
     userId: number,
     { title, content, category, code, language, lineCount, images, tags },
   ) {
-    try {
-      const userEntity = await this.userRepository.findOneBy({
-        id: userId,
-      });
+    const userEntity = await this.userRepository.findOneBy({
+      id: userId,
+    });
 
-      if (userEntity === null) {
-        throw new UserNotFoundException();
-      }
-
-      const imageEntities = images.map((src) => {
-        const imageEntity = new Image();
-        imageEntity.src = src;
-        return imageEntity;
-      });
-
-      const postToTagEntities = await this.toPostToTagEntities(tags);
-      const postEntity = new Post();
-      postEntity.title = title;
-      postEntity.content = content;
-      postEntity.category = category;
-      postEntity.code = code;
-      postEntity.language = language;
-      postEntity.user = userEntity;
-      postEntity.lineCount = lineCount;
-      postEntity.images = imageEntities;
-      postEntity.postToTags = postToTagEntities;
-      await this.postRepository.save(postEntity);
-
-      return postEntity.id;
-    } catch (err) {
-      if (err instanceof UserNotFoundException) {
-        throw err;
-      }
-
-      throw new PostNotWrittenException();
+    if (userEntity === null) {
+      throw new UserNotFoundException();
     }
+
+    const imageEntities = images.map((src) => {
+      const imageEntity = new Image();
+      imageEntity.src = src;
+      return imageEntity;
+    });
+
+    const postToTagEntities = await this.toPostToTagEntities(tags);
+    const postEntity = new Post();
+    postEntity.title = title;
+    postEntity.content = content;
+    postEntity.category = category;
+    postEntity.code = code;
+    postEntity.language = language;
+    postEntity.user = userEntity;
+    postEntity.lineCount = lineCount;
+    postEntity.images = imageEntities;
+    postEntity.postToTags = postToTagEntities;
+    await this.postRepository.save(postEntity);
+
+    return postEntity.id;
   }
 
   private toPostToTagEntities(tags: string[]): Promise<PostToTag[]> {
@@ -92,7 +84,7 @@ export class PostService {
     loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
     const { lastId, tags, authors, category, reviews, likesCnt, detail } =
-      loadPostListRequestDto; // TODO reviews (개수) 로 필터링하기
+      loadPostListRequestDto;
     let isLast = true;
     const postInfosAfterFiltering = await Promise.all([
       this.postRepository.findByIdLikesCntGreaterThanOrEqual(likesCnt),
@@ -161,7 +153,7 @@ export class PostService {
       throw new UserNotFoundException();
     }
     if (post.user.id !== userId) {
-      throw new UnauthorizeException();
+      throw new UserNotSameException();
     }
     post.isDeleted = true;
     await this.postRepository.deleteUsingPost(post);

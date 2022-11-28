@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { lastValueFrom } from 'rxjs';
+import { catchError, lastValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { UserRepository } from '../user/user.repository';
+import { TokenNotFoundException } from '../../exception/token-not-found.exception';
+import { TokenNotPermittedException } from '../../exception/token-not-permitted.exception';
 
 @Injectable()
 export class AuthService {
@@ -66,7 +68,6 @@ export class AuthService {
 
   async getUserInfoUsingGithub(code: string) {
     const githubToken = await this.getGithubToken(code);
-
     const { data: githubInfo } = await lastValueFrom(
       this.httpService.get('https://api.github.com/user', {
         headers: {
@@ -75,11 +76,17 @@ export class AuthService {
       }),
     );
     const { data: emails } = await lastValueFrom(
-      this.httpService.get('https://api.github.com/user/emails', {
-        headers: {
-          Authorization: `Bearer ${githubToken}`,
-        },
-      }),
+      this.httpService
+        .get('https://api.github.com/user/emails', {
+          headers: {
+            Authorization: `Bearer ${githubToken}`,
+          },
+        })
+        .pipe(
+          catchError(() => {
+            throw new TokenNotPermittedException();
+          }),
+        ),
     );
     const { email } = emails.filter((v) => v.primary)[0];
     const { avatar_url: profileUrl, login: nickname } = githubInfo;
@@ -95,8 +102,10 @@ export class AuthService {
         code: code,
       }),
     );
-
-    const githubToken = data.match(/(?<=access_token=).*?(?=&)/)[0];
-    return githubToken;
+    const githubToken = data.match(/(?<=access_token=).*?(?=&)/);
+    if (!githubToken) {
+      throw new TokenNotFoundException();
+    }
+    return githubToken[0];
   }
 }
