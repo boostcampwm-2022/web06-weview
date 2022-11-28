@@ -26,6 +26,7 @@ import { UserNotFoundException } from '../../exception/user-not-found.exception'
 
 @Controller()
 @ApiTags('좋아요 API')
+@ApiBearerAuth('access-token')
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}
 
@@ -38,7 +39,6 @@ export class LikesController {
   })
   @ApiCreatedResponse({ description: '좋아요 성공' })
   @ApiNotFoundResponse({ description: '게시물 or 유저가 없습니다' })
-  @ApiBearerAuth('access-token')
   async likes(@Req() req: Request, @Param('postId') postId: number) {
     try {
       const userId = req.user['id'];
@@ -64,7 +64,6 @@ export class LikesController {
   @ApiNoContentResponse({
     description: '좋아요 취소 성공',
   })
-  @ApiBearerAuth('access-token')
   async cancelLikes(@Req() req: Request, @Param('postId') postId: number) {
     const userId = req.user['id'];
     await this.likesService.cancelLikes(userId, postId);

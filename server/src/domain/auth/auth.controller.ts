@@ -57,7 +57,7 @@ export class AuthController {
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
       });
-
+      res.status(HttpStatus.CREATED);
       return {
         accessToken: accessToken,
         expiresIn: expiresIn,

@@ -32,6 +32,8 @@ import { PostNotFoundException } from '../../exception/post-not-found.exception'
 
 @Controller()
 @ApiTags('리뷰 API')
+@ApiBadRequestResponse({ description: '잘못된 요청입니다' })
+@ApiBearerAuth('access-token')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
@@ -47,7 +49,6 @@ export class ReviewController {
   @ApiNotFoundResponse({
     description: '게시물 or 사용자가 존재하지 않습니다',
   })
-  @ApiBearerAuth('access-token')
   async write(@Req() req: Request, @Body() requestDto: ReviewWriteRequestDto) {
     try {
       const userId = req.user['id'];
@@ -70,7 +71,6 @@ export class ReviewController {
     description: '검색조건에 맞는 최신 데이터를 가져옵니다',
   })
   @ApiOkResponse({ description: '요청에 성공했습니다' })
-  @ApiBadRequestResponse({ description: '잘못된 요청입니다' })
   async getReviewsOfPost(
     @Param('postId') postId: number,
     @Query() requestDto: ReviewGetAllRequestDto,

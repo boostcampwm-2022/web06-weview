@@ -28,6 +28,7 @@ import { PostNotFoundException } from '../../exception/post-not-found.exception'
 
 @Controller()
 @ApiTags('신고 API')
+@ApiBearerAuth('access-token')
 export class ReportController {
   constructor(private reportService: ReportService) {}
 
@@ -44,7 +45,6 @@ export class ReportController {
   @ApiConflictResponse({
     description: '이미 해당 게시물에 신고가 이뤄진 상황',
   })
-  @ApiBearerAuth('access-token')
   async create(
     @Req() req: Request,
     @Param('postId') postId: number,
