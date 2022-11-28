@@ -12,7 +12,7 @@ import { TagRepository } from '../tag/tag.repository';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
 import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
 import { UserRepository } from '../user/user.repository';
-import { UnauthorizeException } from '../../exception/unauthorize.exception';
+import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
 
 @Injectable()
@@ -161,7 +161,7 @@ export class PostService {
       throw new UserNotFoundException();
     }
     if (post.user.id !== userId) {
-      throw new UnauthorizeException();
+      throw new UserNotSameException();
     }
     post.isDeleted = true;
     await this.postRepository.deleteUsingPost(post);

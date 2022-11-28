@@ -12,6 +12,10 @@ import {
   Headers,
   Delete,
   Param,
+  Res,
+  NotFoundException,
+  UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { PostService } from './post.service';
@@ -22,11 +26,24 @@ import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { LikesService } from '../likes/likes.service';
 import { AuthService } from '../auth/auth.service';
 import { AccessTokenGuard } from '../auth/access-token.guard';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { UserNotFoundException } from '../../exception/user-not-found.exception';
+import { PostNotFoundException } from '../../exception/post-not-found.exception';
+import { UserNotSameException } from '../../exception/user-not-same.exception';
 
 export const SEND_POST_CNT = 3;
 export const LATEST_DATA_CONDITION = -1;
 
 @Controller('posts')
+@ApiTags('게시물 API')
 export class PostController {
   constructor(
     private readonly postService: PostService,
@@ -35,9 +52,16 @@ export class PostController {
   ) {}
 
   @Get()
+  @ApiOperation({
+    summary: '조회',
+    description: '검색조건에 맞는 최신 데이터를 가져옵니다',
+  })
+  @ApiOkResponse({ description: '올바른 요청입니다' })
+  @ApiBadRequestResponse({ description: '잘못된 요청입니다' })
   async inqueryUsingFilter(
     @Query() inqueryDto: InqueryDto,
     @Headers() headers,
+    @Res({ passthrough: true }) res,
   ): Promise<LoadPostListResponseDto> {
     const {
       lastId,
@@ -62,6 +86,8 @@ export class PostController {
     );
     await this.addLikesCntColumnEveryPosts(returnValue);
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
+    res.status(HttpStatus.ACCEPTED);
+
     return returnValue;
   }
 
@@ -95,6 +121,19 @@ export class PostController {
   @Post()
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: '작성',
+    description: '게시물을 작성합니다',
+  })
+  @ApiCreatedResponse({
+    description: '게시물 작성에 성공했습니다',
+  })
+  @ApiNotFoundResponse({
+    description: '해당 유저는 존재하지 않습니다',
+  })
+  @ApiBadRequestResponse({
+    description: '잘못된 요청입니다',
+  })
   async write(@Req() req: Request, @Body() writeDto: WriteDto) {
     const userId = req.user['id'];
 
@@ -112,8 +151,32 @@ export class PostController {
   @Delete(':postId')
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: '삭제',
+    description: '게시물을 삭제합니다',
+  })
+  @ApiOkResponse({ description: '올바른 요청입니다' })
+  @ApiForbiddenResponse({
+    description: '삭제할 권한이 존재하지 않습니다',
+  })
+  @ApiNotFoundResponse({
+    description: '유저 혹은 게시물이 존재하지 않습니다',
+  })
   async deletePost(@Req() req: Request, @Param('postId') postId: number) {
-    const userId = req.user['id'];
-    await this.postService.delete(userId, postId);
+    try {
+      const userId = req.user['id'];
+      await this.postService.delete(userId, postId);
+    } catch (err) {
+      if (err instanceof UserNotFoundException) {
+        throw new NotFoundException(err.message);
+      }
+      if (err instanceof UserNotFoundException) {
+        throw new NotFoundException(err.message);
+      }
+      if (err instanceof UserNotSameException) {
+        throw new ForbiddenException(err.message);
+      }
+      throw new InternalServerErrorException();
+    }
   }
 }

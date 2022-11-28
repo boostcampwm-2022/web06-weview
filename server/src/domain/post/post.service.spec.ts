@@ -13,7 +13,7 @@ import { UserRepository } from '../user/user.repository';
 import { DataSource } from 'typeorm';
 import { User } from '../user/user.entity';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
-import { UnauthorizeException } from '../../exception/unauthorize.exception';
+import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { Post } from './post.entity';
 
 describe('PostService', () => {
@@ -681,7 +681,7 @@ describe('PostService', () => {
           await service.delete(differentUserId, 1);
           throw new Error();
         } catch (err) {
-          expect(err).toBeInstanceOf(UnauthorizeException);
+          expect(err).toBeInstanceOf(UserNotSameException);
         }
       });
 
