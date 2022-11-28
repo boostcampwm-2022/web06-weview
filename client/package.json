@@ -12,8 +12,6 @@
     "checkTs": "tsc --noEmit"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.13",
     "@tanstack/react-query": "^4.14.5",
