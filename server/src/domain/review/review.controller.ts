@@ -20,8 +20,8 @@ import {
 import { ReviewService } from './review.service';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
-  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -47,6 +47,7 @@ export class ReviewController {
   @ApiNotFoundResponse({
     description: '게시물 or 사용자가 존재하지 않습니다',
   })
+  @ApiBearerAuth('access-token')
   async write(@Req() req: Request, @Body() requestDto: ReviewWriteRequestDto) {
     try {
       const userId = req.user['id'];

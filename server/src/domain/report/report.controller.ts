@@ -16,7 +16,7 @@ import { AccessTokenGuard } from '../auth/access-token.guard';
 import { ReportCreateRequestDto } from './dto/controller-request.dto';
 import { ReportService } from './report.service';
 import {
-  ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
@@ -44,6 +44,7 @@ export class ReportController {
   @ApiConflictResponse({
     description: '이미 해당 게시물에 신고가 이뤄진 상황',
   })
+  @ApiBearerAuth('access-token')
   async create(
     @Req() req: Request,
     @Param('postId') postId: number,

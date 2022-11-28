@@ -28,6 +28,7 @@ import { AuthService } from '../auth/auth.service';
 import { AccessTokenGuard } from '../auth/access-token.guard';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -58,6 +59,7 @@ export class PostController {
   })
   @ApiOkResponse({ description: '올바른 요청입니다' })
   @ApiBadRequestResponse({ description: '잘못된 요청입니다' })
+  @ApiBearerAuth('access-token')
   async inqueryUsingFilter(
     @Query() inqueryDto: InqueryDto,
     @Headers() headers,
@@ -134,6 +136,7 @@ export class PostController {
   @ApiBadRequestResponse({
     description: '잘못된 요청입니다',
   })
+  @ApiBearerAuth('access-token')
   async write(@Req() req: Request, @Body() writeDto: WriteDto) {
     const userId = req.user['id'];
 
@@ -162,6 +165,7 @@ export class PostController {
   @ApiNotFoundResponse({
     description: '유저 혹은 게시물이 존재하지 않습니다',
   })
+  @ApiBearerAuth('access-token')
   async deletePost(@Req() req: Request, @Param('postId') postId: number) {
     try {
       const userId = req.user['id'];

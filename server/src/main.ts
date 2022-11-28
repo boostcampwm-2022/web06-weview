@@ -12,7 +12,6 @@ async function bootstrap() {
     app.set('trust proxy', 1);
   }
 
-  // TODO 쿠키 테스트 찾아보기
   const config = new DocumentBuilder()
     .setTitle('Weview API')
     .setVersion('1.0')

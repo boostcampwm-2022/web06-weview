@@ -77,7 +77,7 @@ export class AuthController {
     }
   }
 
-  // TODO 쿠키 테스트
+  // TODO swagger 쿠키 테스트 찾아보기
   @Get('refresh')
   @UseGuards(RefreshTokenGuard)
   @ApiOperation({
