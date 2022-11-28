@@ -1,8 +1,8 @@
 import React, { FormEvent, useCallback } from "react";
-import CodeEditor from "../../../Code/CodeEditor";
 import SubmitButton from "./SubmitButton/SubmitButton";
 import useModalStore from "@/store/useModalStore";
 import LanguageSelector from "@/components/Modal/WriteModal/WritingForm/LanguageSelector/LanguageSelector";
+import CodeContainer from "@/components/Code/CodeContainer";
 
 const WritingForm = (): JSX.Element => {
   const { openSubmitModal } = useModalStore((state) => ({
@@ -17,7 +17,7 @@ const WritingForm = (): JSX.Element => {
   return (
     <form onSubmit={submitWritings} className="writing-form">
       <LanguageSelector />
-      <CodeEditor />
+      <CodeContainer isEditable={true} />
       <div className="writing-form__buttons">
         {/* <PrettifyButton /> */}
         <SubmitButton />

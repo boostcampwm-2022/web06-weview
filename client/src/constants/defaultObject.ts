@@ -1,4 +1,5 @@
-import { PostInfo } from "@/types/post";
+import { PostInfo, CodeInfo } from "@/types/post";
+import { DEFAULT_LANGUAGE } from "./options";
 
 export const defaultPostInfo: PostInfo = {
   author: {
@@ -17,4 +18,11 @@ export const defaultPostInfo: PostInfo = {
   tags: [],
   title: "",
   updatedAt: "",
+};
+
+export const defaultCodeInfo: CodeInfo = {
+  code: "",
+  language: DEFAULT_LANGUAGE,
+  isEditable: false,
+  setCode: undefined,
 };
