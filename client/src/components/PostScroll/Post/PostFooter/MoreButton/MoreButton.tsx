@@ -1,8 +1,18 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import SvgIconButton from "@/components/CommonButtons/SvgIconButton/SvgIconButton";
 
 const MoreButton = (): JSX.Element => {
-  return <MoreHorizIcon className="post__footer__right-block--btn" />;
+  const handleOpenMore: MouseEventHandler = () => {};
+
+  return (
+    <SvgIconButton
+      Icon={MoreHorizIcon}
+      detail="더보기"
+      onClick={handleOpenMore}
+      className="post__footer__right-block--btn"
+    />
+  );
 };
 
 export default MoreButton;

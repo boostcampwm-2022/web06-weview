@@ -3,6 +3,7 @@ import ForumIcon from "@mui/icons-material/Forum";
 import useCommonModalStore from "@/store/useCommonModalStore";
 import ReviewModal from "@/components/Modal/ReviewModal/ReviewModal";
 import { PostContext } from "@/components/PostScroll/Post/Post";
+import SvgIconButton from "@/components/CommonButtons/SvgIconButton/SvgIconButton";
 
 const ReviewButton = (): JSX.Element => {
   const { id: postId, code, language } = useContext(PostContext);
@@ -13,7 +14,9 @@ const ReviewButton = (): JSX.Element => {
   }, [openModal]);
 
   return (
-    <ForumIcon
+    <SvgIconButton
+      Icon={ForumIcon}
+      detail="리뷰보기"
       onClick={handleOpenReviewModal}
       className="post__footer__left-block--btn"
     />
