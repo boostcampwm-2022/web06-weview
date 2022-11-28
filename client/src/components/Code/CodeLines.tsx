@@ -8,6 +8,7 @@ interface CodeLinesProps {
 
 const CodeLines = ({ code, lineRef }: CodeLinesProps): JSX.Element => {
   const [lineCount, setLineCount] = useState(0);
+
   useEffect(() => {
     setLineCount(getLineCount(code));
   }, [code]);
