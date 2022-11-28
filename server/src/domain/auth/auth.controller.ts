@@ -21,6 +21,7 @@ import {
 import { RefreshTokenGuard } from './refresh-token.guard';
 import {
   ApiBadRequestResponse,
+  ApiCookieAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
@@ -77,7 +78,6 @@ export class AuthController {
     }
   }
 
-  // TODO swagger 쿠키 테스트 찾아보기
   @Get('refresh')
   @UseGuards(RefreshTokenGuard)
   @ApiOperation({
@@ -86,6 +86,7 @@ export class AuthController {
   })
   @ApiUnauthorizedResponse({ description: 'Refresh 토큰이 잘못되었습니다' })
   @ApiOkResponse({ description: '올바른 요청입니다' })
+  @ApiCookieAuth('refreshToken')
   refreshTokens(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
