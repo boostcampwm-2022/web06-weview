@@ -1,8 +1,6 @@
 import { IsString, MinLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class ReportCreateRequestDto {
-  @ApiProperty()
   @IsString({
     message: '신고 사유는 문자열만 가능합니다.',
   })

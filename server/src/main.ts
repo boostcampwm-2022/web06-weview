@@ -15,7 +15,6 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Weview API')
     .setVersion('1.0')
-    // .addTag('메인')
     .addBearerAuth(
       {
         type: 'http',
