@@ -1,5 +1,5 @@
 import axiosInstance from "@/apis/axios";
-import { PostPages, WritingResponse } from "@/types/post";
+import { PostPages, UploadImageProps, WritingResponse } from "@/types/post";
 import { setQueryString } from "@/utils/queryString";
 import useSearchStore from "@/store/useSearchStore";
 import useWritingStore from "@/store/useWritingStore";
@@ -14,21 +14,22 @@ export const fetchPost = async (pageParam: string): Promise<PostPages> => {
   return data;
 };
 
-interface uploadImageProps {
-  url: string;
-  imageFile: string;
-}
-
 export const uploadImage = async ({
-  url,
-  imageFile,
-}: uploadImageProps): Promise<string> => {
-  const { data } = await axiosInstance.put(url, imageFile, {
+  preSignedData,
+  imageUri,
+}: UploadImageProps): Promise<string> => {
+  const payload = new FormData();
+  Object.entries(preSignedData.fields).forEach(([key, value]) => {
+    payload.append(key, value);
+  });
+  payload.append("file", await (await fetch(imageUri)).blob()); // imageURI -> file
+  payload.append("Content-Type", "image/jpeg"); // file type 명시
+  await axiosInstance.post(preSignedData.url, payload, {
     headers: {
-      "Content-Type": "image/jpeg",
+      "Content-Type": "multipart/form-data",
     },
   });
-  return data;
+  return `${preSignedData.url}/${preSignedData.fields.Key}`;
 };
 
 export const postWritingsAPI = async (

@@ -1,26 +1,21 @@
-import React, { useContext, useLayoutEffect, useState } from "react";
+import React, { useContext } from "react";
 import { PostContext } from "@/components/PostScroll/Post/Post";
-import { isEmpty } from "@/utils/typeCheck";
-import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import ProgressiveImage from "@/components/commons/ProgressiveImage/ProgressiveImage";
+import codePlaceholder from "@/assets/progressive-image.jpg";
 
 const PostImageSlider = (): JSX.Element => {
   const { images } = useContext(PostContext);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useLayoutEffect(() => {
-    if (isEmpty(images)) {
-      return;
-    }
-    setIsLoading(false);
-  }, [images]);
 
   return (
     <div className="post__image-slider">
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <img className="post__image-slider--image" src={images[0].src} />
-      )}
+      <ProgressiveImage
+        className="post__image-slider--image"
+        src={images[0].src}
+        placeholder={codePlaceholder}
+        width="100%"
+        height="100%"
+        alt="이미지 설명"
+      />
     </div>
   );
 };

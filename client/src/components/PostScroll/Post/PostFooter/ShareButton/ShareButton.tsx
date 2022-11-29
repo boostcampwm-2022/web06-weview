@@ -1,6 +1,6 @@
 import React, { MouseEventHandler } from "react";
 import ShareIcon from "@mui/icons-material/Share";
-import SvgIconButton from "@/components/CommonButtons/SvgIconButton/SvgIconButton";
+import SvgIconButton from "@/components/commons/SvgIconButton/SvgIconButton";
 
 const ShareButton = (): JSX.Element => {
   const handleShare: MouseEventHandler = () => {

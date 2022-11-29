@@ -1,6 +1,6 @@
 import React, { MouseEventHandler, useState } from "react";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import SvgIconButton from "@/components/CommonButtons/SvgIconButton/SvgIconButton";
+import SvgIconButton from "@/components/commons/SvgIconButton/SvgIconButton";
 
 const primaryColor = "#84cb8d";
 const textColor = "#222222";

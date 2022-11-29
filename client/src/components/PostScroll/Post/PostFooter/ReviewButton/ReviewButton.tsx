@@ -3,7 +3,7 @@ import ForumIcon from "@mui/icons-material/Forum";
 import useCommonModalStore from "@/store/useCommonModalStore";
 import ReviewModal from "@/components/Modal/ReviewModal/ReviewModal";
 import { PostContext } from "@/components/PostScroll/Post/Post";
-import SvgIconButton from "@/components/CommonButtons/SvgIconButton/SvgIconButton";
+import SvgIconButton from "@/components/commons/SvgIconButton/SvgIconButton";
 
 const ReviewButton = (): JSX.Element => {
   const { id: postId, code, language } = useContext(PostContext);

@@ -1,5 +1,5 @@
 import axiosInstance from "./axios";
-import { AccessTokenInfo, MyInfo } from "@/types/auth";
+import { AccessTokenInfo, MyInfo, PreSignedData } from "@/types/auth";
 import axios from "axios";
 import { API_SERVER_URL } from "@/constants/env";
 
@@ -17,9 +17,9 @@ export const logOutAPI = async (): Promise<void> => {
   await axiosInstance.delete("/auth/logout");
 };
 
-export const fetchPreSignedS3Urls = async (
+export const fetchPreSignedData = async (
   imageCount: number
-): Promise<string[]> => {
+): Promise<PreSignedData[]> => {
   const { data } = await axiosInstance.get(
     `${API_SERVER_URL}/auth/s3-url?imageCount=${imageCount}`
   );

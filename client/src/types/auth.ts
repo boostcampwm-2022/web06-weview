@@ -11,3 +11,17 @@ export interface UserInfo {
 }
 
 export interface MyInfo extends AccessTokenInfo, UserInfo {}
+
+export interface PreSignedData {
+  url: string;
+  fields: {
+    Key: string;
+    ACL: string;
+    bucket: string;
+    "X-Amz-Algorithm": string;
+    "X-Amz-Credential": string;
+    "X-Amz-Date": string;
+    "X-Amz-Signature": string;
+    Policy: string;
+  };
+}

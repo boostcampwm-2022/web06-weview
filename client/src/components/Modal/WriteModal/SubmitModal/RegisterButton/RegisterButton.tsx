@@ -4,8 +4,8 @@ import useCodeEditorStore from "@/store/useCodeEditorStore";
 import { postWritingsAPI, uploadImage } from "@/apis/post";
 import useModalStore from "@/store/useModalStore";
 import { isEmpty } from "@/utils/typeCheck";
-import { fetchPreSignedS3Urls } from "@/apis/auth";
-import sampleImage from "../../../../../../public/progressive-image.jpg";
+import { fetchPreSignedData } from "@/apis/auth";
+import sampleImage from "@/assets/progressive-image.jpg";
 
 const RegisterButton = (): JSX.Element => {
   const essentialWritingStates = useWritingStore((state) => [
@@ -31,16 +31,16 @@ const RegisterButton = (): JSX.Element => {
     );
 
   // 이미지들을 S3 에 등록하고 등록된 S3 URL 을 반환
-  const uploadImagesToS3 = async (images: string[]): Promise<string[]> => {
-    const preSignedS3Urls = await fetchPreSignedS3Urls(images.length);
-    if (images.length !== preSignedS3Urls.length) {
+  const uploadImagesToS3 = async (imageUris: string[]): Promise<string[]> => {
+    const preSignedS3Urls = await fetchPreSignedData(imageUris.length);
+    if (imageUris.length !== preSignedS3Urls.length) {
       throw new Error("이미지 업로드를 위한 URL 을 불러오는데 실패했습니다.");
     }
     return await Promise.all(
-      images
-        .map((image, index) => ({
-          url: preSignedS3Urls[index],
-          imageFile: image,
+      imageUris
+        .map((uri, index) => ({
+          preSignedData: preSignedS3Urls[index],
+          imageUri: uri,
         }))
         .map(uploadImage)
     );

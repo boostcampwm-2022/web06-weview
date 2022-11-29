@@ -1,6 +1,6 @@
 import React, { MouseEventHandler, useState } from "react";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import SvgIconButton from "@/components/CommonButtons/SvgIconButton/SvgIconButton";
+import SvgIconButton from "@/components/commons/SvgIconButton/SvgIconButton";
 
 const errorColor = "#f45452";
 const textColor = "#222222";
