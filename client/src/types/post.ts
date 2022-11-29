@@ -43,18 +43,7 @@ export interface WritingResponse {
   message: string;
 }
 
-export interface WritingRequest {
-  title: string;
-  category: string;
-  content: string;
-  code: string;
-  language: string;
-  images: string[];
-  tags?: string[];
-  lineCount: number;
-}
-
-export interface uploadImageProps {
+export interface UploadImageProps {
   preSignedData: PreSignedData;
   imageUri: string;
 }

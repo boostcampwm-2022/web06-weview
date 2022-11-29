@@ -1,14 +1,17 @@
+// fonts
 @import url("https://webfontworld.github.io/gmarket/GmarketSans.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/styles/github.min.css");
-@import "./src/components/MainNav/MainNav.scss";
-@import "components/Modal/WriteModal/WriteModal.scss";
-@import "./pages/Main/Main.scss";
-@import "./src/components/Modal/ModalContainer/ModalContainer";
-@import "src/components/Modal/ModalWrapper/ModalWrapper.scss";
-@import "@/styles/_modal.scss";
-@import "./components/CommonButtons/SvgIconButton/SvgIconButton.scss";
+// pages
+@import "pages/Main/Main";
+// common components
+@import "components/commons/SvgIconButton/SvgIconButton";
+@import "styles/_modal";
+// components
+@import "src/components/MainNav/MainNav";
+@import "components/Modal/WriteModal/WriteModal";
+@import "components/Modal/ModalContainer/ModalContainer";
+@import "components/Modal/ModalWrapper/ModalWrapper";
 
-html,
 body {
   height: 100%;
   padding: 0;

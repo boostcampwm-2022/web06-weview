@@ -4,7 +4,7 @@ import { postWritingsAPI, uploadImage } from "@/apis/post";
 import useModalStore from "@/store/useModalStore";
 import { isEmpty } from "@/utils/typeCheck";
 import { fetchPreSignedData } from "@/apis/auth";
-import sampleImage from "../../../../../../public/progressive-image.jpg";
+import sampleImage from "@/assets/progressive-image.jpg";
 
 const RegisterButton = (): JSX.Element => {
   const essentialStates = useWritingStore((state) => [
