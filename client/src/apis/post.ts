@@ -1,11 +1,10 @@
 import axiosInstance from "@/apis/axios";
-import { PostPages, WritingResponse } from "@/types/post";
+import { PostPages, uploadImageProps, WritingResponse } from "@/types/post";
 import { setQueryString } from "@/utils/queryString";
 import useSearchStore from "@/store/useSearchStore";
 import useWritingStore from "@/store/useWritingStore";
 import { getLineCount } from "@/utils/code";
 import { preventXSS } from "@/utils/regExpression";
-import { PreSignedData } from "@/types/auth";
 
 export const fetchPost = async (pageParam: string): Promise<PostPages> => {
   const { searchQuery } = useSearchStore.getState();
@@ -15,17 +14,12 @@ export const fetchPost = async (pageParam: string): Promise<PostPages> => {
   return data;
 };
 
-interface uploadImageProps {
-  preSignedData: PreSignedData;
-  imageFile: string;
-}
-
 export const uploadImage = async ({
   preSignedData,
-  imageFile,
+  imageUri,
 }: uploadImageProps): Promise<string> => {
   const payload = new FormData();
-  payload.append("file", imageFile);
+  payload.append("file", await (await fetch(imageUri)).blob()); // imageURI -> file
   payload.append("Content-Type", "image/jpeg");
   Object.entries(preSignedData.fields).forEach(([key, value]) => {
     payload.append(key, value);

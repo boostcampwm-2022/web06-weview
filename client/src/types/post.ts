@@ -1,5 +1,5 @@
 // GET /api/post API 명세를 보고 만든 타입
-import { UserInfo } from "@/types/auth";
+import { PreSignedData, UserInfo } from "@/types/auth";
 
 export interface Image {
   src: string;
@@ -52,4 +52,9 @@ export interface WritingRequest {
   images: string[];
   tags?: string[];
   lineCount: number;
+}
+
+export interface uploadImageProps {
+  preSignedData: PreSignedData;
+  imageUri: string;
 }

@@ -25,16 +25,16 @@ const RegisterButton = (): JSX.Element => {
     essentialStates.some((state) => isEmpty(state));
 
   // 이미지들을 S3 에 등록하고 등록된 S3 URL 을 반환
-  const uploadImagesToS3 = async (images: string[]): Promise<string[]> => {
-    const preSignedS3Urls = await fetchPreSignedData(images.length);
-    if (images.length !== preSignedS3Urls.length) {
+  const uploadImagesToS3 = async (imageUris: string[]): Promise<string[]> => {
+    const preSignedS3Urls = await fetchPreSignedData(imageUris.length);
+    if (imageUris.length !== preSignedS3Urls.length) {
       throw new Error("이미지 업로드를 위한 URL 을 불러오는데 실패했습니다.");
     }
     return await Promise.all(
-      images
-        .map((image, index) => ({
+      imageUris
+        .map((uri, index) => ({
           preSignedData: preSignedS3Urls[index],
-          imageFile: image,
+          imageUri: uri,
         }))
         .map(uploadImage)
     );
