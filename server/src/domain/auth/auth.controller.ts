@@ -145,10 +145,21 @@ export class AuthController {
       const presigned = s3.createPresignedPost({
         Bucket: 'weview-image-dev',
         Fields: {
-          Key: randomUUID() + Date.now() + '.jpeg',
+          Key:
+            new Date().toISOString().replace(/[^0-9TZ]/g, '') +
+            randomUUID() +
+            '.jpeg',
           ACL: 'public-read',
         },
         Expires: 60,
+        Conditions: [
+          [
+            'content-length-range',
+            0,
+            this.configService.get<number>('UPLOAD_IMAGE_SIZE'),
+          ],
+          ['eq', '$Content-Type', 'image/jpeg'],
+        ],
       });
 
       arr.push(presigned);
