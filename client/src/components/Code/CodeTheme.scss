@@ -79,9 +79,9 @@
 }
 
 .hljs-section {
+  font-weight: bold;
   /* prettylights-syntax-markup-heading */
   color: #1f6feb;
-  font-weight: bold;
 }
 
 .hljs-bullet {
@@ -90,15 +90,15 @@
 }
 
 .hljs-emphasis {
+  font-style: italic;
   /* prettylights-syntax-markup-italic */
   color: #c9d1d9;
-  font-style: italic;
 }
 
 .hljs-strong {
+  font-weight: bold;
   /* prettylights-syntax-markup-bold */
   color: #c9d1d9;
-  font-weight: bold;
 }
 
 .hljs-addition {

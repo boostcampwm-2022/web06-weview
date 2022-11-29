@@ -11,8 +11,8 @@
 html,
 body {
   height: 100%;
-  margin: 0;
   padding: 0;
+  margin: 0;
   overflow: hidden;
   font-size: $root-em; // rem
 }
@@ -29,8 +29,6 @@ body {
 }
 
 input {
-  -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
 }
 
@@ -43,19 +41,19 @@ button {
 }
 
 select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
 }
 
 ::-webkit-scrollbar {
   width: 0.65em;
+
   &-thumb {
     background-color: $text-color;
     background-clip: padding-box;
     border: 2px solid transparent;
     border-radius: 10px;
   }
+
   &-track {
     background-color: $line-color;
     border-radius: 10px;

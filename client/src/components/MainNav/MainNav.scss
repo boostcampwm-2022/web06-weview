@@ -1,4 +1,4 @@
-@import 'src/constants/_library.scss';
+@import "src/constants/_library.scss";
 @import "@/styles/_global-styles.scss";
 @import "@/styles/_responsive.scss";
 
@@ -7,11 +7,12 @@
 @import "./Profile/Profile.scss";
 
 @include mobile {
-   .nav {
-   }
-   .hidden-main {
-   }
- }
+  .nav {
+  }
+
+  .hidden-main {
+  }
+}
 
 @include tablet {
   .nav {
@@ -23,10 +24,9 @@
     display: flex;
     flex-direction: column;
     width: $main-nav-width;
-    padding: 0.5em 2em 0.5em 2em;
+    padding: 0.5em 2em;
     border: 1px solid $line-color;
     border-top: 0.25rem solid $line-color;
     border-bottom: 0.25rem solid $line-color;
   }
 }
-

@@ -6,11 +6,11 @@
   justify-content: center;
   width: 4.5rem;
   height: 2.3rem;
-  font-weight: normal;
   font-size: 1rem;
+  font-weight: normal;
+  cursor: pointer;
   background: $weview-off-white;
   border-radius: 0.9em;
-  cursor: pointer;
 }
 
 @mixin weview-button--bold($width, $height) {
@@ -23,6 +23,7 @@
   @include weview-button;
   color: $primary;
   border: 1px solid $primary;
+
   &:hover {
     color: $weview-off-white;
     background-color: $primary;
@@ -42,6 +43,7 @@
   @include weview-button;
   color: $error;
   border: 1px solid $error;
+
   &:hover {
     color: $weview-off-white;
     background-color: $error;
@@ -53,11 +55,12 @@
   height: 1.8rem;
   margin-top: 1rem;
   font-size: 0.8rem;
+  cursor: pointer;
   background: none;
   background: none;
   border: 1px solid $line-color;
   border-radius: 0.2rem;
-  cursor: pointer;
+
   &:focus {
     color: $line-color;
   }

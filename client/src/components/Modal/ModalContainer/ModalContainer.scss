@@ -9,16 +9,16 @@
   right: 0;
   left: 0;
   z-index: $modal-content-z-index;
+  box-sizing: border-box;
 
   display: flex;
-  box-sizing: border-box;
   width: 100%;
   max-width: $desktop-main-width;
   height: 100%;
-  margin: 0 auto;
 
   // 모달 내용들은 공통으로 2rem 패딩 내에 존재
   padding: 2rem;
+  margin: 0 auto;
   background-color: $weview-off-white;
   border: 0.25rem solid $line-color;
   border-radius: 1rem;
@@ -29,6 +29,7 @@
     visibility: visible;
     animation: modal-fade-in 600ms cubic-bezier(0.86, 0, 0.3, 1);
   }
+
   &.close {
     z-index: -1;
     visibility: hidden;

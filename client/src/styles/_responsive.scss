@@ -2,18 +2,18 @@
 
 @mixin device {
   @media screen and (min-width: $device-min-width) {
-    @content
+    @content;
   }
 }
 
 @mixin tablet {
   @media screen and (min-width: $tablet-min-width) {
-    @content
+    @content;
   }
 }
 
 @mixin mobile {
   @media screen and (min-width: $mobile-min-width) {
-    @content
+    @content;
   }
 }

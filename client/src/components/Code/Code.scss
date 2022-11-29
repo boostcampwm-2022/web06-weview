@@ -7,41 +7,46 @@ $github-dark-font-color: #c9d1d9;
 
 .code {
   position: relative;
-  display: flex;
   box-sizing: border-box;
+  display: flex;
   width: $device-editor-width;
   min-width: $device-editor-width; // review modal 에서 가로 정렬 기준 flex-shrink: 0 역할
   height: 100%;
   border-radius: 0.25rem;
+
   &__textarea,
   &__present {
     left: $line-width;
     width: calc(100% - $line-width);
     color: $weview-white;
   }
+
   &__textarea,
   &__present,
   &__lines {
     position: absolute;
     box-sizing: border-box;
     height: 100%;
-    margin: 0;
     padding: 0.5rem;
+    margin: 0;
     font-size: 0.75rem;
     white-space: pre-wrap;
+
     &::-webkit-scrollbar {
       display: none;
     }
   }
+
   &__textarea {
     z-index: 1;
     overflow-y: scroll;
     color: transparent;
+    resize: none;
     background-color: transparent;
     border: none;
-    resize: none;
     caret-color: $alert;
   }
+
   &__present {
     z-index: 0;
     overflow-x: hidden;
