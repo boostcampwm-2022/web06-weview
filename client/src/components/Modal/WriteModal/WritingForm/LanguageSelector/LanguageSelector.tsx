@@ -1,10 +1,10 @@
 import React, { useCallback, ChangeEvent } from "react";
 import { LANGUAGES } from "@/constants/options";
 import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
-import useWritingStore from "@/store/useWritingStore";
+import useCodeEditorStore from "@/store/useCodeEditorStore";
 
 const LanguageSelector = (): JSX.Element => {
-  const { selectedLanguage, setLanguage } = useWritingStore((state) => ({
+  const { selectedLanguage, setLanguage } = useCodeEditorStore((state) => ({
     selectedLanguage: state.language,
     setLanguage: state.setLanguage,
   }));
@@ -19,7 +19,7 @@ const LanguageSelector = (): JSX.Element => {
         className="language__select"
         value={selectedLanguage}
       >
-        {LANGUAGES.map((language, idx) => (
+        {LANGUAGES.map((language) => (
           <option key={language} value={language}>
             {language}
           </option>

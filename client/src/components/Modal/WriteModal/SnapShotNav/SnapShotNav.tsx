@@ -1,8 +1,8 @@
 import React from "react";
-import useWritingStore from "@/store/useWritingStore";
+import useCodeEditorStore from "@/store/useCodeEditorStore";
 
 const SnapShotNav = (): JSX.Element => {
-  const { images } = useWritingStore((state) => ({
+  const { images } = useCodeEditorStore((state) => ({
     images: state.images,
   }));
 

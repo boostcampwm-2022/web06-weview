@@ -2,19 +2,61 @@
 @import "ReviewScroll/ReviewForm/ReviewForm.scss";
 @import "./ReviewScroll/ReviewScroll.scss";
 
+$code-line-width: 2.5rem;
+$review-code-width: calc($device-editor-width - $code-line-width);
+$github-dark-font-color: #c9d1d9;
+
 .review-modal {
   display: flex;
-  gap: $device-review-modal-gap;
 
   width: 100%;
   height: 100%;
 
+  &__code {
+    position: relative;
+    box-sizing: border-box;
+    width: $review-code-width;
+    min-width: $review-code-width;
+    height: 100%;
+    background-color: $codeblock-color;
+    border-radius: 0.25rem;
+
+    &--lines,
+    &--view {
+      position: absolute;
+      box-sizing: border-box;
+      height: 100%;
+      padding: 0.5rem;
+      margin: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      font-size: 0.75rem;
+      white-space: pre-wrap;
+    }
+
+    &--view {
+      left: $code-line-width;
+      color: $github-dark-font-color;
+    }
+
+    &--lines {
+      top: 0;
+      left: 0;
+      z-index: 3;
+      width: $code-line-width;
+      color: $weview-white;
+      text-align: end;
+      border-right: 1px solid $line-color;
+    }
+  }
+
   &__review-container {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-
     width: 100%;
     max-width: $device-review-max-width;
     height: 100%;
+    margin-left: $device-review-modal-gap;
   }
 }
