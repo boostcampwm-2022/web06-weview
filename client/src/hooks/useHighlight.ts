@@ -27,7 +27,7 @@ const useHighlight = (highlightArgs: HighlightArgs): string => {
       wrapHTML,
       setHighlightedHTML
     );
-  }, [highlightArgs]);
+  }, [highlightArgs.code, highlightArgs.language]);
 
   return highlightedHTML;
 };
