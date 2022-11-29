@@ -30,16 +30,14 @@ import {
 import { TokenNotFoundException } from '../../exception/token-not-found.exception';
 import { TokenNotPermittedException } from '../../exception/token-not-permitted.exception';
 import { AccessTokenGuard } from './access-token.guard';
-import { ConfigService } from '@nestjs/config';
-import { S3 } from 'aws-sdk';
-import { randomUUID } from 'crypto';
+import { NcpObjectStorage } from 'src/domain/auth/ncp-object-storage';
 
 @Controller('auth')
 @ApiTags('인증 API')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly configService: ConfigService,
+    private readonly ncpObjectStorage: NcpObjectStorage,
   ) {}
 
   @Get('github')
@@ -125,42 +123,9 @@ export class AuthController {
   @Get('/s3-url')
   @UseGuards(AccessTokenGuard)
   getPresignedUrl(@Query('imageCount') imageCount: number) {
-    const endpoint = 'https://kr.object.ncloudstorage.com';
-    const region = 'kr-standard';
-    const access_key = this.configService.get('NCP_ACCESS_KEY');
-    const secret_key = this.configService.get('NCP_SECRET_KEY');
-
-    const s3 = new S3({
-      endpoint,
-      region,
-      credentials: {
-        accessKeyId: access_key,
-        secretAccessKey: secret_key,
-      },
-      signatureVersion: 'v4',
-    });
-
     const arr = [];
     for (let i = 1; i <= imageCount; i++) {
-      const presigned = s3.createPresignedPost({
-        Bucket: 'weview-image-dev',
-        Fields: {
-          Key:
-            new Date().toISOString().replace(/[^0-9TZ]/g, '') +
-            randomUUID() +
-            '.jpeg',
-          ACL: 'public-read',
-        },
-        Expires: 60,
-        Conditions: [
-          [
-            'content-length-range',
-            0,
-            this.configService.get<number>('UPLOAD_IMAGE_SIZE'),
-          ],
-          ['eq', '$Content-Type', 'image/jpeg'],
-        ],
-      });
+      const presigned = this.ncpObjectStorage.createPresignedPost();
 
       arr.push(presigned);
     }
