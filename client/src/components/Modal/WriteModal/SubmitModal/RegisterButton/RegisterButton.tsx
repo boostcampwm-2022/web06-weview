@@ -1,68 +1,69 @@
-import React, { useCallback } from "react";
+import React from "react";
 import useWritingStore from "@/store/useWritingStore";
-import { preventXSS } from "@/utils/regExpression";
-import { postWritingsAPI } from "@/apis/post";
+import { postWritingsAPI, uploadImage } from "@/apis/post";
 import useModalStore from "@/store/useModalStore";
 import { isEmpty } from "@/utils/typeCheck";
-import { getLineCount } from "@/utils/code";
+import { fetchPreSignedS3Urls } from "@/apis/auth";
+import sampleImage from "../../../../../../public/progressive-image.jpg";
 
 const RegisterButton = (): JSX.Element => {
-  const { title, language, code, content, images, tags, resetWritingStore } =
-    useWritingStore((state) => ({
-      title: state.title,
-      language: state.language,
-      code: state.code,
-      content: state.content,
-      images: state.images,
-      tags: state.tags,
-      setImages: state.setImages,
-      setLanguage: state.setLanguage,
-      resetWritingStore: state.reset,
-    }));
-
+  const essentialStates = useWritingStore((state) => [
+    state.title,
+    state.content,
+    state.language,
+    state.code,
+  ]);
+  const resetWritingStore = useWritingStore((state) => state.reset);
   const { closeWritingModal, closeSubmitModal } = useModalStore((state) => ({
     isOpened: state.isSubmitModalOpened,
     closeSubmitModal: state.closeSubmitModal,
     closeWritingModal: state.closeWritingModal,
   }));
 
-  const submitWholeWriting = useCallback(() => {
-    // TODO -> 없는 정보 예외 처리
-    if (
-      isEmpty(title) ||
-      isEmpty(content) ||
-      isEmpty(language) ||
-      isEmpty(code)
-    ) {
-      alert("필수 정보들을 입력해주세요!");
-      return;
+  // 제출 불가능 상태 판단
+  const isInvalidState = (): boolean =>
+    essentialStates.some((state) => isEmpty(state));
+
+  // 이미지들을 S3 에 등록하고 등록된 S3 URL 을 반환
+  const uploadImagesToS3 = async (images: string[]): Promise<string[]> => {
+    const preSignedS3Urls = await fetchPreSignedS3Urls(images.length);
+    if (images.length !== preSignedS3Urls.length) {
+      throw new Error("이미지 업로드를 위한 URL 을 불러오는데 실패했습니다.");
     }
-    postWritingsAPI({
-      category: "리뷰요청",
-      title,
-      content,
-      code: preventXSS(code),
-      language,
-      images: [
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReFASlWHLC8RC6TAfXDIbMeUEqB3TfxvuFZg&usqp=CAU",
-      ],
-      tags,
-      lineCount: getLineCount(code),
-    })
-      .then((res) => {
-        alert(res.message);
+    return await Promise.all(
+      images
+        .map((image, index) => ({
+          url: preSignedS3Urls[index],
+          imageFile: image,
+        }))
+        .map(uploadImage)
+    );
+  };
+
+  // 서버에 Post 정보 등록 요청
+  const handleSubmit = (): void => {
+    void (async () => {
+      if (isInvalidState()) {
+        return alert("필수 정보들을 입력해주세요!");
+      }
+      try {
+        // TODO: 생성된 images 를 WritingStore 에서 가져오기
+        const sampleImages: string[] = [sampleImage, sampleImage, sampleImage];
+        const imageUrls = await uploadImagesToS3(sampleImages);
+        const response = await postWritingsAPI(imageUrls);
+        alert(response.message);
         resetWritingStore();
         closeWritingModal();
         closeSubmitModal();
-      })
-      .catch((err: any) => console.error(err));
-  }, [title, content, code, language, images, tags]);
+      } catch (e) {
+        console.log(e);
+        alert(`전송 중 오류가 발생했습니다.`);
+      }
+    })();
+  };
 
   return (
-    <button
-      onClick={submitWholeWriting}
-      className="submit-modal__button--register"
-    >
+    <button onClick={handleSubmit} className="submit-modal__button--register">
       등록
     </button>
   );
