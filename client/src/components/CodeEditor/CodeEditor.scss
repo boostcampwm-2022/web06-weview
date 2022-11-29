@@ -1,6 +1,6 @@
 @import "../../constants/library";
-@import "@/styles/_global-styles";
-@import "@/components/Code/CodeTheme";
+@import "@/styles/_global-styles.scss";
+@import "@/components/CodeViewer/CodeTheme.scss";
 
 $line-width: 2.5rem;
 $github-dark-font-color: #c9d1d9;
@@ -27,7 +27,6 @@ $github-dark-font-color: #c9d1d9;
     position: absolute;
     box-sizing: border-box;
     height: 100%;
-    padding: 0.5rem;
     margin: 0;
     font-size: 0.75rem;
     white-space: pre-wrap;
