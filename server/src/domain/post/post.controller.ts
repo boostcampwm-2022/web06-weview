@@ -35,6 +35,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
 import { UserNotSameException } from '../../exception/user-not-same.exception';
@@ -53,11 +54,10 @@ export class PostController {
     private readonly authService: AuthService,
   ) {}
 
+  /**
+   * 검색조건에 맞는 최신 데이터를 가져옵니다
+   */
   @Get()
-  @ApiOperation({
-    summary: '조회',
-    description: '검색조건에 맞는 최신 데이터를 가져옵니다',
-  })
   @ApiOkResponse({ description: '올바른 요청입니다' })
   async inqueryUsingFilter(
     @Query() inqueryDto: InqueryDto,
@@ -116,19 +116,19 @@ export class PostController {
     }
   }
 
+  /**
+   * 게시물을 작성합니다
+   */
   @Post()
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({
-    summary: '작성',
-    description: '게시물을 작성합니다',
-  })
   @ApiCreatedResponse({
     description: '게시물 작성에 성공했습니다',
   })
   @ApiNotFoundResponse({
     description: '해당 유저는 존재하지 않습니다',
   })
+  @ApiUnauthorizedResponse()
   async write(@Req() req: Request, @Body() writeDto: WriteDto) {
     try {
       const userId = req.user['id'];
@@ -145,13 +145,12 @@ export class PostController {
     }
   }
 
+  /**
+   * 게시물을 삭제합니다
+   */
   @Delete(':postId')
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({
-    summary: '삭제',
-    description: '게시물을 삭제합니다',
-  })
   @ApiOkResponse({ description: '올바른 요청입니다' })
   @ApiForbiddenResponse({
     description: '삭제할 권한이 존재하지 않습니다',
@@ -159,6 +158,7 @@ export class PostController {
   @ApiNotFoundResponse({
     description: '유저 혹은 게시물이 존재하지 않습니다',
   })
+  @ApiUnauthorizedResponse()
   async deletePost(@Req() req: Request, @Param('postId') postId: number) {
     try {
       const userId = req.user['id'];
