@@ -2,6 +2,7 @@ import axiosInstance from "./axios";
 import { AccessTokenInfo, MyInfo } from "@/types/auth";
 import axios from "axios";
 import { API_SERVER_URL } from "@/constants/env";
+
 export const githubLogInAPI = async (code: string): Promise<MyInfo> => {
   const { data } = await axiosInstance(`/auth/github?code=${code}`);
   return data;
@@ -14,4 +15,13 @@ export const tokenRefreshAPI = async (): Promise<AccessTokenInfo> => {
 
 export const logOutAPI = async (): Promise<void> => {
   await axiosInstance.delete("/auth/logout");
+};
+
+export const fetchPreSignedS3Urls = async (
+  imageCount: number
+): Promise<string[]> => {
+  const { data } = await axiosInstance.get(
+    `${API_SERVER_URL}/auth/s3-url?imageCount=${imageCount}`
+  );
+  return data;
 };

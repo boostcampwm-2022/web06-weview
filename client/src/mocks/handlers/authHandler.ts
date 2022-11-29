@@ -24,4 +24,11 @@ export const authHandler = [
       })
     );
   }),
+  rest.get(`${baseUrl}/auth/s3-url`, (req, res, ctx) => {
+    const count = req.url.searchParams.get("imageCount");
+    return res(
+      ctx.status(200),
+      ctx.json(Array.from({ length: Number(count) }, () => "url"))
+    );
+  }),
 ];
