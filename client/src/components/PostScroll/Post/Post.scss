@@ -4,13 +4,13 @@
 $post-inline-padding: 0.75rem;
 
 .post {
+
+  box-sizing: border-box;
+  box-sizing: border-box;
+  box-sizing: border-box;
   // 반응형 레이아웃
   display: grid;
   grid-template-rows: 12fr 100fr 28fr 15fr; // 가로:세로 = 1:1.54 비율 기준
-
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
   width: 100%;
   height: $main-post-height;
 
@@ -23,19 +23,19 @@ $post-inline-padding: 0.75rem;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
   &__title {
+
+    box-sizing: border-box;
     display: flex;
     grid-row: 1;
     align-items: center;
     justify-content: space-between;
-
-    box-sizing: border-box;
     width: 100%;
     height: 100%;
+    padding-inline: 0.75rem 0.75rem;
     overflow: hidden;
 
     // 아래 구분선
     border-bottom: 1px solid $line-color;
-    padding-inline: 0.75rem 0.75rem;
 
     &__author-profile {
       display: flex;
@@ -47,9 +47,10 @@ $post-inline-padding: 0.75rem;
 
       &--image {
         height: 80%;
-        object-fit: contain;
         border-radius: 50%;
+        object-fit: contain;
       }
+
       &--username {
         font-size: 0.75rem;
       }
@@ -75,14 +76,14 @@ $post-inline-padding: 0.75rem;
   }
 
   &__body {
+
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     grid-row: 3;
     gap: 0.35rem;
     align-items: flex-start;
     justify-content: flex-start;
-
-    box-sizing: border-box;
     width: 100%;
     height: 100%;
     padding: $post-inline-padding;
@@ -105,8 +106,8 @@ $post-inline-padding: 0.75rem;
       &--time-stamp {
         width: fit-content;
         font-size: 0.75rem;
-        white-space: nowrap;
         text-align: left;
+        white-space: nowrap;
       }
     }
 
@@ -116,16 +117,16 @@ $post-inline-padding: 0.75rem;
   }
 
   &__footer {
+
+    box-sizing: border-box;
     display: flex;
     grid-row: 4;
     align-items: center;
     justify-content: space-between;
-
-    box-sizing: border-box;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     padding-inline: $post-inline-padding $post-inline-padding;
+    overflow: hidden;
 
     &__left-block {
       display: flex;

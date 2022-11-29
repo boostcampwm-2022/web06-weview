@@ -28,6 +28,7 @@ $detail-font-size: 0.75rem;
       font-size: $icon-hover-size !important;
       animation: fade-in-icon;
     }
+
     & .svg-icon-button__detail {
       opacity: 0;
       animation: fade-out-text;
@@ -39,6 +40,7 @@ $detail-font-size: 0.75rem;
   from {
     font-size: $icon-default-size;
   }
+
   to {
     font-size: $icon-hover-size;
   }
@@ -48,6 +50,7 @@ $detail-font-size: 0.75rem;
   from {
     opacity: 1;
   }
+
   to {
     opacity: 0;
   }

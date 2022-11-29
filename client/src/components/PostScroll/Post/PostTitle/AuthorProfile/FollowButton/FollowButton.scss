@@ -12,10 +12,11 @@
     width: fit-content;
     height: 1.5rem;
 
-    color: $line-color !important;
-
     font-size: 0.75rem;
+
+    color: $line-color !important;
     border: 1px solid $line-color;
+
     &:hover {
       color: $weview-off-white !important;
       background-color: $line-color;

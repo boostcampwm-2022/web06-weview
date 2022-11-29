@@ -9,10 +9,10 @@ $review-form-header-height: 2.5rem;
 
 .review {
   position: relative;
-  display: flex;
-  gap: 1rem;
 
   box-sizing: border-box;
+  display: flex;
+  gap: 1rem;
 
   width: 100%;
   height: auto;
@@ -25,13 +25,15 @@ $review-form-header-height: 2.5rem;
     flex-shrink: 0;
     width: 1.5rem;
     height: 1.5rem;
+
     &--item {
       width: 100%;
       height: 100%;
-      object-fit: fill;
       border-radius: 9999px;
+      object-fit: fill;
     }
   }
+
   &__balloon {
     position: relative;
 
@@ -41,11 +43,11 @@ $review-form-header-height: 2.5rem;
     border-radius: $review-radius;
 
     &__top {
+
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: space-between;
-
-      box-sizing: border-box;
 
       width: 100%;
       height: $review-form-header-height;
@@ -58,10 +60,12 @@ $review-form-header-height: 2.5rem;
       &--time {
         font-size: 0.75rem;
       }
+
       &--nickname {
         font-weight: bold;
       }
     }
+
     &__content {
       padding: $review-padding;
     }

@@ -1,17 +1,17 @@
-@import '../../../../../constants/library';
+@import "../../../../../constants/library";
 
-.content-textarea{
-  margin-top: 0.25rem;
+.content-textarea {
   width: 80%;
   height: 30%;
+  padding: 0.5em;
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  resize: none;
   border: 1px solid $line-color;
   border-radius: 0.25rem;
-  padding: 0.5em;
-  font-size: 1rem;
   word-spacing: -4px;
-  resize: none;
 }
 
-.content-label{
+.content-label {
   font-size: 0.8rem;
 }

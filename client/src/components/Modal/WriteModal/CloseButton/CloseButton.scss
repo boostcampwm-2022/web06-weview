@@ -1,19 +1,19 @@
 @import "../../../../constants/library";
 
-.close-btn{
-  right: 1.5em;
+.close-btn {
+  position: absolute;
   top: 1.5em;
+  right: 1.5em;
   width: 4em;
   height: 4em;
-  position: absolute;
   cursor: pointer;
+  border-spacing: 0;
   background: none;
   border: none;
-  border-spacing: 0;
 
-  &__icon{
-    color: $error;
+  &__icon {
     width: 2em !important;
     height: 2em !important;
+    color: $error;
   }
 }

@@ -1,36 +1,37 @@
-@import 'src/constants/_library.scss';
+@import "src/constants/_library.scss";
 @import "../../styles/global-styles";
 @import "@/styles/_responsive.scss";
 
 @mixin main-responsive($width, $gap) {
-  width: $width;
   gap: $gap;
+  width: $width;
 }
 
 @mixin main-common {
   display: flex;
   align-items: stretch;
   justify-content: center;
-  margin: 0 auto;
   height: 100%;
+  margin: 0 auto;
   color: $text-color;
 }
 
 @mixin main-fade-in {
+  opacity: 1;
   transition: 1s all ease;
   transform: translateY(0);
-  opacity: 1;
 }
 
 @mixin main-fade-out {
-  transform: translateY(-100%);
   opacity: 0;
   transition: 1s all ease;
+  transform: translateY(-100%);
 }
 
 @include mobile {
   .main {
   }
+
   .hidden-main {
   }
 }
@@ -38,6 +39,7 @@
 @include tablet {
   .main {
   }
+
   .hidden-main {
   }
 }
@@ -47,6 +49,7 @@
     @include main-common;
     @include main-responsive($desktop-main-width, $main-gap);
   }
+
   .hidden-main {
     @include main-common;
     @include main-responsive($desktop-main-width, $main-gap);
