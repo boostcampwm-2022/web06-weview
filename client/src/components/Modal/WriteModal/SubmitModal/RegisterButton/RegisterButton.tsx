@@ -1,5 +1,6 @@
 import React from "react";
 import useWritingStore from "@/store/useWritingStore";
+import useCodeEditorStore from "@/store/useCodeEditorStore";
 import { postWritingsAPI, uploadImage } from "@/apis/post";
 import useModalStore from "@/store/useModalStore";
 import { isEmpty } from "@/utils/typeCheck";
@@ -7,11 +8,14 @@ import { fetchPreSignedS3Urls } from "@/apis/auth";
 import sampleImage from "../../../../../../public/progressive-image.jpg";
 
 const RegisterButton = (): JSX.Element => {
-  const essentialStates = useWritingStore((state) => [
+  const essentialWritingStates = useWritingStore((state) => [
     state.title,
     state.content,
-    state.language,
+  ]);
+  const essentialCodeStates = useCodeEditorStore((state) => [
     state.code,
+    state.language,
+    state.images,
   ]);
   const resetWritingStore = useWritingStore((state) => state.reset);
   const { closeWritingModal, closeSubmitModal } = useModalStore((state) => ({
@@ -22,7 +26,9 @@ const RegisterButton = (): JSX.Element => {
 
   // 제출 불가능 상태 판단
   const isInvalidState = (): boolean =>
-    essentialStates.some((state) => isEmpty(state));
+    [...essentialWritingStates, ...essentialCodeStates].some((state) =>
+      isEmpty(state)
+    );
 
   // 이미지들을 S3 에 등록하고 등록된 S3 URL 을 반환
   const uploadImagesToS3 = async (images: string[]): Promise<string[]> => {
