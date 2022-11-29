@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import hljs from "highlight.js";
-import { formatHighlightedHTML } from "@/utils/code";
+import {
+  chunkHTML,
+  formatHighlightedHTML,
+  splitHTML,
+  wrapHTML,
+} from "@/utils/code";
 import { pipe } from "@/utils/functional";
 
 interface HighlightArgs {
@@ -17,9 +22,12 @@ const useHighlight = (highlightArgs: HighlightArgs): string => {
       ({ code, language }: HighlightArgs) =>
         hljs.highlight(code, { language }).value,
       formatHighlightedHTML,
+      splitHTML,
+      chunkHTML,
+      wrapHTML,
       setHighlightedHTML
     );
-  }, [highlightArgs]);
+  }, [highlightArgs.code, highlightArgs.language]);
 
   return highlightedHTML;
 };

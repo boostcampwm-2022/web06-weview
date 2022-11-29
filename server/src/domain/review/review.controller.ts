@@ -26,6 +26,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
@@ -34,15 +35,15 @@ import { PostNotFoundException } from '../../exception/post-not-found.exception'
 @ApiTags('리뷰 API')
 @ApiBadRequestResponse({ description: '잘못된 요청입니다' })
 @ApiBearerAuth('accessToken')
+@ApiUnauthorizedResponse()
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
+  /**
+   * 리뷰를 작성합니다
+   */
   @Post('reviews')
   @UseGuards(AccessTokenGuard)
-  @ApiOperation({
-    summary: '작성',
-    description: '리뷰를 작성합니다',
-  })
   @ApiCreatedResponse({
     description: '리뷰 작성에 성공했습니다',
   })
@@ -65,11 +66,10 @@ export class ReviewController {
     }
   }
 
+  /**
+   * 검색조건에 맞는 최신 데이터를 가져옵니다
+   */
   @Get('posts/:postId/reviews')
-  @ApiOperation({
-    summary: '조회',
-    description: '검색조건에 맞는 최신 데이터를 가져옵니다',
-  })
   @ApiOkResponse({ description: '요청에 성공했습니다' })
   async getReviewsOfPost(
     @Param('postId') postId: number,

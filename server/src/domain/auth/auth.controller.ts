@@ -8,9 +8,9 @@ import {
   Delete,
   Query,
   UseGuards,
-  NotFoundException,
   BadRequestException,
   InternalServerErrorException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
@@ -21,27 +21,30 @@ import {
 import { RefreshTokenGuard } from './refresh-token.guard';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCookieAuth,
-  ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
-  ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { TokenNotFoundException } from '../../exception/token-not-found.exception';
 import { TokenNotPermittedException } from '../../exception/token-not-permitted.exception';
+import { AccessTokenGuard } from './access-token.guard';
+import { NcpObjectStorage } from 'src/domain/auth/ncp-object-storage';
 
 @Controller('auth')
 @ApiTags('인증 API')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly ncpObjectStorage: NcpObjectStorage,
+  ) {}
 
+  /**
+   * 깃허브 코드를 사용해 사용자를 인증합니다
+   */
   @Get('github')
-  @ApiOperation({
-    summary: '인증',
-    description: '깃허브 코드를 사용해 사용자를 인증합니다',
-  })
   @ApiOkResponse({ description: 'accessToken과 로그인 정보를 받아옵니다' })
   @ApiBadRequestResponse({ description: 'Github 관련 인증에 문제가 있습니다' })
   async authorizeWithGithub(
@@ -77,14 +80,14 @@ export class AuthController {
     }
   }
 
+  /**
+   * refresh 토큰을 사용해 accessToken을 갱신합니다
+   */
   @Get('refresh')
   @UseGuards(RefreshTokenGuard)
-  @ApiOperation({
-    summary: '토큰 갱신',
-    description: 'refresh 토큰을 사용해 accessToken을 갱신합니다',
-  })
   @ApiUnauthorizedResponse({ description: 'Refresh 토큰이 잘못되었습니다' })
   @ApiOkResponse({ description: '올바른 요청입니다' })
+  @ApiUnauthorizedResponse()
   @ApiCookieAuth('refreshToken')
   refreshTokens(
     @Req() req: Request,
@@ -105,15 +108,33 @@ export class AuthController {
     };
   }
 
+  /**
+   * refreshToken(쿠키)를 제거합니다
+   */
   @Delete('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({
-    summary: '로그아웃',
-    description: 'refreshToken을 지웁니다',
-  })
   @ApiNoContentResponse({ description: '로그아웃에 성공했습니다' })
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('refreshToken');
     return;
+  }
+
+  /**
+   * 사진을 등록할 수 있는 PresignedUrl을 배열로 제공합니다
+   */
+  @Get('/s3-url')
+  @UseGuards(AccessTokenGuard)
+  @ApiBearerAuth('accessToken')
+  @ApiOkResponse()
+  @ApiUnauthorizedResponse()
+  getPresignedUrl(@Query('imageCount', ParseIntPipe) imageCount: number) {
+    const arr = [];
+    for (let i = 1; i <= imageCount; i++) {
+      const presigned = this.ncpObjectStorage.createPresignedPost();
+
+      arr.push(presigned);
+    }
+
+    return arr;
   }
 }

@@ -6,6 +6,7 @@ import { HttpModule } from '@nestjs/axios';
 import { AccessTokenStrategy } from './access-token.strategy';
 import { RefreshTokenStrategy } from './refresh-token.strategy';
 import { UserRepository } from '../user/user.repository';
+import { NcpObjectStorage } from './ncp-object-storage';
 
 @Module({
   imports: [HttpModule, JwtModule.register({})],
@@ -14,6 +15,7 @@ import { UserRepository } from '../user/user.repository';
     UserRepository,
     AccessTokenStrategy,
     RefreshTokenStrategy,
+    NcpObjectStorage,
   ],
   controllers: [AuthController],
   exports: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],

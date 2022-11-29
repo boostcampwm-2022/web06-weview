@@ -22,6 +22,7 @@ import {
   ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
@@ -29,15 +30,15 @@ import { PostNotFoundException } from '../../exception/post-not-found.exception'
 @Controller()
 @ApiTags('신고 API')
 @ApiBearerAuth('accessToken')
+@ApiUnauthorizedResponse()
 export class ReportController {
   constructor(private reportService: ReportService) {}
 
+  /**
+   * 게시물을 신고합니다
+   */
   @Post('posts/:postId/report')
   @UseGuards(AccessTokenGuard)
-  @ApiOperation({
-    summary: '게시물 신고',
-    description: 'postId 게시물을 신고합니다',
-  })
   @ApiCreatedResponse({
     description: '신고에 성공',
   })

@@ -20,6 +20,7 @@ import {
   ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
@@ -27,16 +28,16 @@ import { UserNotFoundException } from '../../exception/user-not-found.exception'
 @Controller()
 @ApiTags('좋아요 API')
 @ApiBearerAuth('accessToken')
+@ApiUnauthorizedResponse()
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}
 
+  /**
+   * 좋아요를 추가합니다
+   */
   @Post('posts/:postId/likes')
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({
-    summary: '좋아요 추가',
-    description: 'postId 게시물에 좋아요를 추가합니다',
-  })
   @ApiCreatedResponse({ description: '좋아요 성공' })
   @ApiNotFoundResponse({ description: '게시물 or 유저가 없습니다' })
   async likes(@Req() req: Request, @Param('postId') postId: number) {
@@ -54,13 +55,12 @@ export class LikesController {
     }
   }
 
+  /**
+   * 좋아요를 취소합니다
+   */
   @Delete('posts/:postId/likes')
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({
-    summary: '좋아요 취소',
-    description: 'postId 게시물에 좋아요를 취소합니다',
-  })
   @ApiNoContentResponse({
     description: '좋아요 취소 성공',
   })

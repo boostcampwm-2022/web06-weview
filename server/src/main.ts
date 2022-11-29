@@ -29,7 +29,7 @@ async function bootstrap() {
     .addCookieAuth('refreshToken')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('/', app, document);
 
   app.useGlobalPipes(
     new ValidationPipe({

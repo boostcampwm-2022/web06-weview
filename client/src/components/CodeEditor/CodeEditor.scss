@@ -1,6 +1,6 @@
 @import "../../constants/library";
-@import "@/styles/_global-styles";
-@import "@/components/Code/CodeTheme.scss";
+@import "@/styles/_global-styles.scss";
+@import "@/components/CodeViewer/CodeTheme.scss";
 
 $line-width: 2.5rem;
 $github-dark-font-color: #c9d1d9;
@@ -64,6 +64,7 @@ $github-dark-font-color: #c9d1d9;
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    font-family: "monospace", monospace;
     color: $weview-white;
     text-align: end;
     background-color: $codeblock-color;
