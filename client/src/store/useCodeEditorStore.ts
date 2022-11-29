@@ -12,6 +12,7 @@ interface CodeEditorAction {
   setLanguage: (language: string) => void;
   setCode: (code: string) => void;
   setImages: (imageSrc: string) => void;
+  removeImage: (imageIdx: number) => void;
   reset: () => void;
 }
 
@@ -31,6 +32,14 @@ const useCodeEditorStore = create<CodeEditorState & CodeEditorAction>()(
         setImages: (newImg: string) =>
           set((state: CodeEditorState) => {
             return { images: [...state.images, newImg] };
+          }),
+        removeImage: (willFilteredIndex: number) =>
+          set((state: CodeEditorState) => {
+            return {
+              images: state.images.filter(
+                (src, idx) => idx !== willFilteredIndex
+              ),
+            };
           }),
         reset: () => {
           set(initialCodeEditorState);

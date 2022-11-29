@@ -13,14 +13,15 @@ interface UseCodeEditor {
 }
 
 const useCodeEditor = (): UseCodeEditor => {
-  const { code, setCode, language, setImages } = useCodeEditorStore(
-    (state) => ({
+  const { code, setCode, language, images, setImages, removeImage } =
+    useCodeEditorStore((state) => ({
       code: state.code,
       setCode: state.setCode,
       language: state.language,
+      images: state.images,
       setImages: state.setImages,
-    })
-  );
+      removeImage: state.removeImage,
+    }));
   const [lineCount, setLineCount] = useState(0);
 
   const handleCodeChange = useCallback(
@@ -31,19 +32,35 @@ const useCodeEditor = (): UseCodeEditor => {
   );
 
   useEffect(() => {
-    setLineCount(getLineCount(code) + 1);
+    setLineCount(getLineCount(code));
   }, [code]);
 
   useEffect(() => {
-    if (lineCount === 0 || lineCount % ONE_SNAPSHOT_LINE_COUNT !== 0) return;
-
-    const $code = document.querySelector(
-      `.chunked-${lineCount / ONE_SNAPSHOT_LINE_COUNT}`
+    if (lineCount === 0) return;
+    const requiredSnapshotCount = Math.floor(
+      (lineCount - 1) / ONE_SNAPSHOT_LINE_COUNT
     );
-    domtoimage
-      .toJpeg($code as HTMLElement, IMAGE_OPTIONS)
-      .then((dataUrl: string) => setImages(dataUrl))
-      .catch((error: any) => console.error(error));
+    if (requiredSnapshotCount <= images.length) {
+      for (
+        let snapshotCount = images.length;
+        snapshotCount >= requiredSnapshotCount;
+        snapshotCount--
+      ) {
+        removeImage(snapshotCount);
+      }
+      return;
+    }
+    for (
+      let snapshotCount = images.length;
+      snapshotCount < requiredSnapshotCount;
+      snapshotCount++
+    ) {
+      const $code = document.querySelector(`.chunked-${snapshotCount + 1}`);
+      domtoimage
+        .toJpeg($code as HTMLElement, IMAGE_OPTIONS)
+        .then((dataUrl: string) => setImages(dataUrl))
+        .catch((error: any) => console.error(error));
+    }
   }, [lineCount]);
 
   return {

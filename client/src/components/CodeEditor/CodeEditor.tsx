@@ -10,7 +10,9 @@ const CodeEditor = (): JSX.Element => {
   return (
     <div className="code">
       <div className="code__lines" ref={lineRef}>
-        {Array.from(Array(lineCount).keys()).slice(1).join("\n")}
+        {Array.from(Array(lineCount + 1).keys())
+          .slice(1)
+          .join("\n")}
       </div>
       <textarea
         ref={textRef}
