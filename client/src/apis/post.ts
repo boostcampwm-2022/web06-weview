@@ -19,12 +19,16 @@ export const uploadImage = async ({
   imageUri,
 }: UploadImageProps): Promise<string> => {
   const payload = new FormData();
-  payload.append("file", await (await fetch(imageUri)).blob()); // imageURI -> file
-  payload.append("Content-Type", "image/jpeg");
   Object.entries(preSignedData.fields).forEach(([key, value]) => {
     payload.append(key, value);
   });
-  await axiosInstance.post(preSignedData.url, payload);
+  payload.append("file", await (await fetch(imageUri)).blob()); // imageURI -> file
+  payload.append("Content-Type", "image/jpeg"); // file type 명시
+  await axiosInstance.post(preSignedData.url, payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return `${preSignedData.url}/${preSignedData.fields.Key}`;
 };
 
