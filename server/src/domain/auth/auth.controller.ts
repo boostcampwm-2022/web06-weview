@@ -8,7 +8,6 @@ import {
   Delete,
   Query,
   UseGuards,
-  NotFoundException,
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -22,7 +21,6 @@ import { RefreshTokenGuard } from './refresh-token.guard';
 import {
   ApiBadRequestResponse,
   ApiCookieAuth,
-  ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
@@ -31,11 +29,18 @@ import {
 } from '@nestjs/swagger';
 import { TokenNotFoundException } from '../../exception/token-not-found.exception';
 import { TokenNotPermittedException } from '../../exception/token-not-permitted.exception';
+import { AccessTokenGuard } from './access-token.guard';
+import { ConfigService } from '@nestjs/config';
+import { S3 } from 'aws-sdk';
+import { randomUUID } from 'crypto';
 
 @Controller('auth')
 @ApiTags('인증 API')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Get('github')
   @ApiOperation({
@@ -115,5 +120,40 @@ export class AuthController {
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('refreshToken');
     return;
+  }
+
+  @Get('/s3-url')
+  @UseGuards(AccessTokenGuard)
+  getPresignedUrl(@Query('imageCount') imageCount: number) {
+    const endpoint = 'https://kr.object.ncloudstorage.com';
+    const region = 'kr-standard';
+    const access_key = this.configService.get('NCP_ACCESS_KEY');
+    const secret_key = this.configService.get('NCP_SECRET_KEY');
+
+    const s3 = new S3({
+      endpoint,
+      region,
+      credentials: {
+        accessKeyId: access_key,
+        secretAccessKey: secret_key,
+      },
+      signatureVersion: 'v4',
+    });
+
+    const arr = [];
+    for (let i = 1; i <= imageCount; i++) {
+      const presigned = s3.createPresignedPost({
+        Bucket: 'weview-image-dev',
+        Fields: {
+          Key: randomUUID() + Date.now() + '.jpeg',
+          ACL: 'public-read',
+        },
+        Expires: 60,
+      });
+
+      arr.push(presigned);
+    }
+
+    return arr;
   }
 }
