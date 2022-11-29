@@ -5,7 +5,7 @@ import { postWritingsAPI, uploadImage } from "@/apis/post";
 import useModalStore from "@/store/useModalStore";
 import { isEmpty } from "@/utils/typeCheck";
 import { fetchPreSignedData } from "@/apis/auth";
-import sampleImage from "@/assets/progressive-image.jpg";
+import { pipe } from "@/utils/functional";
 
 const RegisterButton = (): JSX.Element => {
   const essentialWritingStates = useWritingStore((state) => [
@@ -15,8 +15,8 @@ const RegisterButton = (): JSX.Element => {
   const essentialCodeStates = useCodeEditorStore((state) => [
     state.code,
     state.language,
-    state.images,
   ]);
+  const images = useCodeEditorStore((state) => state.images);
   const resetWritingStore = useWritingStore((state) => state.reset);
   const { closeWritingModal, closeSubmitModal } = useModalStore((state) => ({
     isOpened: state.isSubmitModalOpened,
@@ -26,7 +26,7 @@ const RegisterButton = (): JSX.Element => {
 
   // 제출 불가능 상태 판단
   const isInvalidState = (): boolean =>
-    [...essentialWritingStates, ...essentialCodeStates].some((state) =>
+    [...essentialWritingStates, ...essentialCodeStates, images].some((state) =>
       isEmpty(state)
     );
 
@@ -53,10 +53,11 @@ const RegisterButton = (): JSX.Element => {
         return alert("필수 정보들을 입력해주세요!");
       }
       try {
-        // TODO: 생성된 images 를 WritingStore 에서 가져오기
-        const sampleImages: string[] = [sampleImage, sampleImage, sampleImage];
-        const imageUrls = await uploadImagesToS3(sampleImages);
-        const response = await postWritingsAPI(imageUrls);
+        const response = pipe(
+          images, // Image URI
+          await uploadImagesToS3, // S3 URL 배열
+          await postWritingsAPI // Post 정보 등록
+        );
         alert(response.message);
         resetWritingStore();
         closeWritingModal();
