@@ -5,6 +5,7 @@ import useSearchStore from "@/store/useSearchStore";
 import useWritingStore from "@/store/useWritingStore";
 import { getLineCount } from "@/utils/code";
 import { preventXSS } from "@/utils/regExpression";
+import useCodeEditorStore from "@/store/useCodeEditorStore";
 
 export const fetchPost = async (pageParam: string): Promise<PostPages> => {
   const { searchQuery } = useSearchStore.getState();
@@ -35,7 +36,8 @@ export const uploadImage = async ({
 export const postWritingsAPI = async (
   imageUrls: string[]
 ): Promise<WritingResponse> => {
-  const { title, language, code, content, tags } = useWritingStore.getState();
+  const { title, content, tags } = useWritingStore.getState();
+  const { language, code } = useCodeEditorStore.getState();
   const { data } = await axiosInstance.post("/posts", {
     title,
     category: "리뷰요청",
