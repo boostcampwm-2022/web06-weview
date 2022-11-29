@@ -1,1 +1,1 @@
-export const ONE_SNAP_SHOT_LINE_COUNT = 15;
+export const ONE_SNAPSHOT_LINE_COUNT = 15;

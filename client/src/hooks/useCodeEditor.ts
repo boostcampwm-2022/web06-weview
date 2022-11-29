@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { ONE_SNAP_SHOT_LINE_COUNT } from "@/constants/code";
+import { ONE_SNAPSHOT_LINE_COUNT } from "@/constants/code";
 import domtoimage from "dom-to-image";
 import { IMAGE_OPTIONS } from "@/constants/options";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
@@ -35,10 +35,10 @@ const useCodeEditor = (): UseCodeEditor => {
   }, [code]);
 
   useEffect(() => {
-    if (lineCount === 0 || lineCount % ONE_SNAP_SHOT_LINE_COUNT !== 0) return;
+    if (lineCount === 0 || lineCount % ONE_SNAPSHOT_LINE_COUNT !== 0) return;
 
     const $code = document.querySelector(
-      `.chunked-${lineCount / ONE_SNAP_SHOT_LINE_COUNT}`
+      `.chunked-${lineCount / ONE_SNAPSHOT_LINE_COUNT}`
     );
     domtoimage
       .toJpeg($code as HTMLElement, IMAGE_OPTIONS)

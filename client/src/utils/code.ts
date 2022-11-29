@@ -1,5 +1,5 @@
 import { NEW_LINE_REGEX, SPACE_REGEX } from "@/utils/regExpression";
-import { ONE_SNAP_SHOT_LINE_COUNT } from "@/constants/code";
+import { ONE_SNAPSHOT_LINE_COUNT } from "@/constants/code";
 
 export const getLineCount = (code: string): number => code.split("\n").length;
 
@@ -13,8 +13,8 @@ export const splitHTML = (html: string): string[] => html.split(NEW_LINE_REGEX);
 // 잘라진 html을 특정 개수만큼씩 div로 묶는다.
 export const chunkHTML = (htmlData: string[]): string[][] => {
   const arr = [];
-  for (let i = 0; i < htmlData.length; i += ONE_SNAP_SHOT_LINE_COUNT) {
-    arr.push(htmlData.slice(i, i + ONE_SNAP_SHOT_LINE_COUNT));
+  for (let i = 0; i < htmlData.length; i += ONE_SNAPSHOT_LINE_COUNT) {
+    arr.push(htmlData.slice(i, i + ONE_SNAPSHOT_LINE_COUNT));
   }
   return arr;
 };
