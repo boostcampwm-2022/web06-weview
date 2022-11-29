@@ -3,7 +3,7 @@ import useWritingStore from "@/store/useWritingStore";
 import { postWritingsAPI, uploadImage } from "@/apis/post";
 import useModalStore from "@/store/useModalStore";
 import { isEmpty } from "@/utils/typeCheck";
-import { fetchPreSignedS3Urls } from "@/apis/auth";
+import { fetchPreSignedData } from "@/apis/auth";
 import sampleImage from "../../../../../../public/progressive-image.jpg";
 
 const RegisterButton = (): JSX.Element => {
@@ -26,14 +26,14 @@ const RegisterButton = (): JSX.Element => {
 
   // 이미지들을 S3 에 등록하고 등록된 S3 URL 을 반환
   const uploadImagesToS3 = async (images: string[]): Promise<string[]> => {
-    const preSignedS3Urls = await fetchPreSignedS3Urls(images.length);
+    const preSignedS3Urls = await fetchPreSignedData(images.length);
     if (images.length !== preSignedS3Urls.length) {
       throw new Error("이미지 업로드를 위한 URL 을 불러오는데 실패했습니다.");
     }
     return await Promise.all(
       images
         .map((image, index) => ({
-          url: preSignedS3Urls[index],
+          preSignedData: preSignedS3Urls[index],
           imageFile: image,
         }))
         .map(uploadImage)

@@ -5,6 +5,7 @@ import useSearchStore from "@/store/useSearchStore";
 import useWritingStore from "@/store/useWritingStore";
 import { getLineCount } from "@/utils/code";
 import { preventXSS } from "@/utils/regExpression";
+import { PreSignedData } from "@/types/auth";
 
 export const fetchPost = async (pageParam: string): Promise<PostPages> => {
   const { searchQuery } = useSearchStore.getState();
@@ -15,20 +16,22 @@ export const fetchPost = async (pageParam: string): Promise<PostPages> => {
 };
 
 interface uploadImageProps {
-  url: string;
+  preSignedData: PreSignedData;
   imageFile: string;
 }
 
 export const uploadImage = async ({
-  url,
+  preSignedData,
   imageFile,
 }: uploadImageProps): Promise<string> => {
-  const { data } = await axiosInstance.put(url, imageFile, {
-    headers: {
-      "Content-Type": "image/jpeg",
-    },
+  const payload = new FormData();
+  payload.append("file", imageFile);
+  payload.append("Content-Type", "image/jpeg");
+  Object.entries(preSignedData.fields).forEach(([key, value]) => {
+    payload.append(key, value);
   });
-  return data;
+  await axiosInstance.post(preSignedData.url, payload);
+  return `${preSignedData.url}/${preSignedData.fields.Key}`;
 };
 
 export const postWritingsAPI = async (
