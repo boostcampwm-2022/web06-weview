@@ -33,7 +33,7 @@ import { PostNotFoundException } from '../../exception/post-not-found.exception'
 @Controller()
 @ApiTags('리뷰 API')
 @ApiBadRequestResponse({ description: '잘못된 요청입니다' })
-@ApiBearerAuth('access-token')
+@ApiBearerAuth('accessToken')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 

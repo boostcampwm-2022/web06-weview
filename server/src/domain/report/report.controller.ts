@@ -28,7 +28,7 @@ import { PostNotFoundException } from '../../exception/post-not-found.exception'
 
 @Controller()
 @ApiTags('신고 API')
-@ApiBearerAuth('access-token')
+@ApiBearerAuth('accessToken')
 export class ReportController {
   constructor(private reportService: ReportService) {}
 

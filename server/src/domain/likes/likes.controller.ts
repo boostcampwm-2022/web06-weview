@@ -26,7 +26,7 @@ import { UserNotFoundException } from '../../exception/user-not-found.exception'
 
 @Controller()
 @ApiTags('좋아요 API')
-@ApiBearerAuth('access-token')
+@ApiBearerAuth('accessToken')
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}
 
