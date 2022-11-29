@@ -25,7 +25,7 @@ export const uploadImage = async ({
 }: uploadImageProps): Promise<string> => {
   const { data } = await axiosInstance.put(url, imageFile, {
     headers: {
-      "Content-Type": "image/jpg",
+      "Content-Type": "image/jpeg",
     },
   });
   return data;
