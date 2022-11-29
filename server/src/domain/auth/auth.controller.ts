@@ -8,7 +8,6 @@ import {
   Delete,
   Query,
   UseGuards,
-  NotFoundException,
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -22,7 +21,6 @@ import { RefreshTokenGuard } from './refresh-token.guard';
 import {
   ApiBadRequestResponse,
   ApiCookieAuth,
-  ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
@@ -31,11 +29,16 @@ import {
 } from '@nestjs/swagger';
 import { TokenNotFoundException } from '../../exception/token-not-found.exception';
 import { TokenNotPermittedException } from '../../exception/token-not-permitted.exception';
+import { AccessTokenGuard } from './access-token.guard';
+import { NcpObjectStorage } from 'src/domain/auth/ncp-object-storage';
 
 @Controller('auth')
 @ApiTags('인증 API')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly ncpObjectStorage: NcpObjectStorage,
+  ) {}
 
   @Get('github')
   @ApiOperation({
@@ -115,5 +118,18 @@ export class AuthController {
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('refreshToken');
     return;
+  }
+
+  @Get('/s3-url')
+  @UseGuards(AccessTokenGuard)
+  getPresignedUrl(@Query('imageCount') imageCount: number) {
+    const arr = [];
+    for (let i = 1; i <= imageCount; i++) {
+      const presigned = this.ncpObjectStorage.createPresignedPost();
+
+      arr.push(presigned);
+    }
+
+    return arr;
   }
 }
