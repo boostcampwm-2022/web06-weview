@@ -44,7 +44,7 @@ export const LATEST_DATA_CONDITION = -1;
 
 @Controller('posts')
 @ApiTags('게시물 API')
-@ApiBearerAuth('access-token')
+@ApiBearerAuth('accessToken')
 @ApiBadRequestResponse({ description: '잘못된 요청입니다' })
 export class PostController {
   constructor(
