@@ -128,13 +128,8 @@ export class AuthController {
   @ApiOkResponse()
   @ApiUnauthorizedResponse()
   getPresignedUrl(@Query('imageCount', ParseIntPipe) imageCount: number) {
-    const arr = [];
-    for (let i = 1; i <= imageCount; i++) {
-      const presigned = this.ncpObjectStorage.createPresignedPost();
-
-      arr.push(presigned);
-    }
-
-    return arr;
+    return Array.from({ length: imageCount }, () =>
+      this.ncpObjectStorage.createPresignedPost(),
+    );
   }
 }

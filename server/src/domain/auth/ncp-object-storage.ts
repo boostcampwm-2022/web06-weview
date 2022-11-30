@@ -24,7 +24,7 @@ export class NcpObjectStorage {
     });
   }
 
-  createPresignedPost() {
+  createPresignedPost(): any {
     const presigned = this.objectStorage.createPresignedPost({
       Bucket: 'weview-image-dev',
       Fields: {
