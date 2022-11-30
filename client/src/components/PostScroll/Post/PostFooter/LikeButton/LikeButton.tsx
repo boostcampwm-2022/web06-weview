@@ -10,30 +10,7 @@ const textColor = "#222222";
 const LikeButton = (): JSX.Element => {
   const { id, isLiked } = useContext(PostContext);
 
-  const toggleLiked: MouseEventHandler = () => {
-    if (typeof isLiked === "undefined") {
-      alert("로그인 후 이용해 주세요");
-      return;
-    }
-    likeToggleMutation.mutate();
-  };
-
-  const handleRequestLogin: MouseEventHandler = () => {
-    alert("로그인 후 이용해주세요");
-  };
-
-  if (isLiked === undefined) {
-    return (
-      <SvgIconButton
-        Icon={ThumbUpAltIcon}
-        detail="좋아요"
-        onClick={handleRequestLogin}
-        className="post__footer__left-block--btn"
-      />
-    );
-  }
-
-  const { isLikedState, likeToggleMutation } = usePostLike({
+  const { isLikedState, toggleLiked } = usePostLike({
     postId: id,
     isLiked,
   });

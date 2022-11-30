@@ -1,17 +1,13 @@
-import { useState } from "react";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { MouseEventHandler, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/react-query/queryClient";
 import { toggleLikeAPI } from "@/apis/post";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
+import useAuthStore from "@/store/useAuthStore";
 
 interface UsePostLike {
   isLikedState: boolean;
-  likeToggleMutation: UseMutationResult<
-    void,
-    unknown,
-    void,
-    { previousPosts: unknown }
-  >;
+  toggleLiked: MouseEventHandler;
 }
 
 const usePostLike = ({
@@ -19,11 +15,14 @@ const usePostLike = ({
   isLiked,
 }: {
   postId: string;
-  isLiked: boolean;
+  isLiked?: boolean;
 }): UsePostLike => {
-  const [isLikedState, setIsLikedState] = useState(isLiked);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const [isLikedState, setIsLikedState] = useState(
+    isLiked !== undefined && isLiked
+  );
 
-  const likeToggleMutation = useMutation(
+  const toggleLikedMutation = useMutation(
     async () => await toggleLikeAPI({ postId, isLiked: isLikedState }),
     {
       onMutate: async () => {
@@ -42,7 +41,12 @@ const usePostLike = ({
       },
     }
   );
-  return { isLikedState, likeToggleMutation };
+  const toggleLiked: MouseEventHandler = () => {
+    if (typeof isLiked === "undefined" || !isLoggedIn)
+      return alert("로그인 후 이용해 주세요");
+    toggleLikedMutation?.mutate();
+  };
+  return { isLikedState, toggleLiked };
 };
 
 export default usePostLike;
