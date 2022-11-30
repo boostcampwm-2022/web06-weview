@@ -19,19 +19,19 @@ export class Post extends BaseTimeEntity {
   @ManyToOne(() => User)
   user: User;
 
-  @Column({ default: Category.QUESTION })
+  @Column({ default: Category.QUESTION, length: 60 })
   category!: Category;
 
-  @Column()
+  @Column({ length: 180 })
   title!: string;
 
-  @Column()
+  @Column({ length: 900 })
   content!: string;
 
-  @Column()
+  @Column({ length: 6000 })
   code!: string;
 
-  @Column()
+  @Column({ length: 20 })
   language!: string; // TODO enum 적용 고민하기
 
   @Column()

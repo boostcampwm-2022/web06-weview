@@ -17,6 +17,6 @@ export class Report extends BaseTimeEntity {
   @ManyToOne(() => Post)
   post: Post;
 
-  @Column()
+  @Column({ length: 300 })
   reason: string;
 }

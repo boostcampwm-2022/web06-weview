@@ -9,9 +9,9 @@ export class User extends BaseTimeEntity {
   @Column({ unique: true })
   email!: string;
 
-  @Column()
+  @Column({ length: 24 })
   nickname!: string;
 
-  @Column()
+  @Column({ length: 2000 })
   profileUrl!: string;
 }
