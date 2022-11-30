@@ -1,5 +1,8 @@
 {
   "plugin": ["stylelint-prettier"],
+  "rules": {
+    "selector-class-pattern": null
+  },
   "extends": [
     "stylelint-config-sass-guidelines",
     "stylelint-config-prettier",
