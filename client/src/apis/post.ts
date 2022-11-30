@@ -6,6 +6,7 @@ import useWritingStore from "@/store/useWritingStore";
 import { getLineCount } from "@/utils/code";
 import { preventXSS } from "@/utils/regExpression";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
+import axios from "axios";
 
 export const fetchPost = async (pageParam: string): Promise<PostPages> => {
   const { searchQuery } = useSearchStore.getState();
@@ -25,7 +26,7 @@ export const uploadImage = async ({
   });
   payload.append("file", await (await fetch(imageUri)).blob()); // imageURI -> file
   payload.append("Content-Type", "image/jpeg"); // file type 명시
-  await axiosInstance.post(preSignedData.url, payload, {
+  await axios.post(preSignedData.url, payload, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
