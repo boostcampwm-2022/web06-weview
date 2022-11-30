@@ -36,32 +36,49 @@ const useCodeEditor = (): UseCodeEditor => {
     setLineCount(getLineCount(code));
   }, [code]);
 
+  const removeUselessImage = useCallback(
+    (requiredSnapshotCount: number) => {
+      for (
+        let imageIndex = images.length;
+        imageIndex >= requiredSnapshotCount;
+        imageIndex--
+      ) {
+        removeImage(imageIndex);
+      }
+    },
+    [images]
+  );
+
+  const snapShotCode = useCallback(
+    (requiredSnapshotCount: number) => {
+      const domToImagePromises = [];
+      for (
+        let imageIndex = images.length;
+        imageIndex < requiredSnapshotCount;
+        imageIndex++
+      ) {
+        const $code = document.querySelector(`.chunked-${imageIndex + 1}`);
+        domToImagePromises.push(
+          domtoimage.toJpeg($code as HTMLElement, IMAGE_OPTIONS)
+        );
+      }
+      Promise.all(domToImagePromises)
+        .then((dataUrls: string[]) => {
+          dataUrls.forEach((dataUrl) => setImages(dataUrl));
+        })
+        .catch((error: any) => console.error(error));
+    },
+    [images]
+  );
+
   useEffect(() => {
     if (lineCount === 0) return;
     const requiredSnapshotCount = Math.floor(
       (lineCount - 1) / ONE_SNAPSHOT_LINE_COUNT
     );
-    if (requiredSnapshotCount <= images.length) {
-      for (
-        let snapshotCount = images.length;
-        snapshotCount >= requiredSnapshotCount;
-        snapshotCount--
-      ) {
-        removeImage(snapshotCount);
-      }
-      return;
-    }
-    for (
-      let snapshotCount = images.length;
-      snapshotCount < requiredSnapshotCount;
-      snapshotCount++
-    ) {
-      const $code = document.querySelector(`.chunked-${snapshotCount + 1}`);
-      domtoimage
-        .toJpeg($code as HTMLElement, IMAGE_OPTIONS)
-        .then((dataUrl: string) => setImages(dataUrl))
-        .catch((error: any) => console.error(error));
-    }
+    requiredSnapshotCount <= images.length
+      ? removeUselessImage(requiredSnapshotCount)
+      : snapShotCode(requiredSnapshotCount);
   }, [lineCount]);
 
   return {
