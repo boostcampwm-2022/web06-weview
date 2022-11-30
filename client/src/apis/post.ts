@@ -24,8 +24,8 @@ export const uploadImage = async ({
   Object.entries(preSignedData.fields).forEach(([key, value]) => {
     payload.append(key, value);
   });
-  payload.append("file", await (await fetch(imageUri)).blob()); // imageURI -> file
   payload.append("Content-Type", "image/jpeg"); // file type 명시
+  payload.append("file", await (await fetch(imageUri)).blob()); // imageURI -> file
   await axios.post(preSignedData.url, payload, {
     headers: {
       "Content-Type": "multipart/form-data",
