@@ -51,3 +51,16 @@ export const postWritingsAPI = async (
   });
   return data;
 };
+
+export const toggleLikeAPI = async ({
+  postId,
+  isLiked,
+}: {
+  postId: string;
+  isLiked: boolean;
+}): Promise<void> => {
+  const { data } = isLiked
+    ? await axiosInstance.delete(`/posts/${postId}/likes`)
+    : await axiosInstance.post(`/posts/${postId}/likes`);
+  return data;
+};

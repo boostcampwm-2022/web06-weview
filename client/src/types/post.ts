@@ -9,6 +9,7 @@ export interface Image {
 interface AdditionalPostInfo {
   category?: string;
   likes?: number;
+  isLiked?: boolean;
 }
 
 export interface CodeStore {
