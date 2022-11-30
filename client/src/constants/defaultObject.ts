@@ -1,4 +1,5 @@
 import { PostInfo, CodeInfo } from "@/types/post";
+
 import { DEFAULT_LANGUAGE } from "./options";
 
 export const defaultPostInfo: PostInfo = {

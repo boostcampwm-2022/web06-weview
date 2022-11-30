@@ -1,5 +1,7 @@
 import React from "react";
+
 import { Label } from "@/types/search";
+
 import "./SearchLabel.scss";
 
 interface SearchLabelProps {

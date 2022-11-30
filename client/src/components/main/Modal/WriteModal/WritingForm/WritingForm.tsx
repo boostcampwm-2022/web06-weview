@@ -1,8 +1,11 @@
 import React, { FormEvent, useCallback } from "react";
-import SubmitButton from "./SubmitButton/SubmitButton";
+
 import useModalStore from "@/store/useModalStore";
 import LanguageSelector from "@/components/main/Modal/WriteModal/WritingForm/LanguageSelector/LanguageSelector";
 import CodeEditor from "@/components/main/CodeEditor/CodeEditor";
+
+import SubmitButton from "./SubmitButton/SubmitButton";
+
 import "./WritingForm.scss";
 
 const WritingForm = (): JSX.Element => {

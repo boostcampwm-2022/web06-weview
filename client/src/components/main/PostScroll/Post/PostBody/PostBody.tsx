@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
+
 import { PostContext } from "@/components/main/PostScroll/Post/Post";
 import TimeStamp from "@/components/commons/TimeStamp/TimeStamp";
+
 import "./PostBody.scss";
 
 const PostBody = (): JSX.Element => {

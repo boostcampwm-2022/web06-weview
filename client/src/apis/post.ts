@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import axiosInstance from "@/apis/axios";
 import { PostPages, UploadImageProps, WritingResponse } from "@/types/post";
 import { setQueryString } from "@/utils/queryString";
@@ -6,7 +8,6 @@ import useWritingStore from "@/store/useWritingStore";
 import { getLineCount } from "@/utils/code";
 import { preventXSS } from "@/utils/regExpression";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
-import axios from "axios";
 
 export const fetchPost = async (pageParam: string): Promise<PostPages> => {
   const { searchQuery } = useSearchStore.getState();

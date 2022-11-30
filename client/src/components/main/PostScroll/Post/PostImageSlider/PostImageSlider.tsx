@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
+
 import { PostContext } from "@/components/main/PostScroll/Post/Post";
 import ProgressiveImage from "@/components/commons/ProgressiveImage/ProgressiveImage";
 import codePlaceholder from "@/assets/progressive-image.jpg";
+
 import "./PostImageSlider.scss";
 
 const PostImageSlider = (): JSX.Element => {

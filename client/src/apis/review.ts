@@ -1,5 +1,6 @@
-import axiosInstance from "./axios";
 import { ReviewResponse, ReviewPages } from "@/types/review";
+
+import axiosInstance from "./axios";
 
 export const getReviewsAPI = async (
   postId: string,

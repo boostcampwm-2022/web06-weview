@@ -1,4 +1,5 @@
 import { RefObject, useCallback, useEffect, useState } from "react";
+
 import { pipe } from "@/utils/functional";
 
 interface RelativeSizeOptions {

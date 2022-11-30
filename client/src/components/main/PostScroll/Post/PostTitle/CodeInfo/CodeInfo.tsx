@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
+
 import { PostContext } from "@/components/main/PostScroll/Post/Post";
 import { LINE_COUNT_REGEX } from "@/utils/regExpression";
+
 import "./CodeInfo.scss";
 
 const CodeInfo = (): JSX.Element => {

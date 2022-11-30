@@ -1,4 +1,5 @@
 import React from "react";
+
 import "./PrettifyButton.scss";
 
 const PrettifyButton = (): JSX.Element => {

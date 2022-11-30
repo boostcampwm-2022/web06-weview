@@ -1,7 +1,10 @@
 import React from "react";
+
+import useAuthStore from "@/store/useAuthStore";
+
 import NotLoggedInProfile from "./NotLoggedInProfile/NotLoggedInProfile";
 import UserProfile from "./UserProfile/UserProfile";
-import useAuthStore from "@/store/useAuthStore";
+
 import "./Profile.scss";
 
 const Profile = (): JSX.Element => {

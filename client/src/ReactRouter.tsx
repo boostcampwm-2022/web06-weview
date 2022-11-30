@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import LoginCallback from "@/pages/LoginCallback/LoginCallback";
 import React from "react";
+
+import LoginCallback from "@/pages/LoginCallback/LoginCallback";
 import Main from "@/pages/Main/Main";
 
 const ReactRouter = (): React.ReactElement => {

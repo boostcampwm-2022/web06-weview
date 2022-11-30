@@ -1,11 +1,13 @@
 import React from "react";
-import "./RegisterButton.scss";
+
 import useWritingStore from "@/store/useWritingStore";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
 import { postWritingsAPI, uploadImage } from "@/apis/post";
 import useModalStore from "@/store/useModalStore";
 import { isEmpty } from "@/utils/typeCheck";
 import { fetchPreSignedData } from "@/apis/auth";
+
+import "./RegisterButton.scss";
 
 const RegisterButton = (): JSX.Element => {
   const essentialWritingStates = useWritingStore((state) => [

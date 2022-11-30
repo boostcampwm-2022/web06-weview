@@ -1,7 +1,9 @@
 import React from "react";
+
 import MainNav from "@/components/main/MainNav/MainNav";
 import PostScroll from "@/components/main/PostScroll/PostScroll";
 import useModalStore from "@/store/useModalStore";
+
 import "./Main.scss";
 
 const Main = (): JSX.Element => {

@@ -9,6 +9,7 @@ import {
   useInfiniteQuery,
 } from "@tanstack/react-query";
 import { useCallback } from "react";
+
 import { QUERY_KEYS } from "@/react-query/queryKeys";
 import { getReviewsAPI } from "@/apis/review";
 import { ReviewPages } from "@/types/review";

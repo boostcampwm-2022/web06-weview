@@ -1,7 +1,9 @@
 import React, { useCallback, ChangeEvent } from "react";
-import { LANGUAGES } from "@/constants/options";
 import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
+
+import { LANGUAGES } from "@/constants/options";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
+
 import "./LanguageSelector.scss";
 
 const LanguageSelector = (): JSX.Element => {
