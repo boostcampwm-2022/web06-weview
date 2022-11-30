@@ -34,8 +34,18 @@
 
 @include device {
   .main {
-    @include main-common;
-    @include main-responsive($desktop-main-width, $main-gap);
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    background-color: $weview-off-white;
+
+    &__content {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+    }
   }
 
   .hidden-main {

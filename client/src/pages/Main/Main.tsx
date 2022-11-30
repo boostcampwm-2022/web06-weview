@@ -14,7 +14,9 @@ const Main = (): JSX.Element => {
   return (
     <div className={isWritingModalOpened ? "hidden-main" : "main"}>
       <MainNav />
-      <PostScroll />
+      <div className="main__content">
+        <PostScroll />
+      </div>
     </div>
   );
 };
