@@ -1,7 +1,7 @@
 @import "@/styles/_theme";
 @import "@/styles/_global-style";
 
-$line-width: 2.5rem;
+$line-width: 4rem;
 $github-dark-font-color: #c9d1d9;
 
 .code {
@@ -11,7 +11,7 @@ $github-dark-font-color: #c9d1d9;
   width: $device-editor-width;
   min-width: $device-editor-width; // review modal 에서 가로 정렬 기준 flex-shrink: 0 역할
   height: 100%;
-  border-radius: 0.25rem;
+  border-radius: $radius-small;
 
   &__textarea,
   &__present {
@@ -28,7 +28,7 @@ $github-dark-font-color: #c9d1d9;
     height: 100%;
     padding: 0.5rem;
     margin: 0;
-    font-size: 0.75rem;
+    font-size: $font-medium;
     white-space: pre-wrap;
 
     &::-webkit-scrollbar {
@@ -59,8 +59,10 @@ $github-dark-font-color: #c9d1d9;
     left: 0;
     z-index: 3;
     display: flex;
+    justify-content: center;
     width: $line-width;
     height: 100%;
+
     overflow-x: hidden;
     overflow-y: auto;
     font-family: "monospace", monospace;
