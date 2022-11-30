@@ -1,8 +1,8 @@
 import React, { useCallback, ChangeEvent } from "react";
-import "./LanguageSelector.scss";
 import { LANGUAGES } from "@/constants/options";
 import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
+import "./LanguageSelector.scss";
 
 const LanguageSelector = (): JSX.Element => {
   const { selectedLanguage, setLanguage } = useCodeEditorStore((state) => ({
