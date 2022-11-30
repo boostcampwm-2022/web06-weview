@@ -12,12 +12,10 @@ import {
   Headers,
   Delete,
   Param,
-  Res,
   NotFoundException,
-  UnauthorizedException,
   ForbiddenException,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { PostService } from './post.service';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
 import { InqueryDto, WriteDto } from './dto/controller-request.dto';
@@ -33,12 +31,12 @@ import {
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
 import { UserNotSameException } from '../../exception/user-not-same.exception';
+import { PostNotFoundException } from 'src/exception/post-not-found.exception';
 
 export const SEND_POST_CNT = 3;
 export const LATEST_DATA_CONDITION = -1;
@@ -133,16 +131,16 @@ export class PostController {
     try {
       const userId = req.user['id'];
       await this.postService.write(userId, writeDto);
-
-      return {
-        message: '글 작성에 성공했습니다.',
-      };
     } catch (err) {
       if (err instanceof UserNotFoundException) {
         throw new NotFoundException(err.message);
       }
       throw new InternalServerErrorException(err.message);
     }
+
+    return {
+      message: '글 작성에 성공했습니다.',
+    };
   }
 
   /**
@@ -167,7 +165,7 @@ export class PostController {
       if (err instanceof UserNotFoundException) {
         throw new NotFoundException(err.message);
       }
-      if (err instanceof UserNotFoundException) {
+      if (err instanceof PostNotFoundException) {
         throw new NotFoundException(err.message);
       }
       if (err instanceof UserNotSameException) {
