@@ -1,6 +1,7 @@
 import React from "react";
 import TimeStamp from "@/components/commons/TimeStamp/TimeStamp";
 import { ReviewInfo } from "@/types/review";
+import "./Review.scss";
 
 interface ReviewProps {
   reviewInfo: ReviewInfo;

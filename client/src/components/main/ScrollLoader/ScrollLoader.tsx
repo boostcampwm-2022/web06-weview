@@ -1,7 +1,7 @@
 import React from "react";
-import "./ScrollLoader.scss";
 import useIntersect from "@/hooks/useIntersect";
 import LoadingSpinner from "@/components/commons/LoadingSpinner/LoadingSpinner";
+import "./ScrollLoader.scss";
 
 interface PostLoaderProps {
   onIntersect: (

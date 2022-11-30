@@ -1,16 +1,14 @@
 // fonts
 @import url("https://webfontworld.github.io/gmarket/GmarketSans.css");
-@import url("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/styles/github.min.css");
 // pages
 @import "pages/Main/Main";
 // common components
 @import "components/commons/SvgIconButton/SvgIconButton";
-@import "styles/_modal";
 // components
-@import "src/components/MainNav/MainNav";
-@import "components/Modal/WriteModal/WriteModal";
-@import "components/Modal/ModalContainer/ModalContainer";
-@import "components/Modal/ModalWrapper/ModalWrapper";
+@import "src/components/main/MainNav/MainNav";
+@import "components/main/Modal/WriteModal/WriteModal";
+@import "components/main/Modal/ModalContainer/ModalContainer";
+@import "components/main/Modal/ModalWrapper/ModalWrapper";
 
 html,
 body {

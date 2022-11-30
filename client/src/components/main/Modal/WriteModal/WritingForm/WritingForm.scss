@@ -1,9 +1,4 @@
-@import "@/styles/_global-styles";
-@import "@/components/Modal/WriteModal/SubmitModal/TitleInput/TitleInput";
-@import "@/components/CodeEditor/CodeEditor";
-@import "PrettifyButton/PrettifyButton";
-@import "SubmitButton/SubmitButton";
-@import "LanguageSelector/LanguageSelector";
+@import "@/styles/_global-style.scss";
 
 .writing-form {
   display: flex;

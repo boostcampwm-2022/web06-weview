@@ -1,8 +1,8 @@
 import React from "react";
-import "./SearchModal.scss";
 import useModalStore from "@/store/useModalStore";
-import SearchForm from "@/components/Modal/SearchModal/SearchForm/SearchForm";
+import SearchForm from "@/components/main/Modal/SearchModal/SearchForm/SearchForm";
 import { DESCRIPTION } from "@/constants/search";
+import "./SearchModal.scss";
 
 const SearchModal = (): JSX.Element => {
   const { isSearchModalOpened } = useModalStore((state) => ({

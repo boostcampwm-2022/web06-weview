@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import useCommonModalStore from "@/store/useCommonModalStore";
+import "./ModalContainer.scss";
 
 interface ModalContent {
   content: ReactNode;

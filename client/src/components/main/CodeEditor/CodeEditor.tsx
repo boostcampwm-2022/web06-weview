@@ -1,7 +1,8 @@
 import React from "react";
 import useEditorScroll from "@/hooks/useEditorScroll";
 import useCodeEditor from "@/hooks/useCodeEditor";
-import CodeViewer from "@/components/CodeViewer/CodeViewer";
+import CodeViewer from "@/components/main/CodeViewer/CodeViewer";
+import "./CodeEditor.scss";
 
 const CodeEditor = (): JSX.Element => {
   const { code, handleCodeChange, language, lineCount } = useCodeEditor();

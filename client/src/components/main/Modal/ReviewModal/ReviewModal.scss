@@ -1,6 +1,4 @@
-@import "@/styles/_global-styles";
-@import "./ReviewScroll/ReviewForm/ReviewForm";
-@import "./ReviewScroll/ReviewScroll";
+@import "@/styles/_global-style";
 
 $code-line-width: 2.5rem;
 $review-code-width: calc($device-editor-width - $code-line-width);

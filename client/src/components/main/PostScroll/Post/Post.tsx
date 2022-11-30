@@ -1,10 +1,10 @@
 import React, { createContext } from "react";
 import "./Post.scss";
 import { PostInfo } from "@/types/post";
-import PostTitle from "@/components/PostScroll/Post/PostTitle/PostTitle";
-import PostImageSlider from "@/components/PostScroll/Post/PostImageSlider/PostImageSlider";
-import PostBody from "@/components/PostScroll/Post/PostBody/PostBody";
-import PostFooter from "@/components/PostScroll/Post/PostFooter/PostFooter";
+import PostTitle from "@/components/main/PostScroll/Post/PostTitle/PostTitle";
+import PostImageSlider from "@/components/main/PostScroll/Post/PostImageSlider/PostImageSlider";
+import PostBody from "@/components/main/PostScroll/Post/PostBody/PostBody";
+import PostFooter from "@/components/main/PostScroll/Post/PostFooter/PostFooter";
 import { defaultPostInfo } from "@/constants/defaultObject";
 
 interface PostProps {

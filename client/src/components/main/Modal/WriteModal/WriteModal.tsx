@@ -1,7 +1,7 @@
 import React from "react";
 import SnapShotNav from "./SnapShotNav/SnapShotNav";
 import WritingForm from "./WritingForm/WritingForm";
-import SubmitModal from "@/components/Modal/WriteModal/SubmitModal/SubmitModal";
+import SubmitModal from "@/components/main/Modal/WriteModal/SubmitModal/SubmitModal";
 
 const WriteModal = (): JSX.Element => {
   return (

@@ -1,10 +1,6 @@
 @import "@/styles/_theme";
-@import "@/styles/_global-styles";
+@import "@/styles/_global-style";
 @import "@/styles/_responsive";
-
-@import "./Menu/Menu";
-@import "./Filter/Filter";
-@import "./Profile/Profile";
 
 @include mobile {
   .nav {

@@ -1,8 +1,9 @@
 import React, { FormEvent, useCallback } from "react";
 import SubmitButton from "./SubmitButton/SubmitButton";
+import "./WritingForm.scss";
 import useModalStore from "@/store/useModalStore";
-import LanguageSelector from "@/components/Modal/WriteModal/WritingForm/LanguageSelector/LanguageSelector";
-import CodeEditor from "@/components/CodeEditor/CodeEditor";
+import LanguageSelector from "@/components/main/Modal/WriteModal/WritingForm/LanguageSelector/LanguageSelector";
+import CodeEditor from "@/components/main/CodeEditor/CodeEditor";
 
 const WritingForm = (): JSX.Element => {
   const { openSubmitModal } = useModalStore((state) => ({

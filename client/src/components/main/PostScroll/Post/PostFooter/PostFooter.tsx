@@ -1,9 +1,10 @@
 import React from "react";
-import LikeButton from "@/components/PostScroll/Post/PostFooter/LikeButton/LikeButton";
-import ReportButton from "@/components/PostScroll/Post/PostFooter/ReportButton/ReportButton";
-import ReviewButton from "@/components/PostScroll/Post/PostFooter/ReviewButton/ReviewButton";
-import ShareButton from "@/components/PostScroll/Post/PostFooter/ShareButton/ShareButton";
-import MoreButton from "@/components/PostScroll/Post/PostFooter/MoreButton/MoreButton";
+import LikeButton from "@/components/main/PostScroll/Post/PostFooter/LeftBlockItems/LikeButton";
+import ReportButton from "@/components/main/PostScroll/Post/PostFooter/LeftBlockItems/ReportButton";
+import ReviewButton from "@/components/main/PostScroll/Post/PostFooter/LeftBlockItems/ReviewButton";
+import ShareButton from "@/components/main/PostScroll/Post/PostFooter/LeftBlockItems/ShareButton";
+import MoreButton from "@/components/main/PostScroll/Post/PostFooter/RightBlockItems/MoreButton";
+import "./PostFooter.scss";
 
 const PostFooter = (): JSX.Element => {
   return (

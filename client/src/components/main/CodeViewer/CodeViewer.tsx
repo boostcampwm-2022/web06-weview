@@ -1,5 +1,6 @@
 import React, { RefObject } from "react";
 import useHighlight from "@/hooks/useHighlight";
+import "./CodeViewer.scss";
 
 interface CodeViewerProps {
   code: string;

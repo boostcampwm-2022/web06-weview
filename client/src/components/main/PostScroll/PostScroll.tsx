@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
-
-import "./PostScroll.scss";
-import Post from "@/components/PostScroll/Post/Post";
+import Post from "@/components/main/PostScroll/Post/Post";
 import usePostInfiniteScroll from "@/hooks/usePostInfiniteScroll";
-import ScrollLoader from "@/components/ScrollLoader/ScrollLoader";
+import ScrollLoader from "@/components/main/ScrollLoader/ScrollLoader";
 import { PostInfo, PostPages } from "@/types/post";
+import "./PostScroll.scss";
+
 const PostScroll = (): JSX.Element => {
   const { data, onIntersect, hasNextPage } = usePostInfiniteScroll();
 

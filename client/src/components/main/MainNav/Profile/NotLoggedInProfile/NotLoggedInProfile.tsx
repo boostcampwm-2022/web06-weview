@@ -1,6 +1,7 @@
 import React from "react";
 import useOAuthPopup from "@/hooks/useOAuthPopup";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import "./NotLoggedInProfile.scss";
 
 const NotLoggedInProfile = (): JSX.Element => {
   const { handleOpenOAuthPopup } = useOAuthPopup();

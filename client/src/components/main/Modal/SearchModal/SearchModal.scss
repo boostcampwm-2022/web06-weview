@@ -1,8 +1,8 @@
-@import "../../../styles/global-styles";
-@import "../../../styles/responsive";
-@import "../../../styles/theme";
-@import "../../../styles/global-styles";
-@import "SearchForm/SearchForm";
+@import "@/styles/global-style";
+@import "@/styles/responsive";
+@import "@/styles/theme";
+@import "@/styles/global-style";
+
 $modal-border-radius: 10px;
 
 @include device() {

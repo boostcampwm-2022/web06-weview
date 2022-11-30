@@ -1,6 +1,8 @@
 import React from "react";
 import { SvgIcon } from "@mui/material";
 
+import "./SvgIconButton.scss";
+
 interface SvgIconButtonProps {
   Icon: typeof SvgIcon;
   detail: string;

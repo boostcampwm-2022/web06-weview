@@ -1,4 +1,5 @@
 import React from "react";
+import "./CloseButton.scss";
 import useModalStore from "@/store/useModalStore";
 
 const CloseButton = (): JSX.Element => {
@@ -7,7 +8,7 @@ const CloseButton = (): JSX.Element => {
   }));
 
   return (
-    <button className="submit-modal__button--close" onClick={closeModal}>
+    <button className="writing-close-button" onClick={closeModal}>
       닫기
     </button>
   );

@@ -1,0 +1,6 @@
+@import '@/styles/button';
+
+.writing-close-button {
+  @include red-button;
+  margin-right: 0.25em;
+}

@@ -1,10 +1,11 @@
 import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { isEnterKey } from "@/utils/pressedKeyCheck";
-import SearchLabel from "@/components/Modal/SearchModal/SearchForm/SearchLabel/SearchLabel";
+import SearchLabel from "@/components/main/Modal/SearchModal/SearchForm/SearchLabel/SearchLabel";
 import { Label, SearchQuery } from "@/types/search";
 import { SEPARATOR } from "@/constants/search";
 import useSearchStore from "@/store/useSearchStore";
 import { formatTag } from "@/utils/regExpression";
+import "./SearchForm.scss";
 
 const createLabel = (word: string): Label => {
   const separator = word[0];

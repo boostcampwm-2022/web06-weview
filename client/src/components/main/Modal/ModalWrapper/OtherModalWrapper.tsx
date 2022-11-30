@@ -1,6 +1,7 @@
 import React, { useCallback, MouseEvent } from "react";
 import useModalStore from "@/store/useModalStore";
-import SearchModal from "@/components/Modal/SearchModal/SearchModal";
+import SearchModal from "@/components/main/Modal/SearchModal/SearchModal";
+import "./ModalWrapper.scss";
 
 const OtherModalContainer = (): JSX.Element => {
   const { closeRecentOpenedModal, resetRecentOpenedModal } = useModalStore(

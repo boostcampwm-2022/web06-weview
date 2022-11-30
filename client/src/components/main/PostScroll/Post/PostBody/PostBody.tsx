@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
-import { PostContext } from "@/components/PostScroll/Post/Post";
+import { PostContext } from "@/components/main/PostScroll/Post/Post";
 import TimeStamp from "@/components/commons/TimeStamp/TimeStamp";
+import "./PostBody.scss";
 
 const PostBody = (): JSX.Element => {
   const { title, content, updatedAt } = useContext(PostContext);

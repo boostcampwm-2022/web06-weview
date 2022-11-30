@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { PostContext } from "@/components/PostScroll/Post/Post";
+import { PostContext } from "@/components/main/PostScroll/Post/Post";
 import { LINE_COUNT_REGEX } from "@/utils/regExpression";
+import "./CodeInfo.scss";
 
 const CodeInfo = (): JSX.Element => {
   const { code, images } = useContext(PostContext);
@@ -11,7 +12,7 @@ const CodeInfo = (): JSX.Element => {
   }, [code]);
 
   return (
-    <div className="post__title--code-info">
+    <div className="post__title__code-info">
       {lineCount ?? 0} Lines, {images.length} Images
     </div>
   );

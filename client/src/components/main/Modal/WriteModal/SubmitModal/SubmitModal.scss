@@ -1,7 +1,5 @@
-@import "../../../CommonButtons/CommonButtons";
-@import "ContentArea/ContentArea";
-@import "TagInput/TagInput";
-@import "../../../../styles/global-styles";
+@import "@/styles/_button.scss";
+@import "@/styles/global-style";
 
 .submit-modal {
   position: absolute;
@@ -38,14 +36,5 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 1em;
-
-    &--close {
-      @include red-button;
-      margin-right: 0.25em;
-    }
-
-    &--register {
-      @include nav-button;
-    }
   }
 }

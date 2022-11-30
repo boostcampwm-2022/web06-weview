@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useCallback } from "react";
+import "./ContentArea.scss";
 import useWritingStore from "@/store/useWritingStore";
 
 const ContentArea = (): JSX.Element => {

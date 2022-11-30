@@ -1,4 +1,5 @@
 import React from "react";
+import "./RegisterButton.scss";
 import useWritingStore from "@/store/useWritingStore";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
 import { postWritingsAPI, uploadImage } from "@/apis/post";
@@ -66,7 +67,7 @@ const RegisterButton = (): JSX.Element => {
   };
 
   return (
-    <button onClick={handleSubmit} className="submit-modal__button--register">
+    <button onClick={handleSubmit} className="writing-register-button">
       등록
     </button>
   );

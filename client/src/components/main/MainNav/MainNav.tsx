@@ -1,7 +1,8 @@
 import React from "react";
-import Filter from "@/components/MainNav/Filter/Filter";
-import Menu from "@/components/MainNav/Menu/Menu";
-import Profile from "@/components/MainNav/Profile/Profile";
+import Filter from "@/components/main/MainNav/Filter/Filter";
+import Menu from "@/components/main/MainNav/Menu/Menu";
+import Profile from "@/components/main/MainNav/Profile/Profile";
+import "./MainNav.scss";
 
 const MainNav = (): JSX.Element => {
   return (

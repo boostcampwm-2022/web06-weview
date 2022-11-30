@@ -4,6 +4,7 @@ import useCommonModalStore from "@/store/useCommonModalStore";
 import ReviewModal from "@/components/main/Modal/ReviewModal/ReviewModal";
 import { PostContext } from "@/components/main/PostScroll/Post/Post";
 import SvgIconButton from "@/components/commons/SvgIconButton/SvgIconButton";
+import "./LeftBlockItems.scss";
 
 const ReviewButton = (): JSX.Element => {
   const { id: postId, code, language } = useContext(PostContext);

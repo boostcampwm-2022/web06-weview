@@ -1,6 +1,7 @@
 import React, { MouseEventHandler } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import SvgIconButton from "@/components/commons/SvgIconButton/SvgIconButton";
+import "./RightBlockItems.scss";
 
 const MoreButton = (): JSX.Element => {
   const handleOpenMore: MouseEventHandler = () => {};

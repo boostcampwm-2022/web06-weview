@@ -1,4 +1,5 @@
 import React from "react";
+import "./SnapShotNav.scss";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
 
 const SnapShotNav = (): JSX.Element => {

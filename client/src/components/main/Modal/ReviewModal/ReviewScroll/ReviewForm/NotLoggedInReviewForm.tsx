@@ -1,5 +1,6 @@
 import React from "react";
 import useOAuthPopup from "@/hooks/useOAuthPopup";
+import "./ReviewForm.scss";
 
 const NotLoggedInReviewForm = (): JSX.Element => {
   const { handleOpenOAuthPopup } = useOAuthPopup();

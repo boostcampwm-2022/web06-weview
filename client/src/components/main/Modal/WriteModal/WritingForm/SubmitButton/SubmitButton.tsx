@@ -1,4 +1,5 @@
 import React, { FormEvent, useCallback } from "react";
+import "./SubmitButton.scss";
 import useModalStore from "@/store/useModalStore";
 
 const SubmitButton = (): JSX.Element => {

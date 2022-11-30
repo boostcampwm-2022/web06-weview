@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useState,
 } from "react";
+import "./TagInput.scss";
 import { isSubmitKey } from "@/utils/pressedKeyCheck";
 import useWritingStore from "@/store/useWritingStore";
 import { formatTag } from "@/utils/regExpression";

@@ -1,10 +1,9 @@
 import React from "react";
-
-import "./UserProfile.scss";
 import { logOutAPI } from "@/apis/auth";
 import customLocalStorage from "@/utils/localStorage";
 import useAuthStore from "@/store/useAuthStore";
 import axiosInstance from "@/apis/axios";
+import "./UserProfile.scss";
 
 const UserProfile = (): JSX.Element => {
   const { myInfo, logout } = useAuthStore((state) => ({
