@@ -32,6 +32,7 @@ const posts = Array.from(Array(1024).keys()).map((id) => ({
   language: `javascript`,
   category: id % 2 === 0 ? "리뷰요청" : "질문",
   likes: id % 10,
+  isLiked: id % 2 === 0,
 }));
 
 export const postHandler = [
@@ -74,5 +75,13 @@ export const postHandler = [
       ctx.status(200),
       ctx.json({ message: "글 작성에 성공했습니다." })
     );
+  }),
+
+  rest.post(`${baseUrl}/posts/:postId/likes`, (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.delete(`${baseUrl}/posts/:postId/likes`, (req, res, ctx) => {
+    return res(ctx.status(200));
   }),
 ];

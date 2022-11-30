@@ -1,23 +1,28 @@
-import React, { MouseEventHandler, useState } from "react";
+import React, { MouseEventHandler, useContext } from "react";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import SvgIconButton from "@/components/commons/SvgIconButton/SvgIconButton";
+import usePostLike from "@/hooks/usePostLike";
+import { PostContext } from "@/components/PostScroll/Post/Post";
 
 const primaryColor = "#84cb8d";
 const textColor = "#222222";
 
 const LikeButton = (): JSX.Element => {
-  const [liked, setLiked] = useState(false);
+  const { id, isLiked } = useContext(PostContext);
 
   const toggleLiked: MouseEventHandler = () => {
-    console.log("좋아요");
-    setLiked((liked) => !liked);
+    if (typeof isLiked === "undefined") {
+      alert("로그인 후 이용해 주세요");
+      return;
+    }
+    likeToggleMutation.mutate();
   };
 
   const handleRequestLogin: MouseEventHandler = () => {
-    console.log("로그인이 필요합니다.");
+    alert("로그인 후 이용해주세요");
   };
 
-  if (liked === undefined) {
+  if (isLiked === undefined) {
     return (
       <SvgIconButton
         Icon={ThumbUpAltIcon}
@@ -28,13 +33,18 @@ const LikeButton = (): JSX.Element => {
     );
   }
 
+  const { isLikedState, likeToggleMutation } = usePostLike({
+    postId: id,
+    isLiked,
+  });
+
   return (
     <SvgIconButton
       Icon={ThumbUpAltIcon}
       detail="좋아요"
       onClick={toggleLiked}
       className="post__footer__left-block--btn"
-      color={`${liked ? primaryColor : textColor}`}
+      color={`${isLikedState ? primaryColor : textColor}`}
     />
   );
 };
