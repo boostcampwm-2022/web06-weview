@@ -3,40 +3,69 @@
     "browser": true,
     "es2021": true
   },
-  "extends": [
-    "plugin:react/recommended",
-    "standard-with-typescript",
-    "plugin:prettier/recommended",
-    "prettier",
-    "plugin:cypress/recommended"
-  ],
-  "overrides": [],
-  "parserOptions": {
-    "ecmaVersion": "latest",
-    "project": ["tsconfig.json"],
-    "sourceType": "module"
+  "settings": {
+    "import/extensions": [
+      ".js",
+      ".jsx",
+      ".scss"
+    ],
+    "import/resolver": {
+      "typescript": true
+    }
   },
-  "plugins": ["react", "import"],
-  "rules": {
-    "react/display-name": "off",
-    "import/order": [
-      "error",
-      {
-        "groups": [
-          ["builtin", "external"],
-          "internal",
-          ["parent", "sibling"],
-          "index"
-        ],
-        "newlines-between": "always",
-        "pathGroups": [
-          {
-            "pattern": "@/**",
-            "group": "internal",
-            "position": "after"
-          }
-        ]
-      }
-    ]
+    "extends": [
+      "plugin:react/recommended",
+      "standard-with-typescript",
+      "plugin:prettier/recommended",
+      "prettier",
+      "plugin:cypress/recommended"
+    ],
+    "overrides": [],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "project": [
+        "tsconfig.json"
+      ],
+      "sourceType": "module"
+    },
+    "plugins": [
+      "react",
+      "import"
+    ],
+    "rules": {
+      "react/display-name": "off",
+      "import/order": [
+        "error",
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "internal",
+            ["sibling", "parent", "index"],
+            "type",
+            "unknown"
+          ],
+          "newlines-between": "always",
+          "warnOnUnassignedImports": true,
+          "pathGroups": [
+            {
+              "pattern": "{react*, react*/**}",
+              "group": "external",
+              "position": "before"
+            },
+            {
+              "pattern": "@/**",
+              "group": "internal",
+              "position": "before"
+            },
+            {
+              "pattern": "*.scss",
+              "group": "unknown",
+              "patternOptions": { "matchBase": true },
+              "position": "after"
+            }
+          ]
+        }
+      ]
+    }
   }
-}
