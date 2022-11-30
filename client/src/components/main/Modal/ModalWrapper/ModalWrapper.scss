@@ -1,0 +1,9 @@
+@import "@/styles/_global-style.scss";
+
+.modal-background {
+  position: absolute;
+  top: 0;
+  z-index: $modal-background-z-index !important;
+  width: 100vw;
+  height: 100vh;
+}

@@ -1,4 +1,5 @@
-@import "@/styles/_global-styles.scss";
+@import "@/styles/_global-style";
+@import "@/styles/_animation";
 
 $icon-default-size: 2rem;
 $icon-hover-size: 2.5rem;
@@ -18,40 +19,18 @@ $detail-font-size: 0.75rem;
 
   &__detail {
     font-size: $detail-font-size;
-    transition: 100ms;
+    transition: 200ms;
   }
 
   &:hover {
     cursor: pointer;
 
     & .svg-icon-button__icon {
-      font-size: $icon-hover-size !important;
-      animation: fade-in-icon;
+      @include fade-in-icon($icon-default-size, $icon-hover-size);
     }
 
     & .svg-icon-button__detail {
-      opacity: 0;
-      animation: fade-out-text;
+      @include fade-out-icon();
     }
-  }
-}
-
-@keyframes fade-in-icon {
-  from {
-    font-size: $icon-default-size;
-  }
-
-  to {
-    font-size: $icon-hover-size;
-  }
-}
-
-@keyframes fade-out-text {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
   }
 }

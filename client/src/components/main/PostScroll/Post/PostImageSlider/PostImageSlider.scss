@@ -1,0 +1,13 @@
+.post__image-slider {
+  grid-row: 2;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: black;
+
+  &--image {
+    width: inherit;
+    height: inherit;
+    object-fit: cover; // 가로-세로 비율 맞춰서 꽉 차게
+  }
+}

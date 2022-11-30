@@ -1,6 +1,12 @@
-@import "src/constants/_library.scss";
-@import "../../styles/global-styles";
-@import "@/styles/_responsive.scss";
+@import "@/styles/_theme";
+@import "@/styles/_global-style.scss";
+@import "@/styles/_responsive";
+
+// components
+//
+//
+//
+//
 
 @mixin main-responsive($width, $gap) {
   gap: $gap;
@@ -14,18 +20,6 @@
   height: 100%;
   margin: 0 auto;
   color: $text-color;
-}
-
-@mixin main-fade-in {
-  opacity: 1;
-  transition: 1s all ease;
-  transform: translateY(0);
-}
-
-@mixin main-fade-out {
-  opacity: 0;
-  transition: 1s all ease;
-  transform: translateY(-100%);
 }
 
 @include mobile {

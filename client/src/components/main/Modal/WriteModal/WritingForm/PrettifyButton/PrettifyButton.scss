@@ -1,0 +1,6 @@
+@import "@/styles/_button.scss";
+
+.prettify-button {
+  @include green-button;
+  margin-right: 0.5em;
+}

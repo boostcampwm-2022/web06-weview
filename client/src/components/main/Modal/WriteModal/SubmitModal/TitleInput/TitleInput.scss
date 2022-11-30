@@ -1,0 +1,24 @@
+@import "@/styles/_theme.scss";
+
+.title {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+
+  &__label {
+    margin-bottom: 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  &__input {
+    width: 70%;
+    height: 1.75rem;
+    padding-left: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background: none;
+    border: 1px solid $line-color;
+    border-radius: 0.25rem;
+  }
+}

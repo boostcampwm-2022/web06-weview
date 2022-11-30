@@ -1,0 +1,16 @@
+@import "@/styles/_theme";
+
+.post__title {
+  box-sizing: border-box;
+  display: flex;
+  grid-row: 1;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding-inline: 0.75rem 0.75rem;
+  overflow: hidden;
+
+  // 아래 구분선
+  border-bottom: 1px solid $line-color;
+}

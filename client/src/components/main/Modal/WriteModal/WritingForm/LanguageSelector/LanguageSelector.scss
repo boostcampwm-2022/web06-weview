@@ -1,0 +1,35 @@
+@import "@/styles/theme";
+
+.language {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: calc(35% + 1rem);
+  max-width: 150px;
+  height: 1.75rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  background-color: $codeblock-color;
+  border: 1px solid $line-color;
+  border-radius: 0.2rem;
+
+  &__icon {
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    color: $alert;
+    pointer-events: none;
+    background-color: $codeblock-color;
+  }
+
+  &__select {
+    position: absolute;
+    width: 100%;
+    padding-left: 0.5rem;
+    font-size: 1rem;
+    color: $alert;
+    text-overflow: ellipsis;
+    background-color: $codeblock-color;
+    border: none;
+  }
+}

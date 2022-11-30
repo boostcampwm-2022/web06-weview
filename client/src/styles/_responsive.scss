@@ -1,4 +1,4 @@
-@import "@/styles/_global-styles.scss";
+@import "@/styles/_global-style.scss";
 
 @mixin device {
   @media screen and (min-width: $device-min-width) {

@@ -1,0 +1,35 @@
+@import "@/styles/_theme.scss";
+@import "@/styles/_global-style.scss";
+@import "@/styles/_animation.scss";
+
+.modal-container {
+  // root 의 가운데 정렬
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: $modal-content-z-index;
+  box-sizing: border-box;
+
+  display: flex;
+  width: 100%;
+  max-width: $desktop-main-width;
+  height: 100%;
+
+  // 모달 내용들은 공통으로 2rem 패딩 내에 존재
+  padding: 2rem;
+  margin: 0 auto;
+  background-color: $weview-off-white;
+  border: 0.25rem solid $line-color;
+  border-radius: 1rem;
+  box-shadow: $button-shadow;
+
+  &.open {
+    @include fade-in-modal(600ms);
+  }
+
+  &.close {
+    z-index: -1;
+    visibility: hidden;
+  }
+}

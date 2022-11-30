@@ -1,0 +1,66 @@
+@import "@/styles/_theme";
+@import "@/styles/_mixin";
+
+@mixin weview-button {
+  @include flex-center;
+  width: 4.5rem;
+  height: 2.3rem;
+  font-size: 1rem;
+  font-weight: normal;
+  cursor: pointer;
+  background: $weview-off-white;
+  border-radius: 0.9em;
+}
+
+@mixin weview-button--bold($width, $height) {
+  @include weview-button;
+  width: $width !important;
+  height: $height !important;
+}
+
+@mixin green-button {
+  @include weview-button;
+  color: $primary;
+  border: 1px solid $primary;
+
+  &:hover {
+    color: $weview-off-white;
+    background-color: $primary;
+  }
+}
+
+@mixin green-button--bold($width, $height) {
+  @include weview-button;
+  width: $width !important;
+  height: $height !important;
+  color: $weview-off-white;
+  background-color: $primary;
+  border: 1px solid $primary;
+}
+
+@mixin red-button {
+  @include weview-button;
+  color: $error;
+  border: 1px solid $error;
+
+  &:hover {
+    color: $weview-off-white;
+    background-color: $error;
+  }
+}
+
+@mixin nav-button {
+  width: 5rem;
+  height: 1.8rem;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  background: none;
+  background: none;
+  border: 1px solid $line-color;
+  border-radius: 0.2rem;
+
+  &:focus {
+    color: $line-color;
+  }
+}

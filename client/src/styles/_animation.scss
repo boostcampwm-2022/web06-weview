@@ -1,9 +1,55 @@
-@keyframes modal-fade-in {
-  from {
-    top: 100%;
-  }
+@import "@/styles/_global-style.scss";
 
-  to {
-    top: 0;
+$modal-speed: cubic-bezier(0.86, 0, 0.3, 1);
+
+// SvgIconButton
+@mixin fade-in-icon($default-size, $icon-hover-size) {
+  font-size: $icon-hover-size !important;
+  animation: fade-in-icon;
+  @keyframes fade-in-icon {
+    from {
+      font-size: $default-size;
+    }
+
+    to {
+      font-size: $icon-hover-size;
+    }
   }
 }
+@mixin fade-out-icon() {
+  opacity: 0;
+  animation: fade-out-text;
+  @keyframes fade-out-text {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+}
+// Loading Spinner
+@mixin spin-infinite() {
+  animation: spin 1s linear infinite;
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+// Modal Container
+@mixin fade-in-modal($animation-time) {
+  visibility: visible;
+  animation: modal-fade-in $animation-time $modal-speed;
+  @keyframes modal-fade-in {
+    from {
+      top: 100%;
+    }
+
+    to {
+      top: 0;
+    }
+  }
+}
+
