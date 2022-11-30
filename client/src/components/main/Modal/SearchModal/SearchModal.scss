@@ -1,9 +1,32 @@
-@import "@/styles/global-style";
-@import "@/styles/responsive";
-@import "@/styles/theme";
-@import "@/styles/global-style";
+@import "@/styles/_global-style";
+@import "@/styles/_responsive";
+@import "@/styles/_theme";
+@import "@/styles/_global-style";
 
+$author-color: #c08834;
+$reviews-color: #4dd2ba;
+$likes-color: #ef69da;
 $modal-border-radius: 10px;
+
+@mixin label($border-color) {
+  box-sizing: border-box;
+  display: table-cell;
+  flex: none;
+  width: fit-content;
+  height: fit-content;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  color: $text-color;
+  vertical-align: middle;
+  background-color: $weview-off-white;
+
+  border: 2px solid $border-color;
+  border-radius: 0.9rem;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
 
 @include device() {
   .search-modal {

@@ -2,12 +2,6 @@
 @import "@/styles/_global-style.scss";
 @import "@/styles/_responsive";
 
-// components
-//
-//
-//
-//
-
 @mixin main-responsive($width, $gap) {
   gap: $gap;
   width: $width;

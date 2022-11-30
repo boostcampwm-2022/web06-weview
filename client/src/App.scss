@@ -1,14 +1,8 @@
 // fonts
 @import url("https://webfontworld.github.io/gmarket/GmarketSans.css");
 // pages
-@import "pages/Main/Main";
-// common components
-@import "components/commons/SvgIconButton/SvgIconButton";
-// components
-@import "src/components/main/MainNav/MainNav";
-@import "components/main/Modal/WriteModal/WriteModal";
-@import "components/main/Modal/ModalContainer/ModalContainer";
-@import "components/main/Modal/ModalWrapper/ModalWrapper";
+@import "@/styles/_global-style";
+@import "@/styles/_theme";
 
 html,
 body {

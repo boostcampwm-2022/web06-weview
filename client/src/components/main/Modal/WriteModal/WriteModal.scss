@@ -1,9 +1,5 @@
-@import "../../../../styles/theme";
-@import "../../../../styles/global-style";
-@import "@/components/main/Modal/WriteModal/CloseButton/CloseButton.js";
-@import "@/components/main/Modal/WriteModal/SnapShotNav/SnapShotNav.js";
-@import "@/components/main/Modal/WriteModal/SubmitModal/SubmitModal.js";
-@import "@/components/main/Modal/WriteModal/WritingForm/WritingForm.js";
+@import "@/styles/_theme";
+@import "@/styles/_global-style";
 
 .write-modal {
   display: flex;
