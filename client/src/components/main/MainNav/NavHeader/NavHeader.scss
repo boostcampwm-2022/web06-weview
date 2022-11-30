@@ -1,0 +1,26 @@
+@import "@/styles/_responsive";
+@import "@/styles/_theme";
+
+/*!
+ * max content height : 5rem
+ * max content width : 16rem (4 + 1(gap) + 10)
+ */
+@include device() {
+  .nav__header {
+    display: flex;
+    flex-direction: row !important;
+    gap: 1rem;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+
+    &__logo {
+      content: url("@/assets/images/weview-logo-name.svg");
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

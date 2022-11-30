@@ -1,6 +1,7 @@
-@import "@/styles/_theme";
-@import "@/styles/_global-style";
-@import "@/styles/_responsive";
+@import "@/styles/theme";
+@import "@/styles/global-style";
+@import "@/styles/responsive";
+@import "@/styles/mixin";
 
 @include mobile {
   .nav {
@@ -11,18 +12,64 @@
 }
 
 @include tablet {
-  .nav {
-  }
 }
 
 @include device {
   .nav {
+    position: relative;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    width: $main-nav-width;
-    padding: 0.5em 2em;
-    border: 1px solid $line-color;
-    border-top: 0.25rem solid $line-color;
-    border-bottom: 0.25rem solid $line-color;
+    gap: 2rem;
+    padding: 2rem;
+    border-right: $border-medium $line-color;
+    transition: 300ms;
+
+    /* nav 컨텐츠 섹션 비율 */
+    & > section {
+      width: 100%;
+      height: 5rem; /* header, footer 고정 길이 */
+
+      &:nth-child(1) {
+        flex-grow: 0;
+      }
+
+      &:nth-child(2) {
+        flex-grow: 1;
+      }
+
+      &:nth-child(3) {
+        flex-grow: 0;
+      }
+    }
+
+    /* 반응형: 디바이스-opened */
+    &.opened {
+      width: $main-nav-width;
+
+      .nav-menu__detail {
+        min-width: 7rem;
+        opacity: 1;
+      }
+    }
+
+    /* 반응형: 디바이스-closed */
+    &.closed {
+      width: 9.2rem; /* NavMenu width-height 가 5rem:5rem 이 되는 가로 길이 */
+
+      /* 헤더 로고를 아이콘 로고로 변경한다. */
+      .nav__header {
+        &__logo {
+          width: 50px;
+          height: 50px;
+          content: url("@/assets/images/weview-logo-icon.svg");
+        }
+      }
+
+      /* 글자들을 모두 가린다. */
+      .nav-menu__detail {
+        opacity: 0;
+      }
+    }
   }
 }

@@ -1,0 +1,42 @@
+@import "@/styles/_responsive";
+@import "@/styles/_mixin";
+
+@include device() {
+  .nav__footer {
+    @include flex-start;
+    position: relative;
+    flex-direction: column;
+
+    .nav-menu {
+      width: 100%;
+      height: 5rem;
+      padding: 1rem 0;
+
+      &:hover {
+        cursor: pointer;
+
+        & ~ .nav__footer__active {
+          display: block;
+        }
+      }
+
+      &:nth-child(1) {
+        &:hover ~ .nav__footer__active {
+          top: 0;
+        }
+      }
+    }
+
+    &__active {
+      position: absolute;
+      top: 0;
+      left: -1rem;
+      display: none;
+      width: 0.5rem;
+      height: 5rem;
+      background-color: $primary-light;
+      border-radius: $radius-small;
+      transition: top 300ms;
+    }
+  }
+}
