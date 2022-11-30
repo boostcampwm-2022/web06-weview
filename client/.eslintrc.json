@@ -16,8 +16,27 @@
     "project": ["tsconfig.json"],
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "import"],
   "rules": {
-    "react/display-name": "off"
+    "react/display-name": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          ["builtin", "external"],
+          "internal",
+          ["parent", "sibling"],
+          "index"
+        ],
+        "newlines-between": "always",
+        "pathGroups": [
+          {
+            "pattern": "@/**",
+            "group": "internal",
+            "position": "after"
+          }
+        ]
+      }
+    ]
   }
 }
