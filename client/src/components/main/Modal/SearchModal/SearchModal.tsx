@@ -1,7 +1,9 @@
 import React from "react";
+
 import useModalStore from "@/store/useModalStore";
 import SearchForm from "@/components/main/Modal/SearchModal/SearchForm/SearchForm";
 import { DESCRIPTION } from "@/constants/search";
+
 import "./SearchModal.scss";
 
 const SearchModal = (): JSX.Element => {

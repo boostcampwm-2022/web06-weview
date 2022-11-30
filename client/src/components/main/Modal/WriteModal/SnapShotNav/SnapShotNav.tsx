@@ -1,6 +1,8 @@
 import React from "react";
-import "./SnapShotNav.scss";
+
 import useCodeEditorStore from "@/store/useCodeEditorStore";
+
+import "./SnapShotNav.scss";
 
 const SnapShotNav = (): JSX.Element => {
   const { images } = useCodeEditorStore((state) => ({

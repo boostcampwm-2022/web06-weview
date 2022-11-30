@@ -1,12 +1,14 @@
 import React, { useRef } from "react";
-import "./App.scss";
-import { queryClient } from "@/react-query/queryClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+import { queryClient } from "@/react-query/queryClient";
 import { isEmpty } from "@/utils/typeCheck";
 import ReactRouter from "@/ReactRouter";
 import CommonModalWrapper from "@/components/main/Modal/ModalWrapper/CommonModalWrapper";
 import OtherModalWrapper from "@/components/main/Modal/ModalWrapper/OtherModalWrapper";
+
+import "./App.scss";
 
 function App(): JSX.Element {
   const queryClientRef = useRef<QueryClient>();

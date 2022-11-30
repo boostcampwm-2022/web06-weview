@@ -1,4 +1,5 @@
 import React from "react";
+
 import useImageIntersect from "@/hooks/useImageIntersect";
 
 interface ProgressiveImageProps {

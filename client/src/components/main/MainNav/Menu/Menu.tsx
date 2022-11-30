@@ -1,8 +1,10 @@
 import React, { useCallback, MouseEvent } from "react";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
+
 import useCommonModalStore from "@/store/useCommonModalStore";
 import WriteModal from "@/components/main/Modal/WriteModal/WriteModal";
+
 import "./Menu.scss";
 
 const Menu = (): JSX.Element => {

@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
+
 import { PostContext } from "@/components/main/PostScroll/Post/Post";
+
 import "./AuthorProfile.scss";
 
 const AuthorProfile = (): JSX.Element => {

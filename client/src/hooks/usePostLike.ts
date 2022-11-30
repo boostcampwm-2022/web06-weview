@@ -1,5 +1,6 @@
 import { MouseEventHandler, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+
 import { queryClient } from "@/react-query/queryClient";
 import { toggleLikeAPI } from "@/apis/post";
 import { QUERY_KEYS } from "@/react-query/queryKeys";

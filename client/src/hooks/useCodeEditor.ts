@@ -1,6 +1,7 @@
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { ONE_SNAPSHOT_LINE_COUNT } from "@/constants/code";
 import domtoimage from "dom-to-image";
+
+import { ONE_SNAPSHOT_LINE_COUNT } from "@/constants/code";
 import { IMAGE_OPTIONS } from "@/constants/options";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
 import { getLineCount } from "@/utils/code";

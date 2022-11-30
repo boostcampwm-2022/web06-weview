@@ -1,8 +1,10 @@
 import React from "react";
+
 import ReviewScroll from "@/components/main/Modal/ReviewModal/ReviewScroll/ReviewScroll";
 import CodeViewer from "@/components/main/CodeViewer/CodeViewer";
 import { getLineCount } from "@/utils/code";
 import useViewerScroll from "@/hooks/useViewerScroll";
+
 import "./ReviewModal.scss";
 
 interface ReviewModalProps {

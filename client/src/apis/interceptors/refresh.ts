@@ -1,9 +1,11 @@
 import { AxiosRequestConfig } from "axios";
-import { logOutAPI, tokenRefreshAPI } from "../auth";
+
 import customLocalStorage from "@/utils/localStorage";
 import axiosInstance from "@/apis/axios";
 import { isEmpty } from "@/utils/typeCheck";
 import useAuthStore from "@/store/useAuthStore";
+
+import { logOutAPI, tokenRefreshAPI } from "../auth";
 
 export const refreshInterceptor = async (
   config: AxiosRequestConfig

@@ -1,5 +1,7 @@
 import React, { MouseEvent } from "react";
+
 import useModalStore from "@/store/useModalStore";
+
 import "./Filter.scss";
 
 const Filter = (): JSX.Element => {

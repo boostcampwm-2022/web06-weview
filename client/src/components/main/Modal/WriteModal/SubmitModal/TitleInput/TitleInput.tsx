@@ -1,6 +1,8 @@
 import React, { ChangeEvent, useCallback } from "react";
-import "./TitleInput.scss";
+
 import useWritingStore from "@/store/useWritingStore";
+
+import "./TitleInput.scss";
 
 const TitleInput = (): JSX.Element => {
   const { title, setTitle } = useWritingStore((state) => ({

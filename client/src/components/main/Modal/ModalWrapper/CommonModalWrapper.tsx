@@ -1,6 +1,8 @@
 import React, { useCallback, MouseEvent } from "react";
+
 import ModalContainer from "@/components/main/Modal/ModalContainer/ModalContainer";
 import useCommonModalStore from "@/store/useCommonModalStore";
+
 import "./ModalWrapper.scss";
 
 const CommonModalWrapper = (): JSX.Element => {

@@ -5,9 +5,10 @@ import {
   QueryFunctionContext,
   useInfiniteQuery,
 } from "@tanstack/react-query";
+import { useCallback, useEffect } from "react";
+
 import { fetchPost } from "@/apis/post";
 import { PostPages } from "@/types/post";
-import { useCallback, useEffect } from "react";
 import useSearchStore from "@/store/useSearchStore";
 import { queryClient } from "@/react-query/queryClient";
 import { QUERY_KEYS } from "@/react-query/queryKeys";

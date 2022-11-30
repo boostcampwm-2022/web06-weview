@@ -1,6 +1,9 @@
 import React, { useCallback } from "react";
+
 import "./CloseButton.scss";
+
 import CloseIcon from "@mui/icons-material/Close";
+
 import useModalStore from "@/store/useModalStore";
 
 const CloseButton = (): JSX.Element => {

@@ -1,8 +1,10 @@
 import React, { useMemo } from "react";
+
 import Post from "@/components/main/PostScroll/Post/Post";
 import usePostInfiniteScroll from "@/hooks/usePostInfiniteScroll";
 import ScrollLoader from "@/components/main/ScrollLoader/ScrollLoader";
 import { PostInfo, PostPages } from "@/types/post";
+
 import "./PostScroll.scss";
 
 const PostScroll = (): JSX.Element => {

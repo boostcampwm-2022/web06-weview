@@ -1,5 +1,7 @@
 import React from "react";
+
 import "./CloseButton.scss";
+
 import useModalStore from "@/store/useModalStore";
 
 const CloseButton = (): JSX.Element => {

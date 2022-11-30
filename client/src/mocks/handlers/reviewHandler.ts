@@ -1,5 +1,6 @@
-import { API_SERVER_URL } from "@/constants/env";
 import { rest } from "msw";
+
+import { API_SERVER_URL } from "@/constants/env";
 import { ReviewInfo } from "@/types/review";
 
 const ONE_REQUEST_REVIEWS_COUNT = 3;

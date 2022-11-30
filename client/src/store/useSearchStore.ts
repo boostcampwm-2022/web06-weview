@@ -1,5 +1,6 @@
 import create from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
+
 import { SearchQuery } from "@/types/search";
 
 interface SearchStates {

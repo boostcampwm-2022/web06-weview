@@ -1,7 +1,8 @@
 import { render, RenderResult } from "@testing-library/react";
 import React, { ReactElement, ReactNode } from "react";
-import { generateQueryClient } from "@/react-query/queryClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { generateQueryClient } from "@/react-query/queryClient";
 
 const generateTestQueryClient = (): QueryClient => {
   const client = generateQueryClient();

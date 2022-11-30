@@ -4,10 +4,12 @@ import React, {
   useCallback,
   useState,
 } from "react";
-import "./TagInput.scss";
+
 import { isSubmitKey } from "@/utils/pressedKeyCheck";
 import useWritingStore from "@/store/useWritingStore";
 import { formatTag } from "@/utils/regExpression";
+
+import "./TagInput.scss";
 
 const TagInput = (): JSX.Element => {
   const [tag, setTag] = useState("");
