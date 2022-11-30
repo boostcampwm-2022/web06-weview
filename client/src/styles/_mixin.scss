@@ -30,3 +30,9 @@
   background-color: $codeblock-color;
   border-right: 1px solid $line-color;
 }
+
+@mixin flex-middle-start {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
