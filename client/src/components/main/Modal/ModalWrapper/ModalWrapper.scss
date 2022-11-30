@@ -1,0 +1,10 @@
+@import "@/styles/_global-styles";
+@import "@/components/Modal/SearchModal/SearchForm/SearchForm";
+
+.modal-background {
+  position: absolute;
+  top: 0;
+  z-index: $modal-background-z-index !important;
+  width: 100vw;
+  height: 100vh;
+}

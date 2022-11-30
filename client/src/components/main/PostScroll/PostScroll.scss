@@ -1,0 +1,22 @@
+@import "@/styles/_theme";
+@import "@/styles/_global-styles";
+
+.post-scroll {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: $post-gap;
+  align-items: center;
+
+  width: $main-post-bar-width;
+  height: 100%;
+
+  margin: 0 $post-bar-margin-side;
+  overflow-y: scroll;
+
+  background-color: $weview-off-white;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -1,0 +1,75 @@
+@import "../../../styles/global-styles";
+@import "../../../styles/responsive";
+@import "../../../styles/theme";
+@import "../../../styles/global-styles";
+@import "SearchForm/SearchForm";
+$modal-border-radius: 10px;
+
+@include device() {
+  .search-modal {
+    position: absolute;
+
+    top: 4.5rem;
+    left: 50%;
+
+    z-index: $modal-content-z-index;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: calc($desktop-main-width - 4rem);
+    transform: translate(-50%, 0);
+
+    &__info {
+      box-sizing: border-box;
+      display: grid;
+      grid-template-rows: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+      place-items: flex-start;
+      align-items: center;
+      width: 100%;
+      height: 7rem;
+      padding: 0 1rem;
+      font-size: 0.75rem;
+      background-color: $weview-off-white;
+      border: 1px solid $text-color;
+      border-radius: $modal-border-radius;
+      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+      &__item {
+        display: flex;
+        align-items: center;
+
+        &--example {
+          &--tag {
+            @include label($primary);
+          }
+
+          &--category {
+            @include label($alert);
+          }
+
+          &--author {
+            @include label($author-color);
+          }
+
+          &--likes {
+            @include label($likes-color);
+          }
+
+          &--reviews {
+            @include label($reviews-color);
+          }
+
+          &--detail {
+            @include label($line-color);
+          }
+        }
+
+        &--description {
+          width: 4.5rem;
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+}

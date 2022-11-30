@@ -1,0 +1,22 @@
+@import "@/styles/_global-styles";
+@import "@/components/Modal/WriteModal/SubmitModal/TitleInput/TitleInput";
+@import "@/components/CodeEditor/CodeEditor";
+@import "PrettifyButton/PrettifyButton";
+@import "SubmitButton/SubmitButton";
+@import "LanguageSelector/LanguageSelector";
+
+.writing-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: $device-editor-width;
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+  @media screen and (max-width: 720px) {
+    width: calc(100% - 4rem);
+    height: 100%;
+  }
+}

@@ -1,0 +1,13 @@
+@import "../../../styles/theme";
+@import "../../../styles/global-styles";
+@import "CloseButton/CloseButton";
+@import "SnapShotNav/SnapShotNav";
+@import "SubmitModal/SubmitModal";
+@import "WritingForm/WritingForm";
+
+.write-modal {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+}
