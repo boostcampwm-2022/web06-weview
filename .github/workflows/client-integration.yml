@@ -1,7 +1,7 @@
 name: "Client Test Build (Pull Request)"
 
 on:
-  pull_request: # commit이 push되었을 때 이벤트가 발생
+  pull_request:
     branches: ["main", "dev"]
     paths:
       - "client/**"
