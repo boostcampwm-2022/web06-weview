@@ -1,5 +1,7 @@
-import { API_SERVER_URL } from "@/constants/env";
 import axios, { AxiosRequestConfig } from "axios";
+
+import { API_SERVER_URL } from "@/constants/env";
+
 import {
   refreshErrorHandler,
   refreshInterceptor,

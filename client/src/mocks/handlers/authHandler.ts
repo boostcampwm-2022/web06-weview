@@ -1,4 +1,5 @@
 import { rest } from "msw";
+
 import { mockUser } from "@/mocks/mockData";
 import { API_SERVER_URL } from "@/constants/env";
 
@@ -22,6 +23,13 @@ export const authHandler = [
         expiresIn: 1669293441000,
         accessToken: 123545,
       })
+    );
+  }),
+  rest.get(`${baseUrl}/auth/s3-url`, (req, res, ctx) => {
+    const count = req.url.searchParams.get("imageCount");
+    return res(
+      ctx.status(200),
+      ctx.json(Array.from({ length: Number(count) }, () => "url"))
     );
   }),
 ];

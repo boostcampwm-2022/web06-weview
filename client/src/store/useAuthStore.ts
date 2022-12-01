@@ -1,5 +1,6 @@
 import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
+
 import { MyInfo } from "@/types/auth";
 
 interface AuthStates {

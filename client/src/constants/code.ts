@@ -1,0 +1,1 @@
+export const ONE_SNAPSHOT_LINE_COUNT = 15;

@@ -11,7 +11,6 @@ import { UserRepository } from '../user/user.repository';
 import { ReviewRepository } from './review.repository';
 import { MoreThan } from 'typeorm';
 import { ReviewListResponseDto } from './dto/controller-response.dto';
-import { ReviewNotWrittenException } from 'src/exception/review-not-written.exception';
 
 @Injectable()
 export class ReviewService {
@@ -22,38 +21,35 @@ export class ReviewService {
   ) {}
 
   async write(userId: number, { postId, content }: ReviewWriteRequestDto) {
-    try {
-      const userEntity = await this.userRepository.findOneBy({
-        id: userId,
-        isDeleted: false,
-      });
-      if (!userEntity) {
-        throw new UserNotFoundException();
-      }
+    const userEntityPromise = this.userRepository.findOneBy({
+      id: userId,
+      isDeleted: false,
+    });
 
-      const postEntity = await this.postRepository.findOneBy({
-        id: postId,
-        isDeleted: false,
-      });
-      if (!postEntity) {
-        throw new PostNotFoundException();
-      }
+    const postEntityPromise = this.postRepository.findOneBy({
+      id: postId,
+      isDeleted: false,
+    });
 
-      const reviewEntity = new Review();
-      reviewEntity.user = userEntity;
-      reviewEntity.post = postEntity;
-      reviewEntity.content = content;
+    const [userEntity, postEntity] = await Promise.all([
+      userEntityPromise,
+      postEntityPromise,
+    ]);
 
-      await this.reviewRepository.insert(reviewEntity);
-    } catch (err) {
-      if (err instanceof UserNotFoundException) {
-        throw err;
-      } else if (err instanceof PostNotFoundException) {
-        throw err;
-      } else {
-        throw new ReviewNotWrittenException();
-      }
+    if (!userEntity) {
+      throw new UserNotFoundException();
     }
+
+    if (!postEntity) {
+      throw new PostNotFoundException();
+    }
+
+    const reviewEntity = new Review();
+    reviewEntity.user = userEntity;
+    reviewEntity.post = postEntity;
+    reviewEntity.content = content;
+
+    await this.reviewRepository.insert(reviewEntity);
   }
 
   async getReviewsOfPost(postId: number, { lastId }: ReviewGetAllRequestDto) {

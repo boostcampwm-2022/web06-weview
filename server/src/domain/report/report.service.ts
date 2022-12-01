@@ -22,48 +22,43 @@ export class ReportService {
     postId: number,
     { reason }: ReportCreateRequestDto,
   ) {
-    try {
-      const userEntity = await this.userRepository.findOneBy({
-        id: userId,
-        isDeleted: false,
-      });
-      if (!userEntity) {
-        throw new UserNotFoundException();
-      }
+    const userEntityPromise = this.userRepository.findOneBy({
+      id: userId,
+      isDeleted: false,
+    });
 
-      const postEntity = await this.postRepository.findOneBy({
-        id: postId,
-        isDeleted: false,
-      });
-      if (!postEntity) {
-        throw new PostNotFoundException();
-      }
+    const postEntityPromise = this.postRepository.findOneBy({
+      id: postId,
+      isDeleted: false,
+    });
 
-      const report = new Report();
-      report.user = userEntity;
-      report.post = postEntity;
-      report.reason = reason;
+    const [userEntity, postEntity] = await Promise.all([
+      userEntityPromise,
+      postEntityPromise,
+    ]);
 
-      const existReport = await this.reportRepository.findOneBy({
-        postId,
-        userId,
-      });
-
-      if (existReport) {
-        throw new PostAlreadyReportedException();
-      }
-
-      await this.reportRepository.insert(report);
-    } catch (err) {
-      if (err instanceof UserNotFoundException) {
-        throw err;
-      } else if (err instanceof PostNotFoundException) {
-        throw err;
-      } else if (err instanceof PostAlreadyReportedException) {
-        throw err;
-      } else {
-        throw new PostNotReportedException();
-      }
+    if (!userEntity) {
+      throw new UserNotFoundException();
     }
+
+    if (!postEntity) {
+      throw new PostNotFoundException();
+    }
+
+    const report = new Report();
+    report.user = userEntity;
+    report.post = postEntity;
+    report.reason = reason;
+
+    const existReport = await this.reportRepository.findOneBy({
+      postId,
+      userId,
+    });
+
+    if (existReport) {
+      throw new PostAlreadyReportedException();
+    }
+
+    await this.reportRepository.insert(report);
   }
 }

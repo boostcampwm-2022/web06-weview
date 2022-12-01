@@ -1,0 +1,23 @@
+@import "@/styles/_theme.scss";
+
+.tag-label {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+}
+
+.tag-input {
+  width: 60%;
+  height: 1.5rem;
+  font-size: 1rem;
+  border: 1px solid $line-color;
+  border-radius: 0.25rem;
+}
+
+.tag-list {
+  display: flex;
+
+  & > span {
+    margin-right: 0.2rem;
+    font-size: 0.75rem;
+  }
+}

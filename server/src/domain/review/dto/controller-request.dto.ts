@@ -10,8 +10,11 @@ export class ReviewWriteRequestDto {
 }
 
 export class ReviewGetAllRequestDto {
+  /**
+   * lastId를 기준으로 더 최신의 데이터를 반환합니다. lastId를 입력하지 않으면 가장 최신의 데이터를 반환합니다
+   */
   @IsOptional()
   @Type(() => Number)
   @IsInt({ message: '글 번호가 형식에 맞지 않습니다.' })
-  lastId: number;
+  lastId?: number = -1;
 }

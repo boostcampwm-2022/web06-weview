@@ -1,0 +1,28 @@
+@import "@/styles/_theme";
+@import "@/styles/_global-style";
+@import "@/styles/_responsive";
+
+@include mobile {
+  .nav {
+  }
+
+  .hidden-main {
+  }
+}
+
+@include tablet {
+  .nav {
+  }
+}
+
+@include device {
+  .nav {
+    display: flex;
+    flex-direction: column;
+    width: $main-nav-width;
+    padding: 0.5em 2em;
+    border: 1px solid $line-color;
+    border-top: 0.25rem solid $line-color;
+    border-bottom: 0.25rem solid $line-color;
+  }
+}

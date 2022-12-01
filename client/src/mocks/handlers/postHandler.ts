@@ -1,4 +1,5 @@
 import { rest } from "msw";
+
 import { API_SERVER_URL } from "@/constants/env";
 import { parsePostQueryString } from "@/mocks/utils/postUtils";
 
@@ -7,8 +8,8 @@ const baseUrl = API_SERVER_URL;
 
 const posts = Array.from(Array(1024).keys()).map((id) => ({
   id: `${id}`,
-  title: `title${id}`,
-  content: `post_contents_${id}`,
+  title: `제목_${id}`,
+  content: `내용_${id}`,
   images: [
     {
       src: "http://placeimg.com/640/640/animals",
@@ -25,13 +26,14 @@ const posts = Array.from(Array(1024).keys()).map((id) => ({
     profileUrl: "http://placeimg.com/640/640/animals",
     email: `name_${id + 10000}@gmail.com`,
   },
-  tags: [`tag1`, `tag2`],
+  tags: [`tag1`, `tag2`, id % 2 === 0 ? `테그` : `태그`],
   reviews: Array.from(Array(id % 3).keys()),
   updatedAt: "2022-11-16 12:26:56.124939",
   code: `sourcecode: ~~~~~~~~~~~~~~~~~~`,
   language: `javascript`,
   category: id % 2 === 0 ? "리뷰요청" : "질문",
   likes: id % 10,
+  isLiked: id % 2 === 0,
 }));
 
 export const postHandler = [
@@ -40,8 +42,6 @@ export const postHandler = [
     const { tags, authors, category, reviews, likes, detail } =
       parsePostQueryString(req.url);
     const SIZE = 3;
-    const isLast = posts.length <= lastId + SIZE;
-
     const filteredData = posts
       .filter(
         (post) =>
@@ -57,14 +57,14 @@ export const postHandler = [
       .filter(
         (post) =>
           post.title.search(detail) > -1 || post.content.search(detail) > -1
-      )
-      .slice(lastId, lastId + SIZE);
+      );
+    const isLast = filteredData.length <= lastId + SIZE;
 
     return res(
       ctx.status(200),
       ctx.delay(1000),
       ctx.json({
-        posts: filteredData,
+        posts: filteredData.slice(lastId, lastId + SIZE),
         lastId: lastId + SIZE - 1,
         isLast,
       })
@@ -76,5 +76,13 @@ export const postHandler = [
       ctx.status(200),
       ctx.json({ message: "글 작성에 성공했습니다." })
     );
+  }),
+
+  rest.post(`${baseUrl}/posts/:postId/likes`, (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.delete(`${baseUrl}/posts/:postId/likes`, (req, res, ctx) => {
+    return res(ctx.status(200));
   }),
 ];

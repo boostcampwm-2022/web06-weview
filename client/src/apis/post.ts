@@ -1,7 +1,13 @@
+import axios from "axios";
+
 import axiosInstance from "@/apis/axios";
-import { PostPages, WritingRequest, WritingResponse } from "@/types/post";
+import { PostPages, UploadImageProps, WritingResponse } from "@/types/post";
 import { setQueryString } from "@/utils/queryString";
 import useSearchStore from "@/store/useSearchStore";
+import useWritingStore from "@/store/useWritingStore";
+import { getLineCount } from "@/utils/code";
+import { preventXSS } from "@/utils/regExpression";
+import useCodeEditorStore from "@/store/useCodeEditorStore";
 
 export const fetchPost = async (pageParam: string): Promise<PostPages> => {
   const { searchQuery } = useSearchStore.getState();
@@ -11,9 +17,51 @@ export const fetchPost = async (pageParam: string): Promise<PostPages> => {
   return data;
 };
 
+export const uploadImage = async ({
+  preSignedData,
+  imageUri,
+}: UploadImageProps): Promise<string> => {
+  const payload = new FormData();
+  Object.entries(preSignedData.fields).forEach(([key, value]) => {
+    payload.append(key, value);
+  });
+  payload.append("Content-Type", "image/jpeg"); // file type 명시
+  payload.append("file", await (await fetch(imageUri)).blob()); // imageURI -> file
+  await axios.post(preSignedData.url, payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return `${preSignedData.url}/${preSignedData.fields.Key}`;
+};
+
 export const postWritingsAPI = async (
-  writing: WritingRequest
+  imageUrls: string[]
 ): Promise<WritingResponse> => {
-  const { data } = await axiosInstance.post("/posts", writing);
+  const { title, content, tags } = useWritingStore.getState();
+  const { language, code } = useCodeEditorStore.getState();
+  const { data } = await axiosInstance.post("/posts", {
+    title,
+    category: "리뷰요청",
+    content,
+    code: preventXSS(code),
+    language,
+    images: imageUrls,
+    tags,
+    lineCount: getLineCount(code),
+  });
+  return data;
+};
+
+export const toggleLikeAPI = async ({
+  postId,
+  isLiked,
+}: {
+  postId: string;
+  isLiked: boolean;
+}): Promise<void> => {
+  const { data } = isLiked
+    ? await axiosInstance.delete(`/posts/${postId}/likes`)
+    : await axiosInstance.post(`/posts/${postId}/likes`);
   return data;
 };

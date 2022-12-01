@@ -1,0 +1,27 @@
+@import "@/styles/_theme";
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 8.25rem; // 50% -> 5rem
+  border-bottom: 1px solid $line-color;
+
+  &__header {
+    font-weight: 500;
+  }
+
+  &__input {
+    height: 2.7rem;
+    border: 1px solid $text-color;
+    border-radius: 15px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+    &::placeholder {
+      padding-left: 0.4rem;
+      font-family: GmarketSans;
+      font-size: 1.3rem;
+      color: $placeholder-color;
+    }
+  }
+}

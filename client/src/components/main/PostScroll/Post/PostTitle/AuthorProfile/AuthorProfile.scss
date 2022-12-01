@@ -1,0 +1,44 @@
+@import "@/styles/_button.scss";
+
+.post__title__author-profile {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+
+  width: fit-content;
+  height: 100%;
+
+  &__image {
+    height: 80%;
+    border-radius: 50%;
+    object-fit: contain;
+  }
+
+  &__username {
+    font-size: 0.75rem;
+  }
+
+  &__follow-button {
+    @include green-button;
+    width: fit-content;
+    height: 1.4rem;
+
+    font-size: 0.8rem;
+
+    &--on {
+      @include weview-button;
+      width: fit-content;
+      height: 1.5rem;
+
+      font-size: 0.75rem;
+
+      color: $line-color !important;
+      border: 1px solid $line-color;
+
+      &:hover {
+        color: $weview-off-white !important;
+        background-color: $line-color;
+      }
+    }
+  }
+}

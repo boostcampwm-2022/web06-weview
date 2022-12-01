@@ -1,0 +1,36 @@
+@import "@/styles/_global-style";
+@import "@/styles/_animation";
+
+$icon-default-size: 2rem;
+$icon-hover-size: 2.5rem;
+$detail-font-size: 0.75rem;
+
+.svg-icon-button {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+  justify-content: center;
+
+  &__icon {
+    font-size: $icon-default-size !important;
+    transition: 200ms !important;
+  }
+
+  &__detail {
+    font-size: $detail-font-size;
+    transition: 200ms;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    & .svg-icon-button__icon {
+      @include fade-in-icon($icon-default-size, $icon-hover-size);
+    }
+
+    & .svg-icon-button__detail {
+      @include fade-out-icon();
+    }
+  }
+}

@@ -1,7 +1,8 @@
-import { LOCAL_URL } from "@/constants/env";
 import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+
+import { LOCAL_URL } from "@/constants/env";
+import LoadingSpinner from "@/components/commons/LoadingSpinner/LoadingSpinner";
 
 const LoginCallback = (): JSX.Element => {
   const [searchParams] = useSearchParams();
