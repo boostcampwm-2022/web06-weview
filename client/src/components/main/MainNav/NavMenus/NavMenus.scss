@@ -3,7 +3,7 @@
 @import "@/styles/theme";
 
 @include device() {
-  .nav__menus {
+  .nav__sidebar__menus {
     @include flex-start;
     position: relative;
     flex-direction: column;
@@ -20,31 +20,31 @@
       &:hover {
         cursor: pointer;
 
-        & ~ .nav__menus__active {
+        & ~ .nav__sidebar__menus__active {
           display: block;
         }
       }
 
       &:nth-child(1) {
-        &:hover ~ .nav__menus__active {
+        &:hover ~ .nav__sidebar__menus__active {
           top: 3rem;
         }
       }
 
       &:nth-child(2) {
-        &:hover ~ .nav__menus__active {
+        &:hover ~ .nav__sidebar__menus__active {
           top: 8rem;
         }
       }
 
       &:nth-child(3) {
-        &:hover ~ .nav__menus__active {
+        &:hover ~ .nav__sidebar__menus__active {
           top: 13rem;
         }
       }
 
       &:nth-child(4) {
-        &:hover ~ .nav__menus__active {
+        &:hover ~ .nav__sidebar__menus__active {
           top: 18rem;
         }
       }

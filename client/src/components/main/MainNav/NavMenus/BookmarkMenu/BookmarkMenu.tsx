@@ -12,7 +12,7 @@ const BookmarkMenu = (): JSX.Element => {
       Icon={BookmarksOutlinedIcon}
       detail="북마크"
       onClick={handleMenuClick}
-      className="nav__menus__menu"
+      className="nav__sidebar__menus__menu"
     />
   );
 };

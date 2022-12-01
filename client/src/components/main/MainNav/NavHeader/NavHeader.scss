@@ -6,7 +6,7 @@
  * max content width : 16rem (4 + 1(gap) + 10)
  */
 @include device() {
-  .nav__header {
+  .nav__sidebar__header {
     display: flex;
     flex-direction: row !important;
     gap: 1rem;

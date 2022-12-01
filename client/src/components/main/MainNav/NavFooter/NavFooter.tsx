@@ -11,13 +11,13 @@ const NavFooter = (): JSX.Element => {
   };
 
   return (
-    <section className="nav__footer">
+    <section className="nav__sidebar__footer">
       <NavMenu
         Icon={SettingsOutlinedIcon}
         detail="설정"
         onClick={handleMenuClick}
       />
-      <div className="active nav__footer__active"></div>
+      <div className="active nav__sidebar__footer__active"></div>
     </section>
   );
 };

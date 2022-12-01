@@ -20,7 +20,7 @@ const SearchMenu = (): JSX.Element => {
       Icon={SearchIcon}
       detail={"검색"}
       onClick={handleMenuClick}
-      className="nav__menus__menu"
+      className="nav__sidebar__menus__menu"
     />
   );
 };

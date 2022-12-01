@@ -17,7 +17,7 @@ const NewPostMenu = (): JSX.Element => {
       Icon={PostAddIcon}
       detail="새 포스트"
       onClick={handleMenuClick}
-      className="nav__menus__menu"
+      className="nav__sidebar__menus__menu"
     />
   );
 };

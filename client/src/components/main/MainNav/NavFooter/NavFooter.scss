@@ -2,7 +2,7 @@
 @import "@/styles/_mixin";
 
 @include device() {
-  .nav__footer {
+  .nav__sidebar__footer {
     @include flex-start;
     position: relative;
     flex-direction: column;
@@ -15,13 +15,13 @@
       &:hover {
         cursor: pointer;
 
-        & ~ .nav__footer__active {
+        & ~ .nav__sidebar__footer__active {
           display: block;
         }
       }
 
       &:nth-child(1) {
-        &:hover ~ .nav__footer__active {
+        &:hover ~ .nav__sidebar__footer__active {
           top: 0;
         }
       }

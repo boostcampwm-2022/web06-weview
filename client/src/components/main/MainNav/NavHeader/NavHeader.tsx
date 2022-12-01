@@ -16,9 +16,9 @@ const NavHeader = (): JSX.Element => {
   };
 
   return (
-    <section className="nav__header">
+    <section className="nav__sidebar__header">
       <img
-        className="nav__header__logo"
+        className="nav__sidebar__header__logo"
         alt="WeView Logo"
         onClick={handleToggleNav}
       />

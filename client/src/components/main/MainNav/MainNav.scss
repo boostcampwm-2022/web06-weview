@@ -18,47 +18,64 @@
   .nav {
     position: relative;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 2rem;
-    border-right: $border-medium $line-color;
-    transition: 300ms;
+    height: 100%;
 
-    /* nav 컨텐츠 섹션 비율 */
-    & > section {
-      width: 100%;
-      height: 5rem; /* header, footer 고정 길이 */
+    &__sidebar {
+      position: relative;
+      z-index: 2;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      height: 100%;
+      padding: 2rem;
+      background-color: $weview-white;
+      border-right: $border-medium $line-color;
+      transition: 300ms;
 
-      &:nth-child(1) {
-        flex-grow: 0;
-      }
+      /* nav 컨텐츠 섹션 비율 */
+      & > section {
+        width: 100%;
+        height: 5rem; /* header, footer 고정 길이 */
 
-      &:nth-child(2) {
-        flex-grow: 1;
-      }
+        &:nth-child(1) {
+          flex-grow: 0;
+        }
 
-      &:nth-child(3) {
-        flex-grow: 0;
+        &:nth-child(2) {
+          flex-grow: 1;
+        }
+
+        &:nth-child(3) {
+          flex-grow: 0;
+        }
       }
     }
 
     /* 반응형: 디바이스-opened */
     &.opened {
-      width: $main-nav-width;
+      .nav__sidebar {
+        width: $main-nav-width;
+      }
 
       .nav-menu__detail {
         min-width: 7rem;
         opacity: 1;
       }
+
+      .nav__content {
+        width: 0;
+      }
     }
 
     /* 반응형: 디바이스-closed */
     &.closed {
-      width: 9.2rem; /* NavMenu width-height 가 5rem:5rem 이 되는 가로 길이 */
+      .nav__sidebar {
+        width: 9.2rem; /* NavMenu width-height 가 5rem:5rem 이 되는 가로 길이 */
+      }
 
       /* 헤더 로고를 아이콘 로고로 변경한다. */
-      .nav__header {
+      .nav__sidebar__header {
         &__logo {
           width: 50px;
           height: 50px;
@@ -69,6 +86,10 @@
       /* 글자들을 모두 가린다. */
       .nav-menu__detail {
         opacity: 0;
+      }
+
+      .nav__content {
+        width: 32rem;
       }
     }
   }

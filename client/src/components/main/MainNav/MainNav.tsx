@@ -12,14 +12,14 @@ const MainNav = (): JSX.Element => {
   const [isOpened] = useNavStore((state) => [state.isOpened]);
 
   return (
-    <>
-      <nav className={`nav ${isOpened ? "opened" : "closed"}`}>
+    <div className={`nav ${isOpened ? "opened" : "closed"}`}>
+      <nav className="nav__sidebar">
         <NavHeader />
         <NavMenus />
         <NavFooter />
       </nav>
-      <NavContent isOpened={!isOpened} />
-    </>
+      <NavContent />
+    </div>
   );
 };
 

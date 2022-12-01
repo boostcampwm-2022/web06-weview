@@ -9,12 +9,12 @@ import "./NavMenus.scss";
 
 const NavMenus = (): JSX.Element => {
   return (
-    <section className="nav__menus">
+    <section className="nav__sidebar__menus">
       <SearchMenu />
       <NewPostMenu />
       <BookmarkMenu />
       <ProfileMenu />
-      <div className="active nav__menus__active"></div>
+      <div className="active nav__sidebar__menus__active"></div>
     </section>
   );
 };

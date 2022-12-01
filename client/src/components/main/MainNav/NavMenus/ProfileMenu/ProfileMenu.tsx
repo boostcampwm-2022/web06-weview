@@ -36,7 +36,7 @@ const ProfileMenu = (): JSX.Element => {
       Icon={AccountCircleTwoToneIcon}
       detail={"프로필"}
       onClick={handleMenuClick}
-      className="nav__menus__menu"
+      className="nav__sidebar__menus__menu"
     />
   );
 };
