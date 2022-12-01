@@ -7,6 +7,11 @@ type NavClickHandler = (fn?: Function) => void;
 interface UseNavResult {
   navState: NAV_STATE_TYPE;
   isOpened: boolean;
+  isSearching: boolean;
+  isWriting: boolean;
+  isBookmarking: boolean;
+  isProfile: boolean;
+  isSetting: boolean;
   handleNavClose: NavClickHandler;
   handleSearch: NavClickHandler;
   handleWrite: NavClickHandler;
@@ -28,6 +33,11 @@ const useNav = (): UseNavResult => {
     state.resetNavState,
   ]);
   const isOpened = !MINIMUM_NAV_STATE.includes(navState);
+  const isSearching = navState === NAV_STATE.SEARCH;
+  const isWriting = navState === NAV_STATE.SEARCH;
+  const isBookmarking = navState === NAV_STATE.SEARCH;
+  const isProfile = navState === NAV_STATE.SEARCH;
+  const isSetting = navState === NAV_STATE.SEARCH;
 
   // 네비게이션 바 컴포넌트 최소화
   const handleNavClose: NavClickHandler = useCallback(
@@ -62,6 +72,7 @@ const useNav = (): UseNavResult => {
     [setNavState]
   );
 
+  // 북마크 보기 로직 실행
   const handleBookmark: NavClickHandler = useCallback(
     (fn) => {
       setNavState(NAV_STATE.BOOKMARK);
@@ -72,6 +83,7 @@ const useNav = (): UseNavResult => {
     [setNavState]
   );
 
+  // 프로필 로직 실행
   const handleProfile: NavClickHandler = useCallback(
     (fn) => {
       setNavState(NAV_STATE.PROFILE);
@@ -82,6 +94,7 @@ const useNav = (): UseNavResult => {
     [setNavState]
   );
 
+  // 환경설정 로직 실행
   const handleSetting: NavClickHandler = useCallback(
     (fn) => {
       setNavState(NAV_STATE.SETTING);
@@ -95,6 +108,11 @@ const useNav = (): UseNavResult => {
   return {
     navState,
     isOpened,
+    isSearching,
+    isWriting,
+    isBookmarking,
+    isProfile,
+    isSetting,
     handleNavClose,
     handleSearch,
     handleWrite,

@@ -1,6 +1,6 @@
 @import "@/styles/_global-style.scss";
 
-$modal-speed: cubic-bezier(0.86, 0, 0.3, 1);
+$speed: cubic-bezier(0.86, 0, 0.3, 1);
 
 // SvgIconButton
 @mixin fade-in-icon($default-size, $icon-hover-size) {
@@ -41,7 +41,7 @@ $modal-speed: cubic-bezier(0.86, 0, 0.3, 1);
 // Modal Container
 @mixin fade-in-modal($animation-time) {
   visibility: visible;
-  animation: modal-fade-in $animation-time $modal-speed;
+  animation: modal-fade-in $animation-time $speed;
   @keyframes modal-fade-in {
     from {
       top: 100%;
@@ -49,6 +49,35 @@ $modal-speed: cubic-bezier(0.86, 0, 0.3, 1);
 
     to {
       top: 0;
+    }
+  }
+}
+
+@mixin content-fade-in() {
+  opacity: 1;
+  animation: fade-in-default 550ms $speed;
+  @keyframes fade-in-default {
+    0% {
+      opacity: 0;
+    }
+    60% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+@mixin nav-content-fade-in() {
+  animation: half-fade-in 300ms ease-out;
+  @keyframes half-fade-in {
+    from {
+      opacity: 0.5;
+    }
+
+    to {
+      opacity: 1;
     }
   }
 }

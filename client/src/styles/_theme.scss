@@ -18,12 +18,19 @@ $primary-light: #bed6c1;
 $primary: #84cb8d;
 $alert: #eb923f;
 $error: #f45452;
+/* Label */
+$author-color: #c08834;
+$reviews-color: #4dd2ba;
+$likes-color: #ef69da;
 
 /* Fonts */
 $font-small: 0.8rem;
 $font-medium: 1.2rem;
 $font-form: 1.3rem;
 $font-large: 1.6rem;
+$font-x-large: 1.9rem;
+$font-xx-large: 2.2rem;
+$font-xxx-large: 2.5rem;
 
 /* Radius */
 $radius-small: 4px;
@@ -32,6 +39,7 @@ $radius-modal: 16px;
 $radius-circle: 1000px;
 
 /* Borders */
+$border-x-small: 0.5px solid;
 $border-small: 1px solid;
 $border-medium: 2px solid;
 $border-large: 4px solid;
