@@ -1,0 +1,29 @@
+@import "@/styles/theme";
+
+.tag-rank {
+  right: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 30rem;
+  height: fit-content;
+  padding: 2rem;
+  margin: 6rem 3.2rem;
+  font-size: 1.3rem;
+  border: $border-small $line-color;
+  border-radius: $radius-small;
+
+  box-shadow: $shadow-button;
+
+  &__header {
+    margin-top: 0;
+  }
+
+  &__list {
+    width: 100%;
+    height: fit-content;
+    padding: 0 1rem;
+    margin: 0;
+    list-style: none;
+  }
+}
