@@ -32,12 +32,14 @@ import { TokenNotFoundException } from '../../exception/token-not-found.exceptio
 import { TokenNotPermittedException } from '../../exception/token-not-permitted.exception';
 import { AccessTokenGuard } from './access-token.guard';
 import { NcpObjectStorage } from 'src/domain/auth/ncp-object-storage';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 @ApiTags('인증 API')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly configService: ConfigService,
     private readonly ncpObjectStorage: NcpObjectStorage,
   ) {}
 
@@ -60,6 +62,7 @@ export class AuthController {
 
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
+        secure: this.configService.get('NODE_ENV') === 'prod',
       });
       return {
         accessToken: accessToken,
