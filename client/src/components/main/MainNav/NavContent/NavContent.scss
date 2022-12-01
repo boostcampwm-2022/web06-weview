@@ -1,0 +1,25 @@
+@import "@/styles/theme";
+@import "@/styles/global-style";
+@import "@/styles/responsive";
+@import "@/styles/mixin";
+
+// NOTE : device 최대 뷰 = 32rem + 9.2rem + PostBa
+@include device {
+  .nav__content {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: $light-gray;
+    transition: 300ms;
+
+    &.opened {
+      width: 32rem;
+      border: $border-small $line-color;
+    }
+
+    &.closed {
+      width: 0;
+    }
+  }
+}
