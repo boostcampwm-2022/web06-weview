@@ -26,10 +26,10 @@ jobs:
 
       - name: Set .env file
         run: |
-          echo "VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}" >> .env
-          echo "VITE_LOCAL_URL=${{ secrets.VITE_LOCAL_URL }}" >> .env
-          echo "VITE_GITHUB_AUTH_SERVER_URL=${{ secrets.VITE_GITHUB_AUTH_SERVER_URL }}" >> .env
-          echo "VITE_API_MODE=${{ secrets.VITE_API_MODE }}" >> .env
+          echo "VITE_SERVER_URL=${{ secrets.DEV_VITE_SERVER_URL }}" >> .env
+          echo "VITE_LOCAL_URL=${{ secrets.DEV_VITE_LOCAL_URL }}" >> .env
+          echo "VITE_GITHUB_AUTH_SERVER_URL=${{ secrets.DEV_VITE_GITHUB_AUTH_SERVER_URL }}" >> .env
+          echo "VITE_API_MODE=${{ secrets.DEV_VITE_API_MODE }}" >> .env
           cat .env
 
       - name: Install npm
@@ -40,8 +40,8 @@ jobs:
 
       - name: Copy files to Bucket
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.NCLOUD_BUCKET_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.NCLOUD_BUCKET_SECRET_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_NCLOUD_BUCKET_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_NCLOUD_BUCKET_SECRET_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
         run: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive ./dist s3://weview-dev
 
