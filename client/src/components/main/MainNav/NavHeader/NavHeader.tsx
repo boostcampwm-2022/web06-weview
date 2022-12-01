@@ -1,18 +1,18 @@
 import React, { MouseEventHandler } from "react";
 
-import useNavStore from "@/store/useNavStore";
+import useNav from "@/hooks/useNav";
 
 import "./NavHeader.scss";
 
 const NavHeader = (): JSX.Element => {
-  const [isOpened, setIsOpened] = useNavStore((state) => [
-    state.isOpened,
-    state.setIsOpened,
-  ]);
+  const { handleNavClose } = useNav();
 
-  // TODO : 다른 로직으로 이동
-  const handleToggleNav: MouseEventHandler = () => {
-    setIsOpened(!isOpened);
+  const businessLogic = (): void => {
+    console.log("NavHeader");
+  };
+
+  const handleHeaderClick: MouseEventHandler = () => {
+    handleNavClose(businessLogic);
   };
 
   return (
@@ -20,7 +20,7 @@ const NavHeader = (): JSX.Element => {
       <img
         className="nav__sidebar__header__logo"
         alt="WeView Logo"
-        onClick={handleToggleNav}
+        onClick={handleHeaderClick}
       />
     </section>
   );

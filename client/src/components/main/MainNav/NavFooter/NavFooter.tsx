@@ -2,12 +2,19 @@ import React, { MouseEventHandler } from "react";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
 import NavMenu from "@/components/main/MainNav/NavMenus/NavMenu/NavMenu";
+import useNav from "@/hooks/useNav";
 
 import "./NavFooter.scss";
 
 const NavFooter = (): JSX.Element => {
-  const handleMenuClick: MouseEventHandler = () => {
+  const { handleSetting } = useNav();
+
+  const businessLogic = (): void => {
     console.log("footer");
+  };
+
+  const handleMenuClick: MouseEventHandler = () => {
+    handleSetting(businessLogic);
   };
 
   return (

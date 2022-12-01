@@ -4,12 +4,14 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import NavMenu from "@/components/main/MainNav/NavMenus/NavMenu/NavMenu";
 import useCommonModalStore from "@/store/useCommonModalStore";
 import WriteModal from "@/components/main/Modal/WriteModal/WriteModal";
+import useNav from "@/hooks/useNav";
 
 const NewPostMenu = (): JSX.Element => {
+  const { handleWrite } = useNav();
   const [openModal] = useCommonModalStore((state) => [state.openModal]);
 
   const handleMenuClick: MouseEventHandler = () => {
-    openModal(<WriteModal />);
+    handleWrite(() => openModal(<WriteModal />));
   };
 
   return (
