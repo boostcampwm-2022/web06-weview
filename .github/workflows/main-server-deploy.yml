@@ -31,7 +31,9 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/weview-main:${{github.ref_name}}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/weview-main:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/weview-main:${{github.ref_name}}
 
       - name: Deploy with SSH
         uses: appleboy/ssh-action@master
