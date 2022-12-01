@@ -26,7 +26,7 @@ export class NcpObjectStorage {
 
   createPresignedPost(): any {
     const presigned = this.objectStorage.createPresignedPost({
-      Bucket: 'weview-image-dev',
+      Bucket: this.configService.get<string>('NCP_UPLOAD_BUCKET'),
       Fields: {
         Key:
           new Date().toISOString().replace(/[^0-9TZ]/g, '') +
