@@ -51,6 +51,6 @@ $github-dark-font-color: #c9d1d9;
     width: 100%;
     max-width: $device-review-max-width;
     height: 100%;
-    margin-left: $device-review-modal-gap/2;
+    margin-left: calc($device-review-modal-gap / 2);
   }
 }
