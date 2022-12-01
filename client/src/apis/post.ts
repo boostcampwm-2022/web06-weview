@@ -6,7 +6,6 @@ import { setQueryString } from "@/utils/queryString";
 import useSearchStore from "@/store/useSearchStore";
 import useWritingStore from "@/store/useWritingStore";
 import { getLineCount } from "@/utils/code";
-import { preventXSS } from "@/utils/regExpression";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
 
 export const fetchPost = async (pageParam: string): Promise<PostPages> => {
@@ -44,7 +43,7 @@ export const postWritingsAPI = async (
     title,
     category: "리뷰요청",
     content,
-    code: preventXSS(code),
+    code,
     language,
     images: imageUrls,
     tags,
