@@ -18,6 +18,7 @@ export class RankingService {
       (MINUTES_PER_HOUR / QUEUE_CYCLE_EXPRESSED_SECOND) * MINUTES_PER_HOUR,
     );
     this.tagCountBuffer = {};
+    this.ranking = [];
     // TODO DB를 연동해 초기데이터 넣어주기
   }
 
