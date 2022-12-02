@@ -16,18 +16,15 @@ export class RankingService {
       (MINUTES_PER_HOUR / QUEUE_CYCLE_EXPRESSED_SECOND) * MINUTES_PER_HOUR,
     );
     this.tagCountBuffer = {};
-    // TODO 어떻게 초기 데이터 넣어줘야할지 고민하기
+    // TODO DB를 연동해 초기데이터 넣어주기
   }
 
-  // 사용자가 요청했을때
   getRanking() {
     return this.ranking;
   }
 
-  // 검색한 태그들을 저장한다
   async saveSearchedTags(tags: string[]) {
     tags.map((tag) => {
-      //tag가 있으면 +1, 없으면 1로 만들어준다
       if (this.tagCountBuffer[tag]) {
         this.tagCountBuffer[tag] += 1;
       } else {
@@ -37,30 +34,41 @@ export class RankingService {
   }
 
   @Cron('0/' + QUEUE_CYCLE_EXPRESSED_SECOND + ' * * * * *')
-  async putValueInQueue() {
-    const index = this.makeQueueIndexUsingTimeStamp(new Date());
-    this.tagsCountsCircularQueue[index] = Object.assign(
-      {},
-      this.tagCountBuffer,
-    );
+  async updateRanking() {
+    this.putValueInQueue(this.tagCountBuffer);
     this.tagCountBuffer = {};
 
-    const curRanking = this.calculateRanking();
-    // 이전 등수 정보를 넣는다
-    this.ranking = this.enterPreviousRankingData(curRanking);
+    const curRanking = this.returnTopRankedTagsNames();
+    this.ranking = this.addUpAndDownInfo(curRanking);
   }
 
-  private makeQueueIndexUsingTimeStamp(date: Date) {
+  /**
+   * 일정 시간마다 tagCountBuffer를 tagsCountsCircularQueue에 넣는다
+   * 이후 tagCountBuffer를 초기화한다
+   */
+  private putValueInQueue(tagCountBuffer) {
+    const index = this.makeIndexUsingTimeStamp(new Date());
+    this.tagsCountsCircularQueue[index] = Object.assign({}, tagCountBuffer);
+  }
+
+  /**
+   * 시간을 사용해 Queue의 인덱스를 만든다
+   * 일정 시간이 지나면 덮어쓸 큐의 index를 구하기 위해 사용한다
+   */
+  private makeIndexUsingTimeStamp(date: Date) {
     return (
       date.getMinutes() * (MINUTES_PER_HOUR / QUEUE_CYCLE_EXPRESSED_SECOND) +
       Math.floor(date.getSeconds() / QUEUE_CYCLE_EXPRESSED_SECOND)
     );
   }
 
-  private calculateRanking() {
+  /**
+   * 가장 검색이 자주 된 최상위 10개 태그의 이름을 반환한다
+   * 만약 데이터가 10개가 되지 않으면, 존재하는 만큼만 반환한다
+   */
+  private returnTopRankedTagsNames() {
     const tagsCount = this.countForEachTags();
 
-    // 내림차순 정렬, heap으로 바꾸는 거 고려 but, sort 내부적으로 최적화 되어있을듯
     const result = [];
     for (const tagName of Object.keys(tagsCount)) {
       result.push([tagName, tagsCount[tagName]]);
@@ -69,7 +77,6 @@ export class RankingService {
       return b[1] - a[1];
     });
 
-    //10개만 골라온다
     if (result.length <= RANKING_COUNT) {
       return result.map((x) => x[0]);
     }
@@ -93,7 +100,7 @@ export class RankingService {
     return tagsCount;
   }
 
-  private enterPreviousRankingData(curRanking: any[]) {
+  private addUpAndDownInfo(curRanking: any[]) {
     const rankingInfo = [];
     for (let i = 0; i < curRanking.length; i++) {
       const tagName = curRanking[i];
