@@ -4,6 +4,8 @@ import { Cron } from '@nestjs/schedule';
 export const MINUTES_PER_HOUR = 60;
 export const QUEUE_CYCLE_EXPRESSED_SECOND = 15;
 export const RANKING_COUNT = 10;
+export const TAG_NAME_INDEX = 0;
+export const TAG_COUNT_INDEX = 1;
 
 @Injectable()
 export class RankingService {
@@ -74,13 +76,13 @@ export class RankingService {
       result.push([tagName, tagsCount[tagName]]);
     }
     result.sort(function (a, b) {
-      return b[1] - a[1];
+      return b[TAG_COUNT_INDEX] - a[TAG_COUNT_INDEX];
     });
 
     if (result.length <= RANKING_COUNT) {
-      return result.map((x) => x[0]);
+      return result.map((each) => each[TAG_NAME_INDEX]);
     }
-    return result.slice(RANKING_COUNT).map((x) => x[0]);
+    return result.slice(RANKING_COUNT).map((each) => each[TAG_NAME_INDEX]);
   }
 
   private countForEachTags() {
