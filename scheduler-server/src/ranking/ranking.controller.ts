@@ -39,6 +39,7 @@ export class RankingController {
       }
     }
   }
+
   validateTags(tags: string[]) {
     if (tags.length < MIN_TAG_COUNT || tags.length > MAX_TAG_COUNT) {
       throw new BadRequestException('중복되는 태그로 검색할 수 없습니다');
@@ -46,10 +47,10 @@ export class RankingController {
     if (tags.length !== new Set(tags).size) {
       throw new TagDuplicatedException();
     }
-    tags.forEach((name) => this.validateTagName(name));
+    tags.forEach((name) => this.validateEachTagName(name));
   }
 
-  validateTagName(tagName) {
+  validateEachTagName(tagName) {
     if (!TAG_NAME_REGEX.test(tagName)) {
       throw new TagNameInvalidException();
     }
