@@ -3,7 +3,7 @@ import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
-import "./TagRankItem.scss";
+import "./TagRankingItem.scss";
 
 interface PopularTagBoxProps {
   tagInfo: {

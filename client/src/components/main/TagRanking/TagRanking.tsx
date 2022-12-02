@@ -1,11 +1,11 @@
 import React from "react";
 
-import TagRankItem from "@/components/main/TagRank/TagRankItem/TagRankItem";
+import TagRankItem from "@/components/main/TagRanking/TagRankingItem/TagRankingItem";
 import useRanking from "@/hooks/useRanking";
 
-import "./TagRank.scss";
+import "./TagRanking.scss";
 
-const TagRank = (): JSX.Element => {
+const TagRanking = (): JSX.Element => {
   const { rankingData, isStaggering } = useRanking();
 
   return (
@@ -24,4 +24,4 @@ const TagRank = (): JSX.Element => {
   );
 };
 
-export default TagRank;
+export default TagRanking;
