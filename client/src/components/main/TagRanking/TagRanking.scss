@@ -29,13 +29,24 @@
 
 .stagger {
   .tag-rank__list li {
-    //box-shadow: $shadow-box;
-    transition: 1s;
-    transform: rotateX(360deg);
+    animation: stagger 2s ease-in;
   }
-  //@for $i from 0 through 10 {
-  //  .tag-rank__list li:nth-child(#{$i + 1}) {
-  //    transition-delay: 0.1s * $i;
-  //  }
-  //}
+  @for $i from 0 through 9 {
+    .tag-rank__list li:nth-child(#{$i + 1}) {
+      animation-delay: 0.2s * $i;
+    }
+  }
+}
+@keyframes stagger {
+  0% {
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    tranform: rotate(360deg);
+  }
 }
