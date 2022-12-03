@@ -18,12 +18,6 @@ interface UseNavResult {
   handleSetting: NavClickHandler;
 }
 
-// 사용 시 사이드바를 최소화하는 상태 목록
-const MINIMUM_NAV_STATE: NAV_STATE_TYPE[] = [
-  NAV_STATE.SEARCH,
-  NAV_STATE.PROFILE,
-];
-
 const useNav = (): UseNavResult => {
   const [navState, setNavState] = useNavStore((state) => [
     state.navState,
@@ -32,13 +26,16 @@ const useNav = (): UseNavResult => {
 
   const handleNav =
     (newNavState: NAV_STATE_TYPE) => (fn: Function | undefined) => {
+      if (navState === newNavState) {
+        return setNavState(NAV_STATE.DEFAULT);
+      }
       setNavState(newNavState);
       if (fn !== undefined) {
         fn();
       }
     };
 
-  const isOpened = !MINIMUM_NAV_STATE.includes(navState);
+  const isOpened = navState === NAV_STATE.DEFAULT;
   const isSearching = navState === NAV_STATE.SEARCH;
   const isWriting = navState === NAV_STATE.SEARCH;
   const isBookmarking = navState === NAV_STATE.SEARCH;
