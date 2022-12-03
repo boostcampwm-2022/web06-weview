@@ -36,3 +36,27 @@
   align-items: flex-start;
   justify-content: center;
 }
+
+@mixin tag-rank-item-mixin {
+  position: relative;
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:first-child {
+    margin-top: 0.5rem;
+  }
+
+  &__rank {
+    float: left;
+    width: 15px;
+    margin-right: 1.5rem;
+    color: $weview-blue;
+    text-align: center;
+  }
+}

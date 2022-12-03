@@ -11,15 +11,11 @@ interface PopularTagBoxProps {
     prev: number;
     nowRank: number;
   };
-  className: "tag-rank-item" | "tag-rank-item highlight-tag";
 }
 
-const TagRankItem = ({
-  tagInfo,
-  className,
-}: PopularTagBoxProps): JSX.Element => {
+const TagRankItem = ({ tagInfo }: PopularTagBoxProps): JSX.Element => {
   return (
-    <li className={className}>
+    <li className="tag-rank-item">
       <span className="tag-rank-item__rank">{tagInfo.nowRank}.</span>
       <span className="tag-rank-item__name">{tagInfo.name}</span>
       {/* 순위에 새로 들어온 태그 */}

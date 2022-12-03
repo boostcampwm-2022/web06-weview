@@ -95,3 +95,18 @@ $speed: cubic-bezier(0.86, 0, 0.3, 1);
     tranform: rotate(360deg);
   }
 }
+/* 인기 태그 순위 스켈레톤 */
+@mixin skeleton-load($width){
+  animation: skeleton-loading 2s infinite;
+  @keyframes skeleton-loading {
+    0% {
+      transform: translateX(0);
+    }
+
+    50%,
+    100% {
+      transform: translateX($width);
+    }
+  }
+
+}
