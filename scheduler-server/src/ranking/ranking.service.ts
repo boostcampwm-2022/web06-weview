@@ -40,8 +40,7 @@ export class RankingService {
   async updateRanking() {
     this.putValueInQueue(this.tagCountBuffer);
     this.tagCountBuffer = {};
-
-    const curRanking = this.returnTopRankedTagsNames();
+    const curRanking = this.getTopRankTagNames();
     this.ranking = this.addUpAndDownInfo(curRanking);
   }
 
@@ -69,21 +68,18 @@ export class RankingService {
    * 가장 검색이 자주 된 최상위 10개 태그의 이름을 반환한다
    * 만약 데이터가 10개가 되지 않으면, 존재하는 만큼만 반환한다
    */
-  private returnTopRankedTagsNames() {
+  private getTopRankTagNames() {
     const tagsCount = this.countForEachTags();
 
     const result = [];
     for (const tagName of Object.keys(tagsCount)) {
       result.push([tagName, tagsCount[tagName]]);
     }
-    result.sort(function (a, b) {
-      return b[TAG_COUNT_INDEX] - a[TAG_COUNT_INDEX];
-    });
+    result.sort((prev, next) => next[TAG_COUNT_INDEX] - prev[TAG_COUNT_INDEX]);
 
-    if (result.length <= RANKING_COUNT) {
-      return result.map((each) => each[TAG_NAME_INDEX]);
-    }
-    return result.slice(RANKING_COUNT).map((each) => each[TAG_NAME_INDEX]);
+    return result
+      .slice(0, Math.min(RANKING_COUNT, result.length))
+      .map((each) => each[TAG_NAME_INDEX]);
   }
 
   private countForEachTags() {
