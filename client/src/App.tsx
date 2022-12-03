@@ -6,7 +6,6 @@ import { queryClient } from "@/react-query/queryClient";
 import { isEmpty } from "@/utils/typeCheck";
 import ReactRouter from "@/ReactRouter";
 import CommonModalWrapper from "@/components/main/Modal/ModalWrapper/CommonModalWrapper";
-import OtherModalWrapper from "@/components/main/Modal/ModalWrapper/OtherModalWrapper";
 
 import "./App.scss";
 
@@ -20,7 +19,6 @@ function App(): JSX.Element {
     <QueryClientProvider client={queryClient}>
       <ReactRouter />
       <CommonModalWrapper />
-      <OtherModalWrapper />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
