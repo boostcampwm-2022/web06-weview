@@ -1,4 +1,5 @@
 @import "@/styles/theme";
+@import "@/styles/animation";
 
 .tag-rank {
   right: 2rem;
@@ -29,24 +30,11 @@
 
 .stagger {
   .tag-rank__list li {
-    animation: stagger 2s ease-in;
+    animation: stagger 1.2s ease-in;
   }
   @for $i from 0 through 9 {
     .tag-rank__list li:nth-child(#{$i + 1}) {
-      animation-delay: 0.2s * $i;
+      animation-delay: 0.12s * $i;
     }
-  }
-}
-@keyframes stagger {
-  0% {
-    opacity: 0;
-  }
-
-  30% {
-    opacity: 1;
-  }
-
-  100% {
-    tranform: rotate(360deg);
   }
 }

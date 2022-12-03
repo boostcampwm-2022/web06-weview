@@ -81,4 +81,17 @@ $speed: cubic-bezier(0.86, 0, 0.3, 1);
     }
   }
 }
+/* 인기 태그 순위 stagger */
+@keyframes stagger {
+  0% {
+    opacity: 0;
+  }
 
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    tranform: rotate(360deg);
+  }
+}
