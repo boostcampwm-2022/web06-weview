@@ -9,12 +9,8 @@ import "./NavFooter.scss";
 const NavFooter = (): JSX.Element => {
   const { handleSetting } = useNav();
 
-  const businessLogic = (): void => {
-    console.log("footer");
-  };
-
   const handleMenuClick: MouseEventHandler = () => {
-    handleSetting(businessLogic);
+    handleSetting();
   };
 
   return (

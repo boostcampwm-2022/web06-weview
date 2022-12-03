@@ -7,12 +7,8 @@ import "./NavHeader.scss";
 const NavHeader = (): JSX.Element => {
   const { handleNavClose } = useNav();
 
-  const businessLogic = (): void => {
-    console.log("NavHeader");
-  };
-
   const handleHeaderClick: MouseEventHandler = () => {
-    handleNavClose(businessLogic);
+    handleNavClose();
   };
 
   return (

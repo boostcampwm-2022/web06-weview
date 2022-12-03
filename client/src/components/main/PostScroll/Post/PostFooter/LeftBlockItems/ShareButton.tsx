@@ -6,9 +6,7 @@ import SvgIconButton from "@/components/commons/SvgIconButton/SvgIconButton";
 import "./LeftBlockItems.scss";
 
 const ShareButton = (): JSX.Element => {
-  const handleShare: MouseEventHandler = () => {
-    console.log("공유하기");
-  };
+  const handleShare: MouseEventHandler = () => {};
 
   return (
     <SvgIconButton
