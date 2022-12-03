@@ -18,5 +18,14 @@
     background-color: $weview-white;
     border-right: $border-medium $line-color;
     transition: 400ms; /* 약간 동적인 느낌을 주기 위해 100ms 차이를 둠 */
+
+    &.show {
+      width: 32rem;
+    }
+
+    &.hide {
+      width: 0;
+      padding: 0;
+    }
   }
 }

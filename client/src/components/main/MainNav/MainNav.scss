@@ -62,10 +62,6 @@
         min-width: 7rem;
         opacity: 1;
       }
-
-      .nav__content {
-        width: 0;
-      }
     }
 
     /* 반응형: 디바이스-closed */
@@ -87,10 +83,6 @@
       .nav-menu__detail,
       .nav__sidebar__profile-menu__detail {
         opacity: 0;
-      }
-
-      .nav__content {
-        width: 32rem;
       }
     }
   }
