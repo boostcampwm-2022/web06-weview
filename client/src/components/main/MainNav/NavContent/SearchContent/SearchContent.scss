@@ -11,10 +11,20 @@
   width: 100%;
 }
 
+@mixin nav-content-subtitle() {
+  & .title {
+    width: 100%;
+    height: fit-content;
+    font-size: $font-large;
+    border-bottom: $border-small $line-color;
+  }
+}
+
 @include device {
   .search-content {
     @include content-fade-in;
     @include flex-start;
+    @include nav-content-subtitle;
     flex-direction: column;
     gap: 2rem;
     width: 100%;
@@ -24,13 +34,6 @@
     & .content-title {
       width: 100%;
       font-size: $font-xxx-large;
-    }
-
-    & .title {
-      width: 100%;
-      height: fit-content;
-      font-size: $font-large;
-      border-bottom: $border-small $line-color;
     }
 
     /*
