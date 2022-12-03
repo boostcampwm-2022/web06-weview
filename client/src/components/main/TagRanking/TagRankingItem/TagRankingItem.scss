@@ -4,12 +4,11 @@
   width: 100%;
   margin-top: 2rem;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
 
   &:first-child {
-    margin-top: 0;
+    margin-top: 0.5rem;
   }
 
   &__rank {
@@ -22,7 +21,7 @@
 
   &__name {
     display: inline-block;
-    width: 21rem;
+    width: 20rem;
     height: 18px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -31,10 +30,22 @@
   }
 
   &__icon {
-    display: inline-block;
-    float: right;
-    margin-left: 5rem;
-    background-position: 0 0;
+    &--equal,
+    &--up,
+    &--down,
+    &--new {
+      display: inline-block;
+      float: right;
+      margin-right: 1rem;
+      background-position: 0 0;
+    }
+
+    &--new {
+      position: relative;
+      right: -0.3rem;
+      font-size: 1rem;
+      color: $error;
+    }
 
     &--equal {
       color: $placeholder-color-dark;
@@ -54,16 +65,4 @@
   color: $weview-blue;
   text-decoration: underline;
   text-decoration-color: $weview-blue;
-}
-
-.highlight-tag {
-  .tag-rank-item {
-    &__rank {
-      font-weight: bold;
-    }
-
-    &__name {
-      font-weight: bold;
-    }
-  }
 }
