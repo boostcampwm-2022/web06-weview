@@ -1,0 +1,22 @@
+@import "@/styles/theme";
+@import "@/styles/global-style";
+@import "@/styles/responsive";
+@import "@/styles/mixin";
+
+// NOTE : device 최대 뷰 = 32rem + 9.2rem + PostBa
+@include device {
+  .nav__content {
+    position: absolute;
+    top: 0;
+    left: 9.2rem;
+    z-index: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 2rem;
+    background-color: $weview-off-white;
+    border-right: $border-medium $line-color;
+    transition: 400ms; /* 약간 동적인 느낌을 주기 위해 100ms 차이를 둠 */
+  }
+}

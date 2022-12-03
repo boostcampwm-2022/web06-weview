@@ -2,9 +2,9 @@
 @import "@/styles/_theme.scss";
 
 .post__body {
-  $post-inline-padding: 0.75rem;
-  box-sizing: border-box;
+  $post-inline-padding: $font-medium;
   @include flex-start;
+  box-sizing: border-box;
   flex-direction: column;
 
   grid-row: 3;
@@ -25,18 +25,18 @@
 
     &--title {
       flex-grow: 1;
-      font-size: 1rem;
+      font-size: $font-large;
     }
 
     &--time-stamp {
       width: fit-content;
-      font-size: 0.75rem;
+      font-size: $font-medium;
       text-align: left;
       white-space: nowrap;
     }
   }
 
   &--content {
-    font-size: 0.75rem;
+    font-size: $font-medium;
   }
 }

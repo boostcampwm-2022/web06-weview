@@ -1,6 +1,6 @@
-@import "@/styles/_theme.scss";
-@import "@/styles/_global-style.scss";
-@import "@/styles/_animation.scss";
+@import "@/styles/theme";
+@import "@/styles/global-style";
+@import "@/styles/animation";
 
 .modal-container {
   // root 의 가운데 정렬
@@ -22,7 +22,7 @@
   background-color: $weview-off-white;
   border: 0.25rem solid $line-color;
   border-radius: 1rem;
-  box-shadow: $button-shadow;
+  box-shadow: $shadow-box;
 
   &.open {
     @include fade-in-modal(600ms);

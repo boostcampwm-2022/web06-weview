@@ -1,0 +1,45 @@
+@import "@/styles/theme";
+@import "@/styles/mixin";
+@import "@/styles/responsive";
+
+/*!
+ * icon   : 고정
+ * detail : width 100%, 가변
+ * 최소 길이 : 16rem
+ */
+@include device {
+  .nav-menu {
+    box-sizing: border-box;
+    display: flex;
+
+    gap: 2rem;
+    align-items: center;
+
+    width: 100%;
+    height: 4rem;
+    color: $placeholder-color-dark;
+
+    border-radius: $radius-medium;
+
+    &:hover {
+      color: $text-color;
+      cursor: pointer;
+      background-color: $light-gray;
+    }
+
+    &__icon {
+      flex-grow: 0;
+      width: 3rem !important;
+      height: 3rem !important;
+      padding-left: 1rem !important;
+    }
+
+    &__detail {
+      flex-grow: 1;
+      width: fit-content;
+      height: fit-content;
+      font-size: $font-large;
+      transition: 100ms;
+    }
+  }
+}

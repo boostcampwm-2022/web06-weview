@@ -1,16 +1,50 @@
-// _theme.scss
+/*!
+  Theme: WeView Default
+  Description: Light Theme
+  Updated: 2022-11-30
+*/
+
+/* Colors */
 $text-color: #222;
-$line-color: #d7d7d7;
-$placeholder-color: #bbb;
 $codeblock-color: #292c33;
+$code-color: #c9d1d9;
+$placeholder-color-dark: #555;
+$placeholder-color: #bbb;
+$line-color: #d7d7d7;
+$light-gray: #f5f7f9;
 $weview-white: #fff;
 $weview-off-white: #fcfcfc;
-$code-color: #c9d1d9;
-$primary: #84cb8d;
 $primary-light: #bed6c1;
+$primary: #84cb8d;
 $alert: #eb923f;
 $error: #f45452;
-$light-gray: #f5f7f9;
-$box-shadow: 0 4px 10px rgba(51, 51, 51, 0.1), 0 0 4px rgba(51, 51, 51, 0.05);
-$button-shadow: rgba(50, 50, 93, 0.25) 0 6px 12px -2px,
+/* Label */
+$author-color: #c08834;
+$reviews-color: #4dd2ba;
+$likes-color: #ef69da;
+
+/* Fonts */
+$font-small: 0.8rem;
+$font-medium: 1.2rem;
+$font-form: 1.3rem;
+$font-large: 1.6rem;
+$font-x-large: 1.9rem;
+$font-xx-large: 2.2rem;
+$font-xxx-large: 2.5rem;
+
+/* Radius */
+$radius-small: 4px;
+$radius-medium: 6px;
+$radius-modal: 16px;
+$radius-circle: 1000px;
+
+/* Borders */
+$border-x-small: 0.5px solid;
+$border-small: 1px solid;
+$border-medium: 2px solid;
+$border-large: 4px solid;
+
+/* Shadows */
+$shadow-box: 0 4px 10px rgba(51, 51, 51, 0.1), 0 0 4px rgba(51, 51, 51, 0.05);
+$shadow-button: rgba(50, 50, 93, 0.25) 0 6px 12px -2px,
   rgba(0, 0, 0, 0.3) 0 3px 7px -3px;

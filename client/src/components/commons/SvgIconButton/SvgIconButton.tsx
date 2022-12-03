@@ -22,11 +22,11 @@ const SvgIconButton = ({
     <div className={`svg-icon-button ${className}`} onClick={onClick}>
       <Icon
         className="svg-icon-button__icon"
-        style={{ color: color ?? "$text-color" }}
+        style={{ color: color ?? "#222" }}
       />
       <div
         className="svg-icon-button__detail"
-        style={{ color: color ?? "#222222" }}
+        style={{ color: color ?? "#222" }}
       >
         {detail}
       </div>

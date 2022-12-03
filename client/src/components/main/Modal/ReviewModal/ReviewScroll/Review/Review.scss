@@ -1,30 +1,30 @@
 @import "@/styles/_theme";
 
 $review-border-line-size: 1.25px;
-$review-padding: 0.5rem;
-$review-radius: 0.35rem;
-$review-font-size: 0.75rem;
+$review-padding: 0.8rem;
+$review-radius: 0.56rem;
+$review-font-size: $font-medium;
 
-$review-form-header-height: 2.5rem;
+$review-form-header-height: 4rem;
 
 .review {
   position: relative;
 
   box-sizing: border-box;
   display: flex;
-  gap: 1rem;
+  gap: 1.6rem;
 
   width: 100%;
   height: auto;
-  margin-bottom: 1rem;
+  margin-bottom: 1.6rem;
   list-style: none;
 
   &__reviewer-image {
     position: relative;
-    flex-basis: 1.5rem;
+    flex-basis: 2.4rem;
     flex-shrink: 0;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2.4rem;
+    height: 2.5rem;
 
     &--item {
       width: 100%;
@@ -39,7 +39,7 @@ $review-form-header-height: 2.5rem;
 
     box-sizing: border-box;
     width: 100%;
-    border: 1px solid $line-color;
+    border: $border-small $line-color;
     border-radius: $review-radius;
 
     &__top {
@@ -57,7 +57,7 @@ $review-form-header-height: 2.5rem;
 
       &--nickname,
       &--time {
-        font-size: 0.75rem;
+        font-size: $font-medium;
       }
 
       &--nickname {

@@ -1,8 +1,9 @@
 // fonts
 @import url("https://webfontworld.github.io/gmarket/GmarketSans.css");
 // pages
-@import "@/styles/_global-style";
-@import "@/styles/_theme";
+@import "@/styles/global-style";
+@import "@/styles/theme";
+@import "@/styles/reset";
 
 html,
 body {
