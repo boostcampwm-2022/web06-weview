@@ -1,28 +1,12 @@
 @import "@/styles/theme";
+@import "@/styles/mixin";
 
 .tag-rank-item {
-  width: 100%;
-  margin-top: 2rem;
-  overflow: hidden;
-  white-space: nowrap;
-  cursor: pointer;
-
-  &:first-child {
-    margin-top: 0.5rem;
-  }
-
-  &__rank {
-    float: left;
-    width: 15px;
-    margin-right: 8px;
-    color: $weview-blue;
-    text-align: center;
-  }
+  @include tag-rank-item-mixin;
 
   &__name {
     display: inline-block;
     width: 20rem;
-    height: 18px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -36,13 +20,13 @@
     &--new {
       display: inline-block;
       float: right;
-      margin-right: 1rem;
+      margin-right: 0.5rem;
       background-position: 0 0;
     }
 
     &--new {
       position: relative;
-      right: -0.3rem;
+      right: 0.3rem;
       font-size: 1rem;
       color: $error;
     }
@@ -65,4 +49,5 @@
   color: $weview-blue;
   text-decoration: underline;
   text-decoration-color: $weview-blue;
+  text-underline-position: under;
 }
