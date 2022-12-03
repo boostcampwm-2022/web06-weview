@@ -7,12 +7,8 @@ import useNav from "@/hooks/useNav";
 const BookmarkMenu = (): JSX.Element => {
   const { handleBookmark } = useNav();
 
-  const businessLogic = (): void => {
-    console.log("bookmark menu");
-  };
-
   const handleMenuClick: MouseEventHandler = () => {
-    handleBookmark(businessLogic);
+    handleBookmark();
   };
   return (
     <NavMenu

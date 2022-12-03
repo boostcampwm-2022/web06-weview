@@ -8,7 +8,7 @@ const SearchMenu = (): JSX.Element => {
   const { handleSearch } = useNav();
 
   const handleMenuClick: MouseEventHandler = (e) => {
-    handleSearch(() => console.log("Search"));
+    handleSearch();
   };
 
   return (
