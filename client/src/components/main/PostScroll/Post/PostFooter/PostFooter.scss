@@ -12,12 +12,12 @@
 
   &__left-block {
     display: flex;
-    gap: 0.4rem;
+    gap: 1rem;
   }
 
   &__right-block {
     display: flex;
     flex-direction: row-reverse;
-    gap: 0.4rem;
+    gap: 1rem;
   }
 }

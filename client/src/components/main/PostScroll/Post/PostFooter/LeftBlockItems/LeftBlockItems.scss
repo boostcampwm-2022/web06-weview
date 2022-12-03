@@ -1,6 +1,10 @@
-.post__footer__left-block {
-  &--btn {
-    height: 100%;
-    aspect-ratio: 1/1;
+@import "@/styles/_responsive";
+
+@include device {
+  .post__footer__left-block {
+    &--btn {
+      width: 5rem;
+      height: 5rem;
+    }
   }
 }
