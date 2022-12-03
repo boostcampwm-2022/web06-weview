@@ -10,7 +10,6 @@ import { SEND_POST_CNT } from './post.controller';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { TagRepository } from '../tag/tag.repository';
 import { UserNotFoundException } from 'src/exception/user-not-found.exception';
-import { PostNotWrittenException } from 'src/exception/post-not-written.exception';
 import { UserRepository } from '../user/user.repository';
 import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
@@ -32,7 +31,7 @@ export class PostService {
       id: userId,
     });
 
-    if (userEntity === null) {
+    if (!userEntity) {
       throw new UserNotFoundException();
     }
 
@@ -49,8 +48,8 @@ export class PostService {
     postEntity.category = category;
     postEntity.code = code;
     postEntity.language = language;
-    postEntity.user = userEntity;
     postEntity.lineCount = lineCount;
+    postEntity.user = userEntity;
     postEntity.images = imageEntities;
     postEntity.postToTags = postToTagEntities;
     await this.postRepository.save(postEntity);
@@ -60,12 +59,11 @@ export class PostService {
 
   private toPostToTagEntities(tags: string[]): Promise<PostToTag[]> {
     if (!tags) {
-      return undefined;
+      return null;
     }
 
-    const postToTagEntities = Promise.all(
-      tags.map(async (name) => {
-        let tagEntity = await this.tagRepository.findOneBy({ name });
+    const postToTagEntityPromises = tags.map((name) =>
+      this.tagRepository.findOneBy({ name }).then((tagEntity) => {
         if (!tagEntity) {
           tagEntity = new Tag();
           tagEntity.name = name;
@@ -77,7 +75,7 @@ export class PostService {
       }),
     );
 
-    return postToTagEntities;
+    return Promise.all(postToTagEntityPromises);
   }
 
   async loadPostList(

@@ -32,12 +32,14 @@ import { TokenNotFoundException } from '../../exception/token-not-found.exceptio
 import { TokenNotPermittedException } from '../../exception/token-not-permitted.exception';
 import { AccessTokenGuard } from './access-token.guard';
 import { NcpObjectStorage } from 'src/domain/auth/ncp-object-storage';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 @ApiTags('인증 API')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly configService: ConfigService,
     private readonly ncpObjectStorage: NcpObjectStorage,
   ) {}
 
@@ -60,6 +62,7 @@ export class AuthController {
 
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
+        secure: this.configService.get('NODE_ENV') === 'prod',
       });
       return {
         accessToken: accessToken,
@@ -128,13 +131,8 @@ export class AuthController {
   @ApiOkResponse()
   @ApiUnauthorizedResponse()
   getPresignedUrl(@Query('imageCount', ParseIntPipe) imageCount: number) {
-    const arr = [];
-    for (let i = 1; i <= imageCount; i++) {
-      const presigned = this.ncpObjectStorage.createPresignedPost();
-
-      arr.push(presigned);
-    }
-
-    return arr;
+    return Array.from({ length: imageCount }, () =>
+      this.ncpObjectStorage.createPresignedPost(),
+    );
   }
 }

@@ -6,22 +6,20 @@ import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { Category } from './category';
 import { TagRepository } from '../tag/tag.repository';
-import { LikesRepository } from '../likes/likes.repository';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
-import { PostNotWrittenException } from '../../exception/post-not-written.exception';
 import { UserRepository } from '../user/user.repository';
 import { DataSource } from 'typeorm';
 import { User } from '../user/user.entity';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
 import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { Post } from './post.entity';
+import { Tag } from '../tag/tag.entity';
 
 describe('PostService', () => {
   let service: PostService;
   let postRepository;
   let postToTagRepository;
   let tagRepository;
-  let likesRepository;
   let userRepository;
 
   beforeAll(async () => {
@@ -32,7 +30,6 @@ describe('PostService', () => {
         PostToTagRepository,
         UserRepository,
         TagRepository,
-        LikesRepository,
         {
           provide: DataSource,
           useValue: {
@@ -46,7 +43,6 @@ describe('PostService', () => {
     postRepository = module.get<PostRepository>(PostRepository);
     postToTagRepository = module.get<PostToTagRepository>(PostToTagRepository);
     tagRepository = module.get<TagRepository>(TagRepository);
-    likesRepository = module.get<LikesRepository>(LikesRepository);
     userRepository = module.get<UserRepository>(UserRepository);
   });
 
@@ -546,75 +542,120 @@ describe('PostService', () => {
         expect(result).toBeNull();
       });
     });
+  });
 
-    describe('글 작성', () => {
-      const writeDto: WriteDto = {
-        title: '제목',
-        content: '내용',
-        code: 'console.log("test")',
-        language: 'javascript',
-        lineCount: 30,
-        category: Category.QUESTION,
-        images: [
-          'http://localhost:8080/test.png',
-          'http://localhost:8080/abc.jpg',
-        ],
-        tags: ['알고리즘', '정렬'],
-      };
+  describe('글 작성', () => {
+    const writeDto: WriteDto = {
+      title: '제목',
+      content: '내용',
+      code: 'console.log("test")',
+      language: 'javascript',
+      lineCount: 30,
+      category: Category.QUESTION,
+      images: [
+        'http://localhost:8080/test.png',
+        'http://localhost:8080/abc.jpg',
+      ],
+      tags: ['알고리즘', '정렬'],
+    };
 
-      beforeEach(async () => {
-        userRepository.findOneBy = jest.fn();
-        postRepository.save = jest.fn();
-        tagRepository.findOneBy = jest.fn();
-        postToTagRepository.save = jest.fn();
-      });
-
-      it('글 작성 성공', async () => {
-        await service.write(1, writeDto);
-
-        expect(postRepository.save).toBeCalledTimes(1);
-      });
-
-      it('유저를 찾지 못해서 글 작성 실패', async () => {
-        userRepository.findOneBy = jest.fn(() => null);
-
-        try {
-          await service.write(1, writeDto);
-          throw new Error();
-        } catch (err) {
-          expect(err).toBeInstanceOf(UserNotFoundException);
-        }
-      });
-
-      it('그 외 에러로 글 작성 실패', async () => {
-        userRepository.findOneBy = jest.fn(() => new User());
-
-        postRepository.save = jest.fn(() => {
-          throw new PostNotWrittenException();
-        });
-
-        try {
-          await service.write(1, writeDto);
-          throw new Error();
-        } catch (err) {
-          expect(err).toBeInstanceOf(PostNotWrittenException);
-        }
-      });
+    beforeEach(async () => {
+      userRepository.findOneBy = jest.fn();
+      postRepository.save = jest.fn();
+      tagRepository.findOneBy = jest.fn();
+      postToTagRepository.save = jest.fn();
     });
 
-    describe('글 삭제', () => {
-      let user;
-      let post;
+    it('글 작성 성공', async () => {
+      userRepository.findOneBy = jest.fn(() => new User());
+      tagRepository.findOneBy = jest.fn(
+        () => new Promise((resolve) => resolve(new Tag())),
+      );
+      await service.write(1, writeDto);
 
-      beforeEach(async () => {
-        user = new User();
-        post = new Post();
+      expect(postRepository.save).toBeCalledTimes(1);
+    });
 
-        postRepository.findOne = jest.fn();
-        postRepository.deleteUsingPost = jest.fn();
-      });
+    it('유저를 찾지 못해서 글 작성 실패', async () => {
+      userRepository.findOneBy = jest.fn(() => null);
 
-      it('(성공)', async () => {
+      try {
+        await service.write(1, writeDto);
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(UserNotFoundException);
+      }
+    });
+  });
+
+  describe('글 삭제', () => {
+    let user;
+    let post;
+
+    beforeEach(async () => {
+      user = new User();
+      post = new Post();
+
+      postRepository.findOne = jest.fn();
+      postRepository.deleteUsingPost = jest.fn();
+    });
+
+    it('(성공)', async () => {
+      user.id = 1;
+      user.isDeleted = false;
+      post.user = user;
+      post.isDeleted = false;
+
+      postRepository.findOne = jest.fn(() => post);
+
+      await service.delete(1, 1);
+    });
+
+    it('(실패) user.isDeleted가 true인 경우', async () => {
+      try {
+        user.id = 1;
+        user.isDeleted = true;
+        post.user = user;
+        post.isDeleted = false;
+
+        postRepository.findOne = jest.fn(() => post);
+        await service.delete(1, 1);
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(UserNotFoundException);
+      }
+    });
+
+    it('(실패) user가 undefined인 경우', async () => {
+      try {
+        user = undefined;
+        post.user = user;
+        post.isDeleted = false;
+
+        postRepository.findOne = jest.fn(() => post);
+        await service.delete(1, 1);
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(UserNotFoundException);
+      }
+    });
+
+    it('(실패) user가 null인 경우', async () => {
+      try {
+        user = null;
+        post.user = user;
+        post.isDeleted = false;
+
+        postRepository.findOne = jest.fn(() => post);
+        await service.delete(1, 1);
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(UserNotFoundException);
+      }
+    });
+
+    it('(실패) 권한이 존재하지 않는 경우', async () => {
+      try {
         user.id = 1;
         user.isDeleted = false;
         post.user = user;
@@ -622,103 +663,47 @@ describe('PostService', () => {
 
         postRepository.findOne = jest.fn(() => post);
 
+        const differentUserId = 2;
+        await service.delete(differentUserId, 1);
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(UserNotSameException);
+      }
+    });
+
+    it('(실패) post.isDeleted가 true인 경우', async () => {
+      try {
+        user.id = 1;
+        user.isDeleted = false;
+
+        post.user = user;
+        post.isDeleted = true;
+        postRepository.findOne = jest.fn(() => post);
         await service.delete(1, 1);
-      });
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(PostNotFoundException);
+      }
+    });
 
-      it('(실패) user.isDeleted가 true인 경우', async () => {
-        try {
-          user.id = 1;
-          user.isDeleted = true;
-          post.user = user;
-          post.isDeleted = false;
+    it('(실패) post가 undefined인 경우', async () => {
+      try {
+        postRepository.findOne = jest.fn(() => undefined);
+        await service.delete(1, 1);
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(PostNotFoundException);
+      }
+    });
 
-          postRepository.findOne = jest.fn(() => post);
-          await service.delete(1, 1);
-          throw new Error();
-        } catch (err) {
-          expect(err).toBeInstanceOf(UserNotFoundException);
-        }
-      });
-
-      it('(실패) user가 undefined인 경우', async () => {
-        try {
-          user = undefined;
-          post.user = user;
-          post.isDeleted = false;
-
-          postRepository.findOne = jest.fn(() => post);
-          await service.delete(1, 1);
-          throw new Error();
-        } catch (err) {
-          expect(err).toBeInstanceOf(UserNotFoundException);
-        }
-      });
-
-      it('(실패) user가 null인 경우', async () => {
-        try {
-          user = null;
-          post.user = user;
-          post.isDeleted = false;
-
-          postRepository.findOne = jest.fn(() => post);
-          await service.delete(1, 1);
-          throw new Error();
-        } catch (err) {
-          expect(err).toBeInstanceOf(UserNotFoundException);
-        }
-      });
-
-      it('(실패) 권한이 존재하지 않는 경우', async () => {
-        try {
-          user.id = 1;
-          user.isDeleted = false;
-          post.user = user;
-          post.isDeleted = false;
-
-          postRepository.findOne = jest.fn(() => post);
-
-          const differentUserId = 2;
-          await service.delete(differentUserId, 1);
-          throw new Error();
-        } catch (err) {
-          expect(err).toBeInstanceOf(UserNotSameException);
-        }
-      });
-
-      it('(실패) post.isDeleted가 true인 경우', async () => {
-        try {
-          user.id = 1;
-          user.isDeleted = false;
-
-          post.user = user;
-          post.isDeleted = true;
-          postRepository.findOne = jest.fn(() => post);
-          await service.delete(1, 1);
-          throw new Error();
-        } catch (err) {
-          expect(err).toBeInstanceOf(PostNotFoundException);
-        }
-      });
-
-      it('(실패) post가 undefined인 경우', async () => {
-        try {
-          postRepository.findOne = jest.fn(() => undefined);
-          await service.delete(1, 1);
-          throw new Error();
-        } catch (err) {
-          expect(err).toBeInstanceOf(PostNotFoundException);
-        }
-      });
-
-      it('(실패) post가 null인 경우', async () => {
-        try {
-          postRepository.findOne = jest.fn(() => null);
-          await service.delete(1, 1);
-          throw new Error();
-        } catch (err) {
-          expect(err).toBeInstanceOf(PostNotFoundException);
-        }
-      });
+    it('(실패) post가 null인 경우', async () => {
+      try {
+        postRepository.findOne = jest.fn(() => null);
+        await service.delete(1, 1);
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(PostNotFoundException);
+      }
     });
   });
 });

@@ -54,6 +54,7 @@ export class ReviewController {
     try {
       const userId = req.user['id'];
       await this.reviewService.write(userId, requestDto);
+
       return { message: '리뷰 작성에 성공했습니다.' };
     } catch (err) {
       if (err instanceof UserNotFoundException) {
@@ -62,6 +63,7 @@ export class ReviewController {
       if (err instanceof PostNotFoundException) {
         throw new NotFoundException(err.message);
       }
+
       throw new InternalServerErrorException();
     }
   }
