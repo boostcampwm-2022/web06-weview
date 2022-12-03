@@ -22,12 +22,14 @@ const TagRankItem = ({
     <li className={className}>
       <span className="tag-rank-item__rank">{tagInfo.nowRank}.</span>
       <span className="tag-rank-item__name">{tagInfo.name}</span>
+      {/* 순위에 새로 들어온 태그 */}
+      {tagInfo.prev === 0 && <i className="tag-rank-item__icon--new">new</i>}
       {/* 동순위 */}
       {tagInfo.prev === tagInfo.nowRank && (
         <HorizontalRuleIcon className="tag-rank-item__icon--equal" />
       )}
       {/* 순위 낮아짐 */}
-      {tagInfo.prev < tagInfo.nowRank && (
+      {tagInfo.prev !== 0 && tagInfo.prev < tagInfo.nowRank && (
         <ArrowDownwardIcon className="tag-rank-item__icon--down" />
       )}
       {/* 순위 높아짐 */}

@@ -11,7 +11,7 @@ const shuffleArray = (
 const rankingData = [
   { name: "javascript", prev: 2 },
   { name: "java", prev: 3 },
-  { name: "sort", prev: 1 },
+  { name: "sort", prev: 0 },
   { name: "algorithm", prev: 12 },
   { name: "coding-testzxcvzxvxzcvzxvzxc", prev: 5 },
   { name: "quick-sort", prev: 6 },
