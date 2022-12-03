@@ -43,4 +43,4 @@ jobs:
           port: ${{ secrets.DEV_NCLOUD_PORT }}
           script: |
             cd /home/weview/server && docker compose pull
-            cd /home/weview/server && docker compose up --datach
+            cd /home/weview/server && docker compose up --detach
