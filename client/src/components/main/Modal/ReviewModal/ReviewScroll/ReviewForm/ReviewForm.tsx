@@ -6,9 +6,9 @@ import React, {
 } from "react";
 
 import { postReviewAPI } from "@/apis/review";
-import useAuthStore from "@/store/useAuthStore";
 import NotLoggedInReviewForm from "@/components/main/Modal/ReviewModal/ReviewScroll/ReviewForm/NotLoggedInReviewForm";
 import { Refetch } from "@/hooks/useReviewInfiniteScroll";
+import useAuth from "@/hooks/useAuth";
 
 interface ReviewFormProps {
   postId: string;
@@ -18,10 +18,7 @@ interface ReviewFormProps {
 const reviewTextAreaPlaceholder = "리뷰를 입력해주세요.";
 
 const ReviewForm = ({ postId, refetch }: ReviewFormProps): JSX.Element => {
-  const [myInfo, isLoggedIn] = useAuthStore((state) => [
-    state.myInfo,
-    state.isLoggedIn,
-  ]);
+  const { myInfo, isLoggedIn } = useAuth();
   const [content, setContent] = useState("");
 
   const handleContentChange = useCallback(

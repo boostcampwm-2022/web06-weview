@@ -18,7 +18,7 @@ const usePostLike = ({
   postId: string;
   isLiked?: boolean;
 }): UsePostLike => {
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isLoggedIn = useAuthStore((state) => state.myInfo) !== null;
   const [isLikedState, setIsLikedState] = useState(
     isLiked !== undefined && isLiked
   );

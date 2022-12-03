@@ -84,7 +84,8 @@
       }
 
       /* 글자들을 모두 가린다. */
-      .nav-menu__detail {
+      .nav-menu__detail,
+      .nav__sidebar__profile-menu__detail {
         opacity: 0;
       }
 
