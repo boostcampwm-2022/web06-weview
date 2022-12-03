@@ -39,26 +39,53 @@
     /*
      * SearchContentHeader
      */
-    &__input {
+    &__form {
       box-sizing: border-box;
+      display: flex;
+      gap: 1rem;
       width: 100%;
       height: calc($font-medium * 3);
-      padding-left: 1rem;
-      font-size: $font-medium;
-      line-height: calc($font-medium * 3);
-      background-color: $weview-off-white;
-      border: $border-small $placeholder-color-dark;
-      border-radius: $radius-small;
-      transition: 100ms;
 
-      &::placeholder {
+      &__input {
+        box-sizing: border-box;
+        flex: 1;
+        height: 100%;
+        padding-left: 1rem;
         font-size: $font-medium;
-        color: $placeholder-color;
+        line-height: calc($font-medium * 3);
+        background-color: $weview-off-white;
+        border: $border-small $placeholder-color-dark;
+        border-radius: $radius-small;
+        transition: 100ms;
+
+        &::placeholder {
+          font-size: $font-medium;
+          color: $placeholder-color;
+        }
+
+        &:focus {
+          background-color: $weview-white;
+          border: $border-small $primary;
+        }
       }
 
-      &:focus {
-        background-color: $weview-white;
-        border: $border-small $primary;
+      &__submit {
+        display: inline-block !important;
+        flex-shrink: 0;
+        width: 2rem !important;
+        height: 100% !important;
+        padding: 0 1rem;
+        color: $weview-off-white;
+        background-color: $placeholder-color;
+        border-radius: $radius-small;
+
+        &:hover {
+          font-weight: bold;
+          cursor: pointer;
+          background-color: $primary-light;
+          stroke: $weview-off-white;
+          stroke-width: 1;
+        }
       }
     }
 
