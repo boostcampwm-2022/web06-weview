@@ -14,7 +14,7 @@ const TagRanking = (): JSX.Element => {
       <ul className="tag-rank__list">
         {rankingData.map((tag, idx) => (
           <TagRankItem
-            key={idx}
+            key={tag.name}
             tagInfo={{ ...tag, nowRank: idx + 1 }}
             className="tag-rank-item"
           />
