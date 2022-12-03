@@ -26,27 +26,11 @@
         }
       }
 
-      &:nth-child(1) {
-        &:hover ~ .nav__sidebar__menus__active {
-          top: 3rem;
-        }
-      }
-
-      &:nth-child(2) {
-        &:hover ~ .nav__sidebar__menus__active {
-          top: 8rem;
-        }
-      }
-
-      &:nth-child(3) {
-        &:hover ~ .nav__sidebar__menus__active {
-          top: 13rem;
-        }
-      }
-
-      &:nth-child(4) {
-        &:hover ~ .nav__sidebar__menus__active {
-          top: 18rem;
+      @for $i from 0 to 4 {
+        &:nth-child(#{ $i + 1 }) {
+          &:hover ~ .nav__sidebar__menus__active {
+            top: calc(3rem + calc(5rem * $i));
+          }
         }
       }
     }

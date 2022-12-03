@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
 
 import useLabel from "@/hooks/useLabel";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
@@ -12,22 +13,34 @@ const SearchContentHeader = ({
 }: {
   setFocus: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
-  const { word, labels, handleWordChange, handleWordKeyUp, removeLabel } =
-    useLabel();
+  const {
+    word,
+    labels,
+    handleWordChange,
+    handleWordKeyUp,
+    removeLabel,
+    handleSubmit,
+  } = useLabel();
 
   return (
     <>
       <div className="content-title">검색</div>
-      <input
-        className="search-content__input"
-        type="text"
-        value={word}
-        placeholder="WeView 검색"
-        onFocus={() => setFocus(true)}
-        onBlur={() => setFocus(false)}
-        onChange={handleWordChange}
-        onKeyUp={handleWordKeyUp}
-      />
+      <div className="search-content__form">
+        <input
+          className="search-content__form__input"
+          type="text"
+          value={word}
+          placeholder="WeView 검색"
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+          onChange={handleWordChange}
+          onKeyUp={handleWordKeyUp}
+        />
+        <SearchIcon
+          className="search-content__form__submit"
+          onClick={handleSubmit}
+        />
+      </div>
       <div className="title">검색 필터</div>
       <div className="search-content__labels">
         {labels.map((label: Label) => (
