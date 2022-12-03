@@ -18,7 +18,6 @@ interface NavStoreState {
 
 interface NavStoreAction {
   setNavState: (newNavState: NAV_STATE_TYPE) => void;
-  resetNavState: () => void;
 }
 
 interface NavStore extends NavStoreState, NavStoreAction {}
@@ -27,7 +26,6 @@ const useNavStore = create<NavStore>()(
   devtools((set) => ({
     navState: NAV_STATE.DEFAULT,
     setNavState: (newNavState) => set({ navState: newNavState }),
-    resetNavState: () => set({ navState: NAV_STATE.DEFAULT }),
   }))
 );
 

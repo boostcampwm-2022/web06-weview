@@ -9,15 +9,17 @@ interface LabelProps {
   onClickCallback: Function;
 }
 
-const SearchLabel = ({ label, onClickCallback }: LabelProps): JSX.Element => {
-  return (
-    <span
-      className={`search-label ${label.type}`}
-      onClick={() => onClickCallback()}
-    >
-      {label.value}
-    </span>
-  );
-};
+const SearchLabel = React.memo(
+  ({ label, onClickCallback }: LabelProps): JSX.Element => {
+    return (
+      <span
+        className={`search-label ${label.type}`}
+        onClick={() => onClickCallback(label)}
+      >
+        {label.value}
+      </span>
+    );
+  }
+);
 
 export default SearchLabel;

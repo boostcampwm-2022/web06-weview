@@ -34,7 +34,7 @@ const SearchContentHeader = ({
           <SearchLabel
             key={`${label.type}-${label.value}-filtered`}
             label={label}
-            onClickCallback={() => removeLabel(label)}
+            onClickCallback={removeLabel}
           />
         ))}
       </div>
@@ -79,7 +79,7 @@ const SearchContentBlur = (): JSX.Element => {
           <SearchLabel
             key={`${label.type}-${label.value}-recommend`}
             label={label}
-            onClickCallback={() => insertLabel(label)}
+            onClickCallback={insertLabel}
           />
         ))}
       </div>

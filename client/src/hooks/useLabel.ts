@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
 
 import { Label, SearchQuery } from "@/types/search";
 import useSearchStore from "@/store/useSearchStore";
@@ -65,10 +65,10 @@ interface UseLabelResult {
   word: string;
   labels: Label[];
   insertLabel: (label: Label) => void;
+  removeLabel: (label: Label) => void;
   handleWordChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleWordKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
   handleSubmit: () => void;
-  removeLabel: (label: Label) => void;
 }
 
 const useLabel = (): UseLabelResult => {
@@ -88,16 +88,22 @@ const useLabel = (): UseLabelResult => {
   };
 
   // labels 목록에서 라벨 제거
-  const removeLabel = (targetLabel: Label): void => {
-    setLabels([...labels.filter((label) => !labelEqual(label, targetLabel))]);
-  };
+  const removeLabel = useCallback(
+    (targetLabel: Label): void => {
+      setLabels([...labels.filter((label) => !labelEqual(label, targetLabel))]);
+    },
+    [labels, setLabels]
+  );
 
   // 중복되지 않은 라벨 등록
-  const insertLabel = (label: Label): void => {
-    if (!hasLabel(label)) {
-      setLabels([...labels, label]);
-    }
-  };
+  const insertLabel = useCallback(
+    (targetLabel: Label): void => {
+      if (!hasLabel(targetLabel)) {
+        setLabels([...labels, targetLabel]);
+      }
+    },
+    [labels, setLabels]
+  );
 
   // PostScroll 에 현재 검색 필터를 적용
   const handleSubmit = (): void => {
