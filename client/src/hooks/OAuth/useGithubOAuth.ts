@@ -3,21 +3,17 @@ import { useCallback, useEffect, useState } from "react";
 import { GITHUB_AUTH_SERVER_URL } from "@/constants/env";
 import { githubLogInAPI } from "@/apis/auth";
 import axiosInstance from "@/apis/axios";
-import useAuthStore from "@/store/useAuthStore";
 import customLocalStorage from "@/utils/localStorage";
 
-interface OAuthPopup {
-  popup: Window | null;
-  clearPopup: () => void;
-  handleOpenOAuthPopup: () => void;
+interface UseGithubOAuthResult {
+  handleOpenGithubOAuthPopup: () => void;
 }
 
-const useOAuthPopup = (): OAuthPopup => {
-  const login = useAuthStore((state) => state.login);
+const useGithubOAuth = (onSuccess: Function): UseGithubOAuthResult => {
   const [popup, setPopup] = useState<Window | null>(null);
 
   // OAuth 팝업을 열어서 Github Authorization Code 를 요청합니다.
-  const handleOpenOAuthPopup = useCallback((): void => {
+  const handleOpenGithubOAuthPopup = useCallback((): void => {
     const title = "로그인 중...";
     const width = 500;
     const height = 400;
@@ -59,7 +55,7 @@ const useOAuthPopup = (): OAuthPopup => {
 
       githubLogInAPI(code)
         .then((userData) => {
-          login(userData);
+          onSuccess(userData);
           axiosInstance.defaults.headers.common.Authorization = `Bearer ${userData.accessToken}`;
           customLocalStorage.setItem("expiresIn", String(userData.expiresIn));
         })
@@ -79,7 +75,7 @@ const useOAuthPopup = (): OAuthPopup => {
     };
   }, [popup]);
 
-  return { popup, clearPopup, handleOpenOAuthPopup };
+  return { handleOpenGithubOAuthPopup };
 };
 
-export default useOAuthPopup;
+export default useGithubOAuth;
