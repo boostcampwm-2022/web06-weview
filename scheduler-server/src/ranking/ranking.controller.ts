@@ -22,7 +22,7 @@ import {
 export const MAX_TAG_COUNT = 10;
 export const TAG_NAME_REGEX = /^[0-9|a-z|A-Z|ㄱ-ㅎ|가-힣]+$/;
 
-@Controller('ranking')
+@Controller()
 @ApiTags('랭킹 API')
 export class RankingController {
   constructor(private readonly rankingService: RankingService) {}
