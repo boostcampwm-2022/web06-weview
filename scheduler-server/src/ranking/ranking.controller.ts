@@ -2,6 +2,8 @@ import {
   BadRequestException,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   InternalServerErrorException,
   Post,
   Query,
@@ -11,11 +13,17 @@ import { SaveSearchedTagsDto } from './dto/controller-request.dto';
 import { TagNameInvalidException } from '../exception/tag-name-invalid.exception';
 import { TagDuplicatedException } from '../exception/tag-duplicated.exception';
 import { TagCountInvalidException } from '../exception/tag-count-invalid.exception';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 export const MAX_TAG_COUNT = 10;
 export const TAG_NAME_REGEX = /^[0-9|a-z|A-Z|ㄱ-ㅎ|가-힣]+$/;
 
 @Controller('ranking')
+@ApiTags('랭킹 API')
 export class RankingController {
   constructor(private readonly rankingService: RankingService) {}
 
@@ -25,6 +33,9 @@ export class RankingController {
   }
 
   @Post('tags')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse()
+  @ApiBadRequestResponse()
   async saveSearchedTags(@Query() saveSearchedTagsDto: SaveSearchedTagsDto) {
     try {
       const { names: tags } = saveSearchedTagsDto;
