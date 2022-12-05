@@ -103,6 +103,7 @@ export class AuthController {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
+      secure: this.configService.get('NODE_ENV') === 'prod',
     });
 
     return {
