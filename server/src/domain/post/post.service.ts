@@ -179,6 +179,7 @@ export class PostService {
       throw new PostNotFoundException();
     }
     return new EachPostResponseDto(post);
+  }
 
   private async filterUsingDetails(details: string[]) {
     if (!details || details.length < 1) {
