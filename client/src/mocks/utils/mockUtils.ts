@@ -27,3 +27,7 @@ export const parsePostQueryString = (url: URL): SearchFilter => {
 
   return searchQuery;
 };
+
+export const shuffleArray = (
+  arr: Array<{ name: string; prev: number }>
+): Array<{ name: string; prev: number }> => arr.sort(() => Math.random() - 0.5);
