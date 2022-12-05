@@ -15,7 +15,7 @@ interface PopularTagBoxProps {
   };
 }
 
-const TagRankItem = ({ tagInfo }: PopularTagBoxProps): JSX.Element => {
+const TagRankingItem = ({ tagInfo }: PopularTagBoxProps): JSX.Element => {
   const [updateQuery] = useSearchStore((state) => [state.updateQuery]);
   const handleItemClick = useCallback((e: MouseEvent<HTMLLIElement>): void => {
     updateQuery({ tags: [tagInfo.name] });
@@ -43,4 +43,4 @@ const TagRankItem = ({ tagInfo }: PopularTagBoxProps): JSX.Element => {
   );
 };
 
-export default TagRankItem;
+export default TagRankingItem;
