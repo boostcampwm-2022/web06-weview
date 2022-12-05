@@ -197,6 +197,7 @@ export class PostController {
       if (err instanceof PostNotFoundException) {
         throw new NotFoundException(err.message);
       }
+      throw new InternalServerErrorException();
     }
   }
 }

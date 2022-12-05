@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  InternalServerErrorException,
   NotFoundException,
   Param,
   Query,
@@ -47,6 +48,7 @@ export class UserController {
       if (err instanceof UserNotFoundException) {
         throw new NotFoundException(err.message);
       }
+      throw new InternalServerErrorException();
     }
   }
 
