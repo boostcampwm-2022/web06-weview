@@ -37,6 +37,7 @@ import {
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
 import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { PostNotFoundException } from 'src/exception/post-not-found.exception';
+import { UserService } from '../user/user.service';
 
 export const SEND_POST_CNT = 3;
 export const LATEST_DATA_CONDITION = -1;
@@ -50,6 +51,7 @@ export class PostController {
     private readonly postService: PostService,
     private readonly likesService: LikesService,
     private readonly authService: AuthService,
+    private readonly userService: UserService,
   ) {}
 
   /**
@@ -84,6 +86,7 @@ export class PostController {
     );
     await this.addLikesCntColumnEveryPosts(returnValue);
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
+    this.addSearchHistory(headers['authorization'], inqueryDto);
     return returnValue;
   }
 
@@ -112,6 +115,21 @@ export class PostController {
     for (let i = 0; i < result.posts.length; i++) {
       result.posts[i].likesCount = likesCntStore[i];
     }
+  }
+
+  private addSearchHistory(token, inqueryDto: InqueryDto) {
+    if (!token) {
+      return;
+    }
+
+    const userId = this.authService.authenticate(token);
+    if (!userId) {
+      return;
+    }
+
+    // TODO 로그인한 유저가 처음 글 검색시 검색 기록을 추가해야 하기 때문에 글 검색이 있는 PostController에 위치
+    // 후에 글 검색 리팩토링시 같이 리팩토링이 필요할 듯
+    this.userService.addSearchHistory(userId, inqueryDto);
   }
 
   /**
