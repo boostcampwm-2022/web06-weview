@@ -50,15 +50,14 @@ export class UserService {
 
   addSearchHistory(
     userId: number,
-    { lastId, tags, authors, reviews, likes, detail }: InqueryDto,
+    { lastId, tags, reviewCount, likeCount, details }: InqueryDto,
   ) {
     if (lastId !== -1) {
       return;
     }
 
-    const author = authors.length === 0 ? null : authors[0];
-
-    const isSearch = tags.length !== 0 || author || reviews || likes || detail;
+    const isSearch =
+      tags.length !== 0 || reviewCount || likeCount || details.length !== 0;
     if (!isSearch) {
       return;
     }
@@ -66,10 +65,9 @@ export class UserService {
     this.searchHistoryRepository.addSearchHistory(
       userId,
       tags,
-      author,
-      reviews,
-      likes,
-      detail,
+      reviewCount,
+      likeCount,
+      details,
     );
   }
 }

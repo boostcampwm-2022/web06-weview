@@ -20,19 +20,11 @@ export class SearchHistoryMongoRepository extends MongoRepository<SearchHistory>
     });
   }
 
-  async addSearchHistory(
-    userId,
-    tags,
-    author,
-    reviewCount,
-    likeCount,
-    details,
-  ) {
+  async addSearchHistory(userId, tags, reviewCount, likeCount, details) {
     let searchHistory = await this.findOne({
       where: {
         userId,
         tags,
-        author,
         reviewCount,
         likeCount,
         details,
@@ -43,7 +35,6 @@ export class SearchHistoryMongoRepository extends MongoRepository<SearchHistory>
       searchHistory = new SearchHistory(
         userId,
         tags,
-        author,
         reviewCount,
         likeCount,
         details,
