@@ -56,24 +56,12 @@ export class UserController {
   @Get('search/histories')
   @UseGuards(AccessTokenGuard)
   @ApiBearerAuth('accessToken')
-  @ApiNoContentResponse({
-    description: '검색 기록이 없습니다',
-  })
-  @ApiOkResponse({
-    description: '올바른 요청입니다',
-  })
+  @ApiOkResponse()
   @ApiUnauthorizedResponse()
-  async getSearchHistories(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async getSearchHistories(@Req() req: Request) {
     const userId = req.user['id'];
 
     const histories = await this.userService.getSearchHistories(userId);
-    if (histories.length === 0) {
-      res.status(HttpStatus.NO_CONTENT);
-      return;
-    }
 
     return histories;
   }
