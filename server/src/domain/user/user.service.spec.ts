@@ -5,10 +5,11 @@ import { PostRepository } from '../post/post.repository';
 import { DataSource } from 'typeorm';
 import { User } from './user.entity';
 import { Post } from '../post/post.entity';
-import { LoadPostListResponseDto } from '../post/dto/service-response.dto';
 import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 import { Tag } from '../tag/tag.entity';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
+import { SearchHistoryMongoRepository } from '../search/search-history.mongo.repository';
+import { getDataSourceName, getDataSourceToken } from '@nestjs/typeorm';
 
 describe('UserService', () => {
   let service: UserService;
@@ -26,6 +27,13 @@ describe('UserService', () => {
           provide: DataSource,
           useValue: {
             createEntityManager: () => jest.fn(),
+          },
+        },
+        SearchHistoryMongoRepository,
+        {
+          provide: getDataSourceToken('mongo'),
+          useValue: {
+            mongoManager: {},
           },
         },
       ],
