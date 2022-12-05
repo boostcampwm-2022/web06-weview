@@ -84,7 +84,7 @@ export class UserController {
   @ApiForbiddenResponse({
     description: '삭제할 권한이 존재하지 않습니다',
   })
-  async deleteSearchHistories(
+  async deleteSearchHistory(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
     @Param('uuidStr') uuidStr: string,
@@ -92,7 +92,7 @@ export class UserController {
     const userId = req.user['id'];
 
     try {
-      await this.userService.deleteSearchHistories(userId, uuidStr);
+      await this.userService.deleteSearchHistory(userId, uuidStr);
     } catch (err) {
       if (err instanceof SearchHistoryNotFoundException) {
         throw new NotFoundException(err.message);
