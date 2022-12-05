@@ -9,7 +9,7 @@ export class searchHistoryDto {
 
   likeCount: number;
 
-  details: string;
+  details: string[];
 
   updatedAt: Date;
 
