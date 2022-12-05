@@ -21,7 +21,7 @@ const useRanking = (): UseRanking => {
       refetchOnMount: true,
       refetchOnReconnect: true,
       refetchOnWindowFocus: true,
-      refetchInterval: 1000 * 10, // 10초
+      refetchInterval: 1000 * 15, // 15초
     }
   );
 
