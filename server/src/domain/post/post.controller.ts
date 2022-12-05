@@ -62,14 +62,7 @@ export class PostController {
     @Query() inqueryDto: InqueryDto,
     @Headers() headers,
   ): Promise<LoadPostListResponseDto> {
-    const { lastId, reviewCount, likeCount } = inqueryDto;
-    let { tags, details } = inqueryDto;
-    if (typeof tags === 'string') {
-      tags = [tags];
-    }
-    if (typeof details === 'string') {
-      details = [details];
-    }
+    const { tags, lastId, reviewCount, likeCount, details } = inqueryDto;
     const returnValue = await this.postService.loadPostList(
       new LoadPostListRequestDto(lastId, tags, reviewCount, likeCount, details),
     );
