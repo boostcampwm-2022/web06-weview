@@ -84,38 +84,14 @@ export class PostRepository extends Repository<Post> {
 
   findByUserId(lastId: number, userId: number) {
     return this.createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.postToTags', 'postToTag')
+      .leftJoinAndSelect('postToTag.tag', 'tag')
+      .leftJoinAndSelect('post.images', 'image')
       .where('post.userId = :userId', { userId: userId })
       .take(SEND_POST_CNT + 1)
       .orderBy('post.id', 'DESC')
       .getMany();
-  }
-
-  //
-  findBySearchWords(details: string[]) {
-    if (!details || details.length <= 0) {
-      return null; //해당 조건은 사용하지 않습니다
-    }
-    const queryBuilder = this.createQueryBuilder('post').select(
-      'post.id',
-      'postId',
-    );
-    for (const detail of details) {
-      queryBuilder.orWhere(
-        'post.title like :detail OR post.content like :detail',
-        {
-          detail: `%${detail}%`,
-        },
-      );
-    }
-    return queryBuilder.getRawMany();
-  }
-
-  async findByAuthorNicknames(nicknames: string[]) {
-    return this.createQueryBuilder('post')
-      .innerJoinAndSelect('post.user', 'user')
-      .select('post.id', 'postId')
-      .where('user.nickname in (:nicknames)', { nicknames: nicknames })
-      .getRawMany();
   }
 
   async filterUsingDetail(detail: string) {
