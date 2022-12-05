@@ -1,14 +1,14 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 
-import { SearchQuery } from "@/types/search";
+import { SearchFilter } from "@/types/search";
 
 interface SearchStates {
-  searchQuery: SearchQuery;
+  searchQuery: SearchFilter;
 }
 
 interface SearchActions {
-  updateQuery: (query: SearchQuery) => void;
+  updateQuery: (query: SearchFilter) => void;
   reset: () => void;
 }
 

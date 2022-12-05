@@ -1,13 +1,12 @@
-import { SearchQuery } from "@/types/search";
+import { SearchFilter } from "@/types/search";
 
-export const parsePostQueryString = (url: URL): any => {
-  const searchQuery: SearchQuery = {
+export const parsePostQueryString = (url: URL): SearchFilter => {
+  const searchQuery: SearchFilter = {
+    lastId: "-1",
     tags: [],
-    authors: [],
-    category: "",
-    reviews: 0,
-    likes: 0,
-    detail: "",
+    reviewCount: 0,
+    likeCount: 0,
+    details: [],
   };
 
   const tags = url.searchParams.get("tags");
@@ -15,22 +14,16 @@ export const parsePostQueryString = (url: URL): any => {
     searchQuery.tags?.push(...decodeURI(tags).split(","));
   }
 
-  const authors = url.searchParams.get("authors");
-  if (authors !== null) {
-    searchQuery.authors?.push(...decodeURI(authors).split(","));
-  }
-
-  const category = url.searchParams.get("category") ?? "";
-  searchQuery.category = decodeURI(category);
-
   const reviews = url.searchParams.get("reviews") ?? "0";
-  searchQuery.reviews = Number(decodeURI(reviews));
+  searchQuery.reviewCount = Number(decodeURI(reviews));
 
   const likes = url.searchParams.get("likes") ?? "0";
-  searchQuery.likes = Number(decodeURI(likes));
+  searchQuery.likeCount = Number(decodeURI(likes));
 
-  const detail = url.searchParams.get("detail") ?? "";
-  searchQuery.detail = decodeURI(detail);
+  const details = url.searchParams.get("details");
+  if (details !== null) {
+    searchQuery.details = decodeURI(details).split(",");
+  }
 
   return searchQuery;
 };

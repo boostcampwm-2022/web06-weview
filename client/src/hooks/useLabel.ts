@@ -1,55 +1,48 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
 
-import { Label, SearchQuery } from "@/types/search";
+import { Label, SearchFilter } from "@/types/search";
 import useSearchStore from "@/store/useSearchStore";
 import { isEnterKey } from "@/utils/pressedKeyCheck";
 import { SEPARATOR } from "@/constants/search";
 import { formatTag } from "@/utils/regExpression";
 import useLabelStore from "@/store/useLabelStore";
 
-const createSearchQuery = (inputLabels: Label[]): SearchQuery => {
-  return inputLabels.reduce(
-    (prev: SearchQuery, { type, value }: Label) => {
-      switch (type) {
-        case "tag":
-          prev.tags?.push(value);
-          break;
-        case "category":
-          prev.category = value;
-          break;
-        case "author":
-          prev.authors?.push(value);
-          break;
-        case "reviews":
-          prev.reviews = Number(value);
-          break;
-        case "likes":
-          prev.likes = Number(value);
-          break;
-        case "detail":
-          prev.detail = value;
-          break;
-      }
-      return prev;
-    },
-    {
-      lastId: "-1",
-      tags: [],
-      authors: [],
-      category: "",
-      reviews: 0,
-      likes: 0,
-      detail: "",
+const createSearchFilter = (inputLabels: Label[]): SearchFilter => {
+  const searchFilter: SearchFilter = {
+    lastId: "-1",
+    tags: [],
+    reviewCount: 0,
+    likeCount: 0,
+    details: [],
+  };
+
+  inputLabels.reduce((prev: SearchFilter, { type, value }: Label) => {
+    switch (type) {
+      case "tag":
+        prev.tags?.push(value);
+        break;
+      case "reviews":
+        prev.reviewCount = Number(value);
+        break;
+      case "likes":
+        prev.likeCount = Number(value);
+        break;
+      case "details":
+        prev.details?.push(value);
+        break;
     }
-  );
+    return prev;
+  }, searchFilter);
+
+  return searchFilter;
 };
 
 const createLabel = (word: string): Label => {
   const separator = word[0];
   const value = word.slice(1);
-  const type = SEPARATOR[separator] ?? "detail";
+  const type = SEPARATOR[separator] ?? "details";
 
-  if (type === "detail") {
+  if (type === "details") {
     // 상세 검색은 띄어쓰기를 포맷팅하지 않는다.
     return { type, value: word.trim() };
   }
@@ -107,7 +100,7 @@ const useLabel = (): UseLabelResult => {
 
   // PostScroll 에 현재 검색 필터를 적용
   const handleSubmit = (): void => {
-    const searchQuery = createSearchQuery(labels);
+    const searchQuery = createSearchFilter(labels);
     updateQuery(searchQuery);
   };
 
