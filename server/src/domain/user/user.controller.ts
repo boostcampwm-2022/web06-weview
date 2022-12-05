@@ -1,7 +1,10 @@
 import {
   Controller,
+  Delete,
+  ForbiddenException,
   Get,
   HttpStatus,
+  InternalServerErrorException,
   NotFoundException,
   Param,
   Query,
@@ -14,6 +17,7 @@ import { UserService } from './user.service';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiForbiddenResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -23,6 +27,8 @@ import {
 import { UserInqueryPostDto } from './dto/controller-request.dto';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
 import { AccessTokenGuard } from '../auth/access-token.guard';
+import { UserNotSameException } from 'src/exception/user-not-same.exception';
+import { SearchHistoryNotFoundException } from 'src/exception/search-history-not-found.exception';
 
 @Controller()
 @ApiTags('사용자 API')
@@ -64,5 +70,41 @@ export class UserController {
     const histories = await this.userService.getSearchHistories(userId);
 
     return histories;
+  }
+
+  /**
+   * 로그인한 사용자의 검색 기록을 삭제합니다.
+   */
+  @Delete('search/histories/:uuidStr')
+  @UseGuards(AccessTokenGuard)
+  @ApiNoContentResponse()
+  @ApiNotFoundResponse({
+    description: '유저 혹은 게시물이 존재하지 않습니다',
+  })
+  @ApiForbiddenResponse({
+    description: '삭제할 권한이 존재하지 않습니다',
+  })
+  async deleteSearchHistories(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+    @Param('uuidStr') uuidStr: string,
+  ) {
+    const userId = req.user['id'];
+
+    try {
+      await this.userService.deleteSearchHistories(userId, uuidStr);
+    } catch (err) {
+      if (err instanceof SearchHistoryNotFoundException) {
+        throw new NotFoundException(err.message);
+      }
+      if (err instanceof UserNotSameException) {
+        throw new ForbiddenException(err.message);
+      }
+
+      throw new InternalServerErrorException();
+    }
+
+    res.status(HttpStatus.NO_CONTENT);
+    return;
   }
 }
