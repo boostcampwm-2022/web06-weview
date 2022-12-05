@@ -8,11 +8,9 @@ import { MAX_SEARCH_HISTORY } from "@/constants/search";
 export const fetchSearchHistory = async (): Promise<SearchHistory[]> => {
   const { data } = await axiosInstance.get(`/search/histories`);
   if (!Array.isArray(data)) {
-    console.log("hi", data);
     return [];
   }
   if (data.length > MAX_SEARCH_HISTORY) {
-    console.log(data.length);
     return data.slice(0, 5);
   }
   return data;
