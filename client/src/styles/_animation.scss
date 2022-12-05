@@ -85,14 +85,12 @@ $speed: cubic-bezier(0.86, 0, 0.3, 1);
 @keyframes stagger {
   0% {
     opacity: 0;
+    transform: rotatex(0deg);
   }
-
-  30% {
+  
+  100%{
     opacity: 1;
-  }
-
-  100% {
-    transform: rotate(360deg);
+    transform: rotatex(360deg);
   }
 }
 /* 인기 태그 순위 스켈레톤 */
