@@ -174,4 +174,23 @@ export class PostController {
       throw new InternalServerErrorException();
     }
   }
+
+  /**
+   * 게시물 한 건을 조회합니다
+   */
+  @Get(':postId')
+  @ApiOkResponse({ description: '올바른 요청입니다' })
+  @ApiNotFoundResponse({
+    description: '유저 혹은 게시물이 존재하지 않습니다',
+  })
+  async inqueryPost(@Param('postId') postId: number) {
+    try {
+      return await this.postService.inqueryPost(postId);
+    } catch (err) {
+      if (err instanceof PostNotFoundException) {
+        throw new NotFoundException(err.message);
+      }
+      throw new InternalServerErrorException();
+    }
+  }
 }

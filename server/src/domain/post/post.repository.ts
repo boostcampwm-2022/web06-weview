@@ -128,4 +128,14 @@ export class PostRepository extends Repository<Post> {
       );
     return queryBuilder.getRawMany();
   }
+
+  async findById(postId: number) {
+    return this.createQueryBuilder('post')
+      .innerJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.postToTags', 'postToTag')
+      .leftJoinAndSelect('postToTag.tag', 'tag')
+      .leftJoinAndSelect('post.images', 'image')
+      .where('post.id = :postId', { postId: postId })
+      .getOne();
+  }
 }

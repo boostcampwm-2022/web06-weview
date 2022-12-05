@@ -13,6 +13,7 @@ import { PostNotFoundException } from '../../exception/post-not-found.exception'
 import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { Post } from './post.entity';
 import { Tag } from '../tag/tag.entity';
+import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 
 describe('PostService', () => {
   let service: PostService;
@@ -691,6 +692,56 @@ describe('PostService', () => {
       try {
         postRepository.findOne = jest.fn(() => null);
         await service.delete(1, 1);
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(PostNotFoundException);
+      }
+    });
+  });
+
+  describe('게시물 한 건 조회', () => {
+    let post;
+    beforeEach(() => {
+      post = new Post();
+      post.id = 1;
+      post.title = '제목';
+      post.content = 'content';
+      post.code = 'System.out.println("zz")';
+      post.language = 'java';
+      post.updatedAt = new Date();
+      post.user = new User();
+      post.lineCount = 1;
+      const pt = new PostToTag();
+      const tag = new Tag();
+      tag.name = 'dd';
+      pt.tag = tag;
+      post.postToTags = [pt];
+    });
+    it('(성공) 게시물이 있는 경우', async () => {
+      post.isDeleted = false;
+      postRepository.findById = jest.fn(() => post);
+
+      await service.inqueryPost(1);
+    });
+
+    it('(실패) 게시물이 없는 경우', async () => {
+      try {
+        postRepository.findById = jest.fn(() => null);
+
+        await service.inqueryPost(1);
+
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(PostNotFoundException);
+      }
+    });
+
+    it('(실패) 게시물이 삭제된 경우', async () => {
+      try {
+        post.isDeleted = true;
+        postRepository.findById = jest.fn(() => post);
+
+        await service.inqueryPost(1);
         throw new Error();
       } catch (err) {
         expect(err).toBeInstanceOf(PostNotFoundException);
