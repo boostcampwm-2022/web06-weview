@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useCallback } from "react";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+
+import useSearchStore from "@/store/useSearchStore";
 
 import "./TagRankingItem.scss";
 
@@ -14,8 +16,12 @@ interface PopularTagBoxProps {
 }
 
 const TagRankItem = ({ tagInfo }: PopularTagBoxProps): JSX.Element => {
+  const [updateQuery] = useSearchStore((state) => [state.updateQuery]);
+  const handleItemClick = useCallback((tagName: string): void => {
+    updateQuery({ tags: [tagName] });
+  }, []);
   return (
-    <li className="tag-rank-item">
+    <li onClick={() => handleItemClick(tagInfo.name)} className="tag-rank-item">
       <span className="tag-rank-item__rank">{tagInfo.nowRank}.</span>
       <span className="tag-rank-item__name">{tagInfo.name}</span>
       {/* 순위에 새로 들어온 태그 */}
