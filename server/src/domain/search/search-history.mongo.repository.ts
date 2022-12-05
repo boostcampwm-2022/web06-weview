@@ -14,6 +14,9 @@ export class SearchHistoryMongoRepository extends MongoRepository<SearchHistory>
       where: {
         userId: userId,
       },
+      order: {
+        updatedAt: 'DESC',
+      },
     });
   }
 

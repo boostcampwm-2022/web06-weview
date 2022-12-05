@@ -22,7 +22,7 @@ export class SearchHistory extends BaseTimeEntity {
   likeCount: number;
 
   @Column()
-  details: string;
+  details: string[];
 
   constructor(
     userId: number,
@@ -30,7 +30,7 @@ export class SearchHistory extends BaseTimeEntity {
     author: string,
     reviewCount: number,
     likeCount: number,
-    details: string,
+    details: string[],
   ) {
     super();
     this.userId = userId;
