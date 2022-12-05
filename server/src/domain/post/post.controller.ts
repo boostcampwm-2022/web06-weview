@@ -19,7 +19,6 @@ import { Request } from 'express';
 import { PostService } from './post.service';
 import { LoadPostListResponseDto } from './dto/service-response.dto';
 import { InqueryDto, WriteDto } from './dto/controller-request.dto';
-import { Category } from './category';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { LikesService } from '../likes/likes.service';
 import { AuthService } from '../auth/auth.service';
@@ -63,26 +62,16 @@ export class PostController {
     @Query() inqueryDto: InqueryDto,
     @Headers() headers,
   ): Promise<LoadPostListResponseDto> {
-    const {
-      lastId,
-      category,
-      reviews,
-      likes: likesCnt,
-      detail,
-      authors,
-      tags,
-    } = inqueryDto;
-
+    const { lastId, reviewCount, likeCount } = inqueryDto;
+    let { tags, details } = inqueryDto;
+    if (typeof tags === 'string') {
+      tags = [tags];
+    }
+    if (typeof details === 'string') {
+      details = [details];
+    }
     const returnValue = await this.postService.loadPostList(
-      new LoadPostListRequestDto(
-        lastId,
-        tags,
-        authors,
-        category as Category,
-        reviews,
-        likesCnt,
-        detail,
-      ),
+      new LoadPostListRequestDto(lastId, tags, reviewCount, likeCount, details),
     );
     await this.addLikesCntColumnEveryPosts(returnValue);
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);

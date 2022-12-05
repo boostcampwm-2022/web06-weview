@@ -25,7 +25,7 @@ export class PostService {
 
   async write(
     userId: number,
-    { title, content, category, code, language, lineCount, images, tags },
+    { title, content, code, language, lineCount, images, tags },
   ) {
     const userEntity = await this.userRepository.findOneBy({
       id: userId,
@@ -45,7 +45,6 @@ export class PostService {
     const postEntity = new Post();
     postEntity.title = title;
     postEntity.content = content;
-    postEntity.category = category;
     postEntity.code = code;
     postEntity.language = language;
     postEntity.lineCount = lineCount;
@@ -81,26 +80,21 @@ export class PostService {
   async loadPostList(
     loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
-    const { lastId, tags, authors, category, reviews, likesCnt, detail } =
+    const { lastId, tags, reviewCount, likeCount, details } =
       loadPostListRequestDto;
     let isLast = true;
-    const postInfosAfterFiltering = await Promise.all([
-      this.postRepository.findByIdLikesCntGreaterThanOrEqual(likesCnt),
-      this.postToTagRepository.findByContainingTags(tags),
-      this.postRepository.findBySearchWord(detail),
-      this.postRepository.findByReviewCntGreaterThanOrEqual(reviews),
-    ]);
 
-    const postIdsFiltered = this.returnPostIdByAllConditionPass(
-      postInfosAfterFiltering,
+    const postIdsFiltered = await this.filter(
+      tags,
+      reviewCount,
+      likeCount,
+      details,
     );
-
-    const result = await this.postRepository.findByIdUsingCondition(
+    const result = await this.postRepository.findByIdWithFilterResult(
       lastId,
       postIdsFiltered,
-      authors,
-      category,
     );
+
     if (this.canGetNextPost(result.length)) {
       result.pop();
       isLast = false;
@@ -112,12 +106,50 @@ export class PostService {
     return resultCnt === SEND_POST_CNT + 1;
   }
 
+  private async filter(
+    tags: string[],
+    reviewCount: number,
+    likeCount: number,
+    details: string[],
+  ) {
+    const detailedSearchResult = await this.filterUsingDetails(details);
+
+    const postsThatPassEachFilter = await Promise.all([
+      this.postRepository.findByIdLikesCntGreaterThanOrEqual(likeCount),
+      this.postToTagRepository.findByContainingTags(tags),
+      this.postRepository.findByReviewCntGreaterThanOrEqual(reviewCount),
+      detailedSearchResult,
+    ]);
+
+    return this.mergeFilterResult(postsThatPassEachFilter);
+  }
+
+  private async filterUsingDetails(details: string[]) {
+    if (!details || details.length === 0) {
+      return null;
+    }
+
+    const results = await Promise.all([
+      this.postRepository.findBySearchWords(details),
+      this.postRepository.findByAuthorNicknames(details),
+    ]);
+    return this.getResultsAfterRemovedDuplicated(results);
+  }
+
+  private getResultsAfterRemovedDuplicated(results: any[][]) {
+    const temp = new Set();
+    for (const result of results) {
+      result.forEach((each) => temp.add(each));
+    }
+    return Array.from(temp);
+  }
+
   /**
    * 사용된 검색 조건이 한개도 없으면 -> null을 반환
    * 조건을 만족시키는 사용자가 한 명도 없으면 -> 비어있는 배열 []을 반환
    * 배열 안에 값이 있다면 -> 조건을 만족하는 사용자들의 id 리스트를 반환
    */
-  public returnPostIdByAllConditionPass(postInfos: any[]) {
+  public mergeFilterResult(postInfos: any[]) {
     let result;
     for (const postInfo of postInfos) {
       if (postInfo === null) {

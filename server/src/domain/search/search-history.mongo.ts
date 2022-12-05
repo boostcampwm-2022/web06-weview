@@ -13,9 +13,6 @@ export class SearchHistory extends BaseTimeEntity {
   tags: string[];
 
   @Column()
-  author: string;
-
-  @Column()
   reviewCount: number;
 
   @Column()
@@ -27,7 +24,6 @@ export class SearchHistory extends BaseTimeEntity {
   constructor(
     userId: number,
     tags: string[],
-    author: string,
     reviewCount: number,
     likeCount: number,
     details: string[],
@@ -35,7 +31,6 @@ export class SearchHistory extends BaseTimeEntity {
     super();
     this.userId = userId;
     this.tags = tags;
-    this.author = author;
     this.reviewCount = reviewCount;
     this.likeCount = likeCount;
     this.details = details;

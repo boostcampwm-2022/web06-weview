@@ -8,7 +8,6 @@ import { AuthService } from '../src/domain/auth/auth.service';
 import { WriteDto } from '../src/domain/post/dto/controller-request.dto';
 import { AuthModule } from '../src/domain/auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Category } from 'src/domain/post/category';
 
 describe('Post e2e', () => {
   let app: INestApplication;
@@ -84,7 +83,6 @@ describe('Post e2e', () => {
         code: 'console.log("test")',
         language: 'javascript',
         lineCount: 30,
-        category: Category.QUESTION,
         images: [
           'http://localhost:8080/test.png',
           'http://localhost:8080/abc.jpg',
@@ -107,7 +105,6 @@ describe('Post e2e', () => {
         title: '제목',
         code: 'console.log("test")',
         language: 'javascript',
-        category: '리뷰요청',
         images: [
           'http://localhost:8080/test.png',
           'http://localhost:8080/abc.jpg',
@@ -171,7 +168,6 @@ describe('Post e2e', () => {
           lastId: -1,
           tags: '["sort", "greedy"]',
           authors: '["taehoon1229"]',
-          category: 'question',
           reviews: 3,
           likes: 2,
           detail: '어떻게',
@@ -214,7 +210,6 @@ describe('Post e2e', () => {
           lastId: -1,
           tags: '["sort", "greedy"]',
           authors: '["taehoon1229"]',
-          category: 'question',
           reviews: 3,
           likes: 2,
           detail: '           어떻게            ',
