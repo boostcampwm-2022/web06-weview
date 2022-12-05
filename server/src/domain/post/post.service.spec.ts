@@ -291,7 +291,7 @@ describe('PostService', () => {
         .spyOn(postToTagRepository, 'findByContainingTags')
         .mockResolvedValue(resultFilteringTag);
       jest
-        .spyOn(postRepository, 'findBySearchWords')
+        .spyOn(postRepository, 'filterUsingDetail')
         .mockResolvedValue(resultFilteringTag);
       jest
         .spyOn(postRepository, 'findByReviewCntGreaterThanOrEqual')
