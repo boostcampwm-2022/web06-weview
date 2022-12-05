@@ -61,7 +61,7 @@
     border: $border-x-small $reviews_color;
   }
 
-  &.detail {
+  &.details {
     @include hover-label($line-color);
     border: $border-x-small $line-color;
   }

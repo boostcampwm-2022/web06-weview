@@ -1,14 +1,21 @@
+import { InfiniteScrollRequest } from "@/types/react-query";
+
 export interface Label {
   type: string;
   value: string;
 }
 
-export interface SearchQuery {
-  lastId?: string;
+export interface SearchFilter extends InfiniteScrollRequest {
+  details?: string[];
   tags?: string[];
-  authors?: string[];
-  category?: string;
-  reviews?: number;
-  likes?: number;
-  detail?: string;
+  likeCount?: number;
+  reviewCount?: number;
+}
+
+export interface BookmarkSearchFilter extends InfiniteScrollRequest {
+  postId: string;
+}
+
+export interface AuthorSearchFilter extends InfiniteScrollRequest {
+  userId: string;
 }

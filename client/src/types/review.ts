@@ -1,17 +1,17 @@
 import { UserInfo } from "@/types/auth";
+import { InfiniteScrollResponse } from "@/types/react-query";
+
+export interface ReviewerInfo extends UserInfo {}
 
 export interface ReviewInfo {
   id: string;
-  reviewer: Reviewer;
+  reviewer: ReviewerInfo;
   content: string;
   updatedAt: string;
 }
-export interface Reviewer extends UserInfo {}
 
-export interface ReviewPages {
+export interface ReviewPages extends InfiniteScrollResponse {
   reviews: ReviewInfo[];
-  lastId: number;
-  isLast: boolean;
 }
 
 export interface ReviewResponse {
