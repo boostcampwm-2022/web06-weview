@@ -1,58 +1,10 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
 
-import { Label, SearchFilter } from "@/types/search";
+import { Label } from "@/types/search";
 import useSearchStore from "@/store/useSearchStore";
 import { isEnterKey } from "@/utils/pressedKeyCheck";
-import { SEPARATOR } from "@/constants/search";
-import { formatTag } from "@/utils/regExpression";
 import useLabelStore from "@/store/useLabelStore";
-
-const createSearchFilter = (inputLabels: Label[]): SearchFilter => {
-  const searchFilter: SearchFilter = {
-    lastId: "-1",
-    tags: [],
-    reviewCount: 0,
-    likeCount: 0,
-    details: [],
-  };
-
-  inputLabels.reduce((prev: SearchFilter, { type, value }: Label) => {
-    switch (type) {
-      case "tag":
-        prev.tags?.push(value);
-        break;
-      case "reviews":
-        prev.reviewCount = Number(value);
-        break;
-      case "likes":
-        prev.likeCount = Number(value);
-        break;
-      case "details":
-        prev.details?.push(value);
-        break;
-    }
-    return prev;
-  }, searchFilter);
-
-  return searchFilter;
-};
-
-const createLabel = (word: string): Label => {
-  const separator = word[0];
-  const value = word.slice(1);
-  const type = SEPARATOR[separator] ?? "details";
-
-  if (type === "details") {
-    // 상세 검색은 띄어쓰기를 포맷팅하지 않는다.
-    return { type, value: word.trim() };
-  }
-
-  return { type, value: formatTag(value.trim()) };
-};
-
-const labelEqual = (labelA: Label, labelB: Label): boolean => {
-  return labelA.type === labelB.type && labelA.value === labelB.value;
-};
+import { createLabel, createSearchFilter, labelEqual } from "@/utils/label";
 
 interface UseLabelResult {
   word: string;
@@ -100,8 +52,7 @@ const useLabel = (): UseLabelResult => {
 
   // PostScroll 에 현재 검색 필터를 적용
   const handleSubmit = (): void => {
-    const searchQuery = createSearchFilter(labels);
-    updateQuery(searchQuery);
+    updateQuery(createSearchFilter(labels));
   };
 
   const handleWordChange = (e: ChangeEvent<HTMLInputElement>): void => {

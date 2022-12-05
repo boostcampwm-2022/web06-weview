@@ -57,7 +57,7 @@
     border: $border-x-small $primary;
 
     &__icon {
-      content: url("@/assets/images/labels/label-detail.svg");
+      content: url("@/assets/images/labels/label-tag.svg");
     }
   }
 
@@ -87,7 +87,7 @@
     border: $border-x-small $detail-color;
 
     &__icon {
-      content: url("@/assets/images/labels/label-tag.svg");
+      content: url("@/assets/images/labels/label-detail.svg");
     }
   }
 }
