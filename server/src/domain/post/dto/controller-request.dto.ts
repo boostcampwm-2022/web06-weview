@@ -5,8 +5,7 @@ import {
   IsString,
   Min,
 } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
 export class InqueryDto {
   /**
@@ -21,13 +20,10 @@ export class InqueryDto {
   })
   lastId?: number = -1;
 
-  @ApiProperty({
-    description: 'tag들을 콤마로 연결해 입력합니다 ex) java,greedy',
-    required: false,
-    type: String,
-  })
+  /**
+   * 입력받은 태그가 포함되는 게시물을 반환합니다
+   */
   @IsOptional()
-  @Transform(({ value }) => value.split(',').map((each) => each.trim()))
   tags?: string[] = [];
 
   /**
@@ -56,20 +52,7 @@ export class InqueryDto {
   /**
    * 검색어가 제목, 내용, 작성자에 포함되는 게시물들을 반환합니다
    */
-  @ApiProperty({
-    description:
-      '검색어를 콤마로 연결해 입력합니다 ex) 이거 어떻게 풀어요,taehoon1229',
-    required: false,
-    type: String,
-  })
   @IsOptional()
-  @Transform(
-    ({ value }) =>
-      value
-        .split(',')
-        .map((each) => each.trim())
-        .filter((each) => each.length != 0), // ,, 붙어 있는 경우 배열에서 ''로 저장되는 경우를 제거
-  )
   details?: string[] = [];
 }
 
