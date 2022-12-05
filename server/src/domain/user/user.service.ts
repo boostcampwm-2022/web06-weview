@@ -74,7 +74,7 @@ export class UserService {
     );
   }
 
-  async deleteSearchHistories(userId: number, uuidStr: string) {
+  async deleteSearchHistory(userId: number, uuidStr: string) {
     const uuid = new ObjectId(uuidStr);
 
     const searchHistory = await this.searchHistoryRepository.findOne({
