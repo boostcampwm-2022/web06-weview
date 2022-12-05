@@ -1,4 +1,4 @@
-import React, { useCallback, MouseEvent } from "react";
+import React, { useCallback } from "react";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
@@ -17,8 +17,8 @@ interface PopularTagBoxProps {
 
 const TagRankingItem = ({ tagInfo }: PopularTagBoxProps): JSX.Element => {
   const [updateQuery] = useSearchStore((state) => [state.updateQuery]);
-  const handleItemClick = useCallback((e: MouseEvent<HTMLLIElement>): void => {
-    updateQuery({ tags: [tagInfo.name] });
+  const handleItemClick = useCallback((): void => {
+    updateQuery({ tags: [tagInfo.name], lastId: "-1" });
   }, []);
 
   return (
