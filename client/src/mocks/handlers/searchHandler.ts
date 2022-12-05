@@ -7,7 +7,7 @@ import { history } from "@/mocks/datasource/mockDataSource";
 const baseUrl = API_SERVER_URL;
 
 export const searchHandler = [
-  rest.get(`${baseUrl}/search/history`, (req, res, ctx) => {
+  rest.get(`${baseUrl}/search/histories`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.delay(1000), ctx.json(history));
   }),
 ];
