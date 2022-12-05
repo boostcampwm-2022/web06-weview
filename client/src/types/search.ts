@@ -27,4 +27,5 @@ export interface SearchHistory {
   reviewCount: number | null;
   likeCount: number | null;
   updatedAt: string;
+  id: string;
 }

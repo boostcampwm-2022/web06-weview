@@ -4,10 +4,11 @@ import RemoveIcon from "@mui/icons-material/Remove";
 
 import { Label, SearchHistory } from "@/types/search";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
-import { fetchSearchHistory } from "@/apis/search";
+import { deleteSearchHistory, fetchSearchHistory } from "@/apis/search";
 import { labelsFrom } from "@/utils/label";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
 import useLabel from "@/hooks/useLabel";
+import { queryClient } from "@/react-query/queryClient";
 
 import "./SearchHistoryView.scss";
 
@@ -21,6 +22,16 @@ const SearchHistoryItem = ({
   onClick,
 }: SearchHistoryItemProps): JSX.Element => {
   const labels = labelsFrom(history);
+  const handleItemDelete = (): void => {
+    void (async () => {
+      await deleteSearchHistory(history.id);
+      await queryClient.refetchQueries({
+        queryKey: [QUERY_KEYS.HISTORY],
+        type: "active",
+      });
+    })();
+  };
+
   return (
     <div className="search-content__body__histories--item">
       <span
@@ -34,7 +45,10 @@ const SearchHistoryItem = ({
           />
         ))}
       </span>
-      <RemoveIcon className="search-content__body__histories--item--remove" />
+      <RemoveIcon
+        className="search-content__body__histories--item--remove"
+        onClick={handleItemDelete}
+      />
     </div>
   );
 };
@@ -53,7 +67,7 @@ const SearchHistoryView = (): JSX.Element => {
     <div className="search-content__body__histories">
       {data?.map((history) => (
         <SearchHistoryItem
-          key={history.updatedAt}
+          key={history.id}
           history={history}
           onClick={loadLabels}
         />

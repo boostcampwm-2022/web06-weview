@@ -7,6 +7,8 @@ import { posts, history } from "@/mocks/datasource/mockDataSource";
 // Backend API Server URL
 const baseUrl = API_SERVER_URL;
 
+let id = 0;
+
 export const postHandler = [
   rest.get(`${baseUrl}/posts`, (req, res, ctx) => {
     const lastId = Number(req.url.searchParams.get("lastId")) + 1;
@@ -38,11 +40,12 @@ export const postHandler = [
 
     history.push({
       author: "mock-user",
-      details: details ?? [],
-      likeCount: likeCount ?? 0,
-      reviewCount: reviewCount ?? 0,
-      tags: tags ?? [],
+      details: details ?? null,
+      likeCount: likeCount ?? null,
+      reviewCount: reviewCount ?? null,
+      tags: tags ?? null,
       updatedAt: Date(),
+      id: String(++id),
     });
 
     return res(

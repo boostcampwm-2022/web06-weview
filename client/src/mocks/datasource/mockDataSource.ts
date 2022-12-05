@@ -59,4 +59,10 @@ export const rankingData = [
   { name: "kotlin", prev: 13 },
 ];
 
-export const history: SearchHistory[] = [];
+export let history: SearchHistory[];
+history = [];
+
+// lint: import 한 변수에 직접 할당 불가 오류 해결을 위한 함수
+export const setHistory = (newHistory: SearchHistory[]): void => {
+  history = newHistory;
+};
