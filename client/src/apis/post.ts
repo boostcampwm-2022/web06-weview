@@ -1,7 +1,12 @@
 import axios from "axios";
 
 import axiosInstance from "@/apis/axios";
-import { PostPages, UploadImageProps, WritingResponse } from "@/types/post";
+import {
+  PostPages,
+  UploadImageProps,
+  WritingRequestParams,
+  WritingResponse,
+} from "@/types/post";
 import { setQueryString } from "@/utils/queryString";
 import useSearchStore from "@/store/useSearchStore";
 import useWritingStore from "@/store/useWritingStore";
@@ -39,16 +44,16 @@ export const postWritingsAPI = async (
 ): Promise<WritingResponse> => {
   const { title, content, tags } = useWritingStore.getState();
   const { language, code } = useCodeEditorStore.getState();
-  const { data } = await axiosInstance.post("/posts", {
+  const requestParams: WritingRequestParams = {
     title,
-    category: "리뷰요청",
     content,
     code,
     language,
     images: imageUrls,
     tags,
     lineCount: getLineCount(code),
-  });
+  };
+  const { data } = await axiosInstance.post("/posts", requestParams);
   return data;
 };
 

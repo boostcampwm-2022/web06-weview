@@ -4,12 +4,18 @@ import "./LoadingSpinner.scss";
 
 interface LoadingSpinnerProps {
   className?: string;
+  isSmall?: boolean;
 }
 
-const LoadingSpinner = ({ className }: LoadingSpinnerProps): JSX.Element => {
+const LoadingSpinner = ({
+  className,
+  isSmall = false,
+}: LoadingSpinnerProps): JSX.Element => {
   return (
     <div className={`loading-spinner ${className ?? ""}`}>
-      <div className="loading-spinner__spinner"></div>
+      <div
+        className={`loading-spinner__spinner ${isSmall ? "small" : ""}`}
+      ></div>
     </div>
   );
 };

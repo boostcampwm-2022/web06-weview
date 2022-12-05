@@ -60,3 +60,69 @@
     text-align: center;
   }
 }
+
+@mixin label-provider() {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+@mixin nav-content-subtitle() {
+  & .title {
+    width: 100%;
+    height: fit-content;
+    font-size: $font-large;
+    border-bottom: $border-small $line-color;
+  }
+}
+@mixin hover-label($color) {
+  &__value {
+    margin-right: 0.25rem;
+  }
+
+  &__icon {
+    width: $font-large;
+    height: $font-large;
+  }
+
+  &:hover {
+    color: $weview-white;
+    cursor: pointer;
+    background-color: $color;
+    animation: hover-label-animation;
+  }
+  @keyframes hover-label-animation {
+    from {
+    }
+
+    to {
+      color: $weview-white;
+      background-color: $color;
+    }
+  }
+}
+
+@mixin common-search-label {
+  box-sizing: border-box;
+  display: flex;
+  flex: none;
+  gap: 0.25rem;
+
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+
+  padding: 0.25rem;
+  font-size: $font-small;
+  color: $text-color;
+  vertical-align: middle;
+
+  border-radius: $radius-medium;
+  transition: 350ms;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

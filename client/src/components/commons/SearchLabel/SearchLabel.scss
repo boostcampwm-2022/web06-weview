@@ -1,68 +1,44 @@
 @import "@/styles/_theme";
-@mixin hover-label($color) {
-  &:hover {
-    color: $weview-white;
-    cursor: pointer;
-    background-color: $color;
-    animation: hover-label-animation;
-  }
-  @keyframes hover-label-animation {
-    from {
-    }
-
-    to {
-      color: $weview-white;
-      background-color: $color;
-    }
-  }
-}
+@import "@/styles/_mixin";
 
 .search-label {
-  box-sizing: border-box;
-  display: table-cell;
-  flex: none;
-  width: fit-content;
-  height: fit-content;
-
-  padding: 0.5rem;
-  font-size: 0.75rem;
-  color: $text-color;
-  vertical-align: middle;
-
-  border-radius: $radius-small;
-  transition: 350ms;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  &.tag {
+  &__tags {
+    @include common-search-label;
     @include hover-label($primary);
     border: $border-x-small $primary;
+
+    &__icon {
+      content: url("@/assets/images/labels/label-tag.svg");
+    }
   }
 
-  &.category {
-    @include hover-label($alert);
-    border: $border-x-small $alert;
-  }
-
-  &.author {
-    @include hover-label($author-color);
-    border: $border-x-small $author-color;
-  }
-
-  &.likes {
+  &__likes {
+    @include common-search-label;
     @include hover-label($likes-color);
     border: $border-x-small $likes-color;
+
+    &__icon {
+      content: url("@/assets/images/labels/label-like.svg");
+    }
   }
 
-  &.reviews {
+  &__reviews {
+    @include common-search-label;
     @include hover-label($reviews-color);
-    border: $border-x-small $reviews_color;
+    border: $border-x-small $reviews-color;
+
+    &__icon {
+      content: url("@/assets/images/labels/label-comment.svg");
+    }
   }
 
-  &.details {
-    @include hover-label($line-color);
-    border: $border-x-small $line-color;
+  &__details {
+    @include common-search-label;
+    @include hover-label($detail-color);
+    border: $border-x-small $detail-color;
+
+    &__icon {
+      content: url("@/assets/images/labels/label-detail.svg");
+    }
   }
 }

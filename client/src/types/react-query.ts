@@ -1,5 +1,5 @@
 export interface InfiniteScrollRequest {
-  lastId: string;
+  lastId?: string;
 }
 
 export interface InfiniteScrollResponse {

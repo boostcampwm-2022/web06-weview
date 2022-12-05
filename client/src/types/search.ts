@@ -19,3 +19,12 @@ export interface BookmarkSearchFilter extends InfiniteScrollRequest {
 export interface AuthorSearchFilter extends InfiniteScrollRequest {
   userId: string;
 }
+
+export interface SearchHistory {
+  tags: string[] | null;
+  details: string[] | null;
+  author: string | null;
+  reviewCount: number | null;
+  likeCount: number | null;
+  updatedAt: string;
+}

@@ -46,13 +46,16 @@ const usePostInfiniteScroll = (): PostInfiniteScrollResults => {
    * searchQuery 값이 변경되면 다시 로딩합니다.
    */
   useEffect(() => {
-    queryClient
-      .resetQueries(
-        { queryKey: ["posts"], exact: true },
+    void (async () => {
+      await queryClient.resetQueries(
+        { queryKey: [QUERY_KEYS.POSTS], exact: true },
         { cancelRefetch: true }
-      )
-      .then(() => {})
-      .catch(() => {});
+      );
+      await queryClient.refetchQueries({
+        queryKey: [QUERY_KEYS.HISTORY],
+        type: "active",
+      });
+    })();
   }, [searchQuery]);
 
   /**

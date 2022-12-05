@@ -32,6 +32,16 @@ export interface PostPages extends InfiniteScrollResponse {
   posts: PostInfo[];
 }
 
+export interface WritingRequestParams {
+  title: string;
+  content: string;
+  code: string;
+  language: string;
+  images: string[];
+  tags: string[];
+  lineCount: number;
+}
+
 export interface WritingResponse {
   message: string;
 }
