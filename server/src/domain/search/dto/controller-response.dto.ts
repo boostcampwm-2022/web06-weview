@@ -1,6 +1,8 @@
 import { SearchHistory } from '../search-history.mongo';
 
 export class searchHistoryDto {
+  id: string;
+
   tags: string[];
 
   reviewCount: number;
@@ -12,6 +14,7 @@ export class searchHistoryDto {
   updatedAt: Date;
 
   constructor(entity: SearchHistory) {
+    this.id = entity._id.toHexString();
     this.tags = entity.tags;
     this.reviewCount = entity.reviewCount;
     this.likeCount = entity.likeCount;

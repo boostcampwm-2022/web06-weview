@@ -7,6 +7,9 @@ import { SEND_POST_CNT } from '../post/post.controller';
 import { LoadPostListResponseDto } from '../post/dto/service-response.dto';
 import { UserRepository } from './user.repository';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
+import { ObjectId } from 'mongodb';
+import { UserNotSameException } from 'src/exception/user-not-same.exception';
+import { SearchHistoryNotFoundException } from 'src/exception/search-history-not-found.exception';
 
 @Injectable()
 export class UserService {
@@ -69,5 +72,26 @@ export class UserService {
       likeCount,
       details,
     );
+  }
+
+  async deleteSearchHistory(userId: number, uuidStr: string) {
+    const uuid = new ObjectId(uuidStr);
+
+    const searchHistory = await this.searchHistoryRepository.findOne({
+      where: {
+        _id: uuid,
+      },
+    });
+
+    if (!searchHistory) {
+      throw new SearchHistoryNotFoundException();
+    }
+    if (searchHistory.userId !== userId) {
+      throw new UserNotSameException();
+    }
+
+    await this.searchHistoryRepository.delete({
+      _id: uuid,
+    });
   }
 }

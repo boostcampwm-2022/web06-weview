@@ -80,6 +80,9 @@ export class PostService {
     return Promise.all(postToTagEntityPromises);
   }
 
+  /**
+   * 게시물을 조회한다
+   */
   async loadPostList(
     loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
@@ -115,36 +118,13 @@ export class PostService {
     likeCount: number,
     details: string[],
   ) {
-    const detailedSearchResult = await this.filterUsingDetails(details);
-
     const postsThatPassEachFilter = await Promise.all([
       this.postRepository.findByIdLikesCntGreaterThanOrEqual(likeCount),
       this.postToTagRepository.findByContainingTags(tags),
       this.postRepository.findByReviewCntGreaterThanOrEqual(reviewCount),
-      detailedSearchResult,
+      this.filterUsingDetails(details),
     ]);
-
     return this.mergeFilterResult(postsThatPassEachFilter);
-  }
-
-  private async filterUsingDetails(details: string[]) {
-    if (!details || details.length === 0) {
-      return null;
-    }
-
-    const results = await Promise.all([
-      this.postRepository.findBySearchWords(details),
-      this.postRepository.findByAuthorNicknames(details),
-    ]);
-    return this.getResultsAfterRemovedDuplicated(results);
-  }
-
-  private getResultsAfterRemovedDuplicated(results: any[][]) {
-    const temp = new Set();
-    for (const result of results) {
-      result.forEach((each) => temp.add(each));
-    }
-    return Array.from(temp);
   }
 
   /**
@@ -199,5 +179,43 @@ export class PostService {
       throw new PostNotFoundException();
     }
     return new EachPostResponseDto(post);
+
+  private async filterUsingDetails(details: string[]) {
+    if (!details || details.length < 1) {
+      return null;
+    }
+    const postsFilteringEachDetail = await Promise.all(
+      details.map((detail) => this.postRepository.filterUsingDetail(detail)),
+    );
+
+    const temp = [];
+    for (const posts of postsFilteringEachDetail) {
+      temp.push(posts.map((post) => post.postId));
+    }
+    return this.findIntersection(temp);
+  }
+
+  private findIntersection(bundles: any[][]) {
+    const result = [];
+    let smallestBundle = bundles[0];
+    for (const post of bundles) {
+      if (smallestBundle.length > post.length) {
+        smallestBundle = post;
+      }
+    }
+
+    for (const postId of smallestBundle) {
+      let isIntersect = true;
+      for (const bundle of bundles) {
+        if (!bundle.includes(postId)) {
+          isIntersect = false;
+          break;
+        }
+      }
+      if (isIntersect) {
+        result.push({ postId: postId });
+      }
+    }
+    return result;
   }
 }

@@ -74,6 +74,23 @@ export class PostRepository extends Repository<Post> {
     return filteringCnt !== 0;
   }
 
+  async deleteUsingPost(post: Post) {
+    await this.createQueryBuilder()
+      .update(Post)
+      .set(post)
+      .where('id=:id', { id: post.id })
+      .execute();
+  }
+
+  findByUserId(lastId: number, userId: number) {
+    return this.createQueryBuilder('post')
+      .where('post.userId = :userId', { userId: userId })
+      .take(SEND_POST_CNT + 1)
+      .orderBy('post.id', 'DESC')
+      .getMany();
+  }
+
+  //
   findBySearchWords(details: string[]) {
     if (!details || details.length <= 0) {
       return null; //해당 조건은 사용하지 않습니다
@@ -93,14 +110,6 @@ export class PostRepository extends Repository<Post> {
     return queryBuilder.getRawMany();
   }
 
-  async deleteUsingPost(post: Post) {
-    await this.createQueryBuilder()
-      .update(Post)
-      .set(post)
-      .where('id=:id', { id: post.id })
-      .execute();
-  }
-
   async findByAuthorNicknames(nicknames: string[]) {
     return this.createQueryBuilder('post')
       .innerJoinAndSelect('post.user', 'user')
@@ -109,12 +118,15 @@ export class PostRepository extends Repository<Post> {
       .getRawMany();
   }
 
-  findByUserId(lastId: number, userId: number) {
-    return this.createQueryBuilder('post')
-      .where('post.userId = :userId', { userId: userId })
-      .take(SEND_POST_CNT + 1)
-      .orderBy('post.id', 'DESC')
-      .getMany();
+  async filterUsingDetail(detail: string) {
+    const queryBuilder = this.createQueryBuilder('p')
+      .innerJoinAndSelect('p.user', 'u')
+      .select('p.id', 'postId')
+      .where(
+        'u.nickname=:nickname OR p.title like :detail OR p.content like :detail',
+        { nickname: detail, detail: `%${detail}%` },
+      );
+    return queryBuilder.getRawMany();
   }
 
   async findById(postId: number) {

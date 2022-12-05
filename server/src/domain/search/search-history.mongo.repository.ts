@@ -10,6 +10,8 @@ export class SearchHistoryMongoRepository extends MongoRepository<SearchHistory>
   }
 
   async findAllByUserId(userId: number) {
+    const REQUEST_CNT = 5;
+
     return await this.find({
       where: {
         userId: userId,
@@ -17,6 +19,7 @@ export class SearchHistoryMongoRepository extends MongoRepository<SearchHistory>
       order: {
         updatedAt: 'DESC',
       },
+      take: REQUEST_CNT,
     });
   }
 
