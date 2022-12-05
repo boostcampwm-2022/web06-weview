@@ -9,11 +9,9 @@ export class PostRepository extends Repository<Post> {
     super(Post, dataSource.createEntityManager());
   }
 
-  async findByIdUsingCondition(
+  async findByIdWithFilterResult(
     lastId: number,
     postIdsFiltered: number[],
-    users: string[],
-    category: string,
   ): Promise<Post[]> {
     const queryBuilder = this.createQueryBuilder('post')
       .innerJoinAndSelect('post.user', 'user')
@@ -31,22 +29,8 @@ export class PostRepository extends Repository<Post> {
       });
     }
 
-    // 이름으로 필터링
-    if (users.length !== 0) {
-      queryBuilder.andWhere('user.nickname in (:users)', {
-        users: users,
-      });
-    }
-
     if (!this.wantLatestPosts(lastId)) {
       queryBuilder.andWhere('post.id < :lastId', { lastId: lastId });
-    }
-
-    // 카테고리 필터링 (인덱스)
-    if (category) {
-      queryBuilder.andWhere('post.category = :category', {
-        category: category,
-      });
     }
 
     // 3: 서버에서 지정한 한번에 전해주는 Data의 크기
@@ -108,6 +92,14 @@ export class PostRepository extends Repository<Post> {
       .set(post)
       .where('id=:id', { id: post.id })
       .execute();
+  }
+
+  async findByAuthorNicknames(nicknames: string[]) {
+    return this.createQueryBuilder('post')
+      .innerJoinAndSelect('post.user', 'user')
+      .select('post.id', 'postId')
+      .where('user.nickname in (:nicknames)', { nicknames: nicknames })
+      .getRawMany();
   }
 
   findByUserId(lastId: number, userId: number) {

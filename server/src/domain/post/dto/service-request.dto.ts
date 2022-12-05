@@ -1,23 +1,18 @@
 import { IsInt, IsOptional, IsString, MaxLength, Min } from 'class-validator';
-import { Category } from '../category';
 
 export class LoadPostListRequestDto {
   constructor(
     lastId: number,
     tags: string[],
-    authors: string[],
-    category: Category,
-    reviews: number,
-    likesCnt: number,
-    detail: string,
+    reviewCount: number,
+    likeCount: number,
+    details: string[],
   ) {
     this.lastId = lastId;
     this.tags = tags;
-    this.authors = authors;
-    this.category = category;
-    this.reviews = reviews;
-    this.likesCnt = likesCnt;
-    this.detail = detail;
+    this.reviewCount = reviewCount;
+    this.likeCount = likeCount;
+    this.details = details;
   }
 
   @IsInt()
@@ -26,20 +21,15 @@ export class LoadPostListRequestDto {
 
   tags: string[];
 
-  authors: string[];
-
-  @IsOptional()
-  category: Category; // TODO 객체, enum 타입 검사 찾아보기
-
   @IsOptional()
   @IsInt()
   @Min(1)
-  reviews?: number;
+  reviewCount?: number;
 
   @IsOptional()
   @Min(1)
-  likesCnt?: number;
+  likeCount?: number;
 
   @IsOptional()
-  detail?: string;
+  details?: string[];
 }
