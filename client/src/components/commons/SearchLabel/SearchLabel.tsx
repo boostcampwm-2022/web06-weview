@@ -13,10 +13,13 @@ const SearchLabel = React.memo(
   ({ label, onClickCallback }: LabelProps): JSX.Element => {
     return (
       <span
-        className={`search-label ${label.type}`}
+        className={`search-label__${label.type}`}
         onClick={() => onClickCallback(label)}
       >
-        {label.value}
+        <img className={`search-label__${label.type}__icon`} />
+        <span className={`search-label__${label.type}__value`}>
+          {label.value}
+        </span>
       </span>
     );
   }

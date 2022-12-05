@@ -16,11 +16,11 @@ const SearchContentRecommend = (): JSX.Element => {
       value: "부스트캠프",
     },
     {
-      type: "tag",
+      type: "tags",
       value: "Javascript",
     },
     {
-      type: "tag",
+      type: "tags",
       value: "알고리즘",
     },
   ];
