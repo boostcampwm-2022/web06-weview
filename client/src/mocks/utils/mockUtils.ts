@@ -9,12 +9,12 @@ export const parsePostQueryString = (url: URL): SearchFilter => {
     details: [],
   };
 
-  const tags = url.searchParams.getAll("tags");
+  const tags = url.searchParams.getAll("tags[]");
   if (tags !== null) {
     tags.map((tag) => searchQuery.tags?.push(decodeURI(tag)));
   }
 
-  const details = url.searchParams.getAll("details");
+  const details = url.searchParams.getAll("details[]");
   if (details !== null) {
     details.map((detail) => searchQuery.details?.push(decodeURI(detail)));
   }
