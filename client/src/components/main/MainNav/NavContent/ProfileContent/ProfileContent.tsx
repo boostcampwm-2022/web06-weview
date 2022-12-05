@@ -1,8 +1,10 @@
 import React from "react";
 import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
+import DescriptionIcon from "@mui/icons-material/Description";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 
+import useSearchStore from "@/store/useSearchStore";
 import useAuth from "@/hooks/useAuth";
 import NavMenu from "@/components/main/MainNav/NavMenus/NavMenu/NavMenu";
 
@@ -50,26 +52,37 @@ const ProfileContentHeader = (): JSX.Element => {
 };
 
 const ProfileContentMenus = (): JSX.Element => {
-  const { isLoggedIn, handleLogin, handleLogout } = useAuth();
+  const { myInfo, isLoggedIn, handleLogin, handleLogout } = useAuth();
+  const searchAuthorFilter = useSearchStore(
+    (state) => state.searchAuthorFilter
+  );
+
+  if (!isLoggedIn || myInfo === null) {
+    return (
+      <NavMenu
+        Icon={LoginIcon}
+        detail={"로그인"}
+        onClick={handleLogin}
+        className="profile-content__menus__menu"
+      />
+    );
+  }
 
   return (
     <div className="profile-content__menus">
       <div className="title">메뉴</div>
-      {isLoggedIn ? (
-        <NavMenu
-          Icon={LogoutIcon}
-          detail={"로그아웃"}
-          onClick={handleLogout}
-          className="profile-content__menus__menu"
-        />
-      ) : (
-        <NavMenu
-          Icon={LoginIcon}
-          detail={"로그인"}
-          onClick={handleLogin}
-          className="profile-content__menus__menu"
-        />
-      )}
+      <NavMenu
+        Icon={DescriptionIcon}
+        detail="내 포스트"
+        onClick={() => searchAuthorFilter({ userId: myInfo.id })}
+        className="profile-content__menus__menu"
+      />
+      <NavMenu
+        Icon={LogoutIcon}
+        detail={"로그아웃"}
+        onClick={handleLogout}
+        className="profile-content__menus__menu"
+      />
     </div>
   );
 };

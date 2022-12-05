@@ -18,7 +18,9 @@ interface UseLabelResult {
 }
 
 const useLabel = (): UseLabelResult => {
-  const [updateQuery] = useSearchStore((state) => [state.updateQuery]);
+  const [searchDefaultFilter] = useSearchStore((state) => [
+    state.searchDefaultFilter,
+  ]);
   const [word, setWord] = useState(""); // 입력중인 검색어
   const [labels, setLabels] = useLabelStore((state) => [
     state.labels,
@@ -62,7 +64,7 @@ const useLabel = (): UseLabelResult => {
 
   // PostScroll 에 현재 검색 필터를 적용
   const handleSubmit = (): void => {
-    updateQuery(createSearchFilter(labels));
+    searchDefaultFilter(createSearchFilter(labels));
   };
 
   const handleWordChange = (e: ChangeEvent<HTMLInputElement>): void => {
