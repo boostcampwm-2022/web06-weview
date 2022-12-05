@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Post } from './post.entity';
 import { Image } from '../image/image.entity';
 import { Tag } from '../tag/tag.entity';
-import { LoadPostListResponseDto } from './dto/service-response.dto';
+import {
+  EachPostResponseDto,
+  LoadPostListResponseDto,
+} from './dto/service-response.dto';
 import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 import { PostRepository } from './post.repository';
 import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
@@ -187,5 +190,14 @@ export class PostService {
     }
     post.isDeleted = true;
     await this.postRepository.deleteUsingPost(post);
+  }
+
+  async inqueryPost(postId: number) {
+    const post = await this.postRepository.findById(postId);
+
+    if (!post || post.isDeleted) {
+      throw new PostNotFoundException();
+    }
+    return new EachPostResponseDto(post);
   }
 }

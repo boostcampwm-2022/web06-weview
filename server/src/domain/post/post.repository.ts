@@ -116,4 +116,14 @@ export class PostRepository extends Repository<Post> {
       .orderBy('post.id', 'DESC')
       .getMany();
   }
+
+  async findById(postId: number) {
+    return this.createQueryBuilder('post')
+      .innerJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.postToTags', 'postToTag')
+      .leftJoinAndSelect('postToTag.tag', 'tag')
+      .leftJoinAndSelect('post.images', 'image')
+      .where('post.id = :postId', { postId: postId })
+      .getOne();
+  }
 }
