@@ -3,11 +3,14 @@ import { devtools } from "zustand/middleware";
 
 import { AuthorSearchFilter, SearchFilter, SearchType } from "@/types/search";
 
-export type SearchFilterType = "default" | "author";
+export enum SEARCH_FILTER {
+  DEFAULT,
+  AUTHOR,
+}
 
 interface SearchStates {
   filter: SearchType;
-  searchType: SearchFilterType;
+  searchType: SEARCH_FILTER;
 }
 
 interface SearchActions {
@@ -20,7 +23,7 @@ interface SearchStore extends SearchStates, SearchActions {}
 
 const initialSearchStates: SearchStates = {
   filter: {},
-  searchType: "default",
+  searchType: SEARCH_FILTER.DEFAULT,
 };
 
 const useSearchStore = create<SearchStore>()(
@@ -30,14 +33,14 @@ const useSearchStore = create<SearchStore>()(
       set(() => ({
         ...initialSearchStates,
         filter: defaultSearchQuery,
-        searchType: "default",
+        searchType: SEARCH_FILTER.DEFAULT,
       }));
     },
     searchAuthorFilter: (authorSearchQuery) => {
       set({
         ...initialSearchStates,
         filter: authorSearchQuery,
-        searchType: "author",
+        searchType: SEARCH_FILTER.AUTHOR,
       });
     },
     reset: () => set(initialSearchStates),

@@ -8,21 +8,23 @@ import {
 import { useCallback, useEffect } from "react";
 
 import { PostPages } from "@/types/post";
-import useSearchStore from "@/store/useSearchStore";
+import useSearchStore, { SEARCH_FILTER } from "@/store/useSearchStore";
 import { queryClient } from "@/react-query/queryClient";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
 import { fetchPost, fetchUserPost } from "@/apis/post";
 
 const getQueryFn = async (
   pageParam: string,
-  searchType: any
+  searchType: SEARCH_FILTER
 ): Promise<PostPages> => {
-  if (searchType === "author") {
-    return await fetchUserPost(pageParam);
+  if (searchType === SEARCH_FILTER.AUTHOR) {
+    const postPages = await fetchUserPost(pageParam);
+    return postPages;
   }
 
   // default
-  return await fetchPost(pageParam);
+  const postPages = await fetchPost(pageParam);
+  return postPages;
 };
 
 interface PostInfiniteScrollResults {
@@ -49,7 +51,7 @@ const usePostInfiniteScroll = (): PostInfiniteScrollResults => {
   const { data, hasNextPage, isFetching, fetchNextPage } = useInfiniteQuery(
     [QUERY_KEYS.POSTS, searchType, filter],
     async ({ pageParam = -1, queryKey }: QueryFunctionContext) =>
-      await getQueryFn(pageParam, queryKey[1]),
+      await getQueryFn(pageParam, queryKey[1] as SEARCH_FILTER), // lastId, 검색 타입
     {
       getNextPageParam: (lastPost) =>
         lastPost.isLast ? undefined : lastPost.lastId,
