@@ -74,16 +74,23 @@ export class PostRepository extends Repository<Post> {
     return filteringCnt !== 0;
   }
 
-  findBySearchWord(detail: string): Promise<any[]> {
-    if (detail === undefined || detail.length < 0) {
+  findBySearchWords(details: string[]) {
+    if (!details || details.length <= 0) {
       return null; //해당 조건은 사용하지 않습니다
     }
-    return this.createQueryBuilder('post')
-      .select('post.id', 'postId')
-      .where('post.title like :detail OR post.content like :detail', {
-        detail: `%${detail}%`,
-      })
-      .getRawMany();
+    const queryBuilder = this.createQueryBuilder('post').select(
+      'post.id',
+      'postId',
+    );
+    for (const detail of details) {
+      queryBuilder.orWhere(
+        'post.title like :detail OR post.content like :detail',
+        {
+          detail: `%${detail}%`,
+        },
+      );
+    }
+    return queryBuilder.getRawMany();
   }
 
   async deleteUsingPost(post: Post) {

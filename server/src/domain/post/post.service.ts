@@ -128,12 +128,11 @@ export class PostService {
     if (!details || details.length === 0) {
       return null;
     }
-    const resultsPromise = details.map((detail) =>
-      this.postRepository.findBySearchWord(detail),
-    );
-    resultsPromise.push(this.postRepository.findByAuthorNicknames(details));
 
-    const results = await Promise.all(resultsPromise);
+    const results = await Promise.all([
+      this.postRepository.findBySearchWords(details),
+      this.postRepository.findByAuthorNicknames(details),
+    ]);
     return this.getResultsAfterRemovedDuplicated(results);
   }
 
