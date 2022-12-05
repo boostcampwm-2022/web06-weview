@@ -14,6 +14,7 @@ interface UseLabelResult {
   handleWordChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleWordKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
   handleSubmit: () => void;
+  loadLabels: (targetLabels: Label[]) => void;
 }
 
 const useLabel = (): UseLabelResult => {
@@ -50,6 +51,13 @@ const useLabel = (): UseLabelResult => {
     [labels, setLabels]
   );
 
+  const loadLabels = useCallback(
+    (targetLabels: Label[]): void => {
+      setLabels([...targetLabels]);
+    },
+    [setLabels]
+  );
+
   // PostScroll 에 현재 검색 필터를 적용
   const handleSubmit = (): void => {
     updateQuery(createSearchFilter(labels));
@@ -79,6 +87,7 @@ const useLabel = (): UseLabelResult => {
     handleWordKeyUp,
     handleSubmit,
     removeLabel,
+    loadLabels,
   };
 };
 

@@ -7,20 +7,26 @@ import { QUERY_KEYS } from "@/react-query/queryKeys";
 import { fetchSearchHistory } from "@/apis/search";
 import { labelsFrom } from "@/utils/label";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
+import useLabel from "@/hooks/useLabel";
 
 import "./SearchHistoryView.scss";
 
 interface SearchHistoryItemProps {
   history: SearchHistory;
+  onClick: Function;
 }
 
 const SearchHistoryItem = ({
   history,
+  onClick,
 }: SearchHistoryItemProps): JSX.Element => {
   const labels = labelsFrom(history);
   return (
     <div className="search-content__body__histories--item">
-      <span className="search-content__body__histories--item--labels">
+      <span
+        className="search-content__body__histories--item--labels"
+        onClick={() => onClick(labels)}
+      >
         {labels.map((label: Label) => (
           <SearchLabel
             key={`${label.type}-${label.value}-filtered`}
@@ -34,6 +40,7 @@ const SearchHistoryItem = ({
 };
 
 const SearchHistoryView = (): JSX.Element => {
+  const { loadLabels } = useLabel();
   const { data } = useQuery<SearchHistory[] | undefined>(
     [QUERY_KEYS.HISTORY],
     fetchSearchHistory,
@@ -45,7 +52,11 @@ const SearchHistoryView = (): JSX.Element => {
   return (
     <div className="search-content__body__histories">
       {data?.map((history) => (
-        <SearchHistoryItem key={history.updatedAt} history={history} />
+        <SearchHistoryItem
+          key={history.updatedAt}
+          history={history}
+          onClick={loadLabels}
+        />
       ))}
     </div>
   );
