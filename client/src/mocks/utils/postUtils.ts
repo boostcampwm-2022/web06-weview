@@ -9,9 +9,14 @@ export const parsePostQueryString = (url: URL): SearchFilter => {
     details: [],
   };
 
-  const tags = url.searchParams.get("tags");
+  const tags = url.searchParams.getAll("tags");
   if (tags !== null) {
-    searchQuery.tags?.push(...decodeURI(tags).split(","));
+    tags.map((tag) => searchQuery.tags?.push(decodeURI(tag)));
+  }
+
+  const details = url.searchParams.getAll("details");
+  if (details !== null) {
+    details.map((detail) => searchQuery.details?.push(decodeURI(detail)));
   }
 
   const reviews = url.searchParams.get("reviews") ?? "0";
@@ -19,11 +24,6 @@ export const parsePostQueryString = (url: URL): SearchFilter => {
 
   const likes = url.searchParams.get("likes") ?? "0";
   searchQuery.likeCount = Number(decodeURI(likes));
-
-  const details = url.searchParams.get("details");
-  if (details !== null) {
-    searchQuery.details = decodeURI(details).split(",");
-  }
 
   return searchQuery;
 };
