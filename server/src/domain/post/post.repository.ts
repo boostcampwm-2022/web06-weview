@@ -109,4 +109,12 @@ export class PostRepository extends Repository<Post> {
       .where('id=:id', { id: post.id })
       .execute();
   }
+
+  findByUserId(lastId: number, userId: number) {
+    return this.createQueryBuilder('post')
+      .where('post.userId = :userId', { userId: userId })
+      .take(SEND_POST_CNT + 1)
+      .orderBy('post.id', 'DESC')
+      .getMany();
+  }
 }
