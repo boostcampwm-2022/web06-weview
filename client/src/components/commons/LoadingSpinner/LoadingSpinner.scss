@@ -7,7 +7,7 @@
   width: 100%;
   height: 100%;
   margin: 0 auto;
-  background-color: $weview-off-white;
+  background-color: $weview-white;
 
   &__spinner {
     @include spin-infinite();
@@ -19,6 +19,7 @@
     border-radius: 50%;
 
     &.small {
+      @include spin-infinite();
       width: 2.5rem;
       height: 2.5rem;
     }
