@@ -29,7 +29,6 @@ export const posts: PostInfo[] = Array.from(Array(1024).keys()).map((id) => ({
   updatedAt: "2022-11-16 12:26:56.124939",
   code: `sourcecode: ~~~~~~~~~~~~~~~~~~`,
   language: `javascript`,
-  category: id % 2 === 0 ? "리뷰요청" : "질문",
   isLiked: id % 2 === 0,
 }));
 

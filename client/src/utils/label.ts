@@ -35,30 +35,22 @@ export const createSearchFilter = (inputLabels: Label[]): SearchFilter => {
 export const labelsFrom = (history: SearchHistory): Label[] => {
   const labels: Label[] = [];
 
-  history.tags?.forEach((value) =>
-    labels.push({
-      value,
-      type: "tags",
-    })
-  );
-  history.details?.forEach((value) =>
-    labels.push({
-      value,
-      type: "details",
-    })
-  );
-  if (history.reviewCount !== null) {
-    labels.push({
-      value: `${history.reviewCount}`,
-      type: "reviews",
-    });
-  }
-  if (history.likeCount !== null) {
-    labels.push({
-      value: `${history.likeCount}`,
-      type: "likes",
-    });
-  }
+  Object.entries(history).forEach(([key, value]) => {
+    if (value === null) {
+      return;
+    }
+    if (Array.isArray(value)) {
+      return value.forEach((labelValue) =>
+        labels.push({ type: key, value: labelValue })
+      );
+    }
+    if (key === "reviewCount") {
+      return labels.push({ type: "reviews", value });
+    }
+    if (key === "likeCount") {
+      return labels.push({ type: "likes", value });
+    }
+  });
 
   return labels;
 };
@@ -76,6 +68,6 @@ export const createLabel = (word: string): Label => {
   return { type, value: formatTag(value.trim()) };
 };
 
-export const labelEqual = (labelA: Label, labelB: Label): boolean => {
+export const isEqualLabel = (labelA: Label, labelB: Label): boolean => {
   return labelA.type === labelB.type && labelA.value === labelB.value;
 };

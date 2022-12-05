@@ -1,54 +1,5 @@
 @import "@/styles/_theme";
-
-@mixin hover-label($color) {
-  &__value {
-    margin-right: 0.25rem;
-  }
-
-  &__icon {
-    width: $font-large;
-    height: $font-large;
-  }
-
-  &:hover {
-    color: $weview-white;
-    cursor: pointer;
-    background-color: $color;
-    animation: hover-label-animation;
-  }
-  @keyframes hover-label-animation {
-    from {
-    }
-
-    to {
-      color: $weview-white;
-      background-color: $color;
-    }
-  }
-}
-
-@mixin common-search-label {
-  box-sizing: border-box;
-  display: flex;
-  flex: none;
-  gap: 0.25rem;
-
-  align-items: center;
-  width: fit-content;
-  height: fit-content;
-
-  padding: 0.25rem;
-  font-size: $font-small;
-  color: $text-color;
-  vertical-align: middle;
-
-  border-radius: $radius-medium;
-  transition: 350ms;
-
-  &:hover {
-    cursor: pointer;
-  }
-}
+@import "@/styles/_mixin";
 
 .search-label {
   &__tags {

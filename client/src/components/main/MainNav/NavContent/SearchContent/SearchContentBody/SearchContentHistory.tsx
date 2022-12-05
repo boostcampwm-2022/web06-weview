@@ -13,7 +13,7 @@ const SearchContentHistory = (): JSX.Element => {
         fallback={
           <LoadingSpinner
             className={"search-content__body--loading"}
-            small={true}
+            isSmall={true}
           />
         }
       >

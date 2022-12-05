@@ -4,7 +4,7 @@ import { Label } from "@/types/search";
 import useSearchStore from "@/store/useSearchStore";
 import { isEnterKey } from "@/utils/pressedKeyCheck";
 import useLabelStore from "@/store/useLabelStore";
-import { createLabel, createSearchFilter, labelEqual } from "@/utils/label";
+import { createLabel, createSearchFilter, isEqualLabel } from "@/utils/label";
 
 interface UseLabelResult {
   word: string;
@@ -28,7 +28,7 @@ const useLabel = (): UseLabelResult => {
   // labels 목록에서 라벨 검색
   const hasLabel = (targetLabel: Label): boolean => {
     return (
-      labels.find((label: Label) => labelEqual(label, targetLabel)) !==
+      labels.find((label: Label) => isEqualLabel(label, targetLabel)) !==
       undefined
     );
   };
@@ -36,7 +36,9 @@ const useLabel = (): UseLabelResult => {
   // labels 목록에서 라벨 제거
   const removeLabel = useCallback(
     (targetLabel: Label): void => {
-      setLabels([...labels.filter((label) => !labelEqual(label, targetLabel))]);
+      setLabels([
+        ...labels.filter((label) => !isEqualLabel(label, targetLabel)),
+      ]);
     },
     [labels, setLabels]
   );
