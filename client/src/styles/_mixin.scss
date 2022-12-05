@@ -60,3 +60,20 @@
     text-align: center;
   }
 }
+
+@mixin label-provider() {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+@mixin nav-content-subtitle() {
+  & .title {
+    width: 100%;
+    height: fit-content;
+    font-size: $font-large;
+    border-bottom: $border-small $line-color;
+  }
+}

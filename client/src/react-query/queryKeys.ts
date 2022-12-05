@@ -3,4 +3,5 @@ export const QUERY_KEYS = {
   POSTS: "posts",
   REVIEWS: "reviews",
   RANKING: "ranking",
+  HISTORY: "history",
 };
