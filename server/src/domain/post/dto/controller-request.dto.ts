@@ -44,6 +44,9 @@ export class InqueryDto {
    */
   @IsOptional()
   @Type(() => Number)
+  @IsInt({
+    message: '정수만 입력 가능합니다',
+  })
   @Min(1, {
     message: '추천수 1개 이상부터 검색 가능합니다',
   }) //0인 경우는 해당 옵션을 쓸 필요가 없음
