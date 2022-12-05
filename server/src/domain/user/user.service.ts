@@ -1,4 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { InqueryDto } from '../post/dto/controller-request.dto';
+import { searchHistoryDto } from '../search/dto/controller-response.dto';
+import { SearchHistoryMongoRepository } from '../search/search-history.mongo.repository';
 import { PostRepository } from '../post/post.repository';
 import { SEND_POST_CNT } from '../post/post.controller';
 import { LoadPostListResponseDto } from '../post/dto/service-response.dto';
@@ -10,6 +13,7 @@ export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly postRepository: PostRepository,
+    private readonly searchHistoryRepository: SearchHistoryMongoRepository,
   ) {}
 
   async inqueryPosts(lastId: number, userId: number) {
@@ -32,5 +36,40 @@ export class UserService {
 
   private canGetNextPost(resultCnt: number) {
     return resultCnt === SEND_POST_CNT + 1;
+  }
+
+  async getSearchHistories(userId: number) {
+    const histories = await this.searchHistoryRepository.findAllByUserId(
+      userId,
+    );
+
+    return histories.map((entity) => {
+      return new searchHistoryDto(entity);
+    });
+  }
+
+  addSearchHistory(
+    userId: number,
+    { lastId, tags, authors, reviews, likes, detail }: InqueryDto,
+  ) {
+    if (lastId !== -1) {
+      return;
+    }
+
+    const author = authors.length === 0 ? null : authors[0];
+
+    const isSearch = tags.length !== 0 || author || reviews || likes || detail;
+    if (!isSearch) {
+      return;
+    }
+
+    this.searchHistoryRepository.addSearchHistory(
+      userId,
+      tags,
+      author,
+      reviews,
+      likes,
+      detail,
+    );
   }
 }
