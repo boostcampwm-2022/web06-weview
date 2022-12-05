@@ -17,7 +17,7 @@ export const posts: PostInfo[] = Array.from(Array(1024).keys()).map((id) => ({
     },
   ],
   author: {
-    id: `${id + 10000}`,
+    id: `${id}`,
     nickname: `sampleUser_${id + 10000}`,
     profileUrl: "http://placeimg.com/640/640/animals",
     email: `name_${id + 10000}@gmail.com`,

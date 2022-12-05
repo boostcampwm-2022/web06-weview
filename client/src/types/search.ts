@@ -14,11 +14,17 @@ export interface SearchFilter extends InfiniteScrollRequest {
 
 export interface BookmarkSearchFilter extends InfiniteScrollRequest {
   postId: string;
+  userId: string;
 }
 
 export interface AuthorSearchFilter extends InfiniteScrollRequest {
   userId: string;
 }
+
+export type SearchType =
+  | SearchFilter
+  | BookmarkSearchFilter
+  | AuthorSearchFilter;
 
 export interface SearchHistory {
   tags: string[] | null;

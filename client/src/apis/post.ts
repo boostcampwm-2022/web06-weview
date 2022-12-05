@@ -12,11 +12,20 @@ import useSearchStore from "@/store/useSearchStore";
 import useWritingStore from "@/store/useWritingStore";
 import { getLineCount } from "@/utils/code";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
+import { AuthorSearchFilter, SearchFilter } from "@/types/search";
 
 export const fetchPost = async (pageParam: string): Promise<PostPages> => {
-  const { searchQuery } = useSearchStore.getState();
+  const filter = useSearchStore.getState().filter as SearchFilter;
   const { data } = await axiosInstance.get(
-    `/posts?${setQueryString({ ...searchQuery, lastId: pageParam })}`
+    `/posts?${setQueryString({ ...filter, lastId: pageParam })}`
+  );
+  return data;
+};
+
+export const fetchUserPost = async (pageParam: string): Promise<PostPages> => {
+  const filter = useSearchStore.getState().filter as AuthorSearchFilter;
+  const { data } = await axiosInstance.get(
+    `/users/${filter.userId}/posts?lastId=${pageParam}`
   );
   return data;
 };

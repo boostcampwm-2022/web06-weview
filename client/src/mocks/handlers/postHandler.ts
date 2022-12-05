@@ -8,6 +8,7 @@ import { posts, history } from "@/mocks/datasource/mockDataSource";
 const baseUrl = API_SERVER_URL;
 
 let id = 0;
+const SIZE = 3;
 
 export const postHandler = [
   rest.get(`${baseUrl}/posts`, (req, res, ctx) => {
@@ -15,7 +16,7 @@ export const postHandler = [
     const { tags, reviewCount, likeCount, details } = parsePostQueryString(
       req.url
     );
-    const SIZE = 3;
+
     const filteredData = posts
       .filter(
         (post) =>
@@ -58,19 +59,34 @@ export const postHandler = [
       })
     );
   }),
-
   rest.post(`${baseUrl}/posts`, (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({ message: "글 작성에 성공했습니다." })
     );
   }),
-
   rest.post(`${baseUrl}/posts/:postId/likes`, (req, res, ctx) => {
     return res(ctx.status(200));
   }),
-
   rest.delete(`${baseUrl}/posts/:postId/likes`, (req, res, ctx) => {
     return res(ctx.status(200));
+  }),
+  rest.get(`${baseUrl}/users/:userId/posts`, (req, res, ctx) => {
+    const userId = String(req.params.userId);
+    const lastId = Number(req.url.searchParams.get("lastId")) + 1;
+
+    const filteredData = posts.filter((post) => post.author.id === userId);
+
+    const isLast = filteredData.length <= lastId + SIZE;
+
+    return res(
+      ctx.status(200),
+      ctx.delay(300),
+      ctx.json({
+        posts: filteredData.slice(lastId, lastId + SIZE),
+        lastId: lastId + SIZE - 1,
+        isLast,
+      })
+    );
   }),
 ];

@@ -7,11 +7,23 @@ import {
 } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
 
-import { fetchPost } from "@/apis/post";
 import { PostPages } from "@/types/post";
 import useSearchStore from "@/store/useSearchStore";
 import { queryClient } from "@/react-query/queryClient";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
+import { fetchPost, fetchUserPost } from "@/apis/post";
+
+const getQueryFn = async (
+  pageParam: string,
+  searchType: any
+): Promise<PostPages> => {
+  if (searchType === "author") {
+    return await fetchUserPost(pageParam);
+  }
+
+  // default
+  return await fetchPost(pageParam);
+};
 
 interface PostInfiniteScrollResults {
   data: InfiniteData<PostPages> | undefined;
@@ -30,12 +42,14 @@ interface PostInfiniteScrollResults {
  * react-query 를 이용한 포스트 정보에 대한 인피니티 스크롤 커스텀 훅 입니다.
  */
 const usePostInfiniteScroll = (): PostInfiniteScrollResults => {
-  const [searchQuery] = useSearchStore((state) => [state.searchQuery]);
-
+  const [searchType, filter] = useSearchStore((state) => [
+    state.searchType,
+    state.filter,
+  ]);
   const { data, hasNextPage, isFetching, fetchNextPage } = useInfiniteQuery(
-    [QUERY_KEYS.POSTS],
-    async ({ pageParam = -1 }: QueryFunctionContext) =>
-      await fetchPost(pageParam),
+    [QUERY_KEYS.POSTS, searchType, filter],
+    async ({ pageParam = -1, queryKey }: QueryFunctionContext) =>
+      await getQueryFn(pageParam, queryKey[1]),
     {
       getNextPageParam: (lastPost) =>
         lastPost.isLast ? undefined : lastPost.lastId,
@@ -56,7 +70,7 @@ const usePostInfiniteScroll = (): PostInfiniteScrollResults => {
         type: "active",
       });
     })();
-  }, [searchQuery]);
+  }, [filter, searchType]);
 
   /**
    * Intersection Observer 를 위한 콜백 함수

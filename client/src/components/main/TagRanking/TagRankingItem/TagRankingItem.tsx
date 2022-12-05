@@ -16,9 +16,11 @@ interface PopularTagBoxProps {
 }
 
 const TagRankingItem = ({ tagInfo }: PopularTagBoxProps): JSX.Element => {
-  const [updateQuery] = useSearchStore((state) => [state.updateQuery]);
+  const [searchDefaultFilter] = useSearchStore((state) => [
+    state.searchDefaultFilter,
+  ]);
   const handleItemClick = useCallback((): void => {
-    updateQuery({ tags: [tagInfo.name], lastId: "-1" });
+    searchDefaultFilter({ tags: [tagInfo.name], lastId: "-1" });
   }, []);
 
   return (
