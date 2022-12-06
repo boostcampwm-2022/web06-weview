@@ -45,10 +45,11 @@ export class BookmarkService {
       isLast,
     );
 
-    return postList.posts.map((post) => {
+    postList.posts.map((post) => {
       post.isBookmarked = true;
       return post;
     });
+    return postList;
   }
 
   async bookmark(userId: number, { postId }: BookmarkCreateRequestDto) {
