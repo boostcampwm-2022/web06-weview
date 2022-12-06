@@ -14,9 +14,14 @@ const SIZE = 3;
 export const bookmarkHandler = [
   rest.get(`${baseUrl}/bookmarks`, (req, res, ctx) => {
     const lastId = Number(req.url.searchParams.get("lastId")) + 1;
-    const filteredData = posts.filter((post) =>
-      bookmarks.some((bookmark) => bookmark === Number(post.id))
-    );
+    const filteredData = posts
+      .filter((post) =>
+        bookmarks.some((bookmark) => bookmark === Number(post.id))
+      )
+      .map((post) => ({
+        ...post,
+        isBookmarked: true,
+      }));
     const isLast = filteredData.length <= lastId + SIZE;
 
     return res(
@@ -32,8 +37,8 @@ export const bookmarkHandler = [
   rest.post(`${baseUrl}/bookmarks`, async (req, res, ctx) => {
     const { postId } = await req.json();
 
-    if (bookmarks.every((bookmark) => bookmark !== postId)) {
-      bookmarks.push(postId);
+    if (bookmarks.every((bookmark) => bookmark !== Number(postId))) {
+      bookmarks.push(Number(postId));
     }
 
     const response = await res(

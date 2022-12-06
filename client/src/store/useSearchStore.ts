@@ -6,6 +6,7 @@ import { AuthorSearchFilter, SearchFilter, SearchType } from "@/types/search";
 export enum SEARCH_FILTER {
   DEFAULT,
   AUTHOR,
+  BOOKMARK,
 }
 
 interface SearchStates {
@@ -16,6 +17,7 @@ interface SearchStates {
 interface SearchActions {
   searchDefaultFilter: (query: SearchFilter) => void;
   searchAuthorFilter: (query: AuthorSearchFilter) => void;
+  searchBookmarkFilter: () => void;
   reset: () => void;
 }
 
@@ -41,6 +43,12 @@ const useSearchStore = create<SearchStore>()(
         ...initialSearchStates,
         filter: authorSearchQuery,
         searchType: SEARCH_FILTER.AUTHOR,
+      });
+    },
+    searchBookmarkFilter: () => {
+      set({
+        ...initialSearchStates,
+        searchType: SEARCH_FILTER.BOOKMARK,
       });
     },
     reset: () => set(initialSearchStates),

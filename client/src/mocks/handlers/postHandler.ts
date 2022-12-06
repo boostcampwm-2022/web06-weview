@@ -70,9 +70,17 @@ export const postHandler = [
     );
   }),
   rest.post(`${baseUrl}/posts/:postId/likes`, (req, res, ctx) => {
+    const postId = req.params.postId;
+    posts
+      .filter((post) => post.id === postId)
+      .map((post) => (post.isLiked = true));
     return res(ctx.status(200));
   }),
   rest.delete(`${baseUrl}/posts/:postId/likes`, (req, res, ctx) => {
+    const postId = req.params.postId;
+    posts
+      .filter((post) => post.id === postId)
+      .map((post) => (post.isLiked = false));
     return res(ctx.status(200));
   }),
   rest.get(`${baseUrl}/users/:userId/posts`, (req, res, ctx) => {

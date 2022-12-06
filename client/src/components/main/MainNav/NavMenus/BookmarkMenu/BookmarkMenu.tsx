@@ -3,13 +3,18 @@ import BookmarksOutlinedIcon from "@mui/icons-material/BookmarksOutlined";
 
 import NavMenu from "@/components/main/MainNav/NavMenus/NavMenu/NavMenu";
 import useNav from "@/hooks/useNav";
+import useSearchStore from "@/store/useSearchStore";
 
 const BookmarkMenu = (): JSX.Element => {
   const { handleBookmark } = useNav();
+  const searchBookmarkFilter = useSearchStore(
+    (state) => state.searchBookmarkFilter
+  );
 
   const handleMenuClick: MouseEventHandler = () => {
-    handleBookmark();
+    handleBookmark(searchBookmarkFilter);
   };
+
   return (
     <NavMenu
       Icon={BookmarksOutlinedIcon}

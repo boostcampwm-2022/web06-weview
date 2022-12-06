@@ -39,7 +39,7 @@ export const posts: PostInfo[] = Array.from(Array(1024).keys()).map((id) => ({
   updatedAt: "2022-11-16 12:26:56.124939",
   code: `sourcecode: ~~~~~~~~~~~~~~~~~~`,
   language: `javascript`,
-  isLiked: id % 2 === 0,
+  isLiked: false,
 }));
 
 export const reviews: ReviewInfo[] = Array.from(Array(1024).keys()).map(

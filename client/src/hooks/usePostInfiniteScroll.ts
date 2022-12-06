@@ -11,7 +11,7 @@ import { PostPages } from "@/types/post";
 import useSearchStore, { SEARCH_FILTER } from "@/store/useSearchStore";
 import { queryClient } from "@/react-query/queryClient";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
-import { fetchPost, fetchUserPost } from "@/apis/post";
+import { fetchBookmarkPost, fetchPost, fetchUserPost } from "@/apis/post";
 
 const getQueryFn = async (
   pageParam: string,
@@ -19,6 +19,10 @@ const getQueryFn = async (
 ): Promise<PostPages> => {
   if (searchType === SEARCH_FILTER.AUTHOR) {
     const postPages = await fetchUserPost(pageParam);
+    return postPages;
+  }
+  if (searchType === SEARCH_FILTER.BOOKMARK) {
+    const postPages = await fetchBookmarkPost(pageParam);
     return postPages;
   }
 

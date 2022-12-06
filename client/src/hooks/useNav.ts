@@ -26,10 +26,8 @@ const useNav = (): UseNavResult => {
 
   const handleNav =
     (newNavState: NAV_STATE_TYPE) => (fn: Function | undefined) => {
-      if (navState === newNavState) {
-        return setNavState(NAV_STATE.DEFAULT);
-      }
-      setNavState(newNavState);
+      const state = navState === newNavState ? NAV_STATE.DEFAULT : newNavState;
+      setNavState(state);
       if (fn !== undefined) {
         fn();
       }
