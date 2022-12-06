@@ -75,12 +75,10 @@ export class PostController {
     await this.addLikesCntColumnEveryPosts(returnValue);
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
     await this.addBookmarksToPostIfLogin(headers['authorization'], returnValue);
+
     this.addSearchHistory(headers['authorization'], inqueryDto);
-    this.httpService
-      .post(`${this.configService.get('SCHEDULER_SERVER_URL')}/tags`, {
-        tags: tags,
-      })
-      .subscribe();
+
+    this.applyTags(tags, lastId);
 
     return returnValue;
   }
@@ -225,5 +223,24 @@ export class PostController {
       }
       throw new InternalServerErrorException();
     }
+  }
+
+  private applyTags(tags: string[], lastId: number) {
+    if (lastId !== -1) {
+      return;
+    }
+
+    if (tags.length === 0) {
+      return;
+    }
+    this.httpService
+      .post(`${this.configService.get('SCHEDULER_SERVER_URL')}/tags`, {
+        tags: tags,
+      })
+      .subscribe({
+        error: (e) => {
+          e;
+        },
+      });
   }
 }
