@@ -1,5 +1,16 @@
 // fonts
 @import url("https://webfontworld.github.io/gmarket/GmarketSans.css");
+/*
+ * D2 coding (Korean) http://dev.naver.com/projects/d2coding/
+ */
+@font-face {
+  font-family: "D2Coding";
+  font-style: normal;
+  font-weight: normal;
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_three@1.0/D2Coding.woff")
+    format("woff");
+}
+
 // pages
 @import "@/styles/global-style";
 @import "@/styles/theme";

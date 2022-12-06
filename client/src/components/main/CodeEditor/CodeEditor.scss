@@ -18,6 +18,7 @@ $github-dark-font-color: #c9d1d9;
   &__present {
     left: $line-width;
     width: calc(100% - $line-width);
+    overflow-x: scroll;
     color: $weview-white;
   }
 
@@ -27,20 +28,26 @@ $github-dark-font-color: #c9d1d9;
     position: absolute;
     box-sizing: border-box;
     height: 100%;
-    padding: 0.5rem;
+    padding: 0.6rem;
     margin: 0;
-    font-size: $font-medium;
-    white-space: pre-wrap;
+    font-size: $font-large;
 
     &::-webkit-scrollbar {
       display: none;
     }
   }
 
+  &__textarea,
+  &__present > code {
+    font-family: D2Coding, "D2 coding", monospace;
+    letter-spacing: 1px;
+  }
+
   &__textarea {
     z-index: 1;
     overflow-y: scroll;
     color: transparent;
+    white-space: nowrap;
     resize: none;
     background-color: transparent;
     border: none;
