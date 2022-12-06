@@ -3,6 +3,7 @@ import React, { useCallback, useState } from "react";
 import "./DetailSearchForm.scss";
 
 import useLabel from "@/hooks/useLabel";
+import { LIKE_COUNT_ITEMS, REVIEW_COUNT_ITEMS } from "@/constants/search";
 
 interface Item<T> {
   id: number;
@@ -39,22 +40,14 @@ const ItemCheckBox = ({
 };
 
 const LikeCountCheckBoxes = (): JSX.Element => {
-  const items: Array<Item<number>> = [
-    { id: 0, value: 1, description: "1개 이상" },
-    { id: 1, value: 5, description: "5개 이상" },
-    { id: 2, value: 20, description: "20개 이상" },
-  ];
+  const items: Array<Item<number>> = LIKE_COUNT_ITEMS;
   return (
     <CountCheckBoxes items={items} imagePostfix={"--like"} type={"likes"} />
   );
 };
 
 const ReviewCountCheckBoxes = (): JSX.Element => {
-  const items: Array<Item<number>> = [
-    { id: 0, value: 1, description: "1개 이상" },
-    { id: 1, value: 5, description: "5개 이상" },
-    { id: 2, value: 10, description: "10개 이상" },
-  ];
+  const items: Array<Item<number>> = REVIEW_COUNT_ITEMS;
   return (
     <CountCheckBoxes items={items} imagePostfix={"--review"} type={"reviews"} />
   );
