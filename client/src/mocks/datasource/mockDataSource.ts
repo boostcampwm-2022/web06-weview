@@ -1,6 +1,16 @@
 import { PostInfo } from "@/types/post";
 import { SearchHistory } from "@/types/search";
 import { ReviewInfo } from "@/types/review";
+import { MyInfo } from "@/types/auth";
+
+export const mockUser: MyInfo = {
+  id: "1",
+  nickname: "test",
+  accessToken: "1234",
+  expiresIn: 1669293441000,
+  email: "name@gmail.com",
+  profileUrl: "http://placeimg.com/640/640/animals",
+};
 
 export const posts: PostInfo[] = Array.from(Array(1024).keys()).map((id) => ({
   id: `${id}`,
@@ -65,4 +75,11 @@ history = [];
 // lint: import 한 변수에 직접 할당 불가 오류 해결을 위한 함수
 export const setHistory = (newHistory: SearchHistory[]): void => {
   history = newHistory;
+};
+
+export let bookmarks: number[];
+bookmarks = [];
+
+export const setBookmarks = (newBookmarks: number[]): void => {
+  bookmarks = newBookmarks;
 };
