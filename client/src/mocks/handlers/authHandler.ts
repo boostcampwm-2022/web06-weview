@@ -1,7 +1,7 @@
 import { rest } from "msw";
 
-import { mockUser } from "@/mocks/mockData";
 import { API_SERVER_URL } from "@/constants/env";
+import { mockUser } from "@/mocks/datasource/mockDataSource";
 
 // Backend API Server URL
 const baseUrl = API_SERVER_URL;

@@ -2,7 +2,7 @@ import { rest } from "msw";
 
 import { API_SERVER_URL } from "@/constants/env";
 import { parsePostQueryString } from "@/mocks/utils/mockUtils";
-import { posts, history } from "@/mocks/datasource/mockDataSource";
+import { posts, history, bookmarks } from "@/mocks/datasource/mockDataSource";
 
 // Backend API Server URL
 const baseUrl = API_SERVER_URL;
@@ -36,7 +36,11 @@ export const postHandler = [
               post.content.search(detail) > -1 ||
               post.author.nickname.search(detail) > -1
           )
-      );
+      )
+      .map((post) => ({
+        ...post,
+        isBookmarked: bookmarks.includes(Number(post.id)),
+      }));
     const isLast = filteredData.length <= lastId + SIZE;
 
     history.push({
@@ -66,9 +70,17 @@ export const postHandler = [
     );
   }),
   rest.post(`${baseUrl}/posts/:postId/likes`, (req, res, ctx) => {
+    const postId = req.params.postId;
+    posts
+      .filter((post) => post.id === postId)
+      .map((post) => (post.isLiked = true));
     return res(ctx.status(200));
   }),
   rest.delete(`${baseUrl}/posts/:postId/likes`, (req, res, ctx) => {
+    const postId = req.params.postId;
+    posts
+      .filter((post) => post.id === postId)
+      .map((post) => (post.isLiked = false));
     return res(ctx.status(200));
   }),
   rest.get(`${baseUrl}/users/:userId/posts`, (req, res, ctx) => {
