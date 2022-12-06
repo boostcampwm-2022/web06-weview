@@ -1,12 +1,12 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
   InternalServerErrorException,
   Post,
-  Query,
 } from '@nestjs/common';
 import { RankingService } from './ranking.service';
 import { SaveSearchedTagsDto } from './dto/controller-request.dto';
@@ -36,9 +36,9 @@ export class RankingController {
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
-  async saveSearchedTags(@Query() saveSearchedTagsDto: SaveSearchedTagsDto) {
+  async saveSearchedTags(@Body() saveSearchedTagsDto: SaveSearchedTagsDto) {
     try {
-      const { names: tags } = saveSearchedTagsDto;
+      const { tags: tags } = saveSearchedTagsDto;
       this.validateTags(tags);
 
       return await this.rankingService.saveSearchedTags(tags);
