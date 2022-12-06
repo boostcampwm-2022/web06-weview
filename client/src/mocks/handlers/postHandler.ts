@@ -89,4 +89,8 @@ export const postHandler = [
       })
     );
   }),
+  rest.get(`${baseUrl}/posts/:postId`, (req, res, ctx) => {
+    const postId = req.params.postId;
+    return res(ctx.status(200), ctx.json({ post: posts[Number(postId)] }));
+  }),
 ];
