@@ -3,11 +3,11 @@
 .post__title {
   box-sizing: border-box;
   display: flex;
-  grid-row: 1;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 100%;
+  height: 6rem;
   padding-inline: 1.2rem;
   overflow: hidden;
 
