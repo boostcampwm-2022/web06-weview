@@ -9,16 +9,16 @@ import "./NavHeader.scss";
 const NavHeader = (): JSX.Element => {
   const { handleNavClose } = useNav();
   const navigate = useNavigate();
-  
+
   const { loadLabels, handleSubmit } = useLabel();
 
   const handleHeaderClick: MouseEventHandler = () => {
     handleNavClose(() => {
       loadLabels([]);
       handleSubmit();
-    }
-    navigate("/");
-  });
+      navigate("/");
+    });
+  };
 
   return (
     <section className="nav__sidebar__header">
