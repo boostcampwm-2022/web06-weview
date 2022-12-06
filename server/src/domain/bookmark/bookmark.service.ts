@@ -37,13 +37,18 @@ export class BookmarkService {
       bookmarks = bookmarks.slice(0, -1);
     }
 
-    return new LoadPostListResponseDto(
+    const postList = new LoadPostListResponseDto(
       bookmarks.map((bookmark) => {
         bookmark.post.user = bookmark.user;
         return bookmark.post;
       }),
       isLast,
     );
+
+    return postList.posts.map((post) => {
+      post.isBookmarked = true;
+      return post;
+    });
   }
 
   async bookmark(userId: number, { postId }: BookmarkCreateRequestDto) {
@@ -107,5 +112,18 @@ export class BookmarkService {
     }
 
     await this.bookmarkRepository.remove(bookmark);
+  }
+
+  async findPostIdsByUserId(userId: number) {
+    const postsYouBookmarked = await this.bookmarkRepository.find({
+      relations: ['user', 'post'],
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+    });
+
+    return postsYouBookmarked.map((bookmarkInfo) => bookmarkInfo.post.id);
   }
 }
