@@ -2,6 +2,7 @@ import axios from "axios";
 
 import axiosInstance from "@/apis/axios";
 import {
+  PostInfo,
   PostPages,
   UploadImageProps,
   WritingRequestParams,
@@ -76,5 +77,12 @@ export const toggleLikeAPI = async ({
   const { data } = isLiked
     ? await axiosInstance.delete(`/posts/${postId}/likes`)
     : await axiosInstance.post(`/posts/${postId}/likes`);
+  return data;
+};
+
+export const getPostItem = async (
+  postId: string
+): Promise<{ post: PostInfo }> => {
+  const { data } = await axiosInstance.get(`/posts/${postId}`);
   return data;
 };
