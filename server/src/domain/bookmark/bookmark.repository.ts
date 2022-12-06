@@ -13,6 +13,7 @@ export class BookmarkRepository extends Repository<Bookmark> {
       relations: [
         'user',
         'post',
+        'post.user',
         'post.images',
         'post.postToTags',
         'post.postToTags.tag',

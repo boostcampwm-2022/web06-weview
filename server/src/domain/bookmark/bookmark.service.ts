@@ -39,16 +39,12 @@ export class BookmarkService {
 
     const postList = new LoadPostListResponseDto(
       bookmarks.map((bookmark) => {
-        bookmark.post.user = bookmark.user;
         return bookmark.post;
       }),
       isLast,
     );
 
-    postList.posts.map((post) => {
-      post.isBookmarked = true;
-      return post;
-    });
+    postList.posts.forEach((post) => (post.isBookmarked = true));
     return postList;
   }
 
