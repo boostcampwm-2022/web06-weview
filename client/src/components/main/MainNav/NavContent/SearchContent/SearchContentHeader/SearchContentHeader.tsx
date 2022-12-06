@@ -1,10 +1,13 @@
 // SearchContent 에서 고정되어 있는 부분
 import SearchIcon from "@mui/icons-material/Search";
-import React from "react";
+import React, { useState } from "react";
+import ArrowDropDownCircleSharpIcon from "@mui/icons-material/ArrowDropDownCircleSharp";
 
 import useLabel from "@/hooks/useLabel";
 import { Label } from "@/types/search";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
+
+import DetailSearchForm from "./DetailSearchForm/DetailSearchForm";
 
 import "./SearchContentHeader.scss";
 
@@ -17,6 +20,7 @@ const SearchContentHeader = (): JSX.Element => {
     removeLabel,
     handleSubmit,
   } = useLabel();
+  const [isDetailOpened, setIsDetailOpened] = useState(false);
 
   return (
     <>
@@ -35,7 +39,13 @@ const SearchContentHeader = (): JSX.Element => {
           onClick={handleSubmit}
         />
       </div>
-      <div className="title">검색 필터</div>
+      <div className="search-content__filter__header">
+        <div className="search-content__filter__header--title">검색 필터</div>
+        <ArrowDropDownCircleSharpIcon
+          className="search-content__filter__header--btn"
+          onClick={() => setIsDetailOpened((isDetailOpened) => !isDetailOpened)}
+        />
+      </div>
       <div className="search-content__labels">
         {labels.map((label: Label) => (
           <SearchLabel
@@ -45,6 +55,7 @@ const SearchContentHeader = (): JSX.Element => {
           />
         ))}
       </div>
+      {isDetailOpened && <DetailSearchForm />}
     </>
   );
 };

@@ -1,4 +1,10 @@
-import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 import { Label } from "@/types/search";
 import useSearchStore from "@/store/useSearchStore";
@@ -11,6 +17,7 @@ interface UseLabelResult {
   labels: Label[];
   insertLabel: (label: Label) => void;
   removeLabel: (label: Label) => void;
+  removeAndInsert: (removeTargetLabel: Label, insertTargetLabel: Label) => void;
   handleWordChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleWordKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
   handleSubmit: () => void;
@@ -38,9 +45,7 @@ const useLabel = (): UseLabelResult => {
   // labels 목록에서 라벨 제거
   const removeLabel = useCallback(
     (targetLabel: Label): void => {
-      setLabels([
-        ...labels.filter((label) => !isEqualLabel(label, targetLabel)),
-      ]);
+      setLabels(labels.filter((label) => !isEqualLabel(label, targetLabel)));
     },
     [labels, setLabels]
   );
@@ -51,6 +56,17 @@ const useLabel = (): UseLabelResult => {
       if (!hasLabel(targetLabel)) {
         setLabels([...labels, targetLabel]);
       }
+    },
+    [labels, setLabels]
+  );
+
+  const removeAndInsert = useCallback(
+    (removeTargetLabel: Label, insertTargetLabel: Label): void => {
+      const newLabels = [
+        ...labels.filter((label) => !isEqualLabel(label, removeTargetLabel)),
+        insertTargetLabel,
+      ];
+      setLabels(newLabels);
     },
     [labels, setLabels]
   );
@@ -91,6 +107,7 @@ const useLabel = (): UseLabelResult => {
     handleWordKeyUp,
     handleSubmit,
     removeLabel,
+    removeAndInsert,
     loadLabels,
   };
 };

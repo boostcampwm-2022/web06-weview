@@ -19,10 +19,10 @@ export const parsePostQueryString = (url: URL): SearchFilter => {
     details.map((detail) => searchQuery.details?.push(decodeURI(detail)));
   }
 
-  const reviews = url.searchParams.get("reviews") ?? "0";
+  const reviews = url.searchParams.get("reviewCount") ?? "0";
   searchQuery.reviewCount = Number(decodeURI(reviews));
 
-  const likes = url.searchParams.get("likes") ?? "0";
+  const likes = url.searchParams.get("likeCount") ?? "0";
   searchQuery.likeCount = Number(decodeURI(likes));
 
   return searchQuery;

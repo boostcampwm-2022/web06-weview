@@ -12,7 +12,9 @@ const useLabelStore = create<SearchStore>()(
   devtools((set) => ({
     labels: [],
     setLabels: (labels) => {
-      set({ labels });
+      set({
+        labels,
+      });
     },
   }))
 );
