@@ -26,17 +26,23 @@ export const useRefreshInterceptor = (): void => {
         if (nowDate <= expiresDate) return config;
       }
       try {
-        await refreshAndSetAccessTokenInHeader();
-      } catch (err) {
-        console.error(err);
+        await refreshAndSetAccessTokenInHeader(config);
+      } catch (e) {
+        console.error(e);
       }
+
       return config;
     };
 
-    const refreshAndSetAccessTokenInHeader = async (): Promise<void> => {
+    const refreshAndSetAccessTokenInHeader = async (
+      config: AxiosRequestConfig
+    ): Promise<void> => {
       const {
         data: { accessToken, expiresIn: newExpiresIn },
       } = await axios.get(`${API_SERVER_URL}/auth/refresh`);
+      if (config.headers !== undefined) {
+        config.headers.Authorization = `Bearer ${String(accessToken)}`;
+      }
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${String(
         accessToken
       )}`;
