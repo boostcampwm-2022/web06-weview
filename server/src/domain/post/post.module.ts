@@ -33,7 +33,7 @@ import { BookmarkRepository } from '../bookmark/bookmark.repository';
     SearchHistoryMongoRepository,
     PostSubscriber,
   ],
-  imports: [HttpModule, JwtModule.register({})], // TODO 우석이랑 이야기해보고 App으로 올릴지 이야기하기
+  imports: [HttpModule, JwtModule.register({})], // TODO App으로 올릴지 이야기하기
   exports: [PostService, PostRepository],
 })
 export class PostModule {}

@@ -38,6 +38,8 @@ import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { PostNotFoundException } from 'src/exception/post-not-found.exception';
 import { UserService } from '../user/user.service';
 import { BookmarkService } from '../bookmark/bookmark.service';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 export const SEND_POST_CNT = 3;
 export const LATEST_DATA_CONDITION = -1;
@@ -53,6 +55,8 @@ export class PostController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly bookmarkService: BookmarkService,
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
   ) {}
 
   /**
@@ -72,6 +76,12 @@ export class PostController {
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
     await this.addBookmarksToPostIfLogin(headers['authorization'], returnValue);
     this.addSearchHistory(headers['authorization'], inqueryDto);
+    this.httpService
+      .post(`${this.configService.get('SCHEDULER_SERVER_URL')}/tags`, {
+        tags: tags,
+      })
+      .subscribe();
+
     return returnValue;
   }
 
