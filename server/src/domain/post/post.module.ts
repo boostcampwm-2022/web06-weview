@@ -13,6 +13,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
 import { UserService } from '../user/user.service';
 import { SearchHistoryMongoRepository } from '../search/search-history.mongo.repository';
+import { BookmarkService } from '../bookmark/bookmark.service';
+import { BookmarkRepository } from '../bookmark/bookmark.repository';
 
 @Module({
   controllers: [PostController],
@@ -21,10 +23,12 @@ import { SearchHistoryMongoRepository } from '../search/search-history.mongo.rep
     LikesService,
     AuthService,
     UserService,
+    BookmarkService,
     PostRepository,
     TagRepository,
     PostToTagRepository,
     UserRepository,
+    BookmarkRepository,
     LikesRepository,
     SearchHistoryMongoRepository,
     PostSubscriber,

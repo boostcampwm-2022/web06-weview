@@ -37,6 +37,7 @@ import { UserNotFoundException } from '../../exception/user-not-found.exception'
 import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { PostNotFoundException } from 'src/exception/post-not-found.exception';
 import { UserService } from '../user/user.service';
+import { BookmarkService } from '../bookmark/bookmark.service';
 
 export const SEND_POST_CNT = 3;
 export const LATEST_DATA_CONDITION = -1;
@@ -51,6 +52,7 @@ export class PostController {
     private readonly likesService: LikesService,
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly bookmarkService: BookmarkService,
   ) {}
 
   /**
@@ -68,6 +70,7 @@ export class PostController {
     );
     await this.addLikesCntColumnEveryPosts(returnValue);
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
+    await this.addBookmarksToPostIfLogin(headers['authorization'], returnValue);
     this.addSearchHistory(headers['authorization'], inqueryDto);
     return returnValue;
   }
@@ -82,6 +85,26 @@ export class PostController {
         result.posts.forEach((post) => {
           if (postIdsYouLike.includes(post.id)) {
             post.isLiked = true;
+          }
+        });
+      }
+    }
+  }
+
+  private async addBookmarksToPostIfLogin(
+    token,
+    result: LoadPostListResponseDto,
+  ) {
+    if (token) {
+      const userId = this.authService.authenticate(token);
+
+      if (userId) {
+        const postIdsYouBookmark =
+          await this.bookmarkService.findPostIdsByUserId(userId);
+
+        result.posts.forEach((post) => {
+          if (postIdsYouBookmark.includes(post.id)) {
+            post.isBookmarked = true;
           }
         });
       }

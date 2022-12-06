@@ -25,6 +25,7 @@ export class EachPostResponseDto {
   author: AuthorDto;
   tags: string[];
   isLiked: boolean;
+  isBookmarked: boolean;
   likesCount: number;
   lineCount: number;
 
@@ -41,6 +42,7 @@ export class EachPostResponseDto {
     this.author = new AuthorDto(post.user);
     this.tags = post.postToTags.map((obj) => obj.tag.name);
     this.isLiked = false;
+    this.isBookmarked = false;
     this.lineCount = post.lineCount;
   }
 }
