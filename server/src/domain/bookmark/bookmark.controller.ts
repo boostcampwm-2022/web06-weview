@@ -4,13 +4,13 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   HttpStatus,
   InternalServerErrorException,
   NotFoundException,
   Post,
   Query,
   Req,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -22,7 +22,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { PostAlreadyBookmarkedException } from 'src/exception/post-already-bookmarked.exception';
 import { BookmarkNotFoundException } from 'src/exception/bookmark-not-found.exception';
 import { PostNotFoundException } from 'src/exception/post-not-found.exception';
@@ -61,6 +61,7 @@ export class BookmarkController {
    */
   @Post()
   @UseGuards(AccessTokenGuard)
+  @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse()
   @ApiNotFoundResponse({
     description: '유저 혹은 게시물이 존재하지 않습니다',
@@ -70,7 +71,6 @@ export class BookmarkController {
   })
   async bookmark(
     @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
     @Body() requestDto: BookmarkCreateRequestDto,
   ) {
     const userId = req.user['id'];
@@ -91,7 +91,6 @@ export class BookmarkController {
       throw new InternalServerErrorException();
     }
 
-    res.status(HttpStatus.CREATED);
     return;
   }
 
@@ -100,13 +99,13 @@ export class BookmarkController {
    */
   @Delete()
   @UseGuards(AccessTokenGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
   @ApiNotFoundResponse({
     description: '유저가 존재하지 않거나 북마크하지 않은 게시물입니다',
   })
   async unbookmark(
     @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
     @Query() requestDto: BookmarkDeleteRequestDto,
   ) {
     const userId = req.user['id'];
@@ -123,7 +122,6 @@ export class BookmarkController {
       throw new InternalServerErrorException();
     }
 
-    res.status(HttpStatus.NO_CONTENT);
     return;
   }
 }

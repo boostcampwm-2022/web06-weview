@@ -3,16 +3,16 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  HttpCode,
   HttpStatus,
   InternalServerErrorException,
   NotFoundException,
   Param,
   Query,
   Req,
-  Res,
   UseGuards,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { UserService } from './user.service';
 import {
   ApiBadRequestResponse,
@@ -78,6 +78,7 @@ export class UserController {
    */
   @Delete('search/histories/:uuidStr')
   @UseGuards(AccessTokenGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
   @ApiNotFoundResponse({
     description: '유저 혹은 게시물이 존재하지 않습니다',
@@ -87,7 +88,6 @@ export class UserController {
   })
   async deleteSearchHistory(
     @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
     @Param('uuidStr') uuidStr: string,
   ) {
     const userId = req.user['id'];
@@ -105,7 +105,6 @@ export class UserController {
       throw new InternalServerErrorException();
     }
 
-    res.status(HttpStatus.NO_CONTENT);
     return;
   }
 }
