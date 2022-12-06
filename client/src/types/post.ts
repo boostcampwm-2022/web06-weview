@@ -26,6 +26,7 @@ export interface PostInfo {
   likeCount: number;
   lineCount: number;
   isLiked?: boolean;
+  isBookmarked?: boolean;
 }
 
 export interface PostPages extends InfiniteScrollResponse {

@@ -30,6 +30,13 @@ export const fetchUserPost = async (pageParam: string): Promise<PostPages> => {
   return data;
 };
 
+export const fetchBookmarkPost = async (
+  pageParam: string
+): Promise<PostPages> => {
+  const { data } = await axiosInstance.get(`/bookmarks?lastId=${pageParam}`);
+  return data;
+};
+
 export const uploadImage = async ({
   preSignedData,
   imageUri,
