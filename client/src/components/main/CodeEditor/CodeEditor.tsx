@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import useEditorScroll from "@/hooks/useEditorScroll";
 import useCodeEditor from "@/hooks/useCodeEditor";
@@ -9,6 +9,10 @@ import "./CodeEditor.scss";
 const CodeEditor = (): JSX.Element => {
   const { code, handleCodeChange, language, lineCount } = useCodeEditor();
   const { lineRef, textRef, preRef, handleScrollChange } = useEditorScroll();
+
+  useEffect(() => {
+    textRef.current?.focus();
+  }, []);
 
   return (
     <div className="code">
