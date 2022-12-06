@@ -21,10 +21,10 @@
   justify-content: center;
   width: $line-width;
   height: 100%;
-
+  white-space: pre-wrap;
   overflow-x: hidden;
   overflow-y: auto;
-  font-family: "monospace", monospace;
+  font-family: D2Coding, 'D2 coding', monospace;
   color: $weview-white;
   text-align: end;
   background-color: $codeblock-color;
