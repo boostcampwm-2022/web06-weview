@@ -7,6 +7,7 @@ import { ReviewModule } from './domain/review/review.module';
 import { LikesModule } from './domain/likes/likes.module';
 import { ReportModule } from './domain/report/report.module';
 import { UserModule } from './domain/user/user.module';
+import { BookmarkModule } from './domain/bookmark/bookmark.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { UserModule } from './domain/user/user.module';
     LikesModule,
     ReportModule,
     UserModule,
+    BookmarkModule,
   ],
 })
 export class AppModule {}
