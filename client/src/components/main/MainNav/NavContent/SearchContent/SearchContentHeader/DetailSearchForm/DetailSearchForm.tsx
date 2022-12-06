@@ -42,26 +42,30 @@ const ItemCheckBox = ({
 const LikeCountCheckBoxes = (): JSX.Element => {
   const items: Array<Item<number>> = LIKE_COUNT_ITEMS;
   return (
-    <CountCheckBoxes items={items} imagePostfix={"--like"} type={"likes"} />
+    <CountCheckBoxes items={items} imageModifier={"--like"} type={"likes"} />
   );
 };
 
 const ReviewCountCheckBoxes = (): JSX.Element => {
   const items: Array<Item<number>> = REVIEW_COUNT_ITEMS;
   return (
-    <CountCheckBoxes items={items} imagePostfix={"--review"} type={"reviews"} />
+    <CountCheckBoxes
+      items={items}
+      imageModifier={"--review"}
+      type={"reviews"}
+    />
   );
 };
 
 interface CountCheckBoxesProps {
   items: Array<Item<number>>;
-  imagePostfix: string;
+  imageModifier: string;
   type: string;
 }
 
 const CountCheckBoxes = ({
   items,
-  imagePostfix,
+  imageModifier,
   type,
 }: CountCheckBoxesProps): JSX.Element => {
   const { removeLabel, insertLabel, removeAndInsert } = useLabel();
@@ -88,7 +92,9 @@ const CountCheckBoxes = ({
 
   return (
     <span className="detail-search-form__check-boxes">
-      <img className={`detail-search-form__check-boxes__icon${imagePostfix}`} />
+      <img
+        className={`detail-search-form__check-boxes__icon${imageModifier}`}
+      />
       <span className="detail-search-form__check-boxes__title">좋아요</span>
       {items.map((item) => (
         <ItemCheckBox
