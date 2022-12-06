@@ -32,7 +32,7 @@ export class BookmarkService {
         REQUEST_CNT,
       )) || [];
 
-    const isLast = !bookmarks || bookmarks.length < REQUEST_CNT + 1;
+    const isLast = bookmarks.length < REQUEST_CNT + 1;
     if (!isLast) {
       bookmarks = bookmarks.slice(0, -1);
     }
