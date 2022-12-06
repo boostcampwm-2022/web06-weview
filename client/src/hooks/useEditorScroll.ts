@@ -20,6 +20,10 @@ const useEditorScroll = (): UseEditorScroll => {
       preRef.current.style.height = textRef.current.style.height;
       preRef.current.scrollTop = lineRef.current.scrollTop =
         textRef.current.scrollTop;
+      textRef.current.scrollTop = lineRef.current.scrollTop =
+        preRef.current.scrollTop;
+      preRef.current.scrollLeft = textRef.current.scrollLeft;
+      textRef.current.scrollLeft = preRef.current.scrollLeft;
     }
   }, [textRef, preRef, lineRef]);
   return { textRef, preRef, lineRef, handleScrollChange };
