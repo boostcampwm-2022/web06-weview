@@ -4,14 +4,14 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: calc(35% + 1rem);
+  width: calc(35% + 1.6rem);
   max-width: 150px;
-  height: 1.75rem;
-  margin-bottom: 0.5rem;
+  height: 2.8rem;
+  margin-bottom: 0.8rem;
   cursor: pointer;
   background-color: $codeblock-color;
   border: 1px solid $line-color;
-  border-radius: 0.2rem;
+  border-radius: $radius-small;
 
   &__icon {
     position: absolute;
@@ -25,8 +25,8 @@
   &__select {
     position: absolute;
     width: 100%;
-    padding-left: 0.5rem;
-    font-size: 1rem;
+    padding-left: 0.8rem;
+    font-size: $font-large;
     color: $alert;
     text-overflow: ellipsis;
     background-color: $codeblock-color;

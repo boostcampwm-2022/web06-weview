@@ -9,8 +9,12 @@ import { UserRepository } from '../user/user.repository';
 import { LikesRepository } from '../likes/likes.repository';
 import { LikesService } from '../likes/likes.service';
 import { AuthService } from '../auth/auth.service';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
+import { UserService } from '../user/user.service';
+import { SearchHistoryMongoRepository } from '../search/search-history.mongo.repository';
+import { BookmarkService } from '../bookmark/bookmark.service';
+import { BookmarkRepository } from '../bookmark/bookmark.repository';
 
 @Module({
   controllers: [PostController],
@@ -18,14 +22,18 @@ import { HttpModule } from '@nestjs/axios';
     PostService,
     LikesService,
     AuthService,
+    UserService,
+    BookmarkService,
     PostRepository,
     TagRepository,
     PostToTagRepository,
     UserRepository,
+    BookmarkRepository,
     LikesRepository,
+    SearchHistoryMongoRepository,
     PostSubscriber,
   ],
-  imports: [HttpModule, JwtModule.register({})], // TODO 우석이랑 이야기해보고 App으로 올릴지 이야기하기
+  imports: [HttpModule, JwtModule.register({})], // TODO App으로 올릴지 이야기하기
   exports: [PostService, PostRepository],
 })
 export class PostModule {}

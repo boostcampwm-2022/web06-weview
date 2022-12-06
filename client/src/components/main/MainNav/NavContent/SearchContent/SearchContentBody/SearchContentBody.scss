@@ -1,0 +1,29 @@
+@import "@/styles/_animation";
+@import "@/styles/_mixin";
+
+/*
+ * Content Body
+ */
+.search-content__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  height: fit-content;
+  overflow: hidden;
+
+  & * {
+    @include nav-content-fade-in;
+  }
+
+  &__labels {
+    @include label-provider;
+    width: 100%;
+  }
+
+  &--loading {
+    height: 5rem;
+  }
+}

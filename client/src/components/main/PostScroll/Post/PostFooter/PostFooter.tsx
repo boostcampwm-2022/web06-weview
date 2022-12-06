@@ -5,6 +5,7 @@ import ReportButton from "@/components/main/PostScroll/Post/PostFooter/LeftBlock
 import ReviewButton from "@/components/main/PostScroll/Post/PostFooter/LeftBlockItems/ReviewButton";
 import ShareButton from "@/components/main/PostScroll/Post/PostFooter/LeftBlockItems/ShareButton";
 import MoreButton from "@/components/main/PostScroll/Post/PostFooter/RightBlockItems/MoreButton";
+import BookmarkButton from "@/components/main/PostScroll/Post/PostFooter/LeftBlockItems/BookmarkButton";
 
 import "./PostFooter.scss";
 
@@ -16,6 +17,7 @@ const PostFooter = (): JSX.Element => {
         <ReportButton />
         <ReviewButton />
         <ShareButton />
+        <BookmarkButton />
       </div>
       <div className="post__footer__right-block">
         <MoreButton />

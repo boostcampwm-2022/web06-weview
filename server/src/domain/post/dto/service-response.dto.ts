@@ -25,6 +25,7 @@ export class EachPostResponseDto {
   author: AuthorDto;
   tags: string[];
   isLiked: boolean;
+  isBookmarked: boolean;
   likesCount: number;
   lineCount: number;
 
@@ -34,14 +35,14 @@ export class EachPostResponseDto {
     this.content = post.content;
     this.code = post.code;
     this.language = post.language;
-    if (post.images === undefined) {
-      post.images = [];
-    }
-    this.images = post.images.map((image) => new EachImageResponseDto(image));
+    this.images = (post.images ?? []).map(
+      (image) => new EachImageResponseDto(image),
+    );
     this.updatedAt = post.updatedAt;
     this.author = new AuthorDto(post.user);
     this.tags = post.postToTags.map((obj) => obj.tag.name);
     this.isLiked = false;
+    this.isBookmarked = false;
     this.lineCount = post.lineCount;
   }
 }

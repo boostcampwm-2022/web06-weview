@@ -1,0 +1,53 @@
+@import "@/styles/theme";
+@import "@/styles/mixin";
+
+.tag-rank-item {
+  @include tag-rank-item-mixin;
+
+  &__name {
+    display: inline-block;
+    width: 20rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: top;
+  }
+
+  &__icon {
+    &--equal,
+    &--up,
+    &--down,
+    &--new {
+      display: inline-block;
+      float: right;
+      margin-right: 0.5rem;
+      background-position: 0 0;
+    }
+
+    &--new {
+      position: relative;
+      right: 0.3rem;
+      font-size: 1rem;
+      color: $error;
+    }
+
+    &--equal {
+      color: $placeholder-color-dark;
+    }
+
+    &--up {
+      color: $weview-blue;
+    }
+
+    &--down {
+      color: $error;
+    }
+  }
+}
+
+.tag-rank-item:hover .tag-rank-item__name {
+  color: $weview-blue;
+  text-decoration: underline;
+  text-decoration-color: $weview-blue;
+  text-underline-position: under;
+}

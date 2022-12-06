@@ -4,7 +4,6 @@ import { PostService } from './post.service';
 import { PostRepository } from './post.repository';
 import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
-import { Category } from './category';
 import { TagRepository } from '../tag/tag.repository';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
 import { UserRepository } from '../user/user.repository';
@@ -14,6 +13,7 @@ import { PostNotFoundException } from '../../exception/post-not-found.exception'
 import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { Post } from './post.entity';
 import { Tag } from '../tag/tag.entity';
+import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 
 describe('PostService', () => {
   let service: PostService;
@@ -54,10 +54,8 @@ describe('PostService', () => {
     const searchCondition: LoadPostListRequestDto = {
       lastId: 1,
       tags: [],
-      authors: [],
-      category: Category.QUESTION,
-      reviews: 1,
-      likesCnt: 1,
+      reviewCount: 1,
+      likeCount: 1,
     };
     const resultFilteringLikesCnt = [
       { postId: 1, likesCnt: '1' },
@@ -71,7 +69,6 @@ describe('PostService', () => {
         createdAt: '2022-11-17T11:41:34.568Z',
         updatedAt: '2022-11-17T11:41:34.568Z',
         id: 6,
-        category: 'QUESTION',
         title: 'bubble sort 이렇게 해도 되나요?',
         content: '이게 맞나 모르겠어요 ㅠㅠㅠ',
         code: "console.log('코드가 작성되니다');",
@@ -111,7 +108,6 @@ describe('PostService', () => {
         createdAt: '2022-11-17T11:41:34.568Z',
         updatedAt: '2022-11-17T11:41:34.568Z',
         id: 6,
-        category: 'QUESTION',
         title: 'bubble sort 이렇게 해도 되나요?',
         content: '이게 맞나 모르겠어요 ㅠㅠㅠ',
         code: "console.log('코드가 작성되니다');",
@@ -148,7 +144,6 @@ describe('PostService', () => {
         createdAt: '2022-11-17T11:41:34.568Z',
         updatedAt: '2022-11-17T11:41:34.568Z',
         id: 5,
-        category: 'QUESTION',
         title: 'bubble sort 이렇게 해도 되나요?',
         content: '이게 맞나 모르겠어요 ㅠㅠㅠ',
         code: "console.log('코드가 작성되니다');",
@@ -185,7 +180,6 @@ describe('PostService', () => {
         createdAt: '2022-11-17T11:41:34.568Z',
         updatedAt: '2022-11-17T11:41:34.568Z',
         id: 4,
-        category: 'QUESTION',
         title: 'bubble sort 이렇게 해도 되나요?',
         content: '이게 맞나 모르겠어요 ㅠㅠㅠ',
         code: "console.log('코드가 작성되니다');",
@@ -222,7 +216,6 @@ describe('PostService', () => {
         createdAt: '2022-11-17T11:41:34.568Z',
         updatedAt: '2022-11-17T11:41:34.568Z',
         id: 3,
-        category: 'QUESTION',
         title: 'bubble sort 이렇게 해도 되나요?',
         content: '이게 맞나 모르겠어요 ㅠㅠㅠ',
         code: "console.log('코드가 작성되니다');",
@@ -298,7 +291,7 @@ describe('PostService', () => {
         .spyOn(postToTagRepository, 'findByContainingTags')
         .mockResolvedValue(resultFilteringTag);
       jest
-        .spyOn(postRepository, 'findBySearchWord')
+        .spyOn(postRepository, 'filterUsingDetail')
         .mockResolvedValue(resultFilteringTag);
       jest
         .spyOn(postRepository, 'findByReviewCntGreaterThanOrEqual')
@@ -309,7 +302,7 @@ describe('PostService', () => {
     it('마지막 결과값을 포함할 때 isLast는 true가 된다', async () => {
       //given
       jest
-        .spyOn(postRepository, 'findByIdUsingCondition')
+        .spyOn(postRepository, 'findByIdWithFilterResult')
         .mockResolvedValue(postListThatHasOnePost);
 
       //when
@@ -354,7 +347,7 @@ describe('PostService', () => {
     it('마지막 결과가 아닐 때 isLast는 false가 된다', async () => {
       //given
       jest
-        .spyOn(postRepository, 'findByIdUsingCondition')
+        .spyOn(postRepository, 'findByIdWithFilterResult')
         .mockResolvedValue(postListThatHasFourPost);
 
       // when
@@ -452,7 +445,7 @@ describe('PostService', () => {
     it('검색 결과가 없을 때, post=[], lastId -1 isLast: true 를 반환한다', async () => {
       // given
       jest
-        .spyOn(postRepository, 'findByIdUsingCondition')
+        .spyOn(postRepository, 'findByIdWithFilterResult')
         .mockResolvedValue([]);
 
       // when
@@ -484,7 +477,7 @@ describe('PostService', () => {
         const resultFilteringTag = [{ postId: 2 }, { postId: 3 }];
         const resultFilteringSearchWord = [{ postId: 2 }, { postId: 3 }];
 
-        const result = service.returnPostIdByAllConditionPass([
+        const result = service.mergeFilterResult([
           resultFilteringLikesCnt,
           resultFilteringTag,
           resultFilteringSearchWord,
@@ -502,7 +495,7 @@ describe('PostService', () => {
         const resultFilteringTag = [];
         const resultFilteringSearchWord = [{ postId: 2 }, { postId: 3 }];
 
-        const result = service.returnPostIdByAllConditionPass([
+        const result = service.mergeFilterResult([
           resultFilteringLikesCnt,
           resultFilteringTag,
           resultFilteringSearchWord,
@@ -520,7 +513,7 @@ describe('PostService', () => {
         const resultFilteringTag = [{ postId: 2 }, { postId: 3 }];
         const resultFilteringSearchWord = null;
 
-        const result = service.returnPostIdByAllConditionPass([
+        const result = service.mergeFilterResult([
           resultFilteringLikesCnt,
           resultFilteringTag,
         ]);
@@ -533,7 +526,7 @@ describe('PostService', () => {
         const resultFilteringTag = null;
         const resultFilteringSearchWord = null;
 
-        const result = service.returnPostIdByAllConditionPass([
+        const result = service.mergeFilterResult([
           resultFilteringLikesCnt,
           resultFilteringTag,
           resultFilteringSearchWord,
@@ -551,7 +544,6 @@ describe('PostService', () => {
       code: 'console.log("test")',
       language: 'javascript',
       lineCount: 30,
-      category: Category.QUESTION,
       images: [
         'http://localhost:8080/test.png',
         'http://localhost:8080/abc.jpg',
@@ -700,6 +692,56 @@ describe('PostService', () => {
       try {
         postRepository.findOne = jest.fn(() => null);
         await service.delete(1, 1);
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(PostNotFoundException);
+      }
+    });
+  });
+
+  describe('게시물 한 건 조회', () => {
+    let post;
+    beforeEach(() => {
+      post = new Post();
+      post.id = 1;
+      post.title = '제목';
+      post.content = 'content';
+      post.code = 'System.out.println("zz")';
+      post.language = 'java';
+      post.updatedAt = new Date();
+      post.user = new User();
+      post.lineCount = 1;
+      const pt = new PostToTag();
+      const tag = new Tag();
+      tag.name = 'dd';
+      pt.tag = tag;
+      post.postToTags = [pt];
+    });
+    it('(성공) 게시물이 있는 경우', async () => {
+      post.isDeleted = false;
+      postRepository.findById = jest.fn(() => post);
+
+      await service.inqueryPost(1);
+    });
+
+    it('(실패) 게시물이 없는 경우', async () => {
+      try {
+        postRepository.findById = jest.fn(() => null);
+
+        await service.inqueryPost(1);
+
+        throw new Error();
+      } catch (err) {
+        expect(err).toBeInstanceOf(PostNotFoundException);
+      }
+    });
+
+    it('(실패) 게시물이 삭제된 경우', async () => {
+      try {
+        post.isDeleted = true;
+        postRepository.findById = jest.fn(() => post);
+
+        await service.inqueryPost(1);
         throw new Error();
       } catch (err) {
         expect(err).toBeInstanceOf(PostNotFoundException);

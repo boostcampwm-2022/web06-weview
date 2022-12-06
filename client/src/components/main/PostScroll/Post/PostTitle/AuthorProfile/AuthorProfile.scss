@@ -1,4 +1,4 @@
-@import "@/styles/_button.scss";
+@import "@/styles/button";
 
 .post__title__author-profile {
   display: flex;
@@ -15,7 +15,7 @@
   }
 
   &__username {
-    font-size: 0.75rem;
+    font-size: $font-medium;
   }
 
   &__follow-button {
@@ -23,14 +23,14 @@
     width: fit-content;
     height: 1.4rem;
 
-    font-size: 0.8rem;
+    font-size: $font-form;
 
     &--on {
       @include weview-button;
       width: fit-content;
       height: 1.5rem;
 
-      font-size: 0.75rem;
+      font-size: $font-form;
 
       color: $line-color !important;
       border: 1px solid $line-color;

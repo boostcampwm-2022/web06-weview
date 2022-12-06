@@ -26,8 +26,8 @@ const TagInput = (): JSX.Element => {
   const handlePressedKey = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
       const key = e.key;
-      if (!isSubmitKey(key)) return;
-      if (tags.includes(tag)) {
+      if (!isSubmitKey(key) || tag.length === 0) return;
+      if (tags.includes(tag.trim())) {
         setTag("");
         alert("중복된 태그가 있습니다.");
         return;

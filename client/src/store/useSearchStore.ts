@@ -1,30 +1,55 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 
-import { SearchQuery } from "@/types/search";
+import { AuthorSearchFilter, SearchFilter, SearchType } from "@/types/search";
+
+export enum SEARCH_FILTER {
+  DEFAULT,
+  AUTHOR,
+  BOOKMARK,
+}
 
 interface SearchStates {
-  searchQuery: SearchQuery;
+  filter: SearchType;
+  searchType: SEARCH_FILTER;
 }
 
 interface SearchActions {
-  updateQuery: (query: SearchQuery) => void;
+  searchDefaultFilter: (query: SearchFilter) => void;
+  searchAuthorFilter: (query: AuthorSearchFilter) => void;
+  searchBookmarkFilter: () => void;
   reset: () => void;
 }
 
 interface SearchStore extends SearchStates, SearchActions {}
 
 const initialSearchStates: SearchStates = {
-  searchQuery: {
-    lastId: "-1",
-  },
+  filter: {},
+  searchType: SEARCH_FILTER.DEFAULT,
 };
 
 const useSearchStore = create<SearchStore>()(
   devtools((set) => ({
     ...initialSearchStates,
-    updateQuery: (query) => {
-      set(() => ({ searchQuery: query }));
+    searchDefaultFilter: (defaultSearchQuery) => {
+      set(() => ({
+        ...initialSearchStates,
+        filter: defaultSearchQuery,
+        searchType: SEARCH_FILTER.DEFAULT,
+      }));
+    },
+    searchAuthorFilter: (authorSearchQuery) => {
+      set({
+        ...initialSearchStates,
+        filter: authorSearchQuery,
+        searchType: SEARCH_FILTER.AUTHOR,
+      });
+    },
+    searchBookmarkFilter: () => {
+      set({
+        ...initialSearchStates,
+        searchType: SEARCH_FILTER.BOOKMARK,
+      });
     },
     reset: () => set(initialSearchStates),
   }))

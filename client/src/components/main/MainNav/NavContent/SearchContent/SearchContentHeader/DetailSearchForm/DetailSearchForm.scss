@@ -1,0 +1,64 @@
+@import "@/styles/_theme";
+
+@mixin icon-common {
+  width: $font-x-large;
+  height: $font-x-large;
+}
+
+.detail-search-form {
+  &__check-boxes {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+    height: 2.2rem;
+
+    &__title {
+      font-size: $font-medium;
+    }
+
+    &__icon {
+      &--like {
+        @include icon-common;
+        content: url("@/assets/images/labels/label-like.svg");
+      }
+
+      &--review {
+        @include icon-common;
+        content: url("@/assets/images/labels/label-comment.svg");
+      }
+    }
+
+    &__box {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+
+      &--input {
+        width: $font-medium;
+        height: $font-medium;
+        border: $border-small $line-color;
+        border-radius: $radius-small;
+
+        &.checked {
+          background-color: $primary;
+          // v 모양 아이콘 URL
+          background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+          background-repeat: no-repeat;
+          background-position: 50%;
+          background-size: 100% 100%;
+          border-color: transparent;
+        }
+      }
+
+      &--description {
+        font-size: $font-small;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: $light-gray;
+      }
+    }
+  }
+}

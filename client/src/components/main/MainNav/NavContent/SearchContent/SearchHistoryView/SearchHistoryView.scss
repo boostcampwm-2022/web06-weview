@@ -1,0 +1,45 @@
+@import "@/styles/_mixin";
+@import "@/styles/_theme";
+
+.search-content__body__histories {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2rem;
+  width: 100%;
+  height: fit-content;
+
+  &--item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+
+    &--labels {
+      @include label-provider;
+      flex: 1;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    &--remove {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: $font-medium;
+      color: $weview-white;
+      background-color: $placeholder-color;
+      border-radius: $radius-circle;
+
+      &:hover {
+        cursor: pointer;
+        background-color: $error;
+      }
+    }
+  }
+}

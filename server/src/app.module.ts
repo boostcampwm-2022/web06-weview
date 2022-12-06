@@ -6,6 +6,8 @@ import { PostModule } from './domain/post/post.module';
 import { ReviewModule } from './domain/review/review.module';
 import { LikesModule } from './domain/likes/likes.module';
 import { ReportModule } from './domain/report/report.module';
+import { UserModule } from './domain/user/user.module';
+import { BookmarkModule } from './domain/bookmark/bookmark.module';
 
 @Module({
   imports: [
@@ -23,8 +25,23 @@ import { ReportModule } from './domain/report/report.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/domain/**/*.entity.{js,ts}'],
-        synchronize: true,
+        synchronize: configService.get('NODE_ENV') !== 'prod',
         logging: configService.get('NODE_ENV') !== 'prod',
+      }),
+    }),
+    TypeOrmModule.forRootAsync({
+      name: 'mongo',
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mongodb',
+        host: configService.get('MONGO_HOST'),
+        port: configService.get('MONGO_PORT'),
+        database: configService.get('MONGO_NAME'),
+        entities: [__dirname + '/domain/**/*.mongo.{js,ts}'],
+        synchronize: configService.get('NODE_ENV') !== 'prod',
+        logging: configService.get('NODE_ENV') !== 'prod',
+        useUnifiedTopology: true,
       }),
     }),
     AuthModule,
@@ -32,6 +49,8 @@ import { ReportModule } from './domain/report/report.module';
     ReviewModule,
     LikesModule,
     ReportModule,
+    UserModule,
+    BookmarkModule,
   ],
 })
 export class AppModule {}

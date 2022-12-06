@@ -3,13 +3,12 @@
 
 @mixin weview-button {
   @include flex-center;
-  width: 4.5rem;
-  height: 2.3rem;
-  font-size: 1rem;
-  font-weight: normal;
+  width: 7.2rem;
+  height: 3.5rem;
+  font-size: $font-large;
   cursor: pointer;
   background: $weview-off-white;
-  border-radius: 0.9em;
+  border-radius: $radius-modal;
 }
 
 @mixin weview-button--bold($width, $height) {
@@ -21,7 +20,7 @@
 @mixin green-button {
   @include weview-button;
   color: $primary;
-  border: 1px solid $primary;
+  border: $border-small $primary;
 
   &:hover {
     color: $weview-off-white;
@@ -35,7 +34,7 @@
   height: $height !important;
   color: $weview-off-white;
   background-color: $primary;
-  border: 1px solid $primary;
+  border: $border-small $primary;
 }
 
 @mixin red-button {
@@ -50,15 +49,14 @@
 }
 
 @mixin nav-button {
-  width: 5rem;
-  height: 1.8rem;
-  margin-top: 1rem;
-  font-size: 0.8rem;
+  width: 8rem;
+  height: 3rem;
+  margin-top: 1.6rem;
+  font-size: $font-form;
   cursor: pointer;
   background: none;
-  background: none;
-  border: 1px solid $line-color;
-  border-radius: 0.2rem;
+  border: $border-small $line-color;
+  border-radius: $radius-small;
 
   &:focus {
     color: $line-color;

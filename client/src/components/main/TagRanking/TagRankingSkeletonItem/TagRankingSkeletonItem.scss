@@ -1,0 +1,29 @@
+@import "@/styles/theme";
+@import "@/styles/animation";
+@import "@/styles/mixin";
+
+.tag-rank-skeleton-item {
+  @include tag-rank-item-mixin;
+
+  &__content {
+    position: relative;
+    width: 23rem;
+    height: 2rem;
+    overflow: hidden;
+    vertical-align: top;
+    background: #f2f2f2;
+
+    &::before {
+      @include skeleton-load(23rem);
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      width: 3rem;
+      height: 100%;
+      content: "";
+      background: linear-gradient(to right, #f2f2f2, #ddd, #f2f2f2);
+      box-shadow: 0 0 30px 30px rgba(255, 255, 255, 0.05);
+    }
+  }
+}

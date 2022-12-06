@@ -6,19 +6,19 @@
   width: 80%;
 
   &__label {
-    margin-bottom: 0.25rem;
-    font-size: 0.8rem;
+    margin-bottom: 0.4rem;
+    font-size: $font-form;
   }
 
   &__input {
     width: 70%;
-    height: 1.75rem;
+    height: 2.5rem;
     padding-left: 0.5rem;
     margin-bottom: 1rem;
-    font-size: 0.8rem;
+    font-size: $font-form;
     font-weight: bold;
     background: none;
-    border: 1px solid $line-color;
-    border-radius: 0.25rem;
+    border: $border-small $line-color;
+    border-radius: $radius-small;
   }
 }

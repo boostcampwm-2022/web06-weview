@@ -7,8 +7,7 @@ import { PostModule } from '../src/domain/post/post.module';
 import { AuthService } from '../src/domain/auth/auth.service';
 import { WriteDto } from '../src/domain/post/dto/controller-request.dto';
 import { AuthModule } from '../src/domain/auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
-import { Category } from 'src/domain/post/category';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('Post e2e', () => {
   let app: INestApplication;
@@ -21,11 +20,26 @@ describe('Post e2e', () => {
           isGlobal: true,
         }),
         TypeOrmModule.forRoot({
+          name: 'default',
           type: 'sqlite',
           database: ':memory:',
           entities: ['src/domain/**/*.entity.ts'],
           dropSchema: true,
           synchronize: true,
+        }),
+        TypeOrmModule.forRootAsync({
+          name: 'mongo',
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) => ({
+            type: 'mongodb',
+            host: configService.get('MONGO_HOST'),
+            port: configService.get('MONGO_PORT'),
+            database: 'test',
+            entities: ['src/domain/**/*.mongo.{js,ts}'],
+            synchronize: true,
+            useUnifiedTopology: true,
+          }),
         }),
         JwtModule.register({}),
         AuthModule,
@@ -69,7 +83,6 @@ describe('Post e2e', () => {
         code: 'console.log("test")',
         language: 'javascript',
         lineCount: 30,
-        category: Category.QUESTION,
         images: [
           'http://localhost:8080/test.png',
           'http://localhost:8080/abc.jpg',
@@ -92,7 +105,6 @@ describe('Post e2e', () => {
         title: '제목',
         code: 'console.log("test")',
         language: 'javascript',
-        category: '리뷰요청',
         images: [
           'http://localhost:8080/test.png',
           'http://localhost:8080/abc.jpg',
@@ -156,7 +168,6 @@ describe('Post e2e', () => {
           lastId: -1,
           tags: '["sort", "greedy"]',
           authors: '["taehoon1229"]',
-          category: 'question',
           reviews: 3,
           likes: 2,
           detail: '어떻게',
@@ -199,7 +210,6 @@ describe('Post e2e', () => {
           lastId: -1,
           tags: '["sort", "greedy"]',
           authors: '["taehoon1229"]',
-          category: 'question',
           reviews: 3,
           likes: 2,
           detail: '           어떻게            ',
@@ -239,9 +249,5 @@ describe('Post e2e', () => {
     it('필수 파라미터 lastId 없어도 검색 가능', async () => {
       const res = await request(app.getHttpServer()).get('/posts').expect(200);
     });
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });

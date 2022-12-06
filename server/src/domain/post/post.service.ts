@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Post } from './post.entity';
 import { Image } from '../image/image.entity';
 import { Tag } from '../tag/tag.entity';
-import { LoadPostListResponseDto } from './dto/service-response.dto';
+import {
+  EachPostResponseDto,
+  LoadPostListResponseDto,
+} from './dto/service-response.dto';
 import { PostToTag } from '../post-to-tag/post-to-tag.entity';
 import { PostRepository } from './post.repository';
 import { PostToTagRepository } from '../post-to-tag/post-to-tag.repository';
@@ -25,7 +28,7 @@ export class PostService {
 
   async write(
     userId: number,
-    { title, content, category, code, language, lineCount, images, tags },
+    { title, content, code, language, lineCount, images, tags },
   ) {
     const userEntity = await this.userRepository.findOneBy({
       id: userId,
@@ -45,7 +48,6 @@ export class PostService {
     const postEntity = new Post();
     postEntity.title = title;
     postEntity.content = content;
-    postEntity.category = category;
     postEntity.code = code;
     postEntity.language = language;
     postEntity.lineCount = lineCount;
@@ -78,29 +80,27 @@ export class PostService {
     return Promise.all(postToTagEntityPromises);
   }
 
+  /**
+   * 게시물을 조회한다
+   */
   async loadPostList(
     loadPostListRequestDto: LoadPostListRequestDto,
   ): Promise<LoadPostListResponseDto> {
-    const { lastId, tags, authors, category, reviews, likesCnt, detail } =
+    const { lastId, tags, reviewCount, likeCount, details } =
       loadPostListRequestDto;
     let isLast = true;
-    const postInfosAfterFiltering = await Promise.all([
-      this.postRepository.findByIdLikesCntGreaterThanOrEqual(likesCnt),
-      this.postToTagRepository.findByContainingTags(tags),
-      this.postRepository.findBySearchWord(detail),
-      this.postRepository.findByReviewCntGreaterThanOrEqual(reviews),
-    ]);
 
-    const postIdsFiltered = this.returnPostIdByAllConditionPass(
-      postInfosAfterFiltering,
+    const postIdsFiltered = await this.filter(
+      tags,
+      reviewCount,
+      likeCount,
+      details,
     );
-
-    const result = await this.postRepository.findByIdUsingCondition(
+    const result = await this.postRepository.findByIdWithFilterResult(
       lastId,
       postIdsFiltered,
-      authors,
-      category,
     );
+
     if (this.canGetNextPost(result.length)) {
       result.pop();
       isLast = false;
@@ -112,12 +112,27 @@ export class PostService {
     return resultCnt === SEND_POST_CNT + 1;
   }
 
+  private async filter(
+    tags: string[],
+    reviewCount: number,
+    likeCount: number,
+    details: string[],
+  ) {
+    const postsThatPassEachFilter = await Promise.all([
+      this.postRepository.findByIdLikesCntGreaterThanOrEqual(likeCount),
+      this.postToTagRepository.findByContainingTags(tags),
+      this.postRepository.findByReviewCntGreaterThanOrEqual(reviewCount),
+      this.filterUsingDetails(details),
+    ]);
+    return this.mergeFilterResult(postsThatPassEachFilter);
+  }
+
   /**
    * 사용된 검색 조건이 한개도 없으면 -> null을 반환
    * 조건을 만족시키는 사용자가 한 명도 없으면 -> 비어있는 배열 []을 반환
    * 배열 안에 값이 있다면 -> 조건을 만족하는 사용자들의 id 리스트를 반환
    */
-  public returnPostIdByAllConditionPass(postInfos: any[]) {
+  public mergeFilterResult(postInfos: any[]) {
     let result;
     for (const postInfo of postInfos) {
       if (postInfo === null) {
@@ -155,5 +170,53 @@ export class PostService {
     }
     post.isDeleted = true;
     await this.postRepository.deleteUsingPost(post);
+  }
+
+  async inqueryPost(postId: number) {
+    const post = await this.postRepository.findById(postId);
+
+    if (!post || post.isDeleted) {
+      throw new PostNotFoundException();
+    }
+    return new EachPostResponseDto(post);
+  }
+
+  private async filterUsingDetails(details: string[]) {
+    if (!details || details.length < 1) {
+      return null;
+    }
+    const postsFilteringEachDetail = await Promise.all(
+      details.map((detail) => this.postRepository.filterUsingDetail(detail)),
+    );
+
+    const temp = [];
+    for (const posts of postsFilteringEachDetail) {
+      temp.push(posts.map((post) => post.postId));
+    }
+    return this.findIntersection(temp);
+  }
+
+  private findIntersection(bundles: any[][]) {
+    const result = [];
+    let smallestBundle = bundles[0];
+    for (const post of bundles) {
+      if (smallestBundle.length > post.length) {
+        smallestBundle = post;
+      }
+    }
+
+    for (const postId of smallestBundle) {
+      let isIntersect = true;
+      for (const bundle of bundles) {
+        if (!bundle.includes(postId)) {
+          isIntersect = false;
+          break;
+        }
+      }
+      if (isIntersect) {
+        result.push({ postId: postId });
+      }
+    }
+    return result;
   }
 }

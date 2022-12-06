@@ -1,7 +1,8 @@
-@import "@/styles/_theme";
-@import "@/styles/_global-style";
+@import "@/styles/theme";
+@import "@/styles/global-style";
+@import "@/styles/mixin";
 
-$line-width: 2.5rem;
+$line-width: 4rem;
 $github-dark-font-color: #c9d1d9;
 
 .code {
@@ -11,12 +12,13 @@ $github-dark-font-color: #c9d1d9;
   width: $device-editor-width;
   min-width: $device-editor-width; // review modal 에서 가로 정렬 기준 flex-shrink: 0 역할
   height: 100%;
-  border-radius: 0.25rem;
+  border-radius: $radius-small;
 
   &__textarea,
   &__present {
     left: $line-width;
     width: calc(100% - $line-width);
+    overflow-x: scroll;
     color: $weview-white;
   }
 
@@ -26,20 +28,26 @@ $github-dark-font-color: #c9d1d9;
     position: absolute;
     box-sizing: border-box;
     height: 100%;
-    padding: 0.5rem;
+    padding: 0.6rem;
     margin: 0;
-    font-size: 0.75rem;
-    white-space: pre-wrap;
+    font-size: $font-large;
 
     &::-webkit-scrollbar {
       display: none;
     }
   }
 
+  &__textarea,
+  &__present > code {
+    font-family: D2Coding, "D2 coding", monospace;
+    letter-spacing: 1px;
+  }
+
   &__textarea {
     z-index: 1;
     overflow-y: scroll;
     color: transparent;
+    white-space: nowrap;
     resize: none;
     background-color: transparent;
     border: none;
@@ -55,18 +63,6 @@ $github-dark-font-color: #c9d1d9;
   }
 
   &__lines {
-    top: 0;
-    left: 0;
-    z-index: 3;
-    display: flex;
-    width: $line-width;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    font-family: "monospace", monospace;
-    color: $weview-white;
-    text-align: end;
-    background-color: $codeblock-color;
-    border-right: 1px solid $line-color;
+    @include line-count;
   }
 }

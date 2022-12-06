@@ -1,0 +1,30 @@
+@import "@/styles/_animation";
+@import "@/styles/_theme";
+@import "@/styles/_mixin";
+@import "@/styles/_responsive";
+
+@include device {
+  .search-content {
+    @include content-fade-in;
+    @include flex-start;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    height: 100%;
+    color: $placeholder-color-dark;
+
+    & .title {
+      @include nav-content-subtitle;
+    }
+
+    & .content-title {
+      width: 100%;
+      font-size: $font-xxx-large;
+    }
+
+    &__labels {
+      @include label-provider;
+      flex-shrink: 0;
+    }
+  }
+}

@@ -1,9 +1,10 @@
-@import "@/styles/_global-style";
-@import "@/styles/_animation";
+@import "@/styles/global-style";
+@import "@/styles/theme";
+@import "@/styles/animation";
 
-$icon-default-size: 2rem;
-$icon-hover-size: 2.5rem;
-$detail-font-size: 0.75rem;
+$icon-default-size: 2.5rem;
+$icon-hover-size: 3.5rem;
+$detail-font-size: $font-small;
 
 .svg-icon-button {
   display: flex;
@@ -25,11 +26,11 @@ $detail-font-size: 0.75rem;
   &:hover {
     cursor: pointer;
 
-    & .svg-icon-button__icon {
+    .svg-icon-button__icon {
       @include fade-in-icon($icon-default-size, $icon-hover-size);
     }
 
-    & .svg-icon-button__detail {
+    .svg-icon-button__detail {
       @include fade-out-icon();
     }
   }

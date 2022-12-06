@@ -9,11 +9,9 @@ export class PostRepository extends Repository<Post> {
     super(Post, dataSource.createEntityManager());
   }
 
-  async findByIdUsingCondition(
+  async findByIdWithFilterResult(
     lastId: number,
     postIdsFiltered: number[],
-    users: string[],
-    category: string,
   ): Promise<Post[]> {
     const queryBuilder = this.createQueryBuilder('post')
       .innerJoinAndSelect('post.user', 'user')
@@ -31,22 +29,8 @@ export class PostRepository extends Repository<Post> {
       });
     }
 
-    // 이름으로 필터링
-    if (users.length !== 0) {
-      queryBuilder.andWhere('user.nickname in (:users)', {
-        users: users,
-      });
-    }
-
     if (!this.wantLatestPosts(lastId)) {
       queryBuilder.andWhere('post.id < :lastId', { lastId: lastId });
-    }
-
-    // 카테고리 필터링 (인덱스)
-    if (category) {
-      queryBuilder.andWhere('post.category = :category', {
-        category: category,
-      });
     }
 
     // 3: 서버에서 지정한 한번에 전해주는 Data의 크기
@@ -90,23 +74,44 @@ export class PostRepository extends Repository<Post> {
     return filteringCnt !== 0;
   }
 
-  findBySearchWord(detail: string): Promise<any[]> {
-    if (detail === undefined || detail.length < 0) {
-      return null; //해당 조건은 사용하지 않습니다
-    }
-    return this.createQueryBuilder('post')
-      .select('post.id', 'postId')
-      .where('post.title like :detail OR post.content like :detail', {
-        detail: `%${detail}%`,
-      })
-      .getRawMany();
-  }
-
   async deleteUsingPost(post: Post) {
     await this.createQueryBuilder()
       .update(Post)
       .set(post)
       .where('id=:id', { id: post.id })
       .execute();
+  }
+
+  findByUserId(lastId: number, userId: number) {
+    return this.createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.postToTags', 'postToTag')
+      .leftJoinAndSelect('postToTag.tag', 'tag')
+      .leftJoinAndSelect('post.images', 'image')
+      .where('post.userId = :userId', { userId: userId })
+      .take(SEND_POST_CNT + 1)
+      .orderBy('post.id', 'DESC')
+      .getMany();
+  }
+
+  async filterUsingDetail(detail: string) {
+    const queryBuilder = this.createQueryBuilder('p')
+      .innerJoinAndSelect('p.user', 'u')
+      .select('p.id', 'postId')
+      .where(
+        'u.nickname=:nickname OR p.title like :detail OR p.content like :detail',
+        { nickname: detail, detail: `%${detail}%` },
+      );
+    return queryBuilder.getRawMany();
+  }
+
+  async findById(postId: number) {
+    return this.createQueryBuilder('post')
+      .innerJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.postToTags', 'postToTag')
+      .leftJoinAndSelect('postToTag.tag', 'tag')
+      .leftJoinAndSelect('post.images', 'image')
+      .where('post.id = :postId', { postId: postId })
+      .getOne();
   }
 }

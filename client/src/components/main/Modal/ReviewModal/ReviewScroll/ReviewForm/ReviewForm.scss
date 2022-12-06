@@ -2,10 +2,10 @@
 @import "@/styles/_button.scss";
 
 // 크기 관련
-$review-form-header-height: 1.5rem;
-$review-form-content-min-height: 5rem;
-$review-form-footer-height: 1.5rem;
-$review-form-padding: 0.5rem;
+$review-form-header-height: 2.4rem;
+$review-form-content-min-height: 8rem;
+$review-form-footer-height: 2.4rem;
+$review-form-padding: 0.8rem;
 $review-form-min-height: $review-form-header-height +
   $review-form-content-min-height + $review-form-footer-height + 4 *
   $review-form-padding;
@@ -13,11 +13,11 @@ $review-form-max-height: $review-form-min-height +
   $review-form-content-min-height;
 
 // 버튼
-$review-form-button-width: 3.5rem;
+$review-form-button-width: 5.6rem;
 
-$review-form-header-gap: 0.25rem;
-$review-form-radius: 0.35rem;
-$review-form-font-size: 0.75rem;
+$review-form-header-gap: 0.4rem;
+$review-form-radius: 0.56rem;
+$review-form-font-size: 1.2rem;
 
 @mixin review-form-common-style {
   box-sizing: border-box;
@@ -28,7 +28,7 @@ $review-form-font-size: 0.75rem;
 
   width: 100%;
   height: fit-content;
-  min-height: $review-form-min-height;
+  min-height: calc($review-form-min-height + 4px);
   max-height: $review-form-max-height;
   padding: $review-form-padding;
   font-size: $review-form-font-size;
@@ -100,7 +100,6 @@ $review-form-font-size: 0.75rem;
 .not-logged-in-review-form {
   @include review-form-common-style;
   align-items: center;
-
   // 콘텐츠 중앙 정렬
   justify-content: center;
 

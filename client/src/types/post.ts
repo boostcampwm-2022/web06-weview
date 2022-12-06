@@ -1,50 +1,48 @@
 // GET /api/post API 명세를 보고 만든 타입
 import { PreSignedData, UserInfo } from "@/types/auth";
+import { InfiniteScrollResponse } from "@/types/react-query";
 
 export interface Image {
   src: string;
   name: string;
 }
 
-interface AdditionalPostInfo {
-  category?: string;
-  likes?: number;
-  isLiked?: boolean;
+export interface UploadImageProps {
+  preSignedData: PreSignedData;
+  imageUri: string;
 }
 
-export interface CodeStore {
-  code: string;
-  language: string;
-  setCode?: (code: string) => void;
-}
-
-export interface CodeInfo extends CodeStore {
-  isEditable: boolean;
-}
-
-export interface PostInfo extends AdditionalPostInfo {
+export interface PostInfo {
   id: string;
   title: string;
   content: string;
   code: string;
   language: string;
-  images: Image[];
-  updatedAt: string;
-  author: UserInfo;
   tags: string[];
+  images: Image[];
+  author: UserInfo;
+  updatedAt: string;
+  reviewCount: number;
+  likeCount: number;
+  lineCount: number;
+  isLiked?: boolean;
+  isBookmarked?: boolean;
 }
 
-export interface PostPages {
+export interface PostPages extends InfiniteScrollResponse {
   posts: PostInfo[];
-  lastId: number;
-  isLast: boolean;
+}
+
+export interface WritingRequestParams {
+  title: string;
+  content: string;
+  code: string;
+  language: string;
+  images: string[];
+  tags: string[];
+  lineCount: number;
 }
 
 export interface WritingResponse {
   message: string;
-}
-
-export interface UploadImageProps {
-  preSignedData: PreSignedData;
-  imageUri: string;
 }

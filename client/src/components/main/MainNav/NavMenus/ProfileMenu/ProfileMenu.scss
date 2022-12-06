@@ -1,0 +1,49 @@
+@import "@/styles/theme";
+@import "@/styles/mixin";
+@import "@/styles/responsive";
+
+@mixin menu-provider() {
+  box-sizing: border-box;
+  display: flex;
+
+  gap: 2rem;
+  align-items: center;
+
+  width: 100%;
+  height: 4rem;
+  color: $placeholder-color-dark;
+
+  border-radius: $radius-medium;
+
+  &:hover {
+    color: $text-color;
+    cursor: pointer;
+    background-color: $light-gray;
+  }
+
+  &__detail {
+    flex-grow: 1;
+    width: fit-content;
+    height: fit-content;
+    font-size: $font-large;
+    transition: 100ms;
+  }
+
+  &__icon {
+    flex-grow: 0;
+    width: 3rem !important;
+    height: 3rem !important;
+    margin-left: 1rem !important;
+  }
+}
+
+@include device() {
+  .nav__sidebar__profile-menu {
+    @include menu-provider;
+
+    &__icon {
+      border-radius: $radius-circle;
+      object-fit: contain;
+    }
+  }
+}

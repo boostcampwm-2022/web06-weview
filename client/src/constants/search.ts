@@ -1,22 +1,17 @@
 export const SEPARATOR: { [key: string]: string } = {
-  "#": "tag",
-  "@": "category",
-  $: "author",
-  "+": "likes",
-  "^": "reviews",
+  "#": "tags",
 };
 
-interface Description {
-  example: string;
-  description: string;
-  type: string;
-}
-
-export const DESCRIPTION: Description[] = [
-  { example: "#알고리즘", description: "태그", type: "tag" },
-  { example: "$홍길동", description: "유저 닉네임", type: "author" },
-  { example: "@리뷰요청", description: "카테고리", type: "category" },
-  { example: "+3", description: "좋아요 개수", type: "likes" },
-  { example: "^5", description: "리뷰 개수", type: "reviews" },
-  { example: "합병 정렬", description: "상세 검색", type: "detail" },
+export const LIKE_COUNT_ITEMS = [
+  { id: 0, value: 1, description: "1개 이상" },
+  { id: 1, value: 5, description: "5개 이상" },
+  { id: 2, value: 20, description: "20개 이상" },
 ];
+
+export const REVIEW_COUNT_ITEMS = [
+  { id: 0, value: 1, description: "1개 이상" },
+  { id: 1, value: 5, description: "5개 이상" },
+  { id: 2, value: 10, description: "10개 이상" },
+];
+
+export const MAX_SEARCH_HISTORY = 5;

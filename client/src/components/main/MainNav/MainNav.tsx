@@ -1,18 +1,25 @@
 import React from "react";
 
-import Filter from "@/components/main/MainNav/Filter/Filter";
-import Menu from "@/components/main/MainNav/Menu/Menu";
-import Profile from "@/components/main/MainNav/Profile/Profile";
+import NavHeader from "@/components/main/MainNav/NavHeader/NavHeader";
+import NavMenus from "@/components/main/MainNav/NavMenus/NavMenus";
+import NavFooter from "@/components/main/MainNav/NavFooter/NavFooter";
+import NavContent from "@/components/main/MainNav/NavContent/NavContent";
+import useNav from "@/hooks/useNav";
 
 import "./MainNav.scss";
 
 const MainNav = (): JSX.Element => {
+  const { isOpened } = useNav(); // Nav 를 통해 다른 창이 열려 있는지
+
   return (
-    <nav className="nav">
-      <Filter />
-      <Menu />
-      <Profile />
-    </nav>
+    <div className={`nav ${isOpened ? "opened" : "closed"}`}>
+      <nav className="nav__sidebar">
+        <NavHeader />
+        <NavMenus />
+        <NavFooter />
+      </nav>
+      <NavContent />
+    </div>
   );
 };
 

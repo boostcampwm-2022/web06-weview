@@ -1,19 +1,40 @@
 import axios from "axios";
 
 import axiosInstance from "@/apis/axios";
-import { PostPages, UploadImageProps, WritingResponse } from "@/types/post";
+import {
+  PostInfo,
+  PostPages,
+  UploadImageProps,
+  WritingRequestParams,
+  WritingResponse,
+} from "@/types/post";
 import { setQueryString } from "@/utils/queryString";
 import useSearchStore from "@/store/useSearchStore";
 import useWritingStore from "@/store/useWritingStore";
 import { getLineCount } from "@/utils/code";
-import { preventXSS } from "@/utils/regExpression";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
+import { AuthorSearchFilter, SearchFilter } from "@/types/search";
 
 export const fetchPost = async (pageParam: string): Promise<PostPages> => {
-  const { searchQuery } = useSearchStore.getState();
+  const filter = useSearchStore.getState().filter as SearchFilter;
   const { data } = await axiosInstance.get(
-    `/posts?${setQueryString({ ...searchQuery, lastId: pageParam })}`
+    `/posts?${setQueryString({ ...filter, lastId: pageParam })}`
   );
+  return data;
+};
+
+export const fetchUserPost = async (pageParam: string): Promise<PostPages> => {
+  const filter = useSearchStore.getState().filter as AuthorSearchFilter;
+  const { data } = await axiosInstance.get(
+    `/users/${filter.userId}/posts?lastId=${pageParam}`
+  );
+  return data;
+};
+
+export const fetchBookmarkPost = async (
+  pageParam: string
+): Promise<PostPages> => {
+  const { data } = await axiosInstance.get(`/bookmarks?lastId=${pageParam}`);
   return data;
 };
 
@@ -40,16 +61,16 @@ export const postWritingsAPI = async (
 ): Promise<WritingResponse> => {
   const { title, content, tags } = useWritingStore.getState();
   const { language, code } = useCodeEditorStore.getState();
-  const { data } = await axiosInstance.post("/posts", {
+  const requestParams: WritingRequestParams = {
     title,
-    category: "리뷰요청",
     content,
-    code: preventXSS(code),
+    code,
     language,
     images: imageUrls,
     tags,
     lineCount: getLineCount(code),
-  });
+  };
+  const { data } = await axiosInstance.post("/posts", requestParams);
   return data;
 };
 
@@ -63,5 +84,12 @@ export const toggleLikeAPI = async ({
   const { data } = isLiked
     ? await axiosInstance.delete(`/posts/${postId}/likes`)
     : await axiosInstance.post(`/posts/${postId}/likes`);
+  return data;
+};
+
+export const getPostItem = async (
+  postId: string
+): Promise<{ post: PostInfo }> => {
+  const { data } = await axiosInstance.get(`/posts/${postId}`);
   return data;
 };

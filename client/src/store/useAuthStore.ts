@@ -4,7 +4,6 @@ import { devtools, persist } from "zustand/middleware";
 import { MyInfo } from "@/types/auth";
 
 interface AuthStates {
-  isLoggedIn: boolean;
   myInfo: MyInfo | null;
 }
 
@@ -18,10 +17,8 @@ const useAuthStore = create<AuthStates & AuthActions>()(
     persist(
       (set) => ({
         myInfo: null,
-        isLoggedIn: false,
-        login: (userInfo) =>
-          set((state) => ({ isLoggedIn: true, myInfo: userInfo })),
-        logout: () => set((state) => ({ isLoggedIn: false })),
+        login: (userInfo) => set({ myInfo: userInfo }),
+        logout: () => set({ myInfo: null }),
       }),
       {
         name: "auth-storage",

@@ -12,7 +12,6 @@ const ReportButton = (): JSX.Element => {
   const [reported, setReported] = useState(false);
 
   const handleReport: MouseEventHandler = () => {
-    console.log("신고하기");
     setReported((reported) => !reported);
   };
 

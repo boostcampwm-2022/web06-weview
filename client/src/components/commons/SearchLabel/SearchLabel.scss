@@ -1,0 +1,44 @@
+@import "@/styles/_theme";
+@import "@/styles/_mixin";
+
+.search-label {
+  &__tags {
+    @include common-search-label;
+    @include hover-label($primary);
+    border: $border-x-small $primary;
+
+    &__icon {
+      content: url("@/assets/images/labels/label-tag.svg");
+    }
+  }
+
+  &__likes {
+    @include common-search-label;
+    @include hover-label($likes-color);
+    border: $border-x-small $likes-color;
+
+    &__icon {
+      content: url("@/assets/images/labels/label-like.svg");
+    }
+  }
+
+  &__reviews {
+    @include common-search-label;
+    @include hover-label($reviews-color);
+    border: $border-x-small $reviews-color;
+
+    &__icon {
+      content: url("@/assets/images/labels/label-comment.svg");
+    }
+  }
+
+  &__details {
+    @include common-search-label;
+    @include hover-label($detail-color);
+    border: $border-x-small $detail-color;
+
+    &__icon {
+      content: url("@/assets/images/labels/label-detail.svg");
+    }
+  }
+}

@@ -1,0 +1,40 @@
+@import "@/styles/theme";
+@import "@/styles/animation";
+
+.tag-rank {
+  right: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 30rem;
+  height: 47rem;
+  padding: 2rem;
+  margin: 6rem 3.2rem;
+  font-size: 1.3rem;
+  border: $border-small $line-color;
+  border-radius: $radius-small;
+  box-shadow: $shadow-button;
+
+  &__header {
+    margin-top: 0;
+  }
+
+  &__list {
+    width: 100%;
+    height: fit-content;
+    padding: 0 0.1rem;
+    margin: 0;
+    list-style: none;
+  }
+}
+
+.stagger {
+  .tag-rank__list li {
+    animation: stagger 1s linear;
+  }
+  @for $i from 0 through 9 {
+    .tag-rank__list li:nth-child(#{$i + 1}) {
+      animation-delay: 0.1s * $i;
+    }
+  }
+}
