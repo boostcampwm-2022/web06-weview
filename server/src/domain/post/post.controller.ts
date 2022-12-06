@@ -216,7 +216,7 @@ export class PostController {
   })
   async inqueryPost(@Param('postId') postId: number) {
     try {
-      return await this.postService.inqueryPost(postId);
+      return { post: await this.postService.inqueryPost(postId) };
     } catch (err) {
       if (err instanceof PostNotFoundException) {
         throw new NotFoundException(err.message);
