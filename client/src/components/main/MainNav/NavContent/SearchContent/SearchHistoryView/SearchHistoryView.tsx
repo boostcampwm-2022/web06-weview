@@ -60,6 +60,8 @@ const SearchHistoryView = (): JSX.Element => {
     fetchSearchHistory,
     {
       suspense: true,
+      refetchOnMount: true, // 렌더 시 업데이트
+      staleTime: 2 * 1000, // 2초
     }
   );
 
