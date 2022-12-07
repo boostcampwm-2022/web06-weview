@@ -1,13 +1,12 @@
 import React, { useCallback } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+
+import useWritingModalStore from "@/store/useWritingModalStore";
 
 import "./CloseButton.scss";
 
-import CloseIcon from "@mui/icons-material/Close";
-
-import useModalStore from "@/store/useModalStore";
-
 const CloseButton = (): JSX.Element => {
-  const { closeModal } = useModalStore((state) => ({
+  const { closeModal } = useWritingModalStore((state) => ({
     closeModal: state.closeWritingModal,
   }));
 

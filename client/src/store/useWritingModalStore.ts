@@ -1,33 +1,29 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 
-interface ModalStates {
+interface WritingModalStates {
   isWritingModalOpened: boolean;
   isSubmitModalOpened: boolean;
-  isSearchModalOpened: boolean;
 }
 
-interface ModalStore extends ModalStates, ModalActions {}
+interface WritingModalStore extends WritingModalStates, WritingModalActions {}
 
-interface ModalActions {
+interface WritingModalActions {
   openWritingModal: () => void;
   closeWritingModal: () => void;
 
   openSubmitModal: () => void;
   closeSubmitModal: () => void;
 
-  openSearchModal: () => void;
-  closeSearchModal: () => void;
-
   closeRecentOpenedModal: (() => void) | null;
   resetRecentOpenedModal: () => void;
 }
 
-const useModalStore = create<ModalStore>()(
+const useWritingModalStore = create<WritingModalStore>()(
   devtools((set) => ({
     isWritingModalOpened: false,
     openWritingModal: () =>
-      set((state: ModalStore) => ({
+      set((state: WritingModalStore) => ({
         isWritingModalOpened: true,
         closeRecentOpenedModal: state.closeWritingModal,
       })),
@@ -37,14 +33,6 @@ const useModalStore = create<ModalStore>()(
     openSubmitModal: () => set(() => ({ isSubmitModalOpened: true })),
     closeSubmitModal: () => set(() => ({ isSubmitModalOpened: false })),
 
-    isSearchModalOpened: false,
-    openSearchModal: () =>
-      set((state: ModalStore) => ({
-        isSearchModalOpened: true,
-        closeRecentOpenedModal: state.closeSearchModal,
-      })),
-    closeSearchModal: () => set(() => ({ isSearchModalOpened: false })),
-
     closeRecentOpenedModal: null,
     resetRecentOpenedModal: () =>
       set(() => ({
@@ -53,4 +41,4 @@ const useModalStore = create<ModalStore>()(
   }))
 );
 
-export default useModalStore;
+export default useWritingModalStore;

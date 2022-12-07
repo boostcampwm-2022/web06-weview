@@ -1,11 +1,11 @@
 import React, { FormEvent, useCallback } from "react";
 
-import useModalStore from "@/store/useModalStore";
+import useWritingModalStore from "@/store/useWritingModalStore";
 
 import "./SubmitButton.scss";
 
 const SubmitButton = (): JSX.Element => {
-  const { openSubmitModal } = useModalStore((state) => ({
+  const { openSubmitModal } = useWritingModalStore((state) => ({
     openSubmitModal: state.openSubmitModal,
   }));
 
