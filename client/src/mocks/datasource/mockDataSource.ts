@@ -16,7 +16,7 @@ export const mockUser: MyInfo = {
 export const posts: PostInfo[] = Array.from(Array(1024).keys()).map((id) => ({
   id: `${id}`,
   title: `제목_${id}`,
-  content: id % 2 ? LARGE_CONTENT : SMALL_CONTENT,
+  content: id % 2 === 0 ? LARGE_CONTENT : SMALL_CONTENT,
   images: [
     {
       src: "http://placeimg.com/640/640/animals",
@@ -28,7 +28,7 @@ export const posts: PostInfo[] = Array.from(Array(1024).keys()).map((id) => ({
     },
   ],
   author: {
-    id: `${id}`,
+    id: `${id % 100}`,
     nickname: `sampleUser_${id + 10000}`,
     profileUrl: "http://placeimg.com/640/640/animals",
     email: `name_${id + 10000}@gmail.com`,

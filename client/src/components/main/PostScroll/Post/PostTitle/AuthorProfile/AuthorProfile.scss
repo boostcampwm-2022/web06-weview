@@ -12,33 +12,19 @@
     height: 80%;
     border-radius: 50%;
     object-fit: contain;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   &__username {
     font-size: $font-medium;
-  }
 
-  &__follow-button {
-    @include green-button;
-    width: fit-content;
-    height: 1.4rem;
-
-    font-size: $font-form;
-
-    &--on {
-      @include weview-button;
-      width: fit-content;
-      height: 1.5rem;
-
-      font-size: $font-form;
-
-      color: $line-color !important;
-      border: 1px solid $line-color;
-
-      &:hover {
-        color: $weview-off-white !important;
-        background-color: $line-color;
-      }
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+      background-color: $light-gray;
     }
   }
 }
