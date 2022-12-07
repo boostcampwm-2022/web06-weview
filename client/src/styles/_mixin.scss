@@ -29,6 +29,9 @@
   white-space: pre-wrap;
   background-color: $codeblock-color;
   border-right: 1px solid $line-color;
+  &::-webkit-scrollbar{
+    display: none;
+  }
 }
 
 @mixin flex-middle-start {

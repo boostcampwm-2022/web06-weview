@@ -12,6 +12,7 @@ const useViewerScroll = (): UseEditorScroll => {
   const handleScrollChange = useCallback((): void => {
     if (lineRef.current !== null && preRef.current !== null) {
       lineRef.current.scrollTop = preRef.current.scrollTop;
+      preRef.current.scrollTop = lineRef.current.scrollTop;
     }
   }, [preRef, lineRef]);
   return { preRef, lineRef, handleScrollChange };

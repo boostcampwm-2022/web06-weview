@@ -3,12 +3,11 @@
 @import "@/styles/mixin";
 
 $code-line-width: 4rem;
-$review-code-width: calc($device-editor-width - $code-line-width);
+$review-code-width: calc($device-editor-width - $code-line-width - 8rem);
 $github-dark-font-color: #c9d1d9;
 
 .review-modal {
   display: flex;
-
   width: 100%;
   height: 100%;
 
@@ -18,6 +17,7 @@ $github-dark-font-color: #c9d1d9;
     width: $review-code-width;
     min-width: $review-code-width;
     height: 100%;
+
     background-color: $codeblock-color;
     border-radius: $radius-small;
 
@@ -30,13 +30,24 @@ $github-dark-font-color: #c9d1d9;
       margin: 0;
       overflow-x: hidden;
       overflow-y: auto;
-      font-size: $font-medium;
-      white-space: pre-wrap;
+
+      font-size: $font-large;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
 
     &--view {
       left: $code-line-width;
+      width: calc(100% - $code-line-width);
+      overflow-x: scroll;
       color: $github-dark-font-color;
+      letter-spacing: 1px;
+
+      & > code {
+        font-family: D2Coding, "D2 coding", monospace;
+      }
     }
 
     &--lines {
@@ -48,9 +59,9 @@ $github-dark-font-color: #c9d1d9;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: $device-review-max-width;
+    width: 40rem;
+    max-width: 50rem;
     height: 100%;
-    margin-left: calc($device-review-modal-gap / 2);
+    margin-left: calc($device-review-modal-gap);
   }
 }
