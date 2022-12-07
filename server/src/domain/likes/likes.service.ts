@@ -45,6 +45,15 @@ export class LikesService {
     return postsYouLiked.map((likesInfo) => likesInfo.postId);
   }
 
+  async getIsLiked(postId: number, userId: number) {
+    const likes = await this.likesRepository.findOneBy({
+      postId,
+      userId,
+    });
+
+    return !!likes;
+  }
+
   async countLikesCntByPostId(postId: number) {
     return this.likesRepository.count({
       where: {

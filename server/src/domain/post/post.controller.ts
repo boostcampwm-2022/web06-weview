@@ -214,9 +214,24 @@ export class PostController {
   @ApiNotFoundResponse({
     description: '유저 혹은 게시물이 존재하지 않습니다',
   })
-  async inqueryPost(@Param('postId') postId: number) {
+  async inqueryPost(@Param('postId') postId: number, @Headers() header) {
     try {
-      return { post: await this.postService.inqueryPost(postId) };
+      const post = await this.postService.inqueryPost(postId);
+      post.likesCount = await this.likesService.countLikesCntByPostId(post.id);
+
+      const token = header['authorization'];
+      if (token) {
+        const userId = this.authService.authenticate(token);
+        if (userId) {
+          post.isLiked = await this.likesService.getIsLiked(postId, userId);
+          post.isBookmarked = await this.bookmarkService.getIsBookmarked(
+            postId,
+            userId,
+          );
+        }
+      }
+
+      return { post: post };
     } catch (err) {
       if (err instanceof PostNotFoundException) {
         throw new NotFoundException(err.message);
