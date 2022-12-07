@@ -18,8 +18,8 @@ const Post = (): JSX.Element => {
     state.isWritingModalOpened,
   ]);
   const { postId } = useParams();
-  const { isFetching, data } = useQuery(
-    [QUERY_KEYS.POSTS, postId],
+  const { isLoading, data } = useQuery(
+    [QUERY_KEYS.POSTS],
     async () => await getPostItem(postId as string)
   );
 
@@ -28,7 +28,7 @@ const Post = (): JSX.Element => {
       <MainNav />
       <div className="main__content">
         <div className="post-item-box">
-          {isFetching ? (
+          {isLoading ? (
             <LoadingSpinner />
           ) : (
             <PostItem postInfo={data?.post as PostInfo} />

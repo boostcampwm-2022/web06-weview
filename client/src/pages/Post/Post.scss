@@ -10,6 +10,10 @@
   align-items: center;
   width: $main-post-bar-width;
   height: 100%;
-  margin-top: 4rem;
+  overflow-y: scroll;
   background-color: #fcfcfc;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

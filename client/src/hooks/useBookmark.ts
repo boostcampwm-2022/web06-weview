@@ -33,7 +33,9 @@ const useBookmark = ({
     {
       onMutate: async () => {
         await queryClient.cancelQueries([QUERY_KEYS.POSTS]);
-        const previousPosts = queryClient.getQueryData([QUERY_KEYS.POSTS]);
+        const previousPosts = queryClient.getQueriesData([
+          QUERY_KEYS.POSTS,
+        ])[0][1];
         setIsBookmarkedState(!isBookmarkedState);
         return { previousPosts };
       },
