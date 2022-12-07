@@ -1,0 +1,10 @@
+@import "@/styles/_theme";
+
+.modal-title {
+  width: 100%;
+  height: 3rem;
+  font-size: $font-large;
+  // div 텍스트 중앙 정렬
+  line-height: 3rem;
+  text-align: center;
+}
