@@ -8,4 +8,5 @@ $highest-z-index: 90000; // 가장 높은 z-index 값으로 설정
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.2); // 모달 배경 색
+  backdrop-filter: blur(2px);
 }

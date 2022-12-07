@@ -1,11 +1,11 @@
 import React, { ReactNode, useRef } from "react";
 
-import ModalContainer from "@/components/commons/Modal/ModalContainer/ModalContainer";
-import ModalWrapper from "@/components/commons/Modal/ModalWrapper/ModalWrapper";
-import ModalOverlay from "@/components/commons/Modal/ModalOverlay/ModalOverlay";
-import useBackgroundMouseDown from "@/hooks/useBackgroundMouseDown";
-import ModalTitle from "@/components/commons/Modal/ModalTitle/ModalTitle";
-import ModalContents from "@/components/commons/Modal/ModalContents/ModalContents";
+import ModalContainer from "@/components/commons/Modal/core/ModalContainer/ModalContainer";
+import ModalWrapper from "@/components/commons/Modal/core/ModalWrapper/ModalWrapper";
+import ModalOverlay from "@/components/commons/Modal/core/ModalOverlay/ModalOverlay";
+import useOutsideClickHandler from "@/hooks/useOutsideClickHandler";
+import ModalTitle from "@/components/commons/Modal/core/ModalTitle/ModalTitle";
+import ModalContents from "@/components/commons/Modal/core/ModalContents/ModalContents";
 
 interface ModalProps {
   title?: string;
@@ -18,7 +18,7 @@ const Modal = ({ title, onClose, children }: ModalProps): JSX.Element => {
   const handleModalClose = (): void => {
     onClose?.();
   };
-  useBackgroundMouseDown(modalRef, handleModalClose);
+  useOutsideClickHandler(modalRef, handleModalClose);
 
   return (
     <ModalContainer>
