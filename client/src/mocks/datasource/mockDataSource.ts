@@ -2,6 +2,7 @@ import { PostInfo } from "@/types/post";
 import { SearchHistory } from "@/types/search";
 import { ReviewInfo } from "@/types/review";
 import { MyInfo } from "@/types/auth";
+import { LARGE_CONTENT, SMALL_CONTENT } from "@/mocks/datasource/mockConstants";
 
 export const mockUser: MyInfo = {
   id: "1",
@@ -15,7 +16,7 @@ export const mockUser: MyInfo = {
 export const posts: PostInfo[] = Array.from(Array(1024).keys()).map((id) => ({
   id: `${id}`,
   title: `제목_${id}`,
-  content: `내용_${id}`,
+  content: id % 2 ? LARGE_CONTENT : SMALL_CONTENT,
   images: [
     {
       src: "http://placeimg.com/640/640/animals",

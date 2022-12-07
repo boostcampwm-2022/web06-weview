@@ -1,1 +1,4 @@
 export const ONE_SNAPSHOT_LINE_COUNT = 15;
+
+export const MAXIMUM_CONTENT_LENGTH = 200;
+export const MAXIMUM_CONTENT_ENTER = 2;

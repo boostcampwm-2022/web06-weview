@@ -3,11 +3,9 @@
 
 .post {
   box-sizing: border-box;
-  // 반응형 레이아웃
-  display: grid;
-  grid-template-rows: 12fr 100fr 28fr 15fr; // 가로:세로 = 1:1.54 비율 기준
-  width: 100%;
-  height: $main-post-height;
+  display: flex;
+  flex-direction: column;
+  width: 100%; // 54rem
 
   background-color: $weview-off-white;
   border: 1px solid $line-color;
