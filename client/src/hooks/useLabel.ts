@@ -1,10 +1,5 @@
-import {
-  ChangeEvent,
-  KeyboardEvent,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Label } from "@/types/search";
 import useSearchStore from "@/store/useSearchStore";
@@ -28,6 +23,7 @@ const useLabel = (): UseLabelResult => {
   const [searchDefaultFilter] = useSearchStore((state) => [
     state.searchDefaultFilter,
   ]);
+  const navigate = useNavigate();
   const [word, setWord] = useState(""); // 입력중인 검색어
   const [labels, setLabels] = useLabelStore((state) => [
     state.labels,
@@ -80,6 +76,7 @@ const useLabel = (): UseLabelResult => {
 
   // PostScroll 에 현재 검색 필터를 적용
   const handleSubmit = (): void => {
+    navigate("/");
     searchDefaultFilter(createSearchFilter(labels));
   };
 
