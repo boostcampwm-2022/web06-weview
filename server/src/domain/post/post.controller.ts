@@ -76,7 +76,7 @@ export class PostController {
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
     await this.addBookmarksToPostIfLogin(headers['authorization'], returnValue);
 
-    this.addSearchHistory(headers['authorization'], inqueryDto);
+    await this.addSearchHistory(headers['authorization'], inqueryDto);
 
     this.applyTags(tags, lastId);
 
