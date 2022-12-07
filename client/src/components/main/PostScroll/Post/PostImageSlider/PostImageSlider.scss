@@ -8,6 +8,7 @@
   &--image {
     width: inherit;
     height: inherit;
+    cursor: pointer;
     object-fit: cover; // 가로-세로 비율 맞춰서 꽉 차게
   }
 }
