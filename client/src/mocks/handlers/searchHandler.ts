@@ -8,7 +8,7 @@ const baseUrl = API_SERVER_URL;
 
 export const searchHandler = [
   rest.get(`${baseUrl}/search/histories`, (req, res, ctx) => {
-    return res(ctx.status(200), ctx.delay(1000), ctx.json(history));
+    return res(ctx.status(200), ctx.delay(500), ctx.json(history));
   }),
   rest.delete(`${baseUrl}/search/histories/:id`, (req, res, ctx) => {
     setHistory(

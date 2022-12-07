@@ -6,6 +6,7 @@ import ArrowDropDownCircleSharpIcon from "@mui/icons-material/ArrowDropDownCircl
 import useLabel from "@/hooks/useLabel";
 import { Label } from "@/types/search";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
+import useNav from "@/hooks/useNav";
 
 import DetailSearchForm from "./DetailSearchForm/DetailSearchForm";
 
@@ -20,6 +21,7 @@ const SearchContentHeader = (): JSX.Element => {
     removeLabel,
     handleSubmit,
   } = useLabel();
+  const { handleNavClose } = useNav();
   const [isDetailOpened, setIsDetailOpened] = useState(false);
 
   return (
@@ -36,7 +38,9 @@ const SearchContentHeader = (): JSX.Element => {
         />
         <SearchIcon
           className="search-content__form__submit"
-          onClick={handleSubmit}
+          onClick={() => {
+            handleNavClose(() => handleSubmit());
+          }}
         />
       </div>
       <div className="search-content__filter__header">

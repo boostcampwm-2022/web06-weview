@@ -71,10 +71,6 @@ const usePostInfiniteScroll = (): PostInfiniteScrollResults => {
         { queryKey: [QUERY_KEYS.POSTS], exact: true },
         { cancelRefetch: true }
       );
-      await queryClient.refetchQueries({
-        queryKey: [QUERY_KEYS.HISTORY],
-        type: "active",
-      });
     })();
   }, [filter, searchType]);
 
