@@ -44,6 +44,6 @@ export class SearchHistoryMongoRepository extends MongoRepository<SearchHistory>
       );
     }
 
-    this.save(searchHistory);
+    await this.save(searchHistory);
   }
 }
