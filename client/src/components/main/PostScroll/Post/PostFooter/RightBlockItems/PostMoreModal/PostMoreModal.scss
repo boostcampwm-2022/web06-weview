@@ -1,0 +1,13 @@
+@import "@/styles/_theme";
+
+.post-more {
+  width: 20rem;
+  height: fit-content;
+
+  &__menu {
+    &:last-of-type {
+      border-bottom-right-radius: $radius-modal;
+      border-bottom-left-radius: $radius-modal;
+    }
+  }
+}

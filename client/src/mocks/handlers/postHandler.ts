@@ -2,7 +2,12 @@ import { rest } from "msw";
 
 import { API_SERVER_URL } from "@/constants/env";
 import { parsePostQueryString } from "@/mocks/utils/mockUtils";
-import { posts, history, bookmarks } from "@/mocks/datasource/mockDataSource";
+import {
+  posts,
+  history,
+  bookmarks,
+  setPosts,
+} from "@/mocks/datasource/mockDataSource";
 
 // Backend API Server URL
 const baseUrl = API_SERVER_URL;
@@ -68,6 +73,11 @@ export const postHandler = [
       ctx.status(200),
       ctx.json({ message: "글 작성에 성공했습니다." })
     );
+  }),
+  rest.delete(`${baseUrl}/posts/:postId`, (req, res, ctx) => {
+    const postId = String(req.params.postId);
+    setPosts(posts.filter((postInfo) => postInfo.id !== postId));
+    return res(ctx.status(200));
   }),
   rest.post(`${baseUrl}/posts/:postId/likes`, (req, res, ctx) => {
     const postId = req.params.postId;

@@ -13,7 +13,8 @@ export const mockUser: MyInfo = {
   profileUrl: "http://placeimg.com/640/640/animals",
 };
 
-export const posts: PostInfo[] = Array.from(Array(1024).keys()).map((id) => ({
+export let posts: PostInfo[];
+posts = Array.from(Array(1024).keys()).map((id) => ({
   id: `${id}`,
   title: `제목_${id}`,
   content: id % 2 === 0 ? LARGE_CONTENT : SMALL_CONTENT,
@@ -42,6 +43,10 @@ export const posts: PostInfo[] = Array.from(Array(1024).keys()).map((id) => ({
   language: `javascript`,
   isLiked: false,
 }));
+
+export const setPosts = (newPosts: PostInfo[]): void => {
+  posts = newPosts;
+};
 
 export const reviews: ReviewInfo[] = Array.from(Array(1024).keys()).map(
   (id) => ({
