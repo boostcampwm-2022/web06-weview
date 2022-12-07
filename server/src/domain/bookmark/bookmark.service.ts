@@ -14,6 +14,7 @@ import {
 import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
 import { LoadPostListResponseDto } from '../post/dto/service-response.dto';
+import { LikesRepository } from '../likes/likes.repository';
 
 @Injectable()
 export class BookmarkService {
@@ -21,6 +22,7 @@ export class BookmarkService {
     private bookmarkRepository: BookmarkRepository,
     private userRepository: UserRepository,
     private postRepository: PostRepository,
+    private likesRepository: LikesRepository,
   ) {}
 
   async getAll(userId: number, { lastId }: BookmarkGetAllRequestDto) {
@@ -44,7 +46,14 @@ export class BookmarkService {
       isLast,
     );
 
-    postList.posts.forEach((post) => (post.isBookmarked = true));
+    const likes = await this.likesRepository.findBy({
+      userId,
+    });
+    postList.posts.forEach((post) => {
+      post.isBookmarked = true;
+      post.isLiked = likes.some((like) => like.postId === post.id);
+    });
+
     return postList;
   }
 
@@ -122,5 +131,18 @@ export class BookmarkService {
     });
 
     return postsYouBookmarked.map((bookmarkInfo) => bookmarkInfo.post.id);
+  }
+
+  async getIsBookmarked(postId: number, userId: number) {
+    const bookmark = await this.bookmarkRepository.findOneBy({
+      post: {
+        id: postId,
+      },
+      user: {
+        id: userId,
+      },
+    });
+
+    return !!bookmark;
   }
 }
