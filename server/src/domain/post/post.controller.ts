@@ -130,7 +130,7 @@ export class PostController {
     }
   }
 
-  private addSearchHistory(token, inqueryDto: InqueryDto) {
+  private async addSearchHistory(token, inqueryDto: InqueryDto) {
     if (!token) {
       return;
     }
@@ -142,7 +142,7 @@ export class PostController {
 
     // TODO 로그인한 유저가 처음 글 검색시 검색 기록을 추가해야 하기 때문에 글 검색이 있는 PostController에 위치
     // 후에 글 검색 리팩토링시 같이 리팩토링이 필요할 듯
-    this.userService.addSearchHistory(userId, inqueryDto);
+    await this.userService.addSearchHistory(userId, inqueryDto);
   }
 
   /**
