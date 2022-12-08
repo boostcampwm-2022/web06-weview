@@ -51,7 +51,10 @@ const PostMoreModal = ({
         {isDeletable && (
           <PostMoreModalMenu text={"삭제"} onClick={handleDeletePost} />
         )}
-        <PostMoreModalMenu text={"글 보기"} onClick={handleDisplaySinglePost} />
+        <PostMoreModalMenu
+          text={"게시글 보기"}
+          onClick={handleDisplaySinglePost}
+        />
         <PostMoreModalMenu text={"취소"} onClick={handleModalClose} />
       </div>
     </Modal>
