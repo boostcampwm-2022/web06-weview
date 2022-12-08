@@ -3,16 +3,14 @@ import { useParams } from "react-router-dom";
 
 import MainNav from "@/components/main/MainNav/MainNav";
 import TagRanking from "@/components/main/TagRanking/TagRanking";
-import useWritingModalStore from "@/store/useWritingModalStore";
-import useSearchStore from "@/store/useSearchStore";
 import PostScroll from "@/components/main/PostScroll/PostScroll";
+import useCommonModalStore from "@/store/useCommonModalStore";
+import useSearchStore from "@/store/useSearchStore";
 
 import "./Post.scss";
 
 const Post = (): JSX.Element => {
-  const [isWritingModalOpened] = useWritingModalStore((state) => [
-    state.isWritingModalOpened,
-  ]);
+  const isModalOpened = useCommonModalStore((state) => state.isOpened);
   const searchSingleFilter = useSearchStore(
     (state) => state.searchSingleFilter
   );
@@ -22,7 +20,7 @@ const Post = (): JSX.Element => {
   }, []);
 
   return (
-    <div className={isWritingModalOpened ? "hidden-main" : "main"}>
+    <div className={isModalOpened ? "hidden-main" : "main"}>
       <MainNav />
       <div className="main__content">
         <PostScroll />

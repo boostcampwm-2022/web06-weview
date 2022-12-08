@@ -2,18 +2,16 @@ import React from "react";
 
 import MainNav from "@/components/main/MainNav/MainNav";
 import PostScroll from "@/components/main/PostScroll/PostScroll";
-import useWritingModalStore from "@/store/useWritingModalStore";
+import useCommonModalStore from "@/store/useCommonModalStore";
 import TagRanking from "@/components/main/TagRanking/TagRanking";
 
 import "./Main.scss";
 
 const Main = (): JSX.Element => {
-  const { isWritingModalOpened } = useWritingModalStore((state) => ({
-    isWritingModalOpened: state.isWritingModalOpened,
-  }));
+  const isModalOpened = useCommonModalStore((state) => state.isOpened);
 
   return (
-    <div className={isWritingModalOpened ? "hidden-main" : "main"}>
+    <div className={isModalOpened ? "hidden-main" : "main"}>
       <MainNav />
       <div className="main__content">
         <PostScroll />

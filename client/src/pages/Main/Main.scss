@@ -51,5 +51,6 @@
   .hidden-main {
     @include main-common;
     @include main-responsive($desktop-main-width, $main-gap);
+    width: 100%;
   }
 }
