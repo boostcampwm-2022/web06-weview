@@ -1,4 +1,4 @@
-name: "[CD] DEV 서버"
+name: "[CD] DEV API 서버"
 on:
   push:
     branches:

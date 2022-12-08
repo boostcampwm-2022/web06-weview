@@ -1,4 +1,4 @@
-name: "[CD] MAIN 서버"
+name: "[CD] MAIN API 서버"
 on:
   push:
     tags:
