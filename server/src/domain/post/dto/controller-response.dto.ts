@@ -1,42 +1,42 @@
-export class InqueryUsingFilterDto {
-  posts: PostDtoUsingInqueryUsingFilter[];
+export class InquiryUsingFilterDto {
+  posts: PostDtoUsingInquiryUsingFilter[];
   lastId: number;
   isLast: boolean;
 }
 
-export class PostDtoUsingInqueryUsingFilter {
+export class PostDtoUsingInquiryUsingFilter {
   id: number;
   title: string;
   content: string;
   code: string;
   language: string;
-  images: ImageDtoUsingInqueryUsingFilter[];
+  images: ImageDtoUsingInquiryUsingFilter[];
   updatedAt: string;
-  author: AuthorDtoUsingInqueryUsingFilter[];
+  author: AuthorDtoUsingInquiryUsingFilter[];
   tags: string[];
-  reviews: ReviewDtoUsingInqueryUsingFilter[];
+  reviews: ReviewDtoUsingInquiryUsingFilter[];
 }
 
-export class ImageDtoUsingInqueryUsingFilter {
+export class ImageDtoUsingInquiryUsingFilter {
   src: string;
   name: string;
 }
 
-export class AuthorDtoUsingInqueryUsingFilter {
+export class AuthorDtoUsingInquiryUsingFilter {
   id: number;
   nickname: string;
   profileUrl: string;
   email: string;
 }
 
-export class ReviewDtoUsingInqueryUsingFilter {
+export class ReviewDtoUsingInquiryUsingFilter {
   id: number;
-  reviewers: ReviewerDtoUsingInqueryUsingFilter[];
+  reviewers: ReviewerDtoUsingInquiryUsingFilter[];
   content: string;
   updatedAt: string;
 }
 
-export class ReviewerDtoUsingInqueryUsingFilter {
+export class ReviewerDtoUsingInquiryUsingFilter {
   id: number;
   nickname: string;
   profileUrl: string;

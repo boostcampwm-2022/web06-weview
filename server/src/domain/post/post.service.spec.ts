@@ -249,7 +249,7 @@ describe('PostService', () => {
       },
     ];
 
-    const inqueryResult = {
+    const inquiryResult = {
       posts: [
         {
           id: 6,
@@ -721,14 +721,14 @@ describe('PostService', () => {
       post.isDeleted = false;
       postRepository.findById = jest.fn(() => post);
 
-      await service.inqueryPost(1);
+      await service.inquiryPost(1);
     });
 
     it('(실패) 게시물이 없는 경우', async () => {
       try {
         postRepository.findById = jest.fn(() => null);
 
-        await service.inqueryPost(1);
+        await service.inquiryPost(1);
 
         throw new Error();
       } catch (err) {
@@ -741,7 +741,7 @@ describe('PostService', () => {
         post.isDeleted = true;
         postRepository.findById = jest.fn(() => post);
 
-        await service.inqueryPost(1);
+        await service.inquiryPost(1);
         throw new Error();
       } catch (err) {
         expect(err).toBeInstanceOf(PostNotFoundException);
