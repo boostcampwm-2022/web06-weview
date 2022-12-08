@@ -9,6 +9,7 @@ interface ProgressiveImageProps {
   width: number | "100%";
   height: number | "100%";
   alt: string;
+  handleClickImage?: () => void;
 }
 
 const ProgressiveImage = ({
@@ -18,6 +19,7 @@ const ProgressiveImage = ({
   width,
   height,
   alt,
+  handleClickImage,
 }: ProgressiveImageProps): JSX.Element => {
   const { observeImage } = useImageIntersect();
 
@@ -26,6 +28,7 @@ const ProgressiveImage = ({
       ref={observeImage}
       className={`progressive-image ${className}`}
       src={placeholder}
+      onClick={handleClickImage}
       data-lazysrc={src}
       width={width}
       height={height}

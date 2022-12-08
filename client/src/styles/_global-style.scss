@@ -33,14 +33,13 @@ $desktop-main-width: $main-nav-width + $main-post-bar-width + $main-gap +
  */
 
 $default-z-index: 0;
-$modal-background-z-index: 1;
-$modal-content-z-index: 2;
-$modal-upper-z-index: 3;
+$modal-background-z-index: 20000;
+$modal-content-z-index: 20001;
+$modal-upper-z-index: 20002;
 
 /**
  * editor
  */
-
 $editing-form-width: 72rem;
 $device-editor-width: 64rem; // device 최대 너비가 69.5rem - 6:4정도 유지를 위해 40rem 선정
 $line-width: 4rem;

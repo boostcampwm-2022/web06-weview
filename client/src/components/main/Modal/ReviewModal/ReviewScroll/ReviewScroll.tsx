@@ -24,7 +24,7 @@ const ReviewScroll = ({ postId }: ReviewScrollProps): JSX.Element => {
   );
 
   return (
-    <div className="review-modal__review-container">
+    <>
       <ul className="review-list">
         {reviewInfos.map((reviewInfo: ReviewInfo) => (
           <Review key={reviewInfo.id} reviewInfo={reviewInfo} />
@@ -36,7 +36,7 @@ const ReviewScroll = ({ postId }: ReviewScrollProps): JSX.Element => {
         />
       </ul>
       <ReviewForm postId={postId} refetch={refetch} />
-    </div>
+    </>
   );
 };
 

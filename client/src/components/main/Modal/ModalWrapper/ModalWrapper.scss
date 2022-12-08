@@ -1,9 +1,26 @@
 @import "@/styles/_global-style.scss";
+@import "@/styles/theme.scss";
+@import "@/styles/responsive";
 
 .modal-background {
   position: absolute;
   top: 0;
   z-index: $modal-background-z-index !important;
+  display: flex;
+  align-items: center;
   width: 100vw;
   height: 100vh;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: $modal-content-z-index;
+  font-size: 2rem;
+  color: $line-color;
+  cursor: pointer;
+  transform: scale(2);
 }

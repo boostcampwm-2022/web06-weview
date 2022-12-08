@@ -1,7 +1,9 @@
 import React, { useCallback, MouseEvent } from "react";
+import CloseIcon from "@mui/icons-material/Close";
 
 import ModalContainer from "@/components/main/Modal/ModalContainer/ModalContainer";
 import useCommonModalStore from "@/store/useCommonModalStore";
+import { isCloseModalElement } from "@/utils/dom";
 
 import "./ModalWrapper.scss";
 
@@ -12,7 +14,8 @@ const CommonModalWrapper = (): JSX.Element => {
   ]);
 
   const clickWrapperBackGround = useCallback(
-    (e: MouseEvent<HTMLDivElement>) => {
+    (e: MouseEvent<HTMLDivElement | SVGSVGElement>) => {
+      if (!isCloseModalElement(e.target as HTMLElement)) return;
       closeModal();
     },
     []
@@ -20,8 +23,13 @@ const CommonModalWrapper = (): JSX.Element => {
 
   return modalContent !== null ? (
     <>
-      <div className="modal-background" onClick={clickWrapperBackGround} />
-      <ModalContainer content={modalContent} />
+      <div className="modal-background" onClick={clickWrapperBackGround}>
+        <CloseIcon
+          className="modal-close-button"
+          onClick={clickWrapperBackGround}
+        />
+        <ModalContainer content={modalContent} />
+      </div>
     </>
   ) : (
     <></>
