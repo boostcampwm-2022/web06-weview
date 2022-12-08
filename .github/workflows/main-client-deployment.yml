@@ -32,7 +32,7 @@ jobs:
       - name: Install Npm Clean
         run: npm ci
 
-      - name: Build Npm
+      - name: Build
         run: npm run build
 
       - name: Push to NCP Object Storage
