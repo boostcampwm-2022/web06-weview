@@ -1,20 +1,16 @@
-name: "Dev Scheduler Server Auto Deploy"
+name: "[CD] DEV 스케쥴러 서버"
 on:
-  push: # dev 브랜치 & scheduler-server 경로에 push가 일어났을 때 발생한다
+  push:
     branches:
       - dev
     paths:
       - "scheduler-server/**"
-  workflow_dispatch: # POST 요청 및 버튼 클릭 등 임의 (수동) 실행
+  workflow_dispatch:
 
 jobs:
-  deployment:
-    name: deployment
-    runs-on: ubuntu-18.04
-    defaults:
-      run:
-        working-directory: scheduler-server
-    steps: # job 구동 과정
+  build-and-push:
+    runs-on: ubuntu-20.04
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -27,20 +23,26 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
-      - name: Build and Push Docker Image # 도커 허브에 이미지 push
+      - name: Build and Push to Docker Hub
         uses: docker/build-push-action@v3
         with:
           context: ./scheduler-server
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/weview-scheduler-dev:latest
 
+  pull-and-run:
+    runs-on: ubuntu-20.04
+    needs: build-and-push
+    steps:
       - name: Deploy with SSH
         uses: appleboy/ssh-action@master
-        with: # 도커파일의 위치는 weview/server 위치 변경할지 고민해보기.
+        with:
           host: ${{ secrets.DEV_NCLOUD_HOST }}
           username: ${{ secrets.DEV_NCLOUD_USERNAME }}
           password: ${{ secrets.DEV_NCLOUD_PASSWORD }}
           port: ${{ secrets.DEV_NCLOUD_PORT }}
+          script_stop: true
           script: |
-            cd /home/weview/server && docker compose pull
-            cd /home/weview/server && docker compose up --detach
+            cd ~/server 
+            docker compose pull
+            docker compose up --detach

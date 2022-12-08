@@ -1,4 +1,4 @@
-name: "Scheduler Server Test Build (Pull Request)"
+name: "[CI] 스케쥴러 서버(Pull Request)"
 
 on:
   pull_request:
@@ -8,13 +8,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  integration: # 식별자
-    name: integration #이름
-    runs-on: ubuntu-18.04 # Job 구동되는 환경 명시
+  test-and-build:
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: scheduler-server
-    steps: # job 구동 과정
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -23,11 +22,11 @@ jobs:
         with:
           node-version: "16.x"
 
-      - name: Install npm
+      - name: Install Npm Clean
         run: npm ci
 
       - name: Test
         run: npm test
 
-      - name: Build Files
+      - name: Build
         run: npm run build

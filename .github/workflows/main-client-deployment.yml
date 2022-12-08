@@ -1,5 +1,4 @@
-name: "Main Client Auto Deploy"
-
+name: "[CD] MAIN 클라이언트"
 on:
   push:
     tags:
@@ -9,13 +8,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  deployment:
-    name: deployment
-    runs-on: ubuntu-18.04
+  build-and-push:
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: client
-    steps: # job 구동 과정
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -24,27 +22,30 @@ jobs:
         with:
           node-version: "16.x"
 
-      - name: Set .env file
+      - name: Make .env file
         run: |
           echo "VITE_SERVER_URL=${{ secrets.MAIN_VITE_SERVER_URL }}" >> .env
           echo "VITE_LOCAL_URL=${{ secrets.MAIN_VITE_LOCAL_URL }}" >> .env
           echo "VITE_GITHUB_AUTH_SERVER_URL=${{ secrets.MAIN_VITE_GITHUB_AUTH_SERVER_URL }}" >> .env
           echo "VITE_API_MODE=${{ secrets.MAIN_VITE_API_MODE }}" >> .env
-          cat .env
 
-      - name: Install npm
+      - name: Install Npm Clean
         run: npm ci
 
-      - name: Build Files
+      - name: Build
         run: npm run build
 
-      - name: Copy files to Bucket
+      - name: Push to NCP Object Storage
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.MAIN_NCLOUD_BUCKET_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.MAIN_NCLOUD_BUCKET_SECRET_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
         run: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive ./dist s3://weview
 
+  pull:
+    runs-on: ubuntu-20.04
+    needs: build-and-push
+    steps:
       - name: Deploy with SSH
         uses: appleboy/ssh-action@master
         with:
@@ -52,5 +53,4 @@ jobs:
           username: ${{ secrets.MAIN_NCLOUD_USERNAME }}
           password: ${{ secrets.MAIN_NCLOUD_PASSWORD }}
           port: ${{ secrets.MAIN_NCLOUD_PORT }}
-          script: |
-            aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive s3://weview ./client
+          script: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive s3://weview ./client
