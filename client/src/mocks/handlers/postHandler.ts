@@ -97,8 +97,12 @@ export const postHandler = [
     const userId = String(req.params.userId);
     const lastId = Number(req.url.searchParams.get("lastId")) + 1;
 
-    const filteredData = posts.filter((post) => post.author.id === userId);
-
+    const filteredData = posts
+      .filter((post) => post.author.id === userId)
+      .map((post) => ({
+        ...post,
+        isBookmarked: bookmarks.includes(Number(post.id)),
+      }));
     const isLast = filteredData.length <= lastId + SIZE;
 
     return res(
