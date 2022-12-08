@@ -1,9 +1,6 @@
-import React, { useCallback, useContext } from "react";
+import React from "react";
 
 import useImageIntersect from "@/hooks/useImageIntersect";
-import useCommonModalStore from "@/store/useCommonModalStore";
-import ReviewModal from "@/components/main/Modal/ReviewModal/ReviewModal";
-import { PostContext } from "@/components/main/PostScroll/Post/Post";
 
 interface ProgressiveImageProps {
   className: string;
@@ -12,6 +9,7 @@ interface ProgressiveImageProps {
   width: number | "100%";
   height: number | "100%";
   alt: string;
+  handleClickImage?: () => void;
 }
 
 const ProgressiveImage = ({
@@ -21,21 +19,16 @@ const ProgressiveImage = ({
   width,
   height,
   alt,
+  handleClickImage,
 }: ProgressiveImageProps): JSX.Element => {
   const { observeImage } = useImageIntersect();
-  const { id: postId, code, language } = useContext(PostContext);
-  const [openModal] = useCommonModalStore((state) => [state.openModal]);
-
-  const handleOpenReviewModal = useCallback(() => {
-    openModal(<ReviewModal postId={postId} code={code} language={language} />);
-  }, [openModal]);
 
   return (
     <img
       ref={observeImage}
       className={`progressive-image ${className}`}
       src={placeholder}
-      onClick={handleOpenReviewModal}
+      onClick={handleClickImage}
       data-lazysrc={src}
       width={width}
       height={height}
