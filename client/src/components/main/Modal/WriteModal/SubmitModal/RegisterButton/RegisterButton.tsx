@@ -8,6 +8,8 @@ import { isEmpty } from "@/utils/typeCheck";
 import { fetchPreSignedData } from "@/apis/auth";
 import useCommonModalStore from "@/store/useCommonModalStore";
 import useCodeEditor from "@/hooks/useCodeEditor";
+import { QUERY_KEYS } from "@/react-query/queryKeys";
+import { queryClient } from "@/react-query/queryClient";
 
 import "./RegisterButton.scss";
 
@@ -71,8 +73,11 @@ const RegisterButton = (): JSX.Element => {
         if (images.length === 0) {
           const url = await snapShotEachCode(1);
           await uploadPost([url]);
+        } else {
+          await uploadPost(images);
         }
-        await uploadPost(images);
+        await queryClient.invalidateQueries([QUERY_KEYS.POSTS]);
+
         resetWritingStore();
         resetCodeInfo();
         closeModal();
