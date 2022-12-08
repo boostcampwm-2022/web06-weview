@@ -24,7 +24,7 @@ const ReviewModal = ({
     <div className="review-modal">
       <div className="review-modal__code">
         <div className="review-modal__code--lines" ref={lineRef}>
-          {Array.from(Array(getLineCount(code) + 1).keys())
+          {Array.from(Array(getLineCount(code)).keys())
             .slice(1)
             .join("\n")}
         </div>
