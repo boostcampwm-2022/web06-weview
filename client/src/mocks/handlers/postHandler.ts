@@ -116,7 +116,18 @@ export const postHandler = [
     );
   }),
   rest.get(`${baseUrl}/posts/:postId`, (req, res, ctx) => {
-    const postId = req.params.postId;
-    return res(ctx.status(200), ctx.json({ post: posts[Number(postId)] }));
+    const postId = String(req.params.postId);
+
+    const filteredData = posts
+      .filter((post) => post.id === postId)
+      .map((post) => ({
+        ...post,
+        isBookmarked: bookmarks.includes(Number(post.id)),
+      }));
+
+    return res(
+      ctx.status(200),
+      ctx.json({ posts: filteredData.slice(0, 1), lastId: -1, isLast: true })
+    );
   }),
 ];

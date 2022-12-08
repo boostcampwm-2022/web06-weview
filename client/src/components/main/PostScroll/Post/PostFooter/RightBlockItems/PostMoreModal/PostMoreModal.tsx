@@ -17,6 +17,7 @@ interface PostMoreModalProps extends ModalProps {}
 const PostMoreModal = ({
   postId,
   authorId,
+  navigate,
 }: PostMoreModalProps): JSX.Element => {
   const { isLoggedIn, myInfo } = useAuth();
   const { handleModalClose } = useModal();
@@ -35,12 +36,22 @@ const PostMoreModal = ({
     })();
   };
 
+  const handleDisplaySinglePost = (): void => {
+    try {
+      navigate?.();
+      handleModalClose();
+    } catch (e: any) {
+      alert(e.message);
+    }
+  };
+
   return (
     <Modal onClose={handleModalClose} title={"메뉴를 선택해주세요."}>
       <div className="post-more">
         {isDeletable && (
           <PostMoreModalMenu text={"삭제"} onClick={handleDeletePost} />
         )}
+        <PostMoreModalMenu text={"글 보기"} onClick={handleDisplaySinglePost} />
         <PostMoreModalMenu text={"취소"} onClick={handleModalClose} />
       </div>
     </Modal>

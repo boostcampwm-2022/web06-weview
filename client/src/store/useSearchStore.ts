@@ -31,7 +31,7 @@ interface SearchActions {
 interface SearchStore extends SearchStates, SearchActions {}
 
 const initialSearchStates: SearchStates = {
-  filter: {},
+  filter: { lastId: "-1" },
   searchType: SEARCH_FILTER.DEFAULT,
 };
 

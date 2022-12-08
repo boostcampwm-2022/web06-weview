@@ -5,7 +5,7 @@ export interface Label {
   value: string;
 }
 
-export interface SingleSearchFilter {
+export interface SingleSearchFilter extends InfiniteScrollRequest {
   postId: string;
 }
 
