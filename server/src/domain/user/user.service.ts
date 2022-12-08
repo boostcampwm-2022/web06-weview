@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InqueryDto } from '../post/dto/controller-request.dto';
+import { InquiryDto } from '../post/dto/controller-request.dto';
 import { searchHistoryDto } from '../search/dto/controller-response.dto';
 import { SearchHistoryMongoRepository } from '../search/search-history.mongo.repository';
 import { PostRepository } from '../post/post.repository';
@@ -19,7 +19,7 @@ export class UserService {
     private readonly searchHistoryRepository: SearchHistoryMongoRepository,
   ) {}
 
-  async inqueryPosts(lastId: number, userId: number) {
+  async inquiryPosts(lastId: number, userId: number) {
     let isLast = true;
 
     const user = await this.userRepository.findOneBy({
@@ -53,7 +53,7 @@ export class UserService {
 
   async addSearchHistory(
     userId: number,
-    { lastId, tags, reviewCount, likeCount, details }: InqueryDto,
+    { lastId, tags, reviewCount, likeCount, details }: InquiryDto,
   ) {
     if (lastId !== -1) {
       return;

@@ -66,7 +66,7 @@ describe('UserService', () => {
         .fn()
         .mockResolvedValue([post, post, post, post]);
 
-      expect((await service.inqueryPosts(1, 1)).isLast).toBeFalsy();
+      expect((await service.inquiryPosts(1, 1)).isLast).toBeFalsy();
     });
 
     it('4개보다 작은 값을 반환하면 isLast는 true가 된다', async () => {
@@ -74,13 +74,13 @@ describe('UserService', () => {
       postRepository.findByUserId = jest
         .fn()
         .mockResolvedValue([post, post, post]);
-      expect((await service.inqueryPosts(1, 1)).isLast).toBeTruthy();
+      expect((await service.inquiryPosts(1, 1)).isLast).toBeTruthy();
     });
 
     it('존재하지 않는 사용자가 입력되면 UserNotFound 예외를 반환한다', async () => {
       try {
         userRepository.findOneBy = jest.fn().mockResolvedValue(null);
-        expect(await service.inqueryPosts(1, 1));
+        expect(await service.inquiryPosts(1, 1));
         throw new Error();
       } catch (err) {
         expect(err).toBeInstanceOf(UserNotFoundException);

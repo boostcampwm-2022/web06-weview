@@ -1,7 +1,7 @@
 import { IsInt, IsOptional, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class UserInqueryPostDto {
+export class UserInquiryPostDto {
   /**
    * lastId를 기준으로 더 최신의 데이터를 반환합니다.
    * lastId를 입력하지 않으면 가장 최신의 데이터를 반환합니다

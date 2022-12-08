@@ -24,7 +24,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { UserInqueryPostDto } from './dto/controller-request.dto';
+import { UserInquiryPostDto } from './dto/controller-request.dto';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
 import { AccessTokenGuard } from '../auth/access-token.guard';
 import { UserNotSameException } from 'src/exception/user-not-same.exception';
@@ -42,13 +42,13 @@ export class UserController {
   @ApiOkResponse()
   @ApiNotFoundResponse()
   @ApiBadRequestResponse()
-  async inqueryPosts(
+  async inquiryPosts(
     @Param('userId') userId: number,
-    @Query() requestDto: UserInqueryPostDto,
+    @Query() requestDto: UserInquiryPostDto,
   ) {
     try {
       const { lastId } = requestDto;
-      return await this.userService.inqueryPosts(lastId, userId);
+      return await this.userService.inquiryPosts(lastId, userId);
     } catch (err) {
       if (err instanceof UserNotFoundException) {
         throw new NotFoundException(err.message);
