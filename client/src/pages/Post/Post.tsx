@@ -9,17 +9,17 @@ import PostItem from "@/components/main/PostScroll/Post/Post";
 import TagRanking from "@/components/main/TagRanking/TagRanking";
 import { PostInfo } from "@/types/post";
 import LoadingSpinner from "@/components/commons/LoadingSpinner/LoadingSpinner";
-import useModalStore from "@/store/useModalStore";
+import useWritingModalStore from "@/store/useWritingModalStore";
 
 import "./Post.scss";
 
 const Post = (): JSX.Element => {
-  const [isWritingModalOpened] = useModalStore((state) => [
+  const [isWritingModalOpened] = useWritingModalStore((state) => [
     state.isWritingModalOpened,
   ]);
   const { postId } = useParams();
-  const { isFetching, data } = useQuery(
-    [QUERY_KEYS.POSTS, postId],
+  const { isLoading, data } = useQuery(
+    [QUERY_KEYS.POSTS],
     async () => await getPostItem(postId as string)
   );
 
@@ -28,7 +28,7 @@ const Post = (): JSX.Element => {
       <MainNav />
       <div className="main__content">
         <div className="post-item-box">
-          {isFetching ? (
+          {isLoading ? (
             <LoadingSpinner />
           ) : (
             <PostItem postInfo={data?.post as PostInfo} />

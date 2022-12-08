@@ -7,6 +7,7 @@ import { isEmpty } from "@/utils/typeCheck";
 import ReactRouter from "@/ReactRouter";
 import CommonModalWrapper from "@/components/main/Modal/ModalWrapper/CommonModalWrapper";
 import { useRefreshInterceptor } from "@/hooks/useRefreshInterceptor";
+import ModalProvider from "@/components/commons/Modal/ModalProvider/ModalProvider";
 
 import "./App.scss";
 
@@ -21,6 +22,7 @@ function App(): JSX.Element {
     <QueryClientProvider client={queryClient}>
       <ReactRouter />
       <CommonModalWrapper />
+      <ModalProvider />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

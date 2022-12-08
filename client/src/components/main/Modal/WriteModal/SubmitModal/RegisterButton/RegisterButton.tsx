@@ -3,7 +3,7 @@ import React from "react";
 import useWritingStore from "@/store/useWritingStore";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
 import { postWritingsAPI, uploadImage } from "@/apis/post";
-import useModalStore from "@/store/useModalStore";
+import useWritingModalStore from "@/store/useWritingModalStore";
 import { isEmpty } from "@/utils/typeCheck";
 import { fetchPreSignedData } from "@/apis/auth";
 
@@ -20,11 +20,13 @@ const RegisterButton = (): JSX.Element => {
   ]);
   const images = useCodeEditorStore((state) => state.images);
   const resetWritingStore = useWritingStore((state) => state.reset);
-  const { closeWritingModal, closeSubmitModal } = useModalStore((state) => ({
-    isOpened: state.isSubmitModalOpened,
-    closeSubmitModal: state.closeSubmitModal,
-    closeWritingModal: state.closeWritingModal,
-  }));
+  const { closeWritingModal, closeSubmitModal } = useWritingModalStore(
+    (state) => ({
+      isOpened: state.isSubmitModalOpened,
+      closeSubmitModal: state.closeSubmitModal,
+      closeWritingModal: state.closeWritingModal,
+    })
+  );
 
   // 제출 불가능 상태 판단
   const isInvalidState = (): boolean =>

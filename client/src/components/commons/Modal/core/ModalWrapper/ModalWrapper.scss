@@ -1,0 +1,19 @@
+@import "@/styles/_theme.scss";
+
+.modal-wrapper {
+  position: absolute;
+  // 좌측 상단 위치를 modal 중앙에 위치
+  top: 50%;
+  left: 50%;
+  box-sizing: border-box;
+  width: fit-content;
+  min-width: 20rem;
+  height: fit-content;
+  min-height: 5rem;
+  background-color: $weview-white;
+  border: $border-small $line-color;
+  border-radius: $radius-modal;
+  box-shadow: $shadow-box;
+  // wrapper 의 중앙을 modal 중앙에 위치
+  transform: translate(-50%, -50%);
+}

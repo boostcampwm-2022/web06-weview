@@ -28,7 +28,13 @@ const usePostLike = ({
     {
       onMutate: async () => {
         await queryClient.cancelQueries([QUERY_KEYS.POSTS]);
-        const previousPosts = queryClient.getQueryData([QUERY_KEYS.POSTS]);
+        /*
+         *  https://tanstack.com/query/v4/docs/reference/QueryClient#queryclientgetquerydata
+         *  only one QUERY_KEYS.POSTS data exists, it's key [0], value [1]
+         */
+        const previousPosts = queryClient.getQueriesData([
+          QUERY_KEYS.POSTS,
+        ])[0][1];
         setIsLikedState(!isLikedState);
         return { previousPosts };
       },

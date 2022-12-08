@@ -1,6 +1,6 @@
 import React, { useCallback, MouseEvent } from "react";
 
-import useModalStore from "@/store/useModalStore";
+import useWritingModalStore from "@/store/useWritingModalStore";
 import TagInput from "@/components/main/Modal/WriteModal/SubmitModal/TagInput/TagInput";
 import TitleInput from "@/components/main/Modal/WriteModal/SubmitModal/TitleInput/TitleInput";
 
@@ -10,7 +10,7 @@ import RegisterButton from "./RegisterButton/RegisterButton";
 import "./SubmitModal.scss";
 
 const SubmitModal = (): JSX.Element => {
-  const { isOpened, closeModal } = useModalStore((state) => ({
+  const { isOpened, closeModal } = useWritingModalStore((state) => ({
     isOpened: state.isSubmitModalOpened,
     closeModal: state.closeSubmitModal,
   }));

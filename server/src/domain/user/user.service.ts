@@ -51,7 +51,7 @@ export class UserService {
     });
   }
 
-  addSearchHistory(
+  async addSearchHistory(
     userId: number,
     { lastId, tags, reviewCount, likeCount, details }: InqueryDto,
   ) {
@@ -65,7 +65,7 @@ export class UserService {
       return;
     }
 
-    this.searchHistoryRepository.addSearchHistory(
+    await this.searchHistoryRepository.addSearchHistory(
       userId,
       tags,
       reviewCount,

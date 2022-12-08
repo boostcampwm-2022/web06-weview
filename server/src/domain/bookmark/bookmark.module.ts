@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { LikesRepository } from '../likes/likes.repository';
 import { PostRepository } from '../post/post.repository';
 import { UserRepository } from '../user/user.repository';
 import { BookmarkController } from './bookmark.controller';
@@ -12,6 +13,7 @@ import { BookmarkService } from './bookmark.service';
     BookmarkRepository,
     UserRepository,
     PostRepository,
+    LikesRepository,
   ],
   exports: [BookmarkService, BookmarkRepository],
 })

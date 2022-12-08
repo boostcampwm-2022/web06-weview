@@ -2,13 +2,13 @@ import React from "react";
 
 import MainNav from "@/components/main/MainNav/MainNav";
 import PostScroll from "@/components/main/PostScroll/PostScroll";
-import useModalStore from "@/store/useModalStore";
+import useWritingModalStore from "@/store/useWritingModalStore";
 import TagRanking from "@/components/main/TagRanking/TagRanking";
 
 import "./Main.scss";
 
 const Main = (): JSX.Element => {
-  const { isWritingModalOpened } = useModalStore((state) => ({
+  const { isWritingModalOpened } = useWritingModalStore((state) => ({
     isWritingModalOpened: state.isWritingModalOpened,
   }));
 

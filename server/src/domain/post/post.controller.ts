@@ -76,7 +76,7 @@ export class PostController {
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
     await this.addBookmarksToPostIfLogin(headers['authorization'], returnValue);
 
-    this.addSearchHistory(headers['authorization'], inqueryDto);
+    await this.addSearchHistory(headers['authorization'], inqueryDto);
 
     this.applyTags(tags, lastId);
 
@@ -130,7 +130,7 @@ export class PostController {
     }
   }
 
-  private addSearchHistory(token, inqueryDto: InqueryDto) {
+  private async addSearchHistory(token, inqueryDto: InqueryDto) {
     if (!token) {
       return;
     }
@@ -142,7 +142,7 @@ export class PostController {
 
     // TODO 로그인한 유저가 처음 글 검색시 검색 기록을 추가해야 하기 때문에 글 검색이 있는 PostController에 위치
     // 후에 글 검색 리팩토링시 같이 리팩토링이 필요할 듯
-    this.userService.addSearchHistory(userId, inqueryDto);
+    await this.userService.addSearchHistory(userId, inqueryDto);
   }
 
   /**
@@ -214,9 +214,24 @@ export class PostController {
   @ApiNotFoundResponse({
     description: '유저 혹은 게시물이 존재하지 않습니다',
   })
-  async inqueryPost(@Param('postId') postId: number) {
+  async inqueryPost(@Param('postId') postId: number, @Headers() header) {
     try {
-      return { post: await this.postService.inqueryPost(postId) };
+      const post = await this.postService.inqueryPost(postId);
+      post.likesCount = await this.likesService.countLikesCntByPostId(post.id);
+
+      const token = header['authorization'];
+      if (token) {
+        const userId = this.authService.authenticate(token);
+        if (userId) {
+          post.isLiked = await this.likesService.getIsLiked(postId, userId);
+          post.isBookmarked = await this.bookmarkService.getIsBookmarked(
+            postId,
+            userId,
+          );
+        }
+      }
+
+      return { post: post };
     } catch (err) {
       if (err instanceof PostNotFoundException) {
         throw new NotFoundException(err.message);
