@@ -29,7 +29,21 @@ export const authHandler = [
     const count = req.url.searchParams.get("imageCount");
     return res(
       ctx.status(200),
-      ctx.json(Array.from({ length: Number(count) }, () => "url"))
+      ctx.json(
+        Array.from({ length: Number(count) }, () => ({
+          url: "url",
+          fields: {
+            Key: "hahahoho",
+            ACL: "hahahoho",
+            bucket: "hahahoho",
+            "X-Amz-Algorithm": "hahahoho",
+            "X-Amz-Credential": "hahahoho",
+            "X-Amz-Date": "hahahoho",
+            "X-Amz-Signature": "hahahoho",
+            Policy: "hahahoho",
+          },
+        }))
+      )
     );
   }),
 ];
