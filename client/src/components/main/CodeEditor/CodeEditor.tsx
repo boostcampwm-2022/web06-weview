@@ -7,9 +7,9 @@ import CodeViewer from "@/components/main/CodeViewer/CodeViewer";
 import "./CodeEditor.scss";
 
 const CodeEditor = (): JSX.Element => {
-  const { code, handleCodeChange, language, lineCount } = useCodeEditor();
   const { lineRef, textRef, preRef, handleScrollChange } = useEditorScroll();
-
+  const { code, language, lineCount, handleCodeChange, handleKeyDown } =
+    useCodeEditor(textRef);
   useEffect(() => {
     textRef.current?.focus();
   }, []);
@@ -25,6 +25,7 @@ const CodeEditor = (): JSX.Element => {
         ref={textRef}
         onScroll={handleScrollChange}
         onChange={handleCodeChange}
+        onKeyDown={handleKeyDown}
         value={code}
         className="code__textarea"
         autoComplete="false"
