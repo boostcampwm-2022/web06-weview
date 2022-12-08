@@ -1,4 +1,4 @@
-name: "Main Scheduler Server Auto Deploy"
+name: "[CD] MAIN 스케쥴러 서버"
 on:
   push:
     tags:
@@ -6,13 +6,10 @@ on:
     paths:
       - "scheduler-server/**"
   workflow_dispatch:
+
 jobs:
-  deployment:
-    name: deployment
+  build-and-push:
     runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: scheduler-server
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -26,7 +23,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
-      - name: Build and Push Docker image
+      - name: Build and Push to Docker Hub
         uses: docker/build-push-action@v3
         with:
           context: ./scheduler-server
@@ -35,6 +32,10 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/weview-scheduler-main:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/weview-scheduler-main:${{github.ref_name}}
 
+  pull-and-run:
+    runs-on: ubuntu-20.04
+    needs: build-and-push
+    steps:
       - name: Deploy with SSH
         uses: appleboy/ssh-action@master
         with:
@@ -42,6 +43,8 @@ jobs:
           username: ${{ secrets.MAIN_NCLOUD_USERNAME }}
           password: ${{ secrets.MAIN_NCLOUD_PASSWORD }}
           port: ${{ secrets.MAIN_NCLOUD_PORT }}
+          script_stop: true
           script: |
-            cd /home/weview/server && docker compose pull
-            cd /home/weview/server && docker compose up --detach
+            cd ~/server 
+            docker compose pull
+            docker compose up --detach

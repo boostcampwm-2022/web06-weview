@@ -42,6 +42,10 @@ jobs:
           AWS_DEFAULT_REGION: ap-northeast-2
         run: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive ./dist s3://weview-dev
 
+  pull:
+    runs-on: ubuntu-20.04
+    needs: build-and-push
+    steps:
       - name: Deploy with SSH
         uses: appleboy/ssh-action@master
         with:
@@ -49,5 +53,4 @@ jobs:
           username: ${{ secrets.DEV_NCLOUD_USERNAME }}
           password: ${{ secrets.DEV_NCLOUD_PASSWORD }}
           port: ${{ secrets.DEV_NCLOUD_PORT }}
-          script: |
-            aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive s3://weview-dev ./client
+          script: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive s3://weview-dev ./client
