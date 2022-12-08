@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
@@ -19,8 +20,10 @@ const TagRankingItem = ({ tagInfo }: PopularTagBoxProps): JSX.Element => {
   const [searchDefaultFilter] = useSearchStore((state) => [
     state.searchDefaultFilter,
   ]);
+  const navigate = useNavigate();
   const handleItemClick = useCallback((): void => {
     searchDefaultFilter({ tags: [tagInfo.name], lastId: "-1" });
+    navigate("/");
   }, []);
 
   return (
