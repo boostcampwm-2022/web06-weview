@@ -38,6 +38,11 @@ export const fetchBookmarkPost = async (
   return data;
 };
 
+export const deletePost = async (postId: string): Promise<void> => {
+  const { data } = await axiosInstance.delete(`/posts/${postId}`);
+  return data;
+};
+
 export const uploadImage = async ({
   preSignedData,
   imageUri,

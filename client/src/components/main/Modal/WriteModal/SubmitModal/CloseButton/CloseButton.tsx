@@ -1,11 +1,11 @@
 import React from "react";
 
+import useWritingModalStore from "@/store/useWritingModalStore";
+
 import "./CloseButton.scss";
 
-import useModalStore from "@/store/useModalStore";
-
 const CloseButton = (): JSX.Element => {
-  const { closeModal } = useModalStore((state) => ({
+  const { closeModal } = useWritingModalStore((state) => ({
     closeModal: state.closeSubmitModal,
   }));
 

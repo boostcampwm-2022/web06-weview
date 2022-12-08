@@ -1,56 +1,39 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 
-interface ModalStates {
-  isWritingModalOpened: boolean;
-  isSubmitModalOpened: boolean;
-  isSearchModalOpened: boolean;
+import { MODAL_KEY, ModalContext, ModalProps } from "@/types/modal";
+
+interface ModalState {
+  modals: ModalContext[];
 }
 
-interface ModalStore extends ModalStates, ModalActions {}
-
-interface ModalActions {
-  openWritingModal: () => void;
-  closeWritingModal: () => void;
-
-  openSubmitModal: () => void;
-  closeSubmitModal: () => void;
-
-  openSearchModal: () => void;
-  closeSearchModal: () => void;
-
-  closeRecentOpenedModal: (() => void) | null;
-  resetRecentOpenedModal: () => void;
+interface ModalAction {
+  openModal: (key: MODAL_KEY, props: ModalProps) => void;
+  closeModal: () => void;
 }
 
-const useModalStore = create<ModalStore>()(
-  devtools((set) => ({
-    isWritingModalOpened: false,
-    openWritingModal: () =>
-      set((state: ModalStore) => ({
-        isWritingModalOpened: true,
-        closeRecentOpenedModal: state.closeWritingModal,
-      })),
-    closeWritingModal: () => set(() => ({ isWritingModalOpened: false })),
+const initialState: ModalState = {
+  modals: [],
+};
 
-    isSubmitModalOpened: false,
-    openSubmitModal: () => set(() => ({ isSubmitModalOpened: true })),
-    closeSubmitModal: () => set(() => ({ isSubmitModalOpened: false })),
-
-    isSearchModalOpened: false,
-    openSearchModal: () =>
-      set((state: ModalStore) => ({
-        isSearchModalOpened: true,
-        closeRecentOpenedModal: state.closeSearchModal,
-      })),
-    closeSearchModal: () => set(() => ({ isSearchModalOpened: false })),
-
-    closeRecentOpenedModal: null,
-    resetRecentOpenedModal: () =>
-      set(() => ({
-        closeRecentOpenedModal: null,
-      })),
-  }))
+const useModalStore = create<ModalState & ModalAction>()(
+  devtools(
+    (set) => ({
+      ...initialState,
+      openModal: (key, props) => {
+        set((state) => ({
+          modals: [...state.modals, { key, props }],
+        }));
+      },
+      closeModal: () =>
+        set((state) => ({
+          modals: state.modals.slice(0, -1),
+        })),
+    }),
+    {
+      name: "modal-store",
+    }
+  )
 );
 
 export default useModalStore;

@@ -1,0 +1,16 @@
+@import "@/styles/_theme";
+
+.post-more__menu {
+  box-sizing: border-box;
+  width: 100%;
+  height: 5rem;
+  padding: 0 1rem;
+  font-size: $font-large;
+  line-height: 5rem;
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $light-gray;
+  }
+}

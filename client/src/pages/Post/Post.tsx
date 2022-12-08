@@ -9,12 +9,12 @@ import PostItem from "@/components/main/PostScroll/Post/Post";
 import TagRanking from "@/components/main/TagRanking/TagRanking";
 import { PostInfo } from "@/types/post";
 import LoadingSpinner from "@/components/commons/LoadingSpinner/LoadingSpinner";
-import useModalStore from "@/store/useModalStore";
+import useWritingModalStore from "@/store/useWritingModalStore";
 
 import "./Post.scss";
 
 const Post = (): JSX.Element => {
-  const [isWritingModalOpened] = useModalStore((state) => [
+  const [isWritingModalOpened] = useWritingModalStore((state) => [
     state.isWritingModalOpened,
   ]);
   const { postId } = useParams();
