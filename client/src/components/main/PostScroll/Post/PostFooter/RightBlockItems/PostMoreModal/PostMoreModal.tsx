@@ -10,13 +10,20 @@ import "./PostMoreModal.scss";
 import { deletePost } from "@/apis/post";
 import { queryClient } from "@/react-query/queryClient";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
+import useAuth from "@/hooks/useAuth";
 
 interface PostMoreModalProps extends ModalProps {}
 
-const PostMoreModal = ({ postId }: PostMoreModalProps): JSX.Element => {
+const PostMoreModal = ({
+  postId,
+  authorId,
+}: PostMoreModalProps): JSX.Element => {
+  const { isLoggedIn, myInfo } = useAuth();
   const { handleModalClose } = useModal();
 
-  const handleRemovePost = (): void => {
+  const isDeletable = isLoggedIn && myInfo?.id === authorId;
+
+  const handleDeletePost = (): void => {
     void (async () => {
       try {
         await deletePost(postId as string);
@@ -31,7 +38,10 @@ const PostMoreModal = ({ postId }: PostMoreModalProps): JSX.Element => {
   return (
     <Modal onClose={handleModalClose} title={"메뉴를 선택해주세요."}>
       <div className="post-more">
-        <PostMoreModalMenu text={"삭제"} onClick={handleRemovePost} />
+        {isDeletable && (
+          <PostMoreModalMenu text={"삭제"} onClick={handleDeletePost} />
+        )}
+        <PostMoreModalMenu text={"취소"} onClick={handleModalClose} />
       </div>
     </Modal>
   );

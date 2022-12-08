@@ -4,6 +4,7 @@ export enum MODAL_KEY {
 
 export interface ModalProps {
   postId?: string;
+  authorId?: string;
 }
 
 export interface ModalContext {
