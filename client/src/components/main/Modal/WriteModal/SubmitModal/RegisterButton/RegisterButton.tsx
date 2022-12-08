@@ -7,10 +7,12 @@ import useWritingModalStore from "@/store/useWritingModalStore";
 import { isEmpty } from "@/utils/typeCheck";
 import { fetchPreSignedData } from "@/apis/auth";
 import useCommonModalStore from "@/store/useCommonModalStore";
+import useCodeEditor from "@/hooks/useCodeEditor";
 
 import "./RegisterButton.scss";
 
 const RegisterButton = (): JSX.Element => {
+  const { snapShotEachCode } = useCodeEditor();
   const essentialWritingStates = useWritingStore((state) => [
     state.title,
     state.content,
@@ -22,6 +24,7 @@ const RegisterButton = (): JSX.Element => {
   const { images, resetCodeInfo } = useCodeEditorStore((state) => ({
     images: state.images,
     resetCodeInfo: state.reset,
+    setImages: state.setImages,
   }));
   const resetWritingStore = useWritingStore((state) => state.reset);
   const closeModal = useCommonModalStore((state) => state.closeModal);
@@ -52,6 +55,12 @@ const RegisterButton = (): JSX.Element => {
     );
   };
 
+  const uploadPost = async (images: string[]): Promise<void> => {
+    const imageUris = await uploadImagesToS3(images);
+    const response = await postWritingsAPI(imageUris);
+    alert(response.message);
+  };
+
   // 서버에 Post 정보 등록 요청
   const handleSubmit = (): void => {
     void (async () => {
@@ -59,9 +68,11 @@ const RegisterButton = (): JSX.Element => {
         return alert("필수 정보들을 입력해주세요!");
       }
       try {
-        const imageUris = await uploadImagesToS3(images);
-        const response = await postWritingsAPI(imageUris);
-        alert(response.message);
+        if (images.length === 0) {
+          const url = await snapShotEachCode(1);
+          await uploadPost([url]);
+        }
+        await uploadPost(images);
         resetWritingStore();
         resetCodeInfo();
         closeModal();
