@@ -3,13 +3,14 @@ import React, { useEffect } from "react";
 import useEditorScroll from "@/hooks/useEditorScroll";
 import useCodeEditor from "@/hooks/useCodeEditor";
 import CodeViewer from "@/components/main/CodeViewer/CodeViewer";
+import useEditorKeyDown from "@/hooks/useEditorKeyDown";
 
 import "./CodeEditor.scss";
 
 const CodeEditor = (): JSX.Element => {
   const { lineRef, textRef, preRef, handleScrollChange } = useEditorScroll();
-  const { code, language, lineCount, handleCodeChange, handleKeyDown } =
-    useCodeEditor(textRef);
+  const { code, language, lineCount, handleCodeChange } = useCodeEditor();
+  const { handleKeyDown } = useEditorKeyDown(textRef);
   useEffect(() => {
     textRef.current?.focus();
   }, []);
