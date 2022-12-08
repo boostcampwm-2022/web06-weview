@@ -1,15 +1,11 @@
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import MainNav from "@/components/main/MainNav/MainNav";
-import { QUERY_KEYS } from "@/react-query/queryKeys";
-import { getPostItem } from "@/apis/post";
-import PostItem from "@/components/main/PostScroll/Post/Post";
 import TagRanking from "@/components/main/TagRanking/TagRanking";
-import { PostInfo } from "@/types/post";
-import LoadingSpinner from "@/components/commons/LoadingSpinner/LoadingSpinner";
 import useWritingModalStore from "@/store/useWritingModalStore";
+import useSearchStore from "@/store/useSearchStore";
+import PostScroll from "@/components/main/PostScroll/PostScroll";
 
 import "./Post.scss";
 
@@ -17,23 +13,19 @@ const Post = (): JSX.Element => {
   const [isWritingModalOpened] = useWritingModalStore((state) => [
     state.isWritingModalOpened,
   ]);
-  const { postId } = useParams();
-  const { isLoading, data } = useQuery(
-    [QUERY_KEYS.POSTS],
-    async () => await getPostItem(postId as string)
+  const searchSingleFilter = useSearchStore(
+    (state) => state.searchSingleFilter
   );
+  const { postId } = useParams();
+  useEffect(() => {
+    searchSingleFilter({ postId: postId as string });
+  }, []);
 
   return (
     <div className={isWritingModalOpened ? "hidden-main" : "main"}>
       <MainNav />
       <div className="main__content">
-        <div className="post-item-box">
-          {isLoading ? (
-            <LoadingSpinner />
-          ) : (
-            <PostItem postInfo={data?.post as PostInfo} />
-          )}
-        </div>
+        <PostScroll />
         <TagRanking />
       </div>
     </div>

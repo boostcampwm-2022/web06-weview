@@ -5,6 +5,10 @@ export interface Label {
   value: string;
 }
 
+export interface SingleSearchFilter extends InfiniteScrollRequest {
+  postId: string;
+}
+
 export interface SearchFilter extends InfiniteScrollRequest {
   details?: string[];
   tags?: string[];
@@ -24,7 +28,8 @@ export interface AuthorSearchFilter extends InfiniteScrollRequest {
 export type SearchType =
   | SearchFilter
   | BookmarkSearchFilter
-  | AuthorSearchFilter;
+  | AuthorSearchFilter
+  | SingleSearchFilter;
 
 export interface SearchHistory {
   tags: string[] | null;

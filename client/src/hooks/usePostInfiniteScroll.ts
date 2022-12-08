@@ -11,7 +11,12 @@ import { PostPages } from "@/types/post";
 import useSearchStore, { SEARCH_FILTER } from "@/store/useSearchStore";
 import { queryClient } from "@/react-query/queryClient";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
-import { fetchBookmarkPost, fetchPost, fetchUserPost } from "@/apis/post";
+import {
+  fetchBookmarkPost,
+  fetchPost,
+  fetchSinglePost,
+  fetchUserPost,
+} from "@/apis/post";
 
 const getQueryFn = async (
   pageParam: string,
@@ -23,6 +28,10 @@ const getQueryFn = async (
   }
   if (searchType === SEARCH_FILTER.BOOKMARK) {
     const postPages = await fetchBookmarkPost(pageParam);
+    return postPages;
+  }
+  if (searchType === SEARCH_FILTER.SINGLE) {
+    const postPages = await fetchSinglePost(pageParam);
     return postPages;
   }
 

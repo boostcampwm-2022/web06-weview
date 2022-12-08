@@ -1,10 +1,12 @@
-import { MouseEventHandler, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { MouseEventHandler } from "react";
+import { InfiniteData, useMutation } from "@tanstack/react-query";
 
 import { queryClient } from "@/react-query/queryClient";
 import { toggleLikeAPI } from "@/apis/post";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
-import useAuthStore from "@/store/useAuthStore";
+import useAuth from "@/hooks/useAuth";
+import { PostPages } from "@/types/post";
+import useSearchStore from "@/store/useSearchStore";
 
 interface UsePostLike {
   isLikedState: boolean;
@@ -18,10 +20,12 @@ const usePostLike = ({
   postId: string;
   isLiked?: boolean;
 }): UsePostLike => {
-  const isLoggedIn = useAuthStore((state) => state.myInfo) !== null;
-  const [isLikedState, setIsLikedState] = useState(
-    isLiked !== undefined && isLiked
-  );
+  const queryFilters = useSearchStore((state) => [
+    state.searchType,
+    state.filter,
+  ]);
+  const isLikedState = isLiked !== undefined && isLiked;
+  const { isLoggedIn } = useAuth();
 
   const toggleLikedMutation = useMutation(
     async () => await toggleLikeAPI({ postId, isLiked: isLikedState }),
@@ -32,16 +36,44 @@ const usePostLike = ({
          *  https://tanstack.com/query/v4/docs/reference/QueryClient#queryclientgetquerydata
          *  only one QUERY_KEYS.POSTS data exists, it's key [0], value [1]
          */
-        const previousPosts = queryClient.getQueriesData([
-          QUERY_KEYS.POSTS,
-        ])[0][1];
-        setIsLikedState(!isLikedState);
+        // Query Key에 따라서 보고 있는 스크롤이 다르기 때문에, 현재 보이는 화면의 스크롤바 데이터를 가져옴
+        const previousPosts = queryClient.getQueryData<InfiniteData<PostPages>>(
+          [QUERY_KEYS.POSTS, ...queryFilters]
+        );
+
+        // 현재 보고 있는 화면의 스크롤바 데이터만 낙관적으로 업데이트
+        queryClient.setQueryData<InfiniteData<PostPages>>(
+          [QUERY_KEYS.POSTS, ...queryFilters],
+          (oldPages) => {
+            if (oldPages === undefined) {
+              return { pages: [], pageParams: [] };
+            }
+            return {
+              pages: oldPages.pages.map((page) => ({
+                ...page,
+                posts: page.posts.map((postInfo) =>
+                  // 이전 데이터에서 postId 와 일치하는 부분만 상태를 바꿔서 낙관적 업데이트
+                  postInfo.id === postId
+                    ? {
+                        ...postInfo,
+                        isLiked: !isLikedState,
+                      }
+                    : postInfo
+                ),
+              })),
+              pageParams: oldPages.pageParams,
+            };
+          }
+        );
+
         return { previousPosts };
       },
-      onError: (error, _, previousPosts) => {
+      onError: (error, _, context) => {
         console.error(error);
-        queryClient.setQueryData([QUERY_KEYS.POSTS], previousPosts);
-        setIsLikedState(!isLikedState);
+        queryClient.setQueryData(
+          [QUERY_KEYS.POSTS, ...queryFilters],
+          context?.previousPosts
+        );
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries([QUERY_KEYS.POSTS]);

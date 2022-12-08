@@ -13,7 +13,11 @@ import useSearchStore from "@/store/useSearchStore";
 import useWritingStore from "@/store/useWritingStore";
 import { getLineCount } from "@/utils/code";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
-import { AuthorSearchFilter, SearchFilter } from "@/types/search";
+import {
+  AuthorSearchFilter,
+  SearchFilter,
+  SingleSearchFilter,
+} from "@/types/search";
 
 export const fetchPost = async (pageParam: string): Promise<PostPages> => {
   const filter = useSearchStore.getState().filter as SearchFilter;
@@ -35,6 +39,16 @@ export const fetchBookmarkPost = async (
   pageParam: string
 ): Promise<PostPages> => {
   const { data } = await axiosInstance.get(`/bookmarks?lastId=${pageParam}`);
+  return data;
+};
+
+export const fetchSinglePost = async (
+  pageParam: string
+): Promise<PostPages> => {
+  const filter = useSearchStore.getState().filter as SingleSearchFilter;
+  const { data } = await axiosInstance.get(
+    `/posts/${filter.postId}?lastId=${pageParam}`
+  );
   return data;
 };
 
@@ -89,12 +103,5 @@ export const toggleLikeAPI = async ({
   const { data } = isLiked
     ? await axiosInstance.delete(`/posts/${postId}/likes`)
     : await axiosInstance.post(`/posts/${postId}/likes`);
-  return data;
-};
-
-export const getPostItem = async (
-  postId: string
-): Promise<{ post: PostInfo }> => {
-  const { data } = await axiosInstance.get(`/posts/${postId}`);
   return data;
 };
