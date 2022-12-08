@@ -10,7 +10,7 @@ on:
 jobs:
   integration: # 식별자
     name: integration #이름
-    runs-on: ubuntu-18.04 # Job 구동되는 환경 명시
+    runs-on: ubuntu-20.04 # Job 구동되는 환경 명시
     defaults:
       run:
         working-directory: scheduler-server
