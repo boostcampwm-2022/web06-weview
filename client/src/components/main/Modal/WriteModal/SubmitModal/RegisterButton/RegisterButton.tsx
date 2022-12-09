@@ -7,14 +7,12 @@ import useWritingModalStore from "@/store/useWritingModalStore";
 import { isEmpty } from "@/utils/typeCheck";
 import { fetchPreSignedData } from "@/apis/auth";
 import useCommonModalStore from "@/store/useCommonModalStore";
-import useCodeEditor from "@/hooks/useCodeEditor";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
 import { queryClient } from "@/react-query/queryClient";
 
 import "./RegisterButton.scss";
 
 const RegisterButton = (): JSX.Element => {
-  const { snapShotEachCode } = useCodeEditor();
   const essentialWritingStates = useWritingStore((state) => [
     state.title,
     state.content,
@@ -70,14 +68,8 @@ const RegisterButton = (): JSX.Element => {
         return alert("필수 정보들을 입력해주세요!");
       }
       try {
-        if (images.length === 0) {
-          const url = await snapShotEachCode(1);
-          await uploadPost([url]);
-        } else {
-          await uploadPost(images);
-        }
+        await uploadPost(images);
         await queryClient.invalidateQueries([QUERY_KEYS.POSTS]);
-
         resetWritingStore();
         resetCodeInfo();
         closeModal();
