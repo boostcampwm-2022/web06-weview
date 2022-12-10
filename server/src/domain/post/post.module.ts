@@ -16,6 +16,7 @@ import { SearchHistoryMongoRepository } from '../search/search-history.mongo.rep
 import { BookmarkService } from '../bookmark/bookmark.service';
 import { BookmarkRepository } from '../bookmark/bookmark.repository';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
+import { PostSearchService } from './post-search.service';
 
 @Module({
   controllers: [PostController],
@@ -25,6 +26,7 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
     AuthService,
     UserService,
     BookmarkService,
+    PostSearchService,
     PostRepository,
     TagRepository,
     PostToTagRepository,
