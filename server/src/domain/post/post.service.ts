@@ -13,6 +13,7 @@ import { UserNotFoundException } from 'src/exception/user-not-found.exception';
 import { UserRepository } from '../user/user.repository';
 import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 
 @Injectable()
 export class PostService {
@@ -21,6 +22,7 @@ export class PostService {
     private readonly postToTagRepository: PostToTagRepository,
     private readonly tagRepository: TagRepository,
     private readonly userRepository: UserRepository,
+    private readonly esService: ElasticsearchService,
   ) {}
 
   async write(
@@ -42,7 +44,7 @@ export class PostService {
     });
 
     const postToTagEntities = await this.toPostToTagEntities(tags);
-    const postEntity = new Post();
+    let postEntity: Post = new Post();
     postEntity.title = title;
     postEntity.content = content;
     postEntity.code = code;
@@ -51,7 +53,21 @@ export class PostService {
     postEntity.user = userEntity;
     postEntity.images = imageEntities;
     postEntity.postToTags = postToTagEntities;
-    await this.postRepository.save(postEntity);
+
+    postEntity = await this.postRepository.save(postEntity);
+
+    const x = await this.esService.index<PostSearchBody>({
+      index: 'test', //TODO 이름 임시
+      body: {
+        id: postEntity.id,
+        title: postEntity.title,
+        content: postEntity.content,
+        language: postEntity.language,
+        authorId: postEntity.user.id,
+        authorNickname: postEntity.user.nickname,
+        tags: tags.join(' '),
+      },
+    });
 
     return postEntity.id;
   }
@@ -86,6 +102,45 @@ export class PostService {
     const { lastId, tags, reviewCount, likeCount, details } =
       loadPostListRequestDto;
     let isLast = true;
+
+    // tags 직렬화
+    // details 직렬화
+    // TODO 조건이 비어있을 때 사용 안하는 방법 있을까. 없을거같은데
+    const body = await this.esService.search<PostSearchResult>({
+      index: 'test', // TODO 최신순 3개
+      body: {
+        query: {
+          bool: {
+            filter: {
+              bool: {
+                must: [
+                  {
+                    match: {
+                      tags: tags.join(' '),
+                    },
+                  },
+                  {
+                    multi_match: {
+                      query: details.join(' '),
+                      fields: [
+                        'title',
+                        'content',
+                        'language',
+                        'authorNickname',
+                        'tags',
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const hits = body.hits.hits;
+    console.log('hits', hits);
 
     const postIdsFiltered = await this.filter(
       tags,
