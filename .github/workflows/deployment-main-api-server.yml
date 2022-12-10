@@ -8,43 +8,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-push:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-
-      - name: Build and Push to Docker Hub
-        uses: docker/build-push-action@v3
-        with:
-          context: ./server
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/weview-main:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/weview-main:${{github.ref_name}}
-
-  pull-and-run:
-    runs-on: ubuntu-20.04
-    needs: build-and-push
-    steps:
-      - name: Deploy with SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.MAIN_NCLOUD_HOST }}
-          username: ${{ secrets.MAIN_NCLOUD_USERNAME }}
-          password: ${{ secrets.MAIN_NCLOUD_PASSWORD }}
-          port: ${{ secrets.MAIN_NCLOUD_PORT }}
-          script_stop: true
-          script: |
-            cd ~/server 
-            docker compose pull
-            docker compose up --detach
+  reusable:
+    uses: ./.github/workflows/reusable-deployment-server.yml
+    with:
+      docker-context: server
+      docker-image-name: weview-main
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_ACCESS_TOKEN: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      NCLOUD_HOST: ${{ secrets.MAIN_NCLOUD_HOST }}
+      NCLOUD_USERNAME: ${{ secrets.MAIN_NCLOUD_USERNAME }}
+      NCLOUD_PASSWORD: ${{ secrets.MAIN_NCLOUD_PASSWORD }}
+      NCLOUD_PORT: ${{ secrets.MAIN_NCLOUD_PORT }}
