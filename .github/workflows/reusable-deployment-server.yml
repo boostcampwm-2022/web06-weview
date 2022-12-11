@@ -1,4 +1,4 @@
-name: [CD] 서버 공통
+name: "[CD] 서버 공통"
 on:
   workflow_call:
     inputs:

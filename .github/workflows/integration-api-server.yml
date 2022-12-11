@@ -1,5 +1,4 @@
 name: "[CI] API 서버(Pull Request)"
-
 on:
   pull_request:
     branches: ["main", "dev"]
@@ -8,25 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-and-build:
-    runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: server
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Use Node JS
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16.x"
-
-      - name: Install Npm Clean
-        run: npm ci
-
-      - name: Test
-        run: npm test
-
-      - name: Build
-        run: npm run build
+  reusable:
+    uses: ./.github/workflows/reusable-integration.yml
+    with:
+      working-directory: server
