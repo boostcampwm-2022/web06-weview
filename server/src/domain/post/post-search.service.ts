@@ -49,7 +49,7 @@ export class PostSearchService {
         },
       ],
       size: SEND_POST_CNT + 1,
-      index: 'test', // TODO 최신순 3개
+      index: 'test', // TODO 이름 임시
       body: {
         query: {
           bool: {
@@ -71,24 +71,23 @@ export class PostSearchService {
         searchFilter.body.query.bool.filter.bool.must.push({
           multi_match: {
             query: detail,
-            fields: [
-              'title',
-              'content',
-              'code',
-              'language',
-              'authorNickname',
-              'tags',
-            ],
+            fields: ['title', 'content', 'code', 'language', 'authorNickname'],
           },
         });
       }
     }
+
     if (tags && tags.length > 0) {
-      const q = tags.length == 1 ? tags : tags.join(' ');
+      const q =
+        tags.length == 1
+          ? `/"${tags}/"`
+          : tags.map((tag) => `/"${tag}/"`).join(' ');
+      console.log(q);
       searchFilter.body.query.bool.filter.bool.must.push({
         match: {
           tags: {
             query: q,
+
             operator: 'AND',
           },
         },
@@ -113,6 +112,7 @@ export class PostSearchService {
       });
     }
     const body = await this.esService.search<PostSearchResult>(searchFilter);
+    console.log(body.hits.hits);
     return body.hits.hits;
   }
 }
