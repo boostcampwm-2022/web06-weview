@@ -2,6 +2,9 @@ import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { AuthorDto, EachImageResponseDto } from './service-response.dto';
 import { Image } from '../../image/image.entity';
 import { User } from '../../user/user.entity';
+import { SEND_POST_CNT } from '../post.controller';
+
+const SORT_BY_ID = 0;
 
 export class SearchResponseDto {
   posts: EachSearchResponseDto[];
@@ -21,8 +24,12 @@ export class SearchResponseDto {
       );
     }
 
-    this.lastId = posts.length == 0 ? -1 : Number(posts.slice(-1)[0]._id);
+    this.lastId = posts.length == 0 ? -1 : this.getLastId(posts);
     this.isLast = isLast;
+  }
+
+  private getLastId(posts: SearchHit<PostSearchResult>[]) {
+    return posts[SEND_POST_CNT - 1].sort[SORT_BY_ID];
   }
 }
 
@@ -52,7 +59,7 @@ export class EachSearchResponseDto {
         tags = [];
       }
     }
-    this.id = Number(post._id);
+    this.id = post._source.id;
     this.title = post._source.title;
     this.content = post._source.content;
     this.code = post._source.code;

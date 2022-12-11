@@ -4,10 +4,9 @@ interface PostSearchBody {
   content: string;
   code: string;
   language: string;
-  // TODO 이미지 url은 필요없음. 가져올거임
   createdAt: Date;
   updatedAt: Date;
-  authorId: number; // TODO Author 관해서도 가져올거임
+  authorId: number;
   authorNickname: string;
   tags: string;
   likeCount: number;

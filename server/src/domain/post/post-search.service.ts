@@ -18,7 +18,6 @@ export class PostSearchService {
 
     this.esService.index<PostSearchBody>({
       index: 'test', //TODO 이름 임시
-      id: String(post.id),
       body: {
         id: post.id,
         title: post.title,
@@ -63,7 +62,7 @@ export class PostSearchService {
       },
     };
     if (lastId !== -1) {
-      searchFilter.from = lastId;
+      searchFilter.search_after = [lastId];
     }
 
     if (details && details.length > 0) {
@@ -82,7 +81,6 @@ export class PostSearchService {
         tags.length == 1
           ? `/"${tags}/"`
           : tags.map((tag) => `/"${tag}/"`).join(' ');
-      console.log(q);
       searchFilter.body.query.bool.filter.bool.must.push({
         match: {
           tags: {

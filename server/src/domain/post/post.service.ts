@@ -122,7 +122,6 @@ export class PostService {
   ): Promise<SearchResponseDto> {
     let isLast = true;
     const results = await this.postSearchService.search(loadPostListRequestDto);
-    results.reverse();
     if (this.canGetNextPost(results.length)) {
       results.pop();
       isLast = false;
@@ -139,7 +138,7 @@ export class PostService {
       );
       images.push(
         this.imageRepository.findBy({
-          postId: Number(result._id),
+          postId: Number(result._source['id']),
         }),
       );
     }
