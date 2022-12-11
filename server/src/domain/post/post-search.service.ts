@@ -31,6 +31,7 @@ export class PostSearchService {
         authorNickname: post.user.nickname,
         tags: tagValue,
         lineCount: post.lineCount,
+        reviewCount: post.reviewCount,
         likeCount: post.likeCount,
       },
     });

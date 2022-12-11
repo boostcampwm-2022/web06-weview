@@ -11,6 +11,7 @@ interface PostSearchBody {
   authorNickname: string;
   tags: string;
   likeCount: number;
+  reviewCount: number;
   lineCount: number;
 }
 

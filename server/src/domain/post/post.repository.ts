@@ -119,4 +119,31 @@ export class PostRepository extends Repository<Post> {
       .where('post.id = :postId', { postId: postId })
       .getOne();
   }
+
+  increaseLikeCount(post: Post) {
+    this.createQueryBuilder()
+      .update(Post)
+      .set({ likeCount: () => 'likeCount + 1' })
+      .where('id=:id', { id: post.id })
+      .execute();
+  }
+
+  decreaseLikeCount(post: Post) {
+    if (post.likeCount <= 0) {
+      return;
+    }
+    this.createQueryBuilder()
+      .update(Post)
+      .set({ likeCount: () => 'likeCount - 1' })
+      .where('id=:id', { id: post.id })
+      .execute();
+  }
+
+  increaseReviewCount(post: Post) {
+    this.createQueryBuilder()
+      .update(Post)
+      .set({ reviewCount: () => 'reviewCount + 1' })
+      .where('id=:id', { id: post.id })
+      .execute();
+  }
 }

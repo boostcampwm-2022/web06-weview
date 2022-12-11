@@ -45,7 +45,7 @@ export class Post extends BaseTimeEntity {
   likeCount: number;
 
   @Column({ default: 0 })
-  commentCount: number;
+  reviewCount: number;
 
   @Column({ length: 255, default: '[]' })
   tags: string;

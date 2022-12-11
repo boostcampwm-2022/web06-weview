@@ -78,8 +78,6 @@ export class PostController {
       new LoadPostListRequestDto(lastId, tags, reviewCount, likeCount, details),
     );
 
-    const posts = returnValue.posts;
-
     // TODO 로그인 시 해당 작업 잘 동작하나 검사하기
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
     await this.addBookmarksToPostIfLogin(headers['authorization'], returnValue);
