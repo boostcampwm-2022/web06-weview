@@ -1,0 +1,25 @@
+name: "[CD] DEV 클라이언트"
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - "client/**"
+  workflow_dispatch:
+
+jobs:
+  reusable:
+    uses: ./.github/workflows/reusable-deployment-client.yml
+    with:
+      bucket-name: weview-dev
+    secrets:
+      VITE_SERVER_URL: ${{ secrets.DEV_VITE_SERVER_URL }}
+      VITE_LOCAL_URL: ${{ secrets.DEV_LOCAL_URL }}
+      VITE_GITHUB_AUTH_SERVER_URL: ${{ secrets.DEV_GITHUB_AUTH_SERVER_URL }}
+      VITE_API_MODE: ${{ secrets.DEV_VITE_API_MODE }}
+      NCLOUD_BUCKET_ACCESS_KEY: ${{ secrets.DEV_NCLOUD_BUCKET_ACCESS_KEY }}
+      NCLOUD_BUCKET_SECRET_KEY: ${{ secrets.DEV_NCLOUD_BUCKET_SECRET_KEY }}
+      NCLOUD_HOST: ${{ secrets.DEV_NCLOUD_HOST }}
+      NCLOUD_USERNAME: ${{ secrets.DEV_NCLOUD_USERNAME }}
+      NCLOUD_PASSWORD: ${{ secrets.DEV_NCLOUD_PASSWORD }}
+      NCLOUD_PORT: ${{ secrets.DEV_NCLOUD_PORT }}

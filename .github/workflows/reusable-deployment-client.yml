@@ -1,11 +1,32 @@
-name: "[CD] DEV 클라이언트"
+name: "[CD] 클라이언트 공통"
 on:
-  push:
-    branches:
-      - dev
-    paths:
-      - "client/**"
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      bucket-name:
+        description: "버킷 이름"
+        required: true
+        type: string
+    secrets:
+      VITE_SERVER_URL:
+        required: true
+      VITE_LOCAL_URL:
+        required: true
+      VITE_GITHUB_AUTH_SERVER_URL:
+        required: true
+      VITE_API_MODE:
+        required: true
+      NCLOUD_BUCKET_ACCESS_KEY:
+        required: true
+      NCLOUD_BUCKET_SECRET_KEY:
+        required: true
+      NCLOUD_HOST:
+        required: true
+      NCLOUD_USERNAME:
+        required: true
+      NCLOUD_PASSWORD:
+        required: true
+      NCLOUD_PORT:
+        required: true
 
 jobs:
   build-and-push:
@@ -18,7 +39,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Use Node JS
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "16.x"
 
@@ -40,7 +61,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_NCLOUD_BUCKET_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_NCLOUD_BUCKET_SECRET_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
-        run: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive ./dist s3://weview-dev
+        run: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive ./dist s3://${{ inputs.bucket-name }}
 
   pull:
     runs-on: ubuntu-20.04
@@ -53,4 +74,4 @@ jobs:
           username: ${{ secrets.DEV_NCLOUD_USERNAME }}
           password: ${{ secrets.DEV_NCLOUD_PASSWORD }}
           port: ${{ secrets.DEV_NCLOUD_PORT }}
-          script: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive s3://weview-dev ./client
+          script: aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp --recursive s3://${{ inputs.bucket-name }} ./client
