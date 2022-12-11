@@ -4,8 +4,8 @@ import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined
 import { LANGUAGES } from "@/constants/options";
 import useCodeEditorStore from "@/store/useCodeEditorStore";
 import { ONE_SNAPSHOT_LINE_COUNT } from "@/constants/code";
+import { useSnapshotCodeBlock } from "@/hooks/useSnapshotCodeBlock";
 import { getLineCount } from "@/utils/code";
-import useCodeEditor from "@/hooks/useCodeEditor";
 import { wait } from "@/utils/async";
 
 import "./LanguageSelector.scss";
@@ -19,7 +19,7 @@ const LanguageSelector = (): JSX.Element => {
       code: state.code,
       resetImages: state.resetImages,
     }));
-  const { snapShotEachCode } = useCodeEditor();
+  const { snapshotCodeBlock } = useSnapshotCodeBlock();
   const selectLanguage = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
     setLanguage(e.target.value);
     const requiredSnapshotCount = Math.floor(
@@ -30,7 +30,7 @@ const LanguageSelector = (): JSX.Element => {
     void (async () => {
       await wait(1000);
       for (let idx = 1; idx <= requiredSnapshotCount; idx++)
-        await snapShotEachCode(idx);
+        await snapshotCodeBlock(idx);
     })();
   }, []);
 
