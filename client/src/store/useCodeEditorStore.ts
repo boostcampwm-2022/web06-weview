@@ -14,6 +14,7 @@ interface CodeEditorAction {
   setCode: (code: string) => void;
   setImages: (imageSrc: string) => void;
   removeImage: (imageIdx: number) => void;
+  resetImages: () => void;
   reset: () => void;
 }
 
@@ -42,6 +43,7 @@ const useCodeEditorStore = create<CodeEditorState & CodeEditorAction>()(
               ),
             };
           }),
+        resetImages: () => set(() => ({ images: [] })),
         reset: () => {
           set(initialCodeEditorState);
         },

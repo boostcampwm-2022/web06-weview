@@ -11,7 +11,6 @@ interface UseCodeEditor {
   language: string;
   handleCodeChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   lineCount: number;
-  snapShotEachCode: (idx: number) => Promise<string>;
 }
 
 const useCodeEditor = (): UseCodeEditor => {
@@ -50,15 +49,6 @@ const useCodeEditor = (): UseCodeEditor => {
     [images]
   );
 
-  const snapShotEachCode = async (idx: number): Promise<string> => {
-    const $code = document.querySelector(`.chunked-${idx}`);
-    const imgUrl = await domtoimage.toJpeg($code as HTMLElement, IMAGE_OPTIONS);
-    return await new Promise((resolve, reject) => {
-      setImages(imgUrl);
-      resolve(imgUrl);
-    });
-  };
-
   const snapShotCode = useCallback(
     (requiredSnapshotCount: number) => {
       const domToImagePromises = [];
@@ -96,7 +86,6 @@ const useCodeEditor = (): UseCodeEditor => {
     handleCodeChange,
     language,
     lineCount,
-    snapShotEachCode,
   };
 };
 
