@@ -17,7 +17,7 @@ const SearchContentRecommend = (): JSX.Element => {
     },
     {
       type: "tags",
-      value: "Javascript",
+      value: "javascript",
     },
     {
       type: "tags",
