@@ -17,6 +17,7 @@ import { BookmarkService } from '../bookmark/bookmark.service';
 import { BookmarkRepository } from '../bookmark/bookmark.repository';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { PostSearchService } from './post-search.service';
+import { ImageRepository } from '../image/image.repository';
 
 @Module({
   controllers: [PostController],
@@ -35,6 +36,7 @@ import { PostSearchService } from './post-search.service';
     LikesRepository,
     SearchHistoryMongoRepository,
     PostSubscriber,
+    ImageRepository,
   ],
   imports: [
     HttpModule,

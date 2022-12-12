@@ -1,44 +1,59 @@
-export class InquiryUsingFilterDto {
-  posts: PostDtoUsingInquiryUsingFilter[];
+import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import { AuthorDto, EachImageResponseDto } from './service-response.dto';
+import { Image } from '../../image/image.entity';
+import { User } from '../../user/user.entity';
+
+export class SearchResponseDto {
+  posts: EachSearchResponseDto[];
   lastId: number;
   isLast: boolean;
+
+  constructor(
+    posts: SearchHit<PostSearchResult>[],
+    authors: User[],
+    imagesList: Image[][],
+    isLast: boolean,
+  ) {
+    this.posts = [];
+    for (let i = 0; i < posts.length; i++) {
+      this.posts.push(
+        new EachSearchResponseDto(posts[i], authors[i], imagesList[i]),
+      );
+    }
+
+    this.lastId = posts.length == 0 ? -1 : Number(posts.slice(-1)[0]._id);
+    this.isLast = isLast;
+  }
 }
 
-export class PostDtoUsingInquiryUsingFilter {
+export class EachSearchResponseDto {
   id: number;
   title: string;
   content: string;
   code: string;
   language: string;
-  images: ImageDtoUsingInquiryUsingFilter[];
-  updatedAt: string;
-  author: AuthorDtoUsingInquiryUsingFilter[];
+  images: EachImageResponseDto[];
+  updatedAt: Date;
+  author: AuthorDto;
   tags: string[];
-  reviews: ReviewDtoUsingInquiryUsingFilter[];
-}
+  isLiked: boolean;
+  isBookmarked: boolean;
+  likesCount: number;
+  lineCount: number;
 
-export class ImageDtoUsingInquiryUsingFilter {
-  src: string;
-  name: string;
-}
-
-export class AuthorDtoUsingInquiryUsingFilter {
-  id: number;
-  nickname: string;
-  profileUrl: string;
-  email: string;
-}
-
-export class ReviewDtoUsingInquiryUsingFilter {
-  id: number;
-  reviewers: ReviewerDtoUsingInquiryUsingFilter[];
-  content: string;
-  updatedAt: string;
-}
-
-export class ReviewerDtoUsingInquiryUsingFilter {
-  id: number;
-  nickname: string;
-  profileUrl: string;
-  email: string;
+  constructor(post: any, author, images) {
+    this.id = Number(post._id);
+    this.title = post._source.title;
+    this.content = post._source.content;
+    this.code = post._source.code;
+    this.language = post._source.language;
+    this.updatedAt = post._source.updatedat;
+    this.tags = JSON.parse(post._source.tags);
+    this.isLiked = false;
+    this.isBookmarked = false;
+    this.likesCount = post._source.likecount;
+    this.lineCount = post._source.linecount;
+    this.author = new AuthorDto(author);
+    this.images = images.map((image) => new EachImageResponseDto(image));
+  }
 }

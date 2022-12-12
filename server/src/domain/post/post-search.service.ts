@@ -15,8 +15,10 @@ export class PostSearchService {
       tags.sort();
       tagValue = tags.join(' ');
     }
-    const x = await this.esService.index<PostSearchBody>({
+
+    this.esService.index<PostSearchBody>({
       index: 'test', //TODO 이름 임시
+      id: String(post.id),
       body: {
         id: post.id,
         title: post.title,
@@ -29,9 +31,9 @@ export class PostSearchService {
         authorNickname: post.user.nickname,
         tags: tagValue,
         lineCount: post.lineCount,
+        likeCount: post.likeCount,
       },
     });
-    console.log('indexPost ', x);
   }
 
   async search(loadPostListRequestDto: LoadPostListRequestDto) {
@@ -40,7 +42,7 @@ export class PostSearchService {
     const searchFilter: any = {
       sort: [
         {
-          createdAt: {
+          id: {
             order: 'desc',
           },
         },
@@ -64,8 +66,6 @@ export class PostSearchService {
     }
 
     if (details && details.length > 0) {
-      // const q = details.length == 1 ? details : details.join(' ');
-      // console.log(q);
       for (const detail of details) {
         searchFilter.body.query.bool.filter.bool.must.push({
           multi_match: {
@@ -93,12 +93,25 @@ export class PostSearchService {
         },
       });
     }
-
+    if (reviewCount && reviewCount >= 1) {
+      searchFilter.body.query.bool.filter.bool.must.push({
+        range: {
+          reviewCount: {
+            gte: reviewCount,
+          },
+        },
+      });
+    }
+    if (likeCount && likeCount >= 1) {
+      searchFilter.body.query.bool.filter.bool.must.push({
+        range: {
+          likeCount: {
+            gte: likeCount,
+          },
+        },
+      });
+    }
     const body = await this.esService.search<PostSearchResult>(searchFilter);
-    // TODO 이따 searchFilter로 내용 갈아끼기
-    const result = body.hits.hits;
-    console.log('hits', result); //결과
-
-    return result;
+    return body.hits.hits;
   }
 }

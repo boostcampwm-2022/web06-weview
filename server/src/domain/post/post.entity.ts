@@ -40,4 +40,16 @@ export class Post extends BaseTimeEntity {
     cascade: ['insert'],
   })
   postToTags: PostToTag[];
+
+  @Column({ default: 0 })
+  likeCount: number;
+
+  @Column({ default: 0 })
+  commentCount: number;
+
+  @Column({ length: 255, default: '[]' })
+  tags: string;
+
+  @Column({ length: 24, default: '' })
+  userNickname: string;
 }

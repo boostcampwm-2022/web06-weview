@@ -14,6 +14,8 @@ import { UserRepository } from '../user/user.repository';
 import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
 import { PostSearchService } from './post-search.service';
+import { SearchResponseDto } from './dto/controller-response.dto';
+import { ImageRepository } from '../image/image.repository';
 
 @Injectable()
 export class PostService {
@@ -23,12 +25,15 @@ export class PostService {
     private readonly tagRepository: TagRepository,
     private readonly userRepository: UserRepository,
     private readonly postSearchService: PostSearchService,
+    private readonly imageRepository: ImageRepository,
   ) {}
 
   async write(
     userId: number,
     { title, content, code, language, lineCount, images, tags },
   ) {
+    tags.sort();
+
     const userEntity = await this.userRepository.findOneBy({
       id: userId,
     });
@@ -53,9 +58,11 @@ export class PostService {
     postEntity.user = userEntity;
     postEntity.images = imageEntities;
     postEntity.postToTags = postToTagEntities;
+    postEntity.tags = JSON.stringify(tags);
+    postEntity.userNickname = userEntity.nickname;
 
     postEntity = await this.postRepository.save(postEntity);
-    this.postSearchService.indexPost(postEntity, tags);
+    this.postSearchService.indexPost(postEntity, tags); // TODO 데이터 더미로 넣을때 주석처리. 배치로 넣는게 더 빠름
 
     return postEntity.id;
   }
@@ -110,16 +117,38 @@ export class PostService {
     return new LoadPostListResponseDto([post], true);
   }
 
-  async loadPostList(loadPostListRequestDto: LoadPostListRequestDto) {
+  async loadPostList(
+    loadPostListRequestDto: LoadPostListRequestDto,
+  ): Promise<SearchResponseDto> {
     let isLast = true;
-    const result = await this.postSearchService.search(loadPostListRequestDto);
-
-    if (this.canGetNextPost(result.length)) {
-      result.pop();
+    const results = await this.postSearchService.search(loadPostListRequestDto);
+    results.reverse();
+    if (this.canGetNextPost(results.length)) {
+      results.pop();
       isLast = false;
     }
-    // result + image와 Author 정보를 붙인다
-    return new LoadPostListResponseDto([], isLast); // TODO elastic에서 가져온 값 넣기
+
+    const authors = [];
+    const images = [];
+
+    for (const result of results) {
+      authors.push(
+        this.userRepository.findOneBy({
+          id: result._source['authorId'],
+        }),
+      );
+      images.push(
+        this.imageRepository.findBy({
+          postId: Number(result._id),
+        }),
+      );
+    }
+    return new SearchResponseDto(
+      results,
+      await Promise.all(authors),
+      await Promise.all(images),
+      isLast,
+    );
   }
 
   private canGetNextPost(resultCnt: number) {

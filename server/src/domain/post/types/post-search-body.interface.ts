@@ -10,7 +10,7 @@ interface PostSearchBody {
   authorId: number; // TODO Author 관해서도 가져올거임
   authorNickname: string;
   tags: string;
-  // likesCount: number;
+  likeCount: number;
   lineCount: number;
 }
 

@@ -10,6 +10,9 @@ export class Image extends BaseTimeEntity {
   @ManyToOne(() => Post, (post) => post.images)
   post: Post;
 
+  @Column()
+  postId: number;
+
   @Column({ length: 2000 })
   src!: string;
 }
