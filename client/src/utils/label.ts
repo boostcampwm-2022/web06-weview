@@ -1,6 +1,7 @@
-import { Label, SearchFilter, SearchHistory } from "@/types/search";
+import { Label, LabelType, SearchFilter, SearchHistory } from "@/types/search";
 import { SEPARATOR } from "@/constants/search";
 import { formatTag } from "@/utils/regExpression";
+import { LABEL_NAME } from "@/constants/label";
 
 export const createSearchFilter = (inputLabels: Label[]): SearchFilter => {
   const searchFilter: SearchFilter = {
@@ -13,16 +14,16 @@ export const createSearchFilter = (inputLabels: Label[]): SearchFilter => {
 
   inputLabels.reduce((prev: SearchFilter, { type, value }: Label) => {
     switch (type) {
-      case "tags":
+      case LABEL_NAME.TAGS:
         prev.tags?.push(value);
         break;
-      case "reviews":
+      case LABEL_NAME.REVIEWS:
         prev.reviewCount = Number(value);
         break;
-      case "likes":
+      case LABEL_NAME.LIKES:
         prev.likeCount = Number(value);
         break;
-      case "details":
+      case LABEL_NAME.DETAILS:
         prev.details?.push(value);
         break;
     }
@@ -41,7 +42,7 @@ export const labelsFrom = (history: SearchHistory): Label[] => {
     }
     if (Array.isArray(value)) {
       return value.forEach((labelValue) =>
-        labels.push({ type: key, value: labelValue })
+        labels.push({ type: key as LabelType, value: labelValue })
       );
     }
     if (key === "reviewCount") {
@@ -65,7 +66,7 @@ export const createLabel = (word: string): Label => {
     return { type, value: word.trim() };
   }
 
-  return { type, value: formatTag(value.trim()) };
+  return { type: type as LabelType, value: formatTag(value.trim()) };
 };
 
 export const isEqualLabel = (labelA: Label, labelB: Label): boolean => {

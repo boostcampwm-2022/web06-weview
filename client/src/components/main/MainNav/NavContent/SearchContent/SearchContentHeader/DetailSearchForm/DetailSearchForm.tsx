@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from "react";
-
-import "./DetailSearchForm.scss";
+import React, { useState } from "react";
 
 import useLabel from "@/hooks/useLabel";
 import { LIKE_COUNT_ITEMS, REVIEW_COUNT_ITEMS } from "@/constants/search";
+import { LabelType } from "@/types/search";
+
+import "./DetailSearchForm.scss";
 
 interface Item<T> {
   id: number;
@@ -67,7 +68,7 @@ interface CountCheckBoxesProps {
   title: string;
   items: Array<Item<number>>;
   imageModifier: string;
-  type: string;
+  type: LabelType;
 }
 
 const CountCheckBoxes = ({
