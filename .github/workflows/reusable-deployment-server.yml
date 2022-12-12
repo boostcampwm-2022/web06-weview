@@ -6,7 +6,7 @@ on:
         description: "빌드할 도커파일 경로"
         required: true
         type: string
-      docker-image-nam:
+      docker-image-name:
         description: "생성할 도커 이미지 이름"
         required: true
         type: string
