@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, LessThan, MoreThan, Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { LATEST_DATA_CONDITION, SEND_POST_CNT } from './post.controller';
 import { Injectable } from '@nestjs/common';
@@ -83,18 +83,20 @@ export class PostRepository extends Repository<Post> {
   }
 
   findByUserId(lastId: number, userId: number) {
-    return this.createQueryBuilder('post')
-      .leftJoinAndSelect('post.user', 'user')
-      .leftJoinAndSelect('post.postToTags', 'postToTag')
-      .leftJoinAndSelect('postToTag.tag', 'tag')
-      .leftJoinAndSelect('post.images', 'image')
-      .where(
-        'post.userId = :userId AND post.id < :lastId AND post.isDeleted = 0',
-        { userId, lastId },
-      )
-      .take(SEND_POST_CNT + 1)
-      .orderBy('post.id', 'DESC')
-      .getMany();
+    return this.find({
+      relations: ['user', 'images', 'postToTags', 'postToTags.tag'],
+      where: {
+        id: lastId === -1 ? MoreThan(lastId) : LessThan(lastId),
+        isDeleted: false,
+        user: {
+          id: userId,
+        },
+      },
+      take: SEND_POST_CNT + 1,
+      order: {
+        id: 'DESC',
+      },
+    });
   }
 
   async filterUsingDetail(detail: string) {
