@@ -4,13 +4,12 @@ import Modal from "@/components/commons/Modal/core/Modal/Modal";
 import useModal from "@/hooks/useModal";
 import { ModalProps } from "@/types/modal";
 import PostMoreModalMenu from "@/components/main/PostScroll/Post/PostFooter/RightBlockItems/PostMoreModal/PostMoreModalMenu/PostMoreModalMenu";
-
-import "./PostMoreModal.scss";
-
 import { deletePost } from "@/apis/post";
 import { queryClient } from "@/react-query/queryClient";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
 import useAuth from "@/hooks/useAuth";
+
+import "./PostMoreModal.scss";
 
 interface PostMoreModalProps extends ModalProps {}
 

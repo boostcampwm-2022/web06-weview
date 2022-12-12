@@ -42,6 +42,7 @@
     width: 100%;
     min-height: 8rem;
     font-size: $font-medium;
+    white-space: pre-wrap;
 
     &--more {
       color: $placeholder-color-dark;
