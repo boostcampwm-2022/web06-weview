@@ -116,6 +116,7 @@ export class PostSearchService {
     }
 
     const body = await this.esService.search<PostSearchResult>(searchFilter);
+    console.log(body.hits.hits[0]);
     return body.hits.hits;
   }
 }
