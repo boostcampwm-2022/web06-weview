@@ -82,9 +82,10 @@ export class PostSearchService {
 
     if (tags && tags.length > 0) {
       const q =
-        tags.length == 1
-          ? `/"${tags}/"`
-          : tags.map((tag) => `/"${tag}/"`).join(' ');
+        typeof tags === 'string'
+          ? `${tags}`
+          : tags.map((tag) => `${tag}`).join(' ');
+
       searchFilter.body.query.bool.filter.bool.must.push({
         match: {
           tags: {
