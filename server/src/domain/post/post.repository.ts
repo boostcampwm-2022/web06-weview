@@ -88,7 +88,10 @@ export class PostRepository extends Repository<Post> {
       .leftJoinAndSelect('post.postToTags', 'postToTag')
       .leftJoinAndSelect('postToTag.tag', 'tag')
       .leftJoinAndSelect('post.images', 'image')
-      .where('post.userId = :userId', { userId: userId })
+      .where(
+        'post.userId = :userId AND post.id < :lastId AND post.isDeleted = 0',
+        { userId, lastId },
+      )
       .take(SEND_POST_CNT + 1)
       .orderBy('post.id', 'DESC')
       .getMany();
