@@ -9,6 +9,7 @@
   width: 56%;
   height: 2.5rem;
   padding-left: 0.5rem;
+  font-family: GmarketSans;
   font-size: $font-form;
   border: 1px solid $line-color;
   border-radius: $radius-small;
@@ -16,10 +17,16 @@
 
 .tag-list {
   display: flex;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   & > span {
-    margin-right: 0.2rem;
-    font-size: $font-medium;
+    margin-right: 0.5rem;
     font-weight: bold;
   }
 }
