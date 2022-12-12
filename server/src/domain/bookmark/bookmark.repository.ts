@@ -23,6 +23,9 @@ export class BookmarkRepository extends Repository<Bookmark> {
         user: {
           id: userId,
         },
+        post: {
+          isDeleted: false,
+        },
       },
       take: size + 1,
       order: {

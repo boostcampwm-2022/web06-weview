@@ -6,7 +6,9 @@ export const setQueryString = (searchingObj: SearchFilter): string =>
     .filter(([key, value]) => key === "lastId" || isQueryTypeFine(value))
     .map(([key, value]) => {
       if (Array.isArray(value)) {
-        return `${value.map((v) => `${key}[]=${encodeURI(v)}`).join("&")}`;
+        return `${value
+          .map((v) => `${key}[]=${encodeURIComponent(v)}`)
+          .join("&")}`;
       }
       return `${key}=${String(encodeURI(value))}`;
     })

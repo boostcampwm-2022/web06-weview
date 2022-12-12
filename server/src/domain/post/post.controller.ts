@@ -17,8 +17,15 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { PostService } from './post.service';
-import { LoadPostListResponseDto } from './dto/service-response.dto';
-import { InqueryDto, WriteDto } from './dto/controller-request.dto';
+import {
+  EachPostResponseDto,
+  LoadPostListResponseDto,
+} from './dto/service-response.dto';
+import {
+  InquiryDto,
+  InquiryPostDto,
+  WriteDto,
+} from './dto/controller-request.dto';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { LikesService } from '../likes/likes.service';
 import { AuthService } from '../auth/auth.service';
@@ -40,6 +47,7 @@ import { UserService } from '../user/user.service';
 import { BookmarkService } from '../bookmark/bookmark.service';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
+import { BookmarkCreateRequestDto } from '../bookmark/dto/controller-request.dto';
 
 export const SEND_POST_CNT = 3;
 export const LATEST_DATA_CONDITION = -1;
@@ -64,11 +72,11 @@ export class PostController {
    */
   @Get()
   @ApiOkResponse({ description: '올바른 요청입니다' })
-  async inqueryUsingFilter(
-    @Query() inqueryDto: InqueryDto,
+  async search(
+    @Query() inquiryDto: InquiryDto,
     @Headers() headers,
   ): Promise<LoadPostListResponseDto> {
-    const { tags, lastId, reviewCount, likeCount, details } = inqueryDto;
+    const { tags, lastId, reviewCount, likeCount, details } = inquiryDto;
     const returnValue = await this.postService.loadPostList(
       new LoadPostListRequestDto(lastId, tags, reviewCount, likeCount, details),
     );
@@ -76,7 +84,7 @@ export class PostController {
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
     await this.addBookmarksToPostIfLogin(headers['authorization'], returnValue);
 
-    await this.addSearchHistory(headers['authorization'], inqueryDto);
+    await this.addSearchHistory(headers['authorization'], inquiryDto);
 
     this.applyTags(tags, lastId);
 
@@ -130,7 +138,7 @@ export class PostController {
     }
   }
 
-  private async addSearchHistory(token, inqueryDto: InqueryDto) {
+  private async addSearchHistory(token, inquiryDto: InquiryDto) {
     if (!token) {
       return;
     }
@@ -142,7 +150,7 @@ export class PostController {
 
     // TODO 로그인한 유저가 처음 글 검색시 검색 기록을 추가해야 하기 때문에 글 검색이 있는 PostController에 위치
     // 후에 글 검색 리팩토링시 같이 리팩토링이 필요할 듯
-    await this.userService.addSearchHistory(userId, inqueryDto);
+    await this.userService.addSearchHistory(userId, inquiryDto);
   }
 
   /**
@@ -214,10 +222,15 @@ export class PostController {
   @ApiNotFoundResponse({
     description: '유저 혹은 게시물이 존재하지 않습니다',
   })
-  async inqueryPost(@Param('postId') postId: number, @Headers() header) {
+  async inquiryPost(
+    @Param('postId') postId: number,
+    @Headers() header,
+    @Query() requestDto: InquiryPostDto,
+  ) {
     try {
-      const post = await this.postService.inqueryPost(postId);
-      post.likesCount = await this.likesService.countLikesCntByPostId(post.id);
+      const returnValue = await this.postService.inquiryPost(postId);
+      const post = returnValue.posts[0];
+      post.likesCount = await this.likesService.countLikesCntByPostId(postId);
 
       const token = header['authorization'];
       if (token) {
@@ -230,8 +243,7 @@ export class PostController {
           );
         }
       }
-
-      return { post: post };
+      return returnValue;
     } catch (err) {
       if (err instanceof PostNotFoundException) {
         throw new NotFoundException(err.message);

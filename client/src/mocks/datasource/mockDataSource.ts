@@ -34,7 +34,15 @@ posts = Array.from(Array(1024).keys()).map((id) => ({
     profileUrl: "http://placeimg.com/640/640/animals",
     email: `name_${id + 10000}@gmail.com`,
   },
-  tags: [`tag1`, `tag2`, id % 2 === 0 ? `테그` : `태그`],
+  tags: [
+    "#javascript",
+    "#js",
+    "es6",
+    "typescript",
+    "python",
+    "helloworld",
+    "안녕하세요",
+  ],
   reviewCount: id % 10,
   likeCount: id % 10,
   lineCount: 1,
@@ -57,7 +65,7 @@ export const reviews: ReviewInfo[] = Array.from(Array(1024).keys()).map(
       profileUrl: "https://avatars.githubusercontent.com/u/55542546?v=4",
       email: String(Math.floor(Math.random() * 3000)) + "@naver.com",
     },
-    content: "LGTM~乃~乃~乃",
+    content: "LGTM~乃~乃~乃\n고생하셨습니다.",
     updatedAt: "2022-11-14 16:42:56.124939",
   })
 );

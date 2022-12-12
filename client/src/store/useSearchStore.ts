@@ -1,12 +1,18 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 
-import { AuthorSearchFilter, SearchFilter, SearchType } from "@/types/search";
+import {
+  AuthorSearchFilter,
+  SearchFilter,
+  SearchType,
+  SingleSearchFilter,
+} from "@/types/search";
 
 export enum SEARCH_FILTER {
   DEFAULT,
   AUTHOR,
   BOOKMARK,
+  SINGLE,
 }
 
 interface SearchStates {
@@ -17,6 +23,7 @@ interface SearchStates {
 interface SearchActions {
   searchDefaultFilter: (query: SearchFilter) => void;
   searchAuthorFilter: (query: AuthorSearchFilter) => void;
+  searchSingleFilter: (query: SingleSearchFilter) => void;
   searchBookmarkFilter: () => void;
   reset: () => void;
 }
@@ -24,7 +31,7 @@ interface SearchActions {
 interface SearchStore extends SearchStates, SearchActions {}
 
 const initialSearchStates: SearchStates = {
-  filter: {},
+  filter: { lastId: "-1" },
   searchType: SEARCH_FILTER.DEFAULT,
 };
 
@@ -49,6 +56,13 @@ const useSearchStore = create<SearchStore>()(
       set({
         ...initialSearchStates,
         searchType: SEARCH_FILTER.BOOKMARK,
+      });
+    },
+    searchSingleFilter: (singleSearchQuery: SingleSearchFilter) => {
+      set({
+        ...initialSearchStates,
+        filter: singleSearchQuery,
+        searchType: SEARCH_FILTER.SINGLE,
       });
     },
     reset: () => set(initialSearchStates),

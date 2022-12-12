@@ -7,8 +7,11 @@ import { API_SERVER_URL } from "@/constants/env";
 import useAuthStore from "@/store/useAuthStore";
 import { logOutAPI } from "@/apis/auth";
 
+import useAuth from "./useAuth";
+
 export const useRefreshInterceptor = (): void => {
-  const [resetMyInfoState] = useAuthStore((state) => [state.logout]);
+  const resetMyInfoState = useAuthStore((state) => state.logout);
+  const { handleLogin, isLoggedIn } = useAuth();
   const refreshHandler = async (
     config: AxiosRequestConfig
   ): Promise<AxiosRequestConfig> => {
@@ -57,6 +60,7 @@ export const useRefreshInterceptor = (): void => {
       });
     }
   };
+
   const refreshErrorInterceptor = axios.interceptors.response.use(
     (response) => response,
     (error) => {
@@ -69,13 +73,41 @@ export const useRefreshInterceptor = (): void => {
     }
   );
 
+  const axiosInstanceResponseInterceptor =
+    axiosInstance.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const {
+          config,
+          response: { status },
+        } = error;
+        if (config.sent === true) return await Promise.reject(error);
+        if (status === 401) {
+          config.sent = true;
+          if (isLoggedIn) {
+            await refreshAndSetAccessTokenInHeader(config);
+            return config;
+          }
+          alert("로그인이 필요합니다.");
+          handleLogin();
+          return config;
+        }
+        return await Promise.reject(error);
+      }
+    );
+
   const refreshInterceptor = axiosInstance.interceptors.request.use(
     refreshHandler,
     refreshErrorHandler
   );
+
   useEffect(() => {
     return () => {
       axiosInstance.interceptors.request.eject(refreshInterceptor);
+      axiosInstance.interceptors.response.eject(
+        axiosInstanceResponseInterceptor
+      );
+
       axios.interceptors.response.eject(refreshErrorInterceptor);
     };
   }, [refreshInterceptor, refreshErrorInterceptor]);

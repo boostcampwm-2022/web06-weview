@@ -97,8 +97,12 @@ export const postHandler = [
     const userId = String(req.params.userId);
     const lastId = Number(req.url.searchParams.get("lastId")) + 1;
 
-    const filteredData = posts.filter((post) => post.author.id === userId);
-
+    const filteredData = posts
+      .filter((post) => post.author.id === userId)
+      .map((post) => ({
+        ...post,
+        isBookmarked: bookmarks.includes(Number(post.id)),
+      }));
     const isLast = filteredData.length <= lastId + SIZE;
 
     return res(
@@ -112,7 +116,18 @@ export const postHandler = [
     );
   }),
   rest.get(`${baseUrl}/posts/:postId`, (req, res, ctx) => {
-    const postId = req.params.postId;
-    return res(ctx.status(200), ctx.json({ post: posts[Number(postId)] }));
+    const postId = String(req.params.postId);
+
+    const filteredData = posts
+      .filter((post) => post.id === postId)
+      .map((post) => ({
+        ...post,
+        isBookmarked: bookmarks.includes(Number(post.id)),
+      }));
+
+    return res(
+      ctx.status(200),
+      ctx.json({ posts: filteredData.slice(0, 1), lastId: -1, isLast: true })
+    );
   }),
 ];

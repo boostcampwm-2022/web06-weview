@@ -6,6 +6,9 @@ import { postWritingsAPI, uploadImage } from "@/apis/post";
 import useWritingModalStore from "@/store/useWritingModalStore";
 import { isEmpty } from "@/utils/typeCheck";
 import { fetchPreSignedData } from "@/apis/auth";
+import useCommonModalStore from "@/store/useCommonModalStore";
+import { QUERY_KEYS } from "@/react-query/queryKeys";
+import { queryClient } from "@/react-query/queryClient";
 
 import "./RegisterButton.scss";
 
@@ -18,15 +21,17 @@ const RegisterButton = (): JSX.Element => {
     state.code,
     state.language,
   ]);
-  const images = useCodeEditorStore((state) => state.images);
+  const { images, resetCodeInfo } = useCodeEditorStore((state) => ({
+    images: state.images,
+    resetCodeInfo: state.reset,
+    setImages: state.setImages,
+  }));
   const resetWritingStore = useWritingStore((state) => state.reset);
-  const { closeWritingModal, closeSubmitModal } = useWritingModalStore(
-    (state) => ({
-      isOpened: state.isSubmitModalOpened,
-      closeSubmitModal: state.closeSubmitModal,
-      closeWritingModal: state.closeWritingModal,
-    })
-  );
+  const closeModal = useCommonModalStore((state) => state.closeModal);
+  const { closeSubmitModal } = useWritingModalStore((state) => ({
+    isOpened: state.isSubmitModalOpened,
+    closeSubmitModal: state.closeSubmitModal,
+  }));
 
   // 제출 불가능 상태 판단
   const isInvalidState = (): boolean =>
@@ -50,6 +55,12 @@ const RegisterButton = (): JSX.Element => {
     );
   };
 
+  const uploadPost = async (images: string[]): Promise<void> => {
+    const imageUris = await uploadImagesToS3(images);
+    const response = await postWritingsAPI(imageUris);
+    alert(response.message);
+  };
+
   // 서버에 Post 정보 등록 요청
   const handleSubmit = (): void => {
     void (async () => {
@@ -57,11 +68,11 @@ const RegisterButton = (): JSX.Element => {
         return alert("필수 정보들을 입력해주세요!");
       }
       try {
-        const imageUris = await uploadImagesToS3(images);
-        const response = await postWritingsAPI(imageUris);
-        alert(response.message);
+        await uploadPost(images);
+        await queryClient.invalidateQueries([QUERY_KEYS.POSTS]);
         resetWritingStore();
-        closeWritingModal();
+        resetCodeInfo();
+        closeModal();
         closeSubmitModal();
       } catch (e) {
         console.log(e);

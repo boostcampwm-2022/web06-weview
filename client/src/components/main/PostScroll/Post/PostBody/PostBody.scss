@@ -1,12 +1,12 @@
-@import "@/styles/_mixin.scss";
-@import "@/styles/_theme.scss";
+@import "@/styles/_mixin";
+@import "@/styles/_theme";
 
 .post__body {
   $post-inline-padding: $font-medium;
   @include flex-start;
   box-sizing: border-box;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 1rem;
   width: 100%;
   min-height: 14rem;
   padding: $post-inline-padding;
@@ -31,25 +31,6 @@
       font-size: $font-medium;
       text-align: left;
       white-space: nowrap;
-    }
-  }
-
-  &--content {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    align-items: flex-start;
-    width: 100%;
-    min-height: 8rem;
-    font-size: $font-medium;
-
-    &--more {
-      color: $placeholder-color-dark;
-
-      &:hover {
-        font-weight: 700;
-        cursor: pointer;
-      }
     }
   }
 }

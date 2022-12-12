@@ -1,8 +1,14 @@
 import { InfiniteScrollRequest } from "@/types/react-query";
 
 export interface Label {
-  type: string;
+  type: LabelType;
   value: string;
+}
+
+export type LabelType = "tags" | "details" | "likes" | "reviews";
+
+export interface SingleSearchFilter extends InfiniteScrollRequest {
+  postId: string;
 }
 
 export interface SearchFilter extends InfiniteScrollRequest {
@@ -24,7 +30,8 @@ export interface AuthorSearchFilter extends InfiniteScrollRequest {
 export type SearchType =
   | SearchFilter
   | BookmarkSearchFilter
-  | AuthorSearchFilter;
+  | AuthorSearchFilter
+  | SingleSearchFilter;
 
 export interface SearchHistory {
   tags: string[] | null;

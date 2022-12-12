@@ -7,7 +7,8 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class InqueryDto {
+export class InquiryDto {
+  // TODO DTO 이름 변경하기
   /**
    * lastId를 기준으로 더 최신의 데이터를 반환합니다.
    * lastId를 입력하지 않으면 가장 최신의 데이터를 반환합니다
@@ -57,6 +58,16 @@ export class InqueryDto {
    */
   @IsOptional()
   details?: string[] = [];
+}
+
+export class InquiryPostDto {
+  /**
+   * Deprecated. 호환을 위해 존재합니다.
+   */
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  lastId?: number = -1;
 }
 
 export class WriteDto {

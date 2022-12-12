@@ -24,16 +24,22 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { UserInqueryPostDto } from './dto/controller-request.dto';
+import { UserInquiryPostDto } from './dto/controller-request.dto';
 import { UserNotFoundException } from '../../exception/user-not-found.exception';
 import { AccessTokenGuard } from '../auth/access-token.guard';
 import { UserNotSameException } from 'src/exception/user-not-same.exception';
 import { SearchHistoryNotFoundException } from 'src/exception/search-history-not-found.exception';
+import { LikesService } from '../likes/likes.service';
+import { BookmarkService } from '../bookmark/bookmark.service';
 
 @Controller()
 @ApiTags('사용자 API')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly likesService: LikesService,
+    private readonly bookmarkService: BookmarkService,
+  ) {}
 
   /**
    * 특정 사용자가 작성한 게시물을 최신 순으로 가져옵니다
@@ -42,13 +48,34 @@ export class UserController {
   @ApiOkResponse()
   @ApiNotFoundResponse()
   @ApiBadRequestResponse()
-  async inqueryPosts(
+  async inquiryPosts(
     @Param('userId') userId: number,
-    @Query() requestDto: UserInqueryPostDto,
+    @Query() requestDto: UserInquiryPostDto,
   ) {
     try {
       const { lastId } = requestDto;
-      return await this.userService.inqueryPosts(lastId, userId);
+      const result = await this.userService.inquiryPosts(lastId, userId);
+
+      // TODO 구조를 아예 바꿔야돼서 일단 post controller 복붙으로 해결함
+      const postIdsYouLike = await this.likesService.findPostIdsByUserId(
+        userId,
+      );
+      result.posts.forEach((post) => {
+        if (postIdsYouLike.includes(post.id)) {
+          post.isLiked = true;
+        }
+      });
+
+      const postIdsYouBookmark = await this.bookmarkService.findPostIdsByUserId(
+        userId,
+      );
+      result.posts.forEach((post) => {
+        if (postIdsYouBookmark.includes(post.id)) {
+          post.isBookmarked = true;
+        }
+      });
+
+      return result;
     } catch (err) {
       if (err instanceof UserNotFoundException) {
         throw new NotFoundException(err.message);

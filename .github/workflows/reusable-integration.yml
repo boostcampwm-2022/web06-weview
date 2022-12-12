@@ -1,0 +1,70 @@
+name: "[CI] 클라이언트, 서버 공통"
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: "작업할 디렉토리(client | server | scheduler-server)"
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ inputs.working-directory }}/node_modules
+          key: ${{ format('{0}-node-{1}-{2}', runner.os, inputs.working-directory, hashFiles(format('{0}/package-lock.json', inputs.working-directory))) }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ inputs.working-directory }}
+
+      - name: Install Npm Clean If Cache miss
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+  build:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ inputs.working-directory }}/node_modules
+          key: ${{ format('{0}-node-{1}-{2}', runner.os, inputs.working-directory, hashFiles(format('{0}/package-lock.json', inputs.working-directory))) }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ inputs.working-directory }}
+
+      - name: Install Npm Clean If Cache miss
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Build
+        run: npm run build

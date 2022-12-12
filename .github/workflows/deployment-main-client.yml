@@ -1,0 +1,25 @@
+name: "[CD] MAIN 클라이언트"
+on:
+  push:
+    tags:
+      - "v*"
+    paths:
+      - "client/**"
+  workflow_dispatch:
+
+jobs:
+  reusable:
+    uses: ./.github/workflows/reusable-deployment-client.yml
+    with:
+      bucket-name: weview
+    secrets:
+      VITE_SERVER_URL: ${{ secrets.MAIN_VITE_SERVER_URL }}
+      VITE_LOCAL_URL: ${{ secrets.MAIN_VITE_LOCAL_URL }}
+      VITE_GITHUB_AUTH_SERVER_URL: ${{ secrets.MAIN_VITE_GITHUB_AUTH_SERVER_URL }}
+      VITE_API_MODE: ${{ secrets.MAIN_VITE_API_MODE }}
+      NCLOUD_BUCKET_ACCESS_KEY: ${{ secrets.MAIN_NCLOUD_BUCKET_ACCESS_KEY }}
+      NCLOUD_BUCKET_SECRET_KEY: ${{ secrets.MAIN_NCLOUD_BUCKET_SECRET_KEY }}
+      NCLOUD_HOST: ${{ secrets.MAIN_NCLOUD_HOST }}
+      NCLOUD_USERNAME: ${{ secrets.MAIN_NCLOUD_USERNAME }}
+      NCLOUD_PASSWORD: ${{ secrets.MAIN_NCLOUD_PASSWORD }}
+      NCLOUD_PORT: ${{ secrets.MAIN_NCLOUD_PORT }}
