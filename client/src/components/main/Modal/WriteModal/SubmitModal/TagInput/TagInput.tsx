@@ -10,6 +10,7 @@ import useWritingStore from "@/store/useWritingStore";
 import { formatTag } from "@/utils/regExpression";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
 import { LABEL_NAME } from "@/constants/label";
+import { MAX_TAG_LENGTH } from "@/constants/tag";
 
 import "./TagInput.scss";
 
@@ -38,7 +39,7 @@ const TagInput = (): JSX.Element => {
         alert("중복된 태그가 있습니다.");
         return;
       }
-      if (tags.length >= 5) {
+      if (tags.length >= MAX_TAG_LENGTH) {
         alert("태그는 5개까지 입력가능합니다.");
         return;
       }
