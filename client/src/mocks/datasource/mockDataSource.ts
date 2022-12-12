@@ -57,7 +57,7 @@ export const reviews: ReviewInfo[] = Array.from(Array(1024).keys()).map(
       profileUrl: "https://avatars.githubusercontent.com/u/55542546?v=4",
       email: String(Math.floor(Math.random() * 3000)) + "@naver.com",
     },
-    content: "LGTM~乃~乃~乃",
+    content: "LGTM~乃~乃~乃\n고생하셨습니다.",
     updatedAt: "2022-11-14 16:42:56.124939",
   })
 );

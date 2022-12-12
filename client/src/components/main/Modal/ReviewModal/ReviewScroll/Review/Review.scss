@@ -67,6 +67,7 @@ $review-form-header-height: 4rem;
 
     &__content {
       padding: $review-padding;
+      white-space: pre-wrap;
     }
   }
 }
