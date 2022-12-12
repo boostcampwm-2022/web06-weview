@@ -10,11 +10,8 @@ import { logOutAPI } from "@/apis/auth";
 import useAuth from "./useAuth";
 
 export const useRefreshInterceptor = (): void => {
-  const [resetMyInfoState, myInfo] = useAuthStore((state) => [
-    state.logout,
-    state.myInfo,
-  ]);
-  const { handleLogin } = useAuth();
+  const resetMyInfoState = useAuthStore((state) => state.logout);
+  const { handleLogin, isLoggedIn } = useAuth();
   const refreshHandler = async (
     config: AxiosRequestConfig
   ): Promise<AxiosRequestConfig> => {
@@ -63,6 +60,7 @@ export const useRefreshInterceptor = (): void => {
       });
     }
   };
+
   const refreshErrorInterceptor = axios.interceptors.response.use(
     (response) => response,
     (error) => {
@@ -86,7 +84,7 @@ export const useRefreshInterceptor = (): void => {
         if (config.sent === true) return await Promise.reject(error);
         if (status === 401) {
           config.sent = true;
-          if (myInfo !== null) {
+          if (isLoggedIn) {
             await refreshAndSetAccessTokenInHeader(config);
             return config;
           }
