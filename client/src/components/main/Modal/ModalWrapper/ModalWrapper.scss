@@ -1,8 +1,10 @@
-@import "@/styles/_global-style.scss";
-@import "@/styles/theme.scss";
+@import "@/styles/_global-style";
+@import "@/styles/theme";
 @import "@/styles/responsive";
+@import "@/styles/_mixin";
 
 .modal-background {
+  @include modal-bg;
   position: absolute;
   top: 0;
   z-index: $modal-background-z-index !important;
@@ -11,7 +13,6 @@
   width: 100vw;
   height: 100vh;
   min-height: 100vh;
-  background-color: rgba(0, 0, 0, 0.75);
 }
 
 .modal-close-button {
