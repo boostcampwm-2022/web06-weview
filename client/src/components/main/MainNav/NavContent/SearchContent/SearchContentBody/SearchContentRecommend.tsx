@@ -6,24 +6,22 @@ import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
 
 import "./SearchContentBody.scss";
 
+export const recommendKeyword: Label[] = [
+  {
+    type: "details",
+    value: "부스트캠프",
+  },
+  {
+    type: "tags",
+    value: "javascript",
+  },
+  {
+    type: "tags",
+    value: "알고리즘",
+  },
+];
 const SearchContentRecommend = (): JSX.Element => {
   const { insertLabel } = useLabel();
-
-  // TODO : ReactQuery 로 서버 상태로 받아오기
-  const recommendKeyword: Label[] = [
-    {
-      type: "details",
-      value: "부스트캠프",
-    },
-    {
-      type: "tags",
-      value: "javascript",
-    },
-    {
-      type: "tags",
-      value: "알고리즘",
-    },
-  ];
 
   return (
     <div className="search-content__body">
