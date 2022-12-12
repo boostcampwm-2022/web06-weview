@@ -5,9 +5,11 @@ import React, {
   useState,
 } from "react";
 
-import { isSubmitKey } from "@/utils/pressedKeyCheck";
+import { isSpaceKey, isSubmitKey } from "@/utils/pressedKeyCheck";
 import useWritingStore from "@/store/useWritingStore";
 import { formatTag } from "@/utils/regExpression";
+import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
+import { LABEL_NAME } from "@/constants/label";
 
 import "./TagInput.scss";
 
@@ -27,9 +29,17 @@ const TagInput = (): JSX.Element => {
     (e: KeyboardEvent<HTMLInputElement>) => {
       const key = e.key;
       if (!isSubmitKey(key) || tag.length === 0) return;
-      if (tags.includes(tag.trim())) {
+      if (isSpaceKey(key)) {
+        setTag(formatTag(tag));
+        return;
+      }
+      if (tags.includes(tag.trim()) || tags.includes(formatTag(tag))) {
         setTag("");
         alert("중복된 태그가 있습니다.");
+        return;
+      }
+      if (tags.length >= 5) {
+        alert("태그는 5개까지 입력가능합니다.");
         return;
       }
       setTags(formatTag(tag));
@@ -38,9 +48,9 @@ const TagInput = (): JSX.Element => {
     [tags, tag]
   );
 
-  const clickSubmittedTag = useCallback((tag: string) => {
+  const clickSubmittedTag = (tag: string): void => {
     removeTag(tag);
-  }, []);
+  };
 
   return (
     <>
@@ -56,13 +66,11 @@ const TagInput = (): JSX.Element => {
       />
       <div className="tag-list">
         {tags.map((tag) => (
-          <span
-            className="tag-span"
-            onClick={() => clickSubmittedTag(tag)}
+          <SearchLabel
             key={tag}
-          >
-            {tag}
-          </span>
+            label={{ type: LABEL_NAME.TAGS, value: tag }}
+            onClickCallback={() => clickSubmittedTag(tag)}
+          />
         ))}
       </div>
     </>
