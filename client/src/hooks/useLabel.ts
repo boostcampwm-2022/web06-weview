@@ -15,7 +15,7 @@ interface UseLabelResult {
   removeAndInsert: (removeTargetLabel: Label, insertTargetLabel: Label) => void;
   handleWordChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleWordKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
-  handleSubmit: (searchLabels: Label[]) => void;
+  handleSubmit: (searchLabels?: Label[]) => void;
   loadLabels: (targetLabels: Label[]) => void;
 }
 
