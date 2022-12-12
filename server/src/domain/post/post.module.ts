@@ -18,6 +18,7 @@ import { BookmarkRepository } from '../bookmark/bookmark.repository';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { PostSearchService } from './post-search.service';
 import { ImageRepository } from '../image/image.repository';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [PostController],
@@ -41,17 +42,24 @@ import { ImageRepository } from '../image/image.repository';
   imports: [
     HttpModule,
     JwtModule.register({}),
+    ConfigModule,
     ElasticsearchModule.registerAsync({
-      useFactory: () => ({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
         // TODO env로 이동
-        node: 'http://localhost:9200',
-        maxRetries: 10,
-        requestTimeout: 60000,
-        pingTimeout: 60000,
-        sniffOnStart: true,
+        node: configService.get('ELASTICSEARCH_URL'),
+        auth: {
+          username: configService.get('ELASTICSEARCH_USERNAME'), //TODO username, password 넣기
+          password: configService.get('ELASTICSEARCH_PASSWORD'),
+        },
+        maxRetries: configService.get('ELASTICSEARCH_MAX_RETRIES'),
+        requestTimeout: configService.get('ELASTICSEARCH_REQUEST_TIMEOUT'),
+        pingTimeout: configService.get('ELASTICSEARCH_PING_TIMEOUT'),
+        sniffOnStart: configService.get('ELASTICSEARCH_SNIFF_ON_START'),
       }),
+      inject: [ConfigService],
     }),
-  ], // TODO App으로 올릴지 이야기하기
+  ],
   exports: [PostService, PostRepository, ElasticsearchModule],
 })
 export class PostModule {}

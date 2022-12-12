@@ -62,7 +62,7 @@ export class PostService {
     postEntity.userNickname = userEntity.nickname;
 
     postEntity = await this.postRepository.save(postEntity);
-    this.postSearchService.indexPost(postEntity, tags); // TODO 데이터 더미로 넣을때 주석처리. 배치로 넣는게 더 빠름
+    this.postSearchService.indexPost(postEntity, tags);
 
     return postEntity.id;
   }

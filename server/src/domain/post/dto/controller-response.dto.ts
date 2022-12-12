@@ -2,8 +2,10 @@ import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { AuthorDto, EachImageResponseDto } from './service-response.dto';
 import { Image } from '../../image/image.entity';
 import { User } from '../../user/user.entity';
-import { SEND_POST_CNT } from '../post.controller';
 
+/**
+ * 정렬 기준을 한개만 사용하기 때문에(id desc) 0번째 인덱스를 사용하면 정렬된 값의 id를 꺼낼 수 있다
+ */
 const SORT_BY_ID = 0;
 
 export class SearchResponseDto {
@@ -29,11 +31,11 @@ export class SearchResponseDto {
   }
 
   private getLastId(posts: SearchHit<PostSearchResult>[]) {
-    return posts[SEND_POST_CNT - 1].sort[SORT_BY_ID];
+    return posts[posts.length - 1].sort[SORT_BY_ID];
   }
 }
 
-export class EachSearchResponseDto {
+class EachSearchResponseDto {
   id: number;
   title: string;
   content: string;

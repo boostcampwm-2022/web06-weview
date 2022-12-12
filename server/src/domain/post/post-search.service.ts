@@ -3,13 +3,16 @@ import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Post } from './post.entity';
 import { LoadPostListRequestDto } from './dto/service-request.dto';
 import { SEND_POST_CNT } from './post.controller';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PostSearchService {
-  constructor(private readonly esService: ElasticsearchService) {}
+  constructor(
+    private readonly esService: ElasticsearchService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async indexPost(post: Post, tags: any) {
-    // 태그를 정렬해 넣는다.
     let tagValue = '';
     if (tags) {
       tags.sort();
@@ -17,7 +20,8 @@ export class PostSearchService {
     }
 
     this.esService.index<PostSearchBody>({
-      index: 'test', //TODO 이름 임시
+      index: this.configService.get<string>('ELASTICSEARCH_INDEX'),
+      id: String(post.id),
       body: {
         id: post.id,
         title: post.title,
@@ -43,12 +47,12 @@ export class PostSearchService {
       sort: [
         {
           id: {
-            order: 'desc',
+            order: 'DESC',
           },
         },
       ],
       size: SEND_POST_CNT + 1,
-      index: 'test', // TODO 이름 임시
+      index: this.configService.get<string>('ELASTICSEARCH_INDEX'),
       body: {
         query: {
           bool: {
@@ -109,8 +113,8 @@ export class PostSearchService {
         },
       });
     }
+
     const body = await this.esService.search<PostSearchResult>(searchFilter);
-    console.log(body.hits.hits);
     return body.hits.hits;
   }
 }
