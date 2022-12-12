@@ -32,6 +32,7 @@ export class PostService {
     userId: number,
     { title, content, code, language, lineCount, images, tags },
   ) {
+    // TODO 입력값 검증
     tags.sort();
 
     const userEntity = await this.userRepository.findOneBy({
