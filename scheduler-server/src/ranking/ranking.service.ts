@@ -15,7 +15,7 @@ export class RankingService {
 
   constructor() {
     this.tagsCountsCircularQueue = new Array(
-      (MINUTES_PER_HOUR / QUEUE_CYCLE_EXPRESSED_SECOND) * MINUTES_PER_HOUR,
+      (MINUTES_PER_HOUR / QUEUE_CYCLE_EXPRESSED_SECOND) * MINUTES_PER_HOUR * 24,
     );
     this.tagCountBuffer = {};
     this.ranking = [];
