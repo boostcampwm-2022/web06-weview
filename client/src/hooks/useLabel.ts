@@ -15,7 +15,7 @@ interface UseLabelResult {
   removeAndInsert: (removeTargetLabel: Label, insertTargetLabel: Label) => void;
   handleWordChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleWordKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
-  handleSubmit: () => void;
+  handleSubmit: (searchLabels?: Label[]) => void;
   loadLabels: (targetLabels: Label[]) => void;
 }
 
@@ -75,9 +75,9 @@ const useLabel = (): UseLabelResult => {
   );
 
   // PostScroll 에 현재 검색 필터를 적용
-  const handleSubmit = (): void => {
+  const handleSubmit = (searchLabels: Label[] = labels): void => {
     navigate("/");
-    searchDefaultFilter(createSearchFilter(labels));
+    searchDefaultFilter(createSearchFilter(searchLabels));
   };
 
   const handleWordChange = (e: ChangeEvent<HTMLInputElement>): void => {

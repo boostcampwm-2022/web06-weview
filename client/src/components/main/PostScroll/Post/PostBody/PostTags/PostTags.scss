@@ -1,0 +1,14 @@
+@import "@/styles/_mixin";
+@import "@/styles/_theme";
+
+.post__body--tags {
+  @include label-provider;
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  overflow-x: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

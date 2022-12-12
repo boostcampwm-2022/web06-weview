@@ -1,0 +1,22 @@
+@import "@/styles/_mixin";
+@import "@/styles/_theme";
+
+.post__body--content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 8rem;
+  font-size: $font-medium;
+  white-space: pre-wrap;
+
+  &--more {
+    color: $placeholder-color-dark;
+
+    &:hover {
+      font-weight: 700;
+      cursor: pointer;
+    }
+  }
+}
