@@ -15,11 +15,15 @@ interface PostContentProps {
 
 const PostContent = ({ content }: PostContentProps): JSX.Element => {
   const contentSlice = content.slice(0, MAXIMUM_CONTENT_LENGTH);
-  const contentSliceEnterCount = contentSlice.split("\n").length - 1;
+  const contentSliceSplit = contentSlice.split("\n");
+  const preview = Array.from(
+    { length: MAXIMUM_CONTENT_ENTER },
+    (_, index) => contentSliceSplit[index] ?? ""
+  ).join("\n");
 
   const [isOpened, setIsOpened] = useState(
     contentSlice.length < MAXIMUM_CONTENT_LENGTH && // 더보기로 나누지 않을 만큼 내용이 충분히 짧음
-      contentSliceEnterCount < MAXIMUM_CONTENT_ENTER // 더보기로 나누지 않을 만큼 개행이 적음
+      contentSliceSplit.length - 1 < MAXIMUM_CONTENT_ENTER // 더보기로 나누지 않을 만큼 개행이 적음
   );
 
   const handleOpenContent: MouseEventHandler = () => {
@@ -31,7 +35,7 @@ const PostContent = ({ content }: PostContentProps): JSX.Element => {
 
   return (
     <div className="post__body--content">
-      {isOpened ? content : content.slice(0, MAXIMUM_CONTENT_LENGTH)}
+      {isOpened ? content : preview}
       {!isOpened && (
         <p className="post__body--content--more" onClick={handleOpenContent}>
           더보기..
