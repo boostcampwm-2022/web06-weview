@@ -35,8 +35,8 @@ posts = Array.from(Array(1024).keys()).map((id) => ({
     email: `name_${id + 10000}@gmail.com`,
   },
   tags: [
-    "javascript",
-    "js",
+    "#javascript",
+    "#js",
     "es6",
     "typescript",
     "python",

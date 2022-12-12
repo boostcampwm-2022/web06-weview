@@ -75,7 +75,7 @@ const useLabel = (): UseLabelResult => {
   );
 
   // PostScroll 에 현재 검색 필터를 적용
-  const handleSubmit = (searchLabels: Label[] = labels): void => {
+  const handleSubmit = (searchLabels: Label[] | undefined = labels): void => {
     navigate("/");
     searchDefaultFilter(createSearchFilter(searchLabels));
   };
