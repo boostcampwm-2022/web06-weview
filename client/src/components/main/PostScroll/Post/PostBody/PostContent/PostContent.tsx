@@ -13,22 +13,19 @@ interface PostContentProps {
 
 const PostContent = ({ content }: PostContentProps): JSX.Element => {
   const contentSlice = content.slice(0, MAXIMUM_CONTENT_LENGTH);
-  const contentSliceSplit = contentSlice.split("\n");
+  const contentSliceTokens = contentSlice.split("\n");
   const preview = Array.from(
     { length: MAXIMUM_CONTENT_ENTER },
-    (_, index) => contentSliceSplit[index] ?? ""
+    (_, index) => contentSliceTokens[index] ?? ""
   ).join("\n");
 
   const [isOpened, setIsOpened] = useState(
     contentSlice.length < MAXIMUM_CONTENT_LENGTH && // 더보기로 나누지 않을 만큼 내용이 충분히 짧음
-      contentSliceSplit.length - 1 < MAXIMUM_CONTENT_ENTER // 더보기로 나누지 않을 만큼 개행이 적음
+      contentSliceTokens.length - 1 < MAXIMUM_CONTENT_ENTER // 더보기로 나누지 않을 만큼 개행이 적음
   );
 
   const handleOpenContent: MouseEventHandler = () => {
-    if (isOpened) {
-      return;
-    }
-    setIsOpened(true);
+    !isOpened && setIsOpened(true);
   };
 
   return (
