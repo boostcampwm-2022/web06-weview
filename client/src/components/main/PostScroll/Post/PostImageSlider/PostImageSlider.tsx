@@ -53,6 +53,20 @@ const PostImageSlider = (): JSX.Element => {
           handlePrevImage={handlePrevSlide}
           handleNextImage={handleNextImage}
         />
+        {images.length >= 1 && (
+          <div className="post__image-slider__dots">
+            {images.map((image, idx) => {
+              return (
+                <div
+                  key={image.name}
+                  className={`post__image-slider__dots--${
+                    currentImgIndex === idx ? "now" : "other"
+                  }`}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
