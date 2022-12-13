@@ -38,7 +38,7 @@ export class RankingService {
     });
   }
 
-  @Interval(4000)
+  @Interval(15000)
   updateRanking() {
     const tagCounts = this.countAllTags();
     const newRanking = this.getTopRankTagNames(tagCounts);
