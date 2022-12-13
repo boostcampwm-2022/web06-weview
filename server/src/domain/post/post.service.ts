@@ -13,6 +13,9 @@ import { UserNotFoundException } from 'src/exception/user-not-found.exception';
 import { UserRepository } from '../user/user.repository';
 import { UserNotSameException } from '../../exception/user-not-same.exception';
 import { PostNotFoundException } from '../../exception/post-not-found.exception';
+import { PostSearchService } from './post-search.service';
+import { SearchResponseDto } from './dto/controller-response.dto';
+import { ImageRepository } from '../image/image.repository';
 
 @Injectable()
 export class PostService {
@@ -21,12 +24,17 @@ export class PostService {
     private readonly postToTagRepository: PostToTagRepository,
     private readonly tagRepository: TagRepository,
     private readonly userRepository: UserRepository,
+    private readonly postSearchService: PostSearchService,
+    private readonly imageRepository: ImageRepository,
   ) {}
 
   async write(
     userId: number,
     { title, content, code, language, lineCount, images, tags },
   ) {
+    // TODO 입력값 검증
+    tags.sort();
+
     const userEntity = await this.userRepository.findOneBy({
       id: userId,
     });
@@ -42,7 +50,7 @@ export class PostService {
     });
 
     const postToTagEntities = await this.toPostToTagEntities(tags);
-    const postEntity = new Post();
+    let postEntity: Post = new Post();
     postEntity.title = title;
     postEntity.content = content;
     postEntity.code = code;
@@ -51,7 +59,11 @@ export class PostService {
     postEntity.user = userEntity;
     postEntity.images = imageEntities;
     postEntity.postToTags = postToTagEntities;
-    await this.postRepository.save(postEntity);
+    postEntity.tags = JSON.stringify(tags);
+    postEntity.userNickname = userEntity.nickname;
+
+    postEntity = await this.postRepository.save(postEntity);
+    this.postSearchService.indexPost(postEntity, tags);
 
     return postEntity.id;
   }
@@ -75,78 +87,6 @@ export class PostService {
     );
 
     return Promise.all(postToTagEntityPromises);
-  }
-
-  /**
-   * 게시물을 조회한다
-   */
-  async loadPostList(
-    loadPostListRequestDto: LoadPostListRequestDto,
-  ): Promise<LoadPostListResponseDto> {
-    const { lastId, tags, reviewCount, likeCount, details } =
-      loadPostListRequestDto;
-    let isLast = true;
-
-    const postIdsFiltered = await this.filter(
-      tags,
-      reviewCount,
-      likeCount,
-      details,
-    );
-    const result = await this.postRepository.findByIdWithFilterResult(
-      lastId,
-      postIdsFiltered,
-    );
-
-    if (this.canGetNextPost(result.length)) {
-      result.pop();
-      isLast = false;
-    }
-    return new LoadPostListResponseDto(result, isLast);
-  }
-
-  private canGetNextPost(resultCnt: number) {
-    return resultCnt === SEND_POST_CNT + 1;
-  }
-
-  private async filter(
-    tags: string[],
-    reviewCount: number,
-    likeCount: number,
-    details: string[],
-  ) {
-    const postsThatPassEachFilter = await Promise.all([
-      this.postRepository.findByIdLikesCntGreaterThanOrEqual(likeCount),
-      this.postToTagRepository.findByContainingTags(tags),
-      this.postRepository.findByReviewCntGreaterThanOrEqual(reviewCount),
-      this.filterUsingDetails(details),
-    ]);
-    return this.mergeFilterResult(postsThatPassEachFilter);
-  }
-
-  /**
-   * 사용된 검색 조건이 한개도 없으면 -> null을 반환
-   * 조건을 만족시키는 사용자가 한 명도 없으면 -> 비어있는 배열 []을 반환
-   * 배열 안에 값이 있다면 -> 조건을 만족하는 사용자들의 id 리스트를 반환
-   */
-  public mergeFilterResult(postInfos: any[]) {
-    let result;
-    for (const postInfo of postInfos) {
-      if (postInfo === null) {
-        continue;
-      }
-      if (result === undefined) {
-        result = postInfo.map((obj) => obj.postId);
-      } else {
-        result = postInfo
-          .map((obj) => obj.postId)
-          .filter((each) => result.includes(each));
-      }
-    }
-    if (!result) {
-      return null;
-    }
-    return result;
   }
 
   async delete(userId: number, postId: number) {
@@ -178,42 +118,43 @@ export class PostService {
     return new LoadPostListResponseDto([post], true);
   }
 
-  private async filterUsingDetails(details: string[]) {
-    if (!details || details.length < 1) {
-      return null;
+  async loadPostList(
+    loadPostListRequestDto: LoadPostListRequestDto,
+  ): Promise<SearchResponseDto> {
+    let isLast = true;
+    const results = await this.postSearchService.search(loadPostListRequestDto);
+    if (results.length > SEND_POST_CNT + 1) {
+      throw new Error('너무 많은 검색 결과가 반환되었습니다');
     }
-    const postsFilteringEachDetail = await Promise.all(
-      details.map((detail) => this.postRepository.filterUsingDetail(detail)),
-    );
+    if (this.canGetNextPost(results.length)) {
+      results.pop();
+      isLast = false;
+    }
 
-    const temp = [];
-    for (const posts of postsFilteringEachDetail) {
-      temp.push(posts.map((post) => post.postId));
+    const authors = [];
+    const images = [];
+
+    for (const result of results) {
+      authors.push(
+        this.userRepository.findOneBy({
+          id: result._source['authorId'],
+        }),
+      );
+      images.push(
+        this.imageRepository.findBy({
+          postId: Number(result._source['id']),
+        }),
+      );
     }
-    return this.findIntersection(temp);
+    return new SearchResponseDto(
+      results,
+      await Promise.all(authors),
+      await Promise.all(images),
+      isLast,
+    );
   }
 
-  private findIntersection(bundles: any[][]) {
-    const result = [];
-    let smallestBundle = bundles[0];
-    for (const post of bundles) {
-      if (smallestBundle.length > post.length) {
-        smallestBundle = post;
-      }
-    }
-
-    for (const postId of smallestBundle) {
-      let isIntersect = true;
-      for (const bundle of bundles) {
-        if (!bundle.includes(postId)) {
-          isIntersect = false;
-          break;
-        }
-      }
-      if (isIntersect) {
-        result.push({ postId: postId });
-      }
-    }
-    return result;
+  private canGetNextPost(resultCnt: number) {
+    return resultCnt === SEND_POST_CNT + 1;
   }
 }

@@ -22,10 +22,12 @@
     "prepare": "chmod ug+x .husky/* && cd .. && husky install server/.husky"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^8.5.0",
     "@nestjs/axios": "^1.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/elasticsearch": "^9.0.0",
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",

@@ -18,10 +18,6 @@ import {
 import { Request } from 'express';
 import { PostService } from './post.service';
 import {
-  EachPostResponseDto,
-  LoadPostListResponseDto,
-} from './dto/service-response.dto';
-import {
   InquiryDto,
   InquiryPostDto,
   WriteDto,
@@ -47,6 +43,7 @@ import { UserService } from '../user/user.service';
 import { BookmarkService } from '../bookmark/bookmark.service';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
+import { SearchResponseDto } from './dto/controller-response.dto';
 import { BookmarkCreateRequestDto } from '../bookmark/dto/controller-request.dto';
 
 export const SEND_POST_CNT = 3;
@@ -75,14 +72,21 @@ export class PostController {
   async search(
     @Query() inquiryDto: InquiryDto,
     @Headers() headers,
-  ): Promise<LoadPostListResponseDto> {
-    const { tags, lastId, reviewCount, likeCount, details } = inquiryDto;
+  ): Promise<SearchResponseDto> {
+    const { lastId, reviewCount, likeCount, details } = inquiryDto;
+    let { tags } = inquiryDto;
+    // TODO @Transform을 쓰는게 맞을지, 이게 맞을지 고민하기
+    if (typeof tags === 'string') {
+      tags = [tags];
+    }
     const returnValue = await this.postService.loadPostList(
       new LoadPostListRequestDto(lastId, tags, reviewCount, likeCount, details),
     );
-    await this.addLikesCntColumnEveryPosts(returnValue);
+
+    // TODO 로그인 시 해당 작업 잘 동작하나 검사하기
     await this.addLikesToPostIfLogin(headers['authorization'], returnValue);
     await this.addBookmarksToPostIfLogin(headers['authorization'], returnValue);
+    await this.addSearchHistory(headers['authorization'], inquiryDto);
 
     await this.addSearchHistory(headers['authorization'], inquiryDto);
 
@@ -91,9 +95,10 @@ export class PostController {
     return returnValue;
   }
 
-  private async addLikesToPostIfLogin(token, result: LoadPostListResponseDto) {
+  private async addLikesToPostIfLogin(token, result: SearchResponseDto) {
     if (token) {
       const userId = this.authService.authenticate(token);
+
       if (userId) {
         const postIdsYouLike = await this.likesService.findPostIdsByUserId(
           userId,
@@ -107,10 +112,7 @@ export class PostController {
     }
   }
 
-  private async addBookmarksToPostIfLogin(
-    token,
-    result: LoadPostListResponseDto,
-  ) {
+  private async addBookmarksToPostIfLogin(token, result: SearchResponseDto) {
     if (token) {
       const userId = this.authService.authenticate(token);
 
@@ -124,17 +126,6 @@ export class PostController {
           }
         });
       }
-    }
-  }
-
-  private async addLikesCntColumnEveryPosts(result: LoadPostListResponseDto) {
-    const ary = [];
-    for (const post of result.posts) {
-      ary.push(this.likesService.countLikesCntByPostId(post.id));
-    }
-    const likesCntStore = await Promise.all(ary);
-    for (let i = 0; i < result.posts.length; i++) {
-      result.posts[i].likesCount = likesCntStore[i];
     }
   }
 
@@ -225,7 +216,7 @@ export class PostController {
   async inquiryPost(
     @Param('postId') postId: number,
     @Headers() header,
-    @Query() requestDto: InquiryPostDto,
+    @Query() requestDto: InquiryPostDto, //TODO 살펴보기
   ) {
     try {
       const returnValue = await this.postService.inquiryPost(postId);
