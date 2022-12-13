@@ -6,6 +6,7 @@ import useSearchStore from "@/store/useSearchStore";
 import { isEnterKey } from "@/utils/pressedKeyCheck";
 import useLabelStore from "@/store/useLabelStore";
 import { createLabel, createSearchFilter, isEqualLabel } from "@/utils/label";
+import { LABEL_NAME } from "@/constants/label";
 
 interface UseLabelResult {
   word: string;
@@ -16,10 +17,11 @@ interface UseLabelResult {
   handleWordChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleWordKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
   handleSubmit: (searchLabels?: Label[]) => void;
+  handleSearchSubmit: () => void;
   loadLabels: (targetLabels: Label[]) => void;
 }
 
-const useLabel = (): UseLabelResult => {
+const useSearch = (): UseLabelResult => {
   const [searchDefaultFilter] = useSearchStore((state) => [
     state.searchDefaultFilter,
   ]);
@@ -80,20 +82,31 @@ const useLabel = (): UseLabelResult => {
     searchDefaultFilter(createSearchFilter(searchLabels));
   };
 
+  const handleSearchSubmit = (): void => {
+    if (word.length === 0) {
+      return handleSubmit();
+    }
+    const newLabel = createLabel(word);
+    const newLabels = [
+      ...labels.filter((label) => label.type !== LABEL_NAME.DETAILS),
+      newLabel,
+    ];
+    // 중복된 라벨이 없을 경우 등록
+    setLabels(newLabels);
+    setWord("");
+    navigate("/");
+    searchDefaultFilter(createSearchFilter(newLabels));
+  };
+
   const handleWordChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setWord(e.target.value);
   };
 
   const handleWordKeyUp = (e: KeyboardEvent<HTMLInputElement>): void => {
-    if (!isEnterKey(e.key) || word.length === 0) {
+    if (!isEnterKey(e.key)) {
       return;
     }
-    const newLabel = createLabel(word);
-    if (!hasLabel(newLabel)) {
-      // 중복된 라벨이 없을 경우 등록
-      setLabels([...labels, newLabel]);
-      setWord("");
-    }
+    handleSearchSubmit();
   };
 
   return {
@@ -103,10 +116,11 @@ const useLabel = (): UseLabelResult => {
     handleWordChange,
     handleWordKeyUp,
     handleSubmit,
+    handleSearchSubmit,
     removeLabel,
     removeAndInsert,
     loadLabels,
   };
 };
 
-export default useLabel;
+export default useSearch;
