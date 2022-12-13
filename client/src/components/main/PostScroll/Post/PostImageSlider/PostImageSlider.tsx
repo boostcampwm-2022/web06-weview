@@ -53,7 +53,7 @@ const PostImageSlider = (): JSX.Element => {
           handlePrevImage={handlePrevSlide}
           handleNextImage={handleNextImage}
         />
-        {images.length >= 1 && (
+        {images.length > 1 && (
           <div className="post__image-slider__dots">
             {images.map((image, idx) => {
               return (
