@@ -4,14 +4,14 @@ interface PostSearchBody {
   content: string;
   code: string;
   language: string;
-  createdAt: Date;
-  updatedAt: Date;
-  authorId: number;
-  authorNickname: string;
+  createdat: Date;
+  updatedat: Date;
+  authorid: number;
+  authornickname: string;
   tags: string;
-  likeCount: number;
-  reviewCount: number;
-  lineCount: number;
+  likecount: number;
+  reviewcount: number;
+  linecount: number;
 }
 
 interface PostSearchResult {

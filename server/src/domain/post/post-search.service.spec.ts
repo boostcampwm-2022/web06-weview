@@ -465,14 +465,14 @@ describe('PostSearchService', () => {
     });
 
     describe('결과값 검증', () => {
-      it('검색결과가 id로 내림차순 정렬되었을 때, 정상 출력한다', async () => {
+      it('결과값은 내림차순으로 정렬되어진다', async () => {
         //given
         mockElasticSearchService.search = jest.fn().mockResolvedValue({
           hits: {
             hits: [
               { _source: { id: 3 } },
               { _source: { id: 2 } },
-              { _source: { id: 1 } },
+              { _source: { id: 10 } },
             ],
           },
         });
@@ -481,29 +481,10 @@ describe('PostSearchService', () => {
 
         //then
         expect(result).toStrictEqual([
+          { _source: { id: 10 } },
           { _source: { id: 3 } },
           { _source: { id: 2 } },
-          { _source: { id: 1 } },
         ]);
-      });
-
-      it('검색결과가 id로 내림차순 정렬되지 않았을 때, 예외를 반환한다', async () => {
-        try {
-          mockElasticSearchService.search = jest.fn().mockResolvedValue({
-            hits: {
-              hits: [
-                { _source: { id: 4 } },
-                { _source: { id: 2 } },
-                { _source: { id: 3 } },
-              ],
-            },
-          });
-          //when
-          await service.search(searchCondition);
-          throw new Error();
-        } catch (err) {
-          expect(err).toBeInstanceOf(SearchResponseInvalidException);
-        }
       });
 
       it('N+1개 보다 많은 결과가 오면, 예외를 반환한다', async () => {

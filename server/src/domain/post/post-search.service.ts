@@ -51,14 +51,14 @@ export class PostSearchService {
         content: post.content,
         code: post.code,
         language: post.language,
-        createdAt: post.createdAt,
-        updatedAt: post.updatedAt,
-        authorId: post.user.id,
-        authorNickname: post.user.nickname,
+        createdat: post.createdAt,
+        updatedat: post.updatedAt,
+        authorid: post.user.id,
+        authornickname: post.user.nickname,
         tags: tagValue,
-        lineCount: post.lineCount,
-        reviewCount: post.reviewCount,
-        likeCount: post.likeCount,
+        linecount: post.lineCount,
+        reviewcount: post.reviewCount,
+        likecount: post.likeCount,
       },
     });
   }
@@ -140,6 +140,10 @@ export class PostSearchService {
 
     const body = await this.esService.search<PostSearchResult>(searchFilter);
     this.validateReturnValue(body.hits.hits);
+
+    body.hits.hits.sort(
+      (prev, next) => Number(next._source['id']) - Number(prev._source['id']),
+    );
     return body.hits.hits;
   }
 
@@ -154,15 +158,6 @@ export class PostSearchService {
       throw new SearchResponseInvalidException(
         '중복되는 결과가 반환되었습니다',
       );
-    }
-    let min = 21000000;
-    for (const id of ids) {
-      if (min < id) {
-        throw new SearchResponseInvalidException(
-          '결과가 내림차순 정렬되지 않았습니다',
-        );
-      }
-      min = id;
     }
   }
 
