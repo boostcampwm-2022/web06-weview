@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import useSearch from "@/hooks/useSearch";
 import { LIKE_COUNT_ITEMS, REVIEW_COUNT_ITEMS } from "@/constants/search";
 import { LabelType } from "@/types/search";
+import { LABEL_NAME } from "@/constants/label";
 
 import "./DetailSearchForm.scss";
 
@@ -114,9 +115,20 @@ const ReviewCountCheckBoxes = (): JSX.Element => {
 };
 
 const DetailSearchForm = (): JSX.Element => {
+  const { word, handleWordChange, handleInsertTag } = useSearch(
+    LABEL_NAME.TAGS
+  );
+
   return (
     <div>
       <div className="title">상세 검색</div>
+      <input
+        type="text"
+        value={word}
+        placeholder={"태그를 입력해주세요."}
+        onChange={handleWordChange}
+        onKeyUp={handleInsertTag}
+      />
       <LikeCountCheckBoxes />
       <ReviewCountCheckBoxes />
       <button>적용</button>

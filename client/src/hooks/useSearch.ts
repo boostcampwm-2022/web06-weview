@@ -13,6 +13,7 @@ import {
   isEqualLabel,
 } from "@/utils/label";
 import { LABEL_NAME } from "@/constants/label";
+import { formatTag } from "@/utils/regExpression";
 
 interface UseLabelResult {
   word: string;
@@ -27,6 +28,7 @@ interface UseLabelResult {
   handleSubmit: (searchLabels?: Label[]) => void;
   handleSearchSubmit: () => void;
   loadLabels: (targetLabels: Label[]) => void;
+  handleInsertTag: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const useSearch = (
@@ -124,6 +126,18 @@ const useSearch = (
     navigate("/");
   };
 
+  const handleInsertTag = (e: KeyboardEvent<HTMLInputElement>): void => {
+    if (word.length === 0 || !isEnterKey(e.key)) {
+      return;
+    }
+    const newLabel = createLabel(formatTag(word.trim()), LABEL_NAME.TAGS);
+    if (!hasLabel(newLabel, labels)) {
+      // 중복된 라벨이 없을 경우 등록
+      setLabels([...labels, newLabel]);
+      setWord("");
+    }
+  };
+
   const handleWordChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setWord(e.target.value);
   };
@@ -148,6 +162,7 @@ const useSearch = (
     handleSearchSubmit,
     removeLabel,
     loadLabels,
+    handleInsertTag,
   };
 };
 

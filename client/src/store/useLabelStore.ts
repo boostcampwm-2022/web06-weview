@@ -78,7 +78,7 @@ export const getSearchState = (
         store.detailsLabels,
         store.setDetailsLabels,
       ];
-    case LABEL_NAME.Tags:
+    case LABEL_NAME.TAGS:
       return [
         totalLabels,
         setTotalLabels,
