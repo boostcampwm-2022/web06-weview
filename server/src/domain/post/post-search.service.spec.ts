@@ -465,14 +465,14 @@ describe('PostSearchService', () => {
     });
 
     describe('결과값 검증', () => {
-      it('검색결과가 id로 오름차순 정렬되었을 때, 정상 출력한다', async () => {
+      it('검색결과가 id로 내림차순 정렬되었을 때, 정상 출력한다', async () => {
         //given
         mockElasticSearchService.search = jest.fn().mockResolvedValue({
           hits: {
             hits: [
-              { _source: { id: 1 } },
-              { _source: { id: 2 } },
               { _source: { id: 3 } },
+              { _source: { id: 2 } },
+              { _source: { id: 1 } },
             ],
           },
         });
@@ -481,13 +481,13 @@ describe('PostSearchService', () => {
 
         //then
         expect(result).toStrictEqual([
-          { _source: { id: 1 } },
-          { _source: { id: 2 } },
           { _source: { id: 3 } },
+          { _source: { id: 2 } },
+          { _source: { id: 1 } },
         ]);
       });
 
-      it('검색결과가 id로 오름차순 정렬되지 않았을 때, 예외를 반환한다', async () => {
+      it('검색결과가 id로 내림차순 정렬되지 않았을 때, 예외를 반환한다', async () => {
         try {
           mockElasticSearchService.search = jest.fn().mockResolvedValue({
             hits: {
@@ -511,11 +511,11 @@ describe('PostSearchService', () => {
           mockElasticSearchService.search = jest.fn().mockResolvedValue({
             hits: {
               hits: [
-                { _source: { id: 1 } },
-                { _source: { id: 2 } },
-                { _source: { id: 3 } },
-                { _source: { id: 4 } },
                 { _source: { id: 5 } },
+                { _source: { id: 4 } },
+                { _source: { id: 3 } },
+                { _source: { id: 2 } },
+                { _source: { id: 1 } },
               ],
             },
           });
@@ -532,9 +532,9 @@ describe('PostSearchService', () => {
           mockElasticSearchService.search = jest.fn().mockResolvedValue({
             hits: {
               hits: [
-                { _source: { id: 1 } },
-                { _source: { id: 1 } },
                 { _source: { id: 3 } },
+                { _source: { id: 1 } },
+                { _source: { id: 1 } },
               ],
             },
           });

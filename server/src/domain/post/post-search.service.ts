@@ -155,11 +155,11 @@ export class PostSearchService {
         '중복되는 결과가 반환되었습니다',
       );
     }
-    let min = 0;
+    let min = 21000000;
     for (const id of ids) {
-      if (min >= id) {
+      if (min < id) {
         throw new SearchResponseInvalidException(
-          '결과가 오름차순 정렬되지 않았습니다',
+          '결과가 내림차순 정렬되지 않았습니다',
         );
       }
       min = id;
