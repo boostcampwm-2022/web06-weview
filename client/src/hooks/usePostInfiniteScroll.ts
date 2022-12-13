@@ -5,11 +5,10 @@ import {
   QueryFunctionContext,
   useInfiniteQuery,
 } from "@tanstack/react-query";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 import { PostPages } from "@/types/post";
 import useSearchStore, { SEARCH_FILTER } from "@/store/useSearchStore";
-import { queryClient } from "@/react-query/queryClient";
 import { QUERY_KEYS } from "@/react-query/queryKeys";
 import {
   fetchBookmarkPost,
@@ -17,6 +16,7 @@ import {
   fetchSinglePost,
   fetchUserPost,
 } from "@/apis/post";
+import { queryClient } from "@/react-query/queryClient";
 
 const getQueryFn = async (
   pageParam: string,
@@ -34,9 +34,15 @@ const getQueryFn = async (
     const postPages = await fetchSinglePost(pageParam);
     return postPages;
   }
-
   // default
   const postPages = await fetchPost(pageParam);
+  if (pageParam === "-1") {
+    // 최근 검색어 불러오기
+    await queryClient.refetchQueries(
+      { queryKey: [QUERY_KEYS.HISTORY] },
+      { cancelRefetch: true }
+    );
+  }
   return postPages;
 };
 
@@ -64,24 +70,12 @@ const usePostInfiniteScroll = (): PostInfiniteScrollResults => {
   const { data, hasNextPage, isFetching, fetchNextPage } = useInfiniteQuery(
     [QUERY_KEYS.POSTS, searchType, filter],
     async ({ pageParam = -1, queryKey }: QueryFunctionContext) =>
-      await getQueryFn(pageParam, queryKey[1] as SEARCH_FILTER), // lastId, 검색 타입
+      await getQueryFn(String(pageParam), queryKey[1] as SEARCH_FILTER), // lastId, 검색 타입
     {
       getNextPageParam: (lastPost) =>
         lastPost.isLast ? undefined : lastPost.lastId,
     }
   );
-
-  /**
-   * searchQuery 값이 변경되면 다시 로딩합니다.
-   */
-  useEffect(() => {
-    void (async () => {
-      await queryClient.resetQueries(
-        { queryKey: [QUERY_KEYS.POSTS], exact: true },
-        { cancelRefetch: true }
-      );
-    })();
-  }, [filter, searchType]);
 
   /**
    * Intersection Observer 를 위한 콜백 함수
