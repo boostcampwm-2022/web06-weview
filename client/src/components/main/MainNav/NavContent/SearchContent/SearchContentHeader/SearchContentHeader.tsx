@@ -3,7 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import React, { useState } from "react";
 import ArrowDropDownCircleSharpIcon from "@mui/icons-material/ArrowDropDownCircleSharp";
 
-import useLabel from "@/hooks/useLabel";
+import useSearch from "@/hooks/useSearch";
 import { Label } from "@/types/search";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
 import useNav from "@/hooks/useNav";
@@ -20,7 +20,7 @@ const SearchContentHeader = (): JSX.Element => {
     handleWordKeyUp,
     removeLabel,
     handleSubmit,
-  } = useLabel();
+  } = useSearch();
   const { handleNavClose } = useNav();
   const [isDetailOpened, setIsDetailOpened] = useState(false);
 

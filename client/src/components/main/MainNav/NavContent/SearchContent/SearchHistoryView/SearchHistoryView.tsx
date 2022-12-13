@@ -7,7 +7,7 @@ import { QUERY_KEYS } from "@/react-query/queryKeys";
 import { deleteSearchHistory, fetchSearchHistory } from "@/apis/search";
 import { labelsFrom } from "@/utils/label";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
-import useLabel from "@/hooks/useLabel";
+import useSearch from "@/hooks/useSearch";
 import { queryClient } from "@/react-query/queryClient";
 
 import "./SearchHistoryView.scss";
@@ -54,7 +54,7 @@ const SearchHistoryItem = ({
 };
 
 const SearchHistoryView = (): JSX.Element => {
-  const { loadLabels } = useLabel();
+  const { loadLabels } = useSearch();
   const { data } = useQuery<SearchHistory[] | undefined>(
     [QUERY_KEYS.HISTORY],
     fetchSearchHistory,

@@ -1,6 +1,6 @@
 import React from "react";
 
-import useLabel from "@/hooks/useLabel";
+import useSearch from "@/hooks/useSearch";
 import { Label } from "@/types/search";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
 
@@ -21,7 +21,7 @@ export const recommendKeyword: Label[] = [
   },
 ];
 const SearchContentRecommend = (): JSX.Element => {
-  const { insertLabel } = useLabel();
+  const { insertLabel } = useSearch();
 
   return (
     <div className="search-content__body">

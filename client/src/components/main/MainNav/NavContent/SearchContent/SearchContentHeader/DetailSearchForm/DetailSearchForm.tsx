@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import useLabel from "@/hooks/useLabel";
+import useSearch from "@/hooks/useSearch";
 import { LIKE_COUNT_ITEMS, REVIEW_COUNT_ITEMS } from "@/constants/search";
 import { LabelType } from "@/types/search";
 
@@ -77,7 +77,7 @@ const CountCheckBoxes = ({
   imageModifier,
   type,
 }: CountCheckBoxesProps): JSX.Element => {
-  const { removeLabel, insertLabel, removeAndInsert } = useLabel();
+  const { removeLabel, insertLabel, removeAndInsert } = useSearch();
   const [checkedItemId, setCheckedItemId] = useState<number>(-1);
   const handleCheckItem = (id: number): void => {
     const prevItem = items.find((item) => item.id === checkedItemId);
@@ -120,7 +120,7 @@ const CountCheckBoxes = ({
 const DetailSearchForm = (): JSX.Element => {
   return (
     <>
-      <div className="title">세부 검색</div>
+      <div className="title">상세 검색</div>
       <LikeCountCheckBoxes />
       <ReviewCountCheckBoxes />
     </>
