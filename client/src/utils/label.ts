@@ -2,6 +2,7 @@ import { Label, LabelType, SearchFilter, SearchHistory } from "@/types/search";
 import { SEPARATOR } from "@/constants/search";
 import { formatTag } from "@/utils/regExpression";
 import { LABEL_NAME } from "@/constants/label";
+import { TotalLabels } from "@/store/useLabelStore";
 
 export const createSearchFilter = (inputLabels: Label[]): SearchFilter => {
   const searchFilter: SearchFilter = {
@@ -33,6 +34,42 @@ export const createSearchFilter = (inputLabels: Label[]): SearchFilter => {
   return searchFilter;
 };
 
+export const filterLabels = (inputLabels: Label[]): TotalLabels =>
+  inputLabels.reduce(
+    (prev: TotalLabels, label: Label) => {
+      switch (label.type) {
+        case LABEL_NAME.TAGS:
+          prev.tags.push(label);
+          break;
+        case LABEL_NAME.REVIEWS:
+          prev.reviews.push(label);
+          break;
+        case LABEL_NAME.LIKES:
+          prev.likes.push(label);
+          break;
+        case LABEL_NAME.DETAILS:
+          prev.details.push(label);
+          break;
+      }
+      return prev;
+    },
+    {
+      details: [],
+      tags: [],
+      likes: [],
+      reviews: [],
+    }
+  );
+
+export const flatLabels = (totalLabels: TotalLabels): Label[] => {
+  return [
+    ...totalLabels.details,
+    ...totalLabels.tags,
+    ...totalLabels.likes,
+    ...totalLabels.reviews,
+  ];
+};
+
 export const labelsFrom = (history: SearchHistory): Label[] => {
   const labels: Label[] = [];
 
@@ -56,12 +93,16 @@ export const labelsFrom = (history: SearchHistory): Label[] => {
   return labels;
 };
 
-export const createLabel = (word: string): Label => {
+export const createLabel = (word: string, labelType?: LabelType): Label => {
+  if (labelType !== undefined) {
+    return { type: labelType, value: word };
+  }
+
   const separator = word[0];
   const value = word.slice(1);
-  const type = SEPARATOR[separator] ?? "details";
+  const type = SEPARATOR[separator] ?? LABEL_NAME.DETAILS;
 
-  if (type === "details") {
+  if (type === LABEL_NAME.DETAILS) {
     // 상세 검색은 띄어쓰기를 포맷팅하지 않는다.
     return { type, value: word.trim() };
   }

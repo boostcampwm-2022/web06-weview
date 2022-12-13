@@ -6,6 +6,7 @@ import ArrowDropDownCircleSharpIcon from "@mui/icons-material/ArrowDropDownCircl
 import useSearch from "@/hooks/useSearch";
 import { Label } from "@/types/search";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
+import { LABEL_NAME } from "@/constants/label";
 
 import DetailSearchForm from "./DetailSearchForm/DetailSearchForm";
 
@@ -14,12 +15,12 @@ import "./SearchContentHeader.scss";
 const SearchContentHeader = (): JSX.Element => {
   const {
     word,
-    labels,
+    totalLabels,
     handleWordChange,
     handleWordKeyUp,
     removeLabel,
     handleSearchSubmit,
-  } = useSearch();
+  } = useSearch(LABEL_NAME.DETAILS);
   const [isDetailOpened, setIsDetailOpened] = useState(false);
 
   return (
@@ -47,7 +48,7 @@ const SearchContentHeader = (): JSX.Element => {
         />
       </div>
       <div className="search-content__labels">
-        {labels.map((label: Label) => (
+        {totalLabels.map((label: Label) => (
           <SearchLabel
             key={`${label.type}-${label.value}-filtered`}
             label={label}

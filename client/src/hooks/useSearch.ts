@@ -1,19 +1,27 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Label } from "@/types/search";
+import { Label, LabelType } from "@/types/search";
 import useSearchStore from "@/store/useSearchStore";
 import { isEnterKey } from "@/utils/pressedKeyCheck";
-import useLabelStore from "@/store/useLabelStore";
-import { createLabel, createSearchFilter, isEqualLabel } from "@/utils/label";
+import useLabelStore, { getSearchState } from "@/store/useLabelStore";
+import {
+  createLabel,
+  createSearchFilter,
+  filterLabels,
+  flatLabels,
+  isEqualLabel,
+} from "@/utils/label";
 import { LABEL_NAME } from "@/constants/label";
 
 interface UseLabelResult {
   word: string;
+  totalLabels: Label[];
   labels: Label[];
+  hasLabel: (targetLabel: Label, targetLabels: Label[]) => boolean;
+  setLabels: (labels: Label[]) => void;
   insertLabel: (label: Label) => void;
   removeLabel: (label: Label) => void;
-  removeAndInsert: (removeTargetLabel: Label, insertTargetLabel: Label) => void;
   handleWordChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleWordKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
   handleSubmit: (searchLabels?: Label[]) => void;
@@ -21,21 +29,30 @@ interface UseLabelResult {
   loadLabels: (targetLabels: Label[]) => void;
 }
 
-const useSearch = (): UseLabelResult => {
+const useSearch = (
+  labelType: LabelType = LABEL_NAME.DETAILS
+): UseLabelResult => {
   const [searchDefaultFilter] = useSearchStore((state) => [
     state.searchDefaultFilter,
   ]);
   const navigate = useNavigate();
   const [word, setWord] = useState(""); // 입력중인 검색어
-  const [labels, setLabels] = useLabelStore((state) => [
-    state.labels,
-    state.setLabels,
-  ]);
+  const store = useLabelStore(); // LabelStore 구독
+  /**
+   * totalLabels: { details: [], tags: [], likes: [], reviews: [] }
+   * setTotalLabels: totalLabels 업데이트 함수
+   * labels: 현재 LabelType 전역 상태
+   * setLabels: 현재 LabelType 전역 상태 업데이트 함수
+   */
+  const [totalLabels, setTotalLabels, labels, setLabels] = getSearchState(
+    store,
+    labelType
+  );
 
   // labels 목록에서 라벨 검색
-  const hasLabel = (targetLabel: Label): boolean => {
+  const hasLabel = (targetLabel: Label, targetLabels: Label[]): boolean => {
     return (
-      labels.find((label: Label) => isEqualLabel(label, targetLabel)) !==
+      targetLabels.find((label: Label) => isEqualLabel(label, targetLabel)) !==
       undefined
     );
   };
@@ -43,50 +60,52 @@ const useSearch = (): UseLabelResult => {
   // labels 목록에서 라벨 제거
   const removeLabel = useCallback(
     (targetLabel: Label): void => {
-      setLabels(labels.filter((label) => !isEqualLabel(label, targetLabel)));
+      const targetLabels = totalLabels[targetLabel.type].filter(
+        (label) => !isEqualLabel(label, targetLabel)
+      );
+      setTotalLabels({ ...totalLabels, [targetLabel.type]: targetLabels });
     },
-    [labels, setLabels]
+    [totalLabels, setTotalLabels]
   );
 
   // 중복되지 않은 라벨 등록
   const insertLabel = useCallback(
     (targetLabel: Label): void => {
-      if (!hasLabel(targetLabel)) {
-        setLabels([...labels, targetLabel]);
+      const targetLabels = totalLabels[targetLabel.type];
+      if (!hasLabel(targetLabel, targetLabels)) {
+        setTotalLabels({
+          ...totalLabels,
+          [targetLabel.type]: [...targetLabels, targetLabel],
+        });
       }
     },
-    [labels, setLabels]
-  );
-
-  const removeAndInsert = useCallback(
-    (removeTargetLabel: Label, insertTargetLabel: Label): void => {
-      const newLabels = [
-        ...labels.filter((label) => !isEqualLabel(label, removeTargetLabel)),
-        insertTargetLabel,
-      ];
-      setLabels(newLabels);
-    },
-    [labels, setLabels]
+    [totalLabels, setTotalLabels]
   );
 
   const loadLabels = useCallback(
     (targetLabels: Label[]): void => {
-      setLabels([...targetLabels]);
+      setTotalLabels(filterLabels(targetLabels));
     },
-    [setLabels]
+    [setTotalLabels]
   );
 
   // PostScroll 에 현재 검색 필터를 적용
-  const handleSubmit = (searchLabels: Label[] | undefined = labels): void => {
+  const handleSubmit = (searchLabels?: Label[]): void => {
+    if (searchLabels === undefined) {
+      // 입력한 값이 없다면 현재 전역 상태 값을 사용
+      searchDefaultFilter(createSearchFilter(flatLabels(totalLabels)));
+      return navigate("/");
+    }
+    const totalLabelsForSubmit = filterLabels(searchLabels);
+    searchDefaultFilter(createSearchFilter(flatLabels(totalLabelsForSubmit)));
     navigate("/");
-    searchDefaultFilter(createSearchFilter(searchLabels));
   };
 
   const handleSearchSubmit = (): void => {
     if (word.length === 0) {
       return handleSubmit();
     }
-    const newLabel = createLabel(word);
+    const newLabel = createLabel(word, LABEL_NAME.DETAILS);
     const newLabels = [
       ...labels.filter((label) => label.type !== LABEL_NAME.DETAILS),
       newLabel,
@@ -94,8 +113,15 @@ const useSearch = (): UseLabelResult => {
     // 중복된 라벨이 없을 경우 등록
     setLabels(newLabels);
     setWord("");
+    searchDefaultFilter(
+      createSearchFilter(
+        flatLabels({
+          ...totalLabels,
+          details: newLabels,
+        })
+      )
+    );
     navigate("/");
-    searchDefaultFilter(createSearchFilter(newLabels));
   };
 
   const handleWordChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -111,14 +137,16 @@ const useSearch = (): UseLabelResult => {
 
   return {
     word,
+    totalLabels: flatLabels(totalLabels),
     labels,
+    hasLabel,
+    setLabels,
     insertLabel,
     handleWordChange,
     handleWordKeyUp,
     handleSubmit,
     handleSearchSubmit,
     removeLabel,
-    removeAndInsert,
     loadLabels,
   };
 };
