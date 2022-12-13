@@ -24,7 +24,7 @@ posts = Array.from(Array(1024).keys()).map((id) => ({
       name: "image1",
     },
     {
-      src: "http://placeimg.com/640/640/animals",
+      src: "http://placeimg.com/640/640/people",
       name: "image1",
     },
   ],

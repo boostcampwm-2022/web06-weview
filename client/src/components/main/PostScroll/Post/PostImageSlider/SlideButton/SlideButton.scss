@@ -1,0 +1,40 @@
+@import "@/styles/theme";
+@import "@/styles/mixin";
+
+.prev-button,
+.next-button {
+  @include flex-center;
+  position: absolute;
+  top: 50%;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  text-align: center;
+  cursor: pointer;
+  background-color: $code-color;
+  border: none;
+  border-radius: $radius-circle;
+
+  & > svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-bottom: 0.5px;
+    color: $codeblock-color;
+  }
+}
+
+.prev-button {
+  left: 1%;
+
+  & > svg {
+    margin-right: 1.2px;
+  }
+}
+
+.next-button {
+  right: 1%;
+
+  & > svg {
+    margin-left: 2px;
+  }
+}
