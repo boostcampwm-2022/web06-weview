@@ -73,7 +73,12 @@ export class PostController {
     @Query() inquiryDto: InquiryDto,
     @Headers() headers,
   ): Promise<SearchResponseDto> {
-    const { tags, lastId, reviewCount, likeCount, details } = inquiryDto;
+    const { lastId, reviewCount, likeCount, details } = inquiryDto;
+    let { tags } = inquiryDto;
+    // TODO @Transform을 쓰는게 맞을지, 이게 맞을지 고민하기
+    if (typeof tags === 'string') {
+      tags = [tags];
+    }
     const returnValue = await this.postService.loadPostList(
       new LoadPostListRequestDto(lastId, tags, reviewCount, likeCount, details),
     );

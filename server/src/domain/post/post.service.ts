@@ -123,6 +123,9 @@ export class PostService {
   ): Promise<SearchResponseDto> {
     let isLast = true;
     const results = await this.postSearchService.search(loadPostListRequestDto);
+    if (results.length > SEND_POST_CNT + 1) {
+      throw new Error('너무 많은 검색 결과가 반환되었습니다');
+    }
     if (this.canGetNextPost(results.length)) {
       results.pop();
       isLast = false;

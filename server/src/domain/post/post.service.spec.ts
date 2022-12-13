@@ -36,7 +36,22 @@ describe('PostService', () => {
         UserRepository,
         TagRepository,
         ImageRepository,
-        PostSearchService,
+        {
+          provide: PostSearchService,
+          useValue: {
+            indexPost: () => jest.fn(),
+            search: () =>
+              jest.fn().mockResolvedValue({
+                hits: {
+                  hits: [
+                    { _source: { id: 1 } },
+                    { _source: { id: 2 } },
+                    { _source: { id: 3 } },
+                  ],
+                },
+              }),
+          },
+        },
         {
           provide: DataSource,
           useValue: {
@@ -72,6 +87,7 @@ describe('PostService', () => {
     expect(service).toBeDefined();
   });
 
+  // TODO PostService에서 글 작성시, 중복된 태그 입력하면 예외 처리하기
   describe('글 작성', () => {
     const writeDto: WriteDto = {
       title: '제목',
@@ -98,6 +114,9 @@ describe('PostService', () => {
       tagRepository.findOneBy = jest.fn(
         () => new Promise((resolve) => resolve(new Tag())),
       );
+      const post = new Post();
+      post.id = 1;
+      postRepository.save = jest.fn().mockResolvedValue(post);
       await service.write(1, writeDto);
 
       expect(postRepository.save).toBeCalledTimes(1);
