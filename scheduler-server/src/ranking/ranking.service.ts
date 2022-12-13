@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Interval } from '@nestjs/schedule';
 
-export const MINUTES_PER_HOUR = 60;
-export const QUEUE_CYCLE_EXPRESSED_SECOND = 15;
+export const QUEUE_CYCLE = 15;
+export const ROTATION_PER_MINUTE = 60 / QUEUE_CYCLE; // 15초마다 1번
+export const ARRAY_SIZE = ROTATION_PER_MINUTE * 60 * 24; // 1분에 4번 * 60(분) * 24(시간)
+
 export const RANKING_COUNT = 10;
 export const TAG_NAME_INDEX = 0;
 export const TAG_COUNT_INDEX = 1;
 
 @Injectable()
 export class RankingService {
-  private readonly tagsCountsCircularQueue: any[];
-  private tagCountBuffer;
+  private readonly tagCountsCircularQueue: any[];
+  private index: number;
   private ranking: any[];
 
   constructor() {
-    this.tagsCountsCircularQueue = new Array(
-      (MINUTES_PER_HOUR / QUEUE_CYCLE_EXPRESSED_SECOND) * MINUTES_PER_HOUR * 24,
-    );
-    this.tagCountBuffer = {};
+    this.tagCountsCircularQueue = new Array(ARRAY_SIZE);
+    this.index = 0;
     this.ranking = [];
     // TODO DB를 연동해 초기데이터 넣어주기
   }
@@ -27,54 +27,37 @@ export class RankingService {
   }
 
   async saveSearchedTags(tags: string[]) {
+    const tagCounts = this.tagCountsCircularQueue[this.index];
+
     tags.map((tag) => {
-      if (this.tagCountBuffer[tag]) {
-        this.tagCountBuffer[tag] += 1;
+      if (tagCounts[tag]) {
+        tagCounts[tag] += 1;
       } else {
-        this.tagCountBuffer[tag] = 1;
+        tagCounts[tag] = 1;
       }
     });
   }
 
-  @Cron('0/' + QUEUE_CYCLE_EXPRESSED_SECOND + ' * * * * *')
-  async updateRanking() {
-    this.putValueInQueue(this.tagCountBuffer);
-    this.tagCountBuffer = {};
-    const curRanking = this.getTopRankTagNames();
-    this.ranking = this.addUpAndDownInfo(curRanking);
-  }
+  @Interval(4000)
+  updateRanking() {
+    const tagCounts = this.countAllTags();
+    const newRanking = this.getTopRankTagNames(tagCounts);
+    this.ranking = this.addPrevInfo(newRanking);
 
-  /**
-   * 일정 시간마다 tagCountBuffer를 tagsCountsCircularQueue에 넣는다
-   * 이후 tagCountBuffer를 초기화한다
-   */
-  private putValueInQueue(tagCountBuffer) {
-    const index = this.makeIndexUsingTimeStamp(new Date());
-    this.tagsCountsCircularQueue[index] = Object.assign({}, tagCountBuffer);
-  }
-
-  /**
-   * 시간을 사용해 Queue의 인덱스를 만든다
-   * 일정 시간이 지나면 덮어쓸 큐의 index를 구하기 위해 사용한다
-   */
-  private makeIndexUsingTimeStamp(date: Date) {
-    return (
-      date.getMinutes() * (MINUTES_PER_HOUR / QUEUE_CYCLE_EXPRESSED_SECOND) +
-      Math.floor(date.getSeconds() / QUEUE_CYCLE_EXPRESSED_SECOND)
-    );
+    this.index = (this.index + 1) % this.tagCountsCircularQueue.length;
+    this.tagCountsCircularQueue[this.index] = {};
   }
 
   /**
    * 가장 검색이 자주 된 최상위 10개 태그의 이름을 반환한다
    * 만약 데이터가 10개가 되지 않으면, 존재하는 만큼만 반환한다
    */
-  private getTopRankTagNames() {
-    const tagsCount = this.countForEachTags();
+  private getTopRankTagNames(tagCounts) {
+    const result = Object.keys(tagCounts).reduce((arr, tag) => {
+      arr.push([tag, tagCounts[tag]]);
+      return arr;
+    }, []);
 
-    const result = [];
-    for (const tagName of Object.keys(tagsCount)) {
-      result.push([tagName, tagsCount[tagName]]);
-    }
     result.sort((prev, next) => next[TAG_COUNT_INDEX] - prev[TAG_COUNT_INDEX]);
 
     return result
@@ -82,35 +65,49 @@ export class RankingService {
       .map((each) => each[TAG_NAME_INDEX]);
   }
 
-  private countForEachTags() {
-    const tagsCount = {};
-    for (const tagsCountsSearchedAtTime of this.tagsCountsCircularQueue) {
-      if (!tagsCountsSearchedAtTime) {
-        continue;
+  /**
+   * 시간 가중치를 적용한 태그 개수들을 반환한다
+   */
+  private countAllTags() {
+    const totalTagCounts = {};
+    this.tagCountsCircularQueue.forEach((tagCounts, idx) => {
+      if (!tagCounts) {
+        return;
       }
-      for (const tagName of Object.keys(tagsCountsSearchedAtTime)) {
-        if (tagsCount[tagName]) {
-          tagsCount[tagName] += tagsCountsSearchedAtTime[tagName];
+
+      const timeWaste = this.calcTimeWaste(idx);
+      for (const tag in tagCounts) {
+        if (totalTagCounts[tag]) {
+          totalTagCounts[tag] += tagCounts[tag] * timeWaste;
           continue;
         }
-        tagsCount[tagName] = tagsCountsSearchedAtTime[tagName];
+
+        totalTagCounts[tag] = tagCounts[tag] * timeWaste;
       }
-    }
-    return tagsCount;
+    });
+
+    return totalTagCounts;
   }
 
-  private addUpAndDownInfo(curRanking: any[]) {
-    const rankingInfo = [];
-    for (let i = 0; i < curRanking.length; i++) {
-      const tagName = curRanking[i];
-      if (!this.ranking) {
-        rankingInfo.push({ name: tagName, prev: 0 });
-        continue;
-      }
+  /**
+   * 시간 가중치는 현재 큐의 인덱스와 배열의 크기에 따라 정해진다
+   */
+  private calcTimeWaste(idx: number): number {
+    const offset = idx - this.index + ARRAY_SIZE - 1;
+    const timeWaste = ((offset % ARRAY_SIZE) + 1) / ARRAY_SIZE;
+
+    return timeWaste;
+  }
+
+  private addPrevInfo(newRanking: any[]) {
+    const rankingInfo = newRanking.reduce((arr, tag) => {
       const prevIndex =
-        this.ranking.map((obj) => obj.name).indexOf(tagName) + 1;
-      rankingInfo.push({ name: tagName, prev: prevIndex });
-    }
+        this.ranking.findIndex((tagInfo) => tagInfo.name === tag) + 1;
+
+      arr.push({ name: tag, prev: prevIndex });
+      return arr;
+    }, []);
+
     return rankingInfo;
   }
 }
