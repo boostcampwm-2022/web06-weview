@@ -16,14 +16,14 @@ const PostImageSlider = (): JSX.Element => {
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [style, setStyle] = useState(getNextImageStyle(currentImgIndex));
 
+  const handlePrevImage = (): void => {
+    setCurrentImgIndex(currentImgIndex - 1);
+    setStyle(getNextImageStyle(currentImgIndex - 1));
+  };
+
   const handleNextImage = (): void => {
     setCurrentImgIndex(currentImgIndex + 1);
     setStyle(getNextImageStyle(currentImgIndex + 1));
-  };
-
-  const handlePrevSlide = (): void => {
-    setCurrentImgIndex(currentImgIndex - 1);
-    setStyle(getNextImageStyle(currentImgIndex - 1));
   };
 
   const handleClickImage = (): void => {
@@ -50,7 +50,7 @@ const PostImageSlider = (): JSX.Element => {
         <SlideButton
           isFirst={currentImgIndex === 0}
           isLast={currentImgIndex === images.length - 1}
-          handlePrevImage={handlePrevSlide}
+          handlePrevImage={handlePrevImage}
           handleNextImage={handleNextImage}
         />
         {images.length > 1 && (
