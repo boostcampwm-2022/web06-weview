@@ -21,7 +21,7 @@ jobs:
         id: filter
         with:
           base: ${{ github.ref }}
-          ref: ${{ github.action_ref }}
+          ref: ${{ github.head_ref }}
           filters: |
             client:
               - 'client/**'
