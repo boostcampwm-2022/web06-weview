@@ -133,7 +133,6 @@ export class PostService {
 
     const authors = [];
     const images = [];
-
     for (const result of results) {
       authors.push(
         this.userRepository.findOneBy({
