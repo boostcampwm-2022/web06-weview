@@ -26,7 +26,7 @@ export class SearchResponseDto {
       );
     }
 
-    this.lastId = posts.length == 0 ? -1 : this.getLastId(posts);
+    this.lastId = posts.length == 0 ? -1 : Number(this.getLastId(posts));
     this.isLast = isLast;
   }
 

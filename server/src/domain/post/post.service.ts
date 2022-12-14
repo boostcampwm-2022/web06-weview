@@ -136,7 +136,7 @@ export class PostService {
     for (const result of results) {
       authors.push(
         this.userRepository.findOneBy({
-          id: result._source['authorid'],
+          id: result._source['userid'],
         }),
       );
       images.push(
