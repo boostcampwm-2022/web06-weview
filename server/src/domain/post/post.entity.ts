@@ -52,4 +52,7 @@ export class Post extends BaseTimeEntity {
 
   @Column({ length: 24, default: '' })
   userNickname: string;
+
+  @Column()
+  userId!: number;
 }

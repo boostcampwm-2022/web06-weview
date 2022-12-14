@@ -41,7 +41,6 @@ export class PostSearchService {
     if (tags) {
       tagValue = Array.from(new Set(tags)).join(' ');
     }
-
     this.esService.index<PostSearchBody>({
       index: this.configService.get<string>('ELASTICSEARCH_INDEX'),
       id: String(post.id),
@@ -64,9 +63,15 @@ export class PostSearchService {
   }
 
   async search(loadPostListRequestDto: LoadPostListRequestDto) {
-    const { lastId, tags, reviewCount, likeCount, details } =
-      loadPostListRequestDto;
+    const { lastId, reviewCount, likeCount } = loadPostListRequestDto;
+    let { tags, details } = loadPostListRequestDto;
     this.validateParam(loadPostListRequestDto);
+    if (typeof details === 'string') {
+      details = [details];
+    }
+    if (typeof tags === 'string') {
+      tags = [tags];
+    }
 
     const searchFilter: any = {
       sort: [
@@ -104,20 +109,13 @@ export class PostSearchService {
     }
 
     if (tags && tags.length > 0) {
-      const q =
-        typeof tags === 'string'
-          ? `${tags}`
-          : tags.map((tag) => `${tag}`).join(' ');
-
-      searchFilter.body.query.bool.filter.bool.must.push({
-        match: {
-          tags: {
-            query: q,
-
-            operator: 'AND',
+      for (const tag of tags) {
+        searchFilter.body.query.bool.filter.bool.must.push({
+          match: {
+            tags: tag,
           },
-        },
-      });
+        });
+      }
     }
     if (reviewCount && reviewCount >= 1) {
       searchFilter.body.query.bool.filter.bool.must.push({
@@ -185,7 +183,7 @@ export class PostSearchService {
         '선택한 리뷰 개수는 적절하지 않습니다',
       );
     }
-    if (details.length > 1) {
+    if (Array.isArray(details) && details.length > 1) {
       throw new SearchParamInvalidException(
         '검색어의 개수가 적절하지 않습니다',
       );
