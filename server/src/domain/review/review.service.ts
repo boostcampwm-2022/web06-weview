@@ -50,6 +50,7 @@ export class ReviewService {
     reviewEntity.content = content;
 
     await this.reviewRepository.insert(reviewEntity);
+    this.postRepository.increaseReviewCount(postEntity);
   }
 
   async getReviewsOfPost(postId: number, { lastId }: ReviewGetAllRequestDto) {

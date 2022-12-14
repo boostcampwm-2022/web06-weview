@@ -29,13 +29,23 @@ export class LikesService {
     likes.user = user;
     likes.post = post;
     await this.likesRepository.save(likes);
+    this.postRepository.increaseLikeCount(post);
   }
 
   async cancelLikes(userId: number, postId: number) {
+    const [user, post] = await Promise.all([
+      this.userRepository.findOneBy({ id: userId }),
+      this.postRepository.findOneBy({ id: postId }),
+    ]);
+    if (post === null || user === null) {
+      return;
+    }
+
     await this.likesRepository.delete({
       userId: userId,
       postId: postId,
     });
+    this.postRepository.decreaseLikeCount(post);
   }
 
   async findPostIdsByUserId(userId: number) {

@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["main", "dev"]
+  workflow_dispatch:
+
+jobs:
+  path-check:
+    runs-on: ubuntu-20.04
+    outputs:
+      client: ${{ steps.filter.outputs.client }}
+      server: ${{ steps.filter.outputs.server }}
+      scheduler-server: ${{ steps.filter.outputs.scheduler-server }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          base: ${{ github.ref }}
+          ref: ${{ github.head_ref }}
+          filters: |
+            client:
+              - 'client/**'
+            server:
+              - 'server/**'
+            scheduler-server:
+              - 'scheduler-server/**'
+
+  client:
+    needs: path-check
+    if: ${{ needs.path-check.outputs.client == 'true' }}
+    uses: ./.github/workflows/reusable-integration.yml
+    with:
+      working-directory: client
+
+  server:
+    needs: path-check
+    if: ${{ needs.path-check.outputs.server == 'true' }}
+    uses: ./.github/workflows/reusable-integration.yml
+    with:
+      working-directory: server
+
+  scheduler-server:
+    needs: path-check
+    if: ${{ needs.path-check.outputs.scheduler-server == 'true' }}
+    uses: ./.github/workflows/reusable-integration.yml
+    with:
+      working-directory: scheduler-server

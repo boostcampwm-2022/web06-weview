@@ -1,6 +1,7 @@
 import { IsInt, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 
 export class LoadPostListRequestDto {
+  //TODO 이름 변경. SearchCondition..
   constructor(
     lastId: number,
     tags: string[],
