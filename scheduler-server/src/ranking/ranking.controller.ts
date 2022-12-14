@@ -19,7 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-export const MAX_TAG_COUNT = 10;
+export const MAX_TAG_COUNT = 5;
 export const TAG_NAME_REGEX = /^[0-9|a-z|A-Z|ㄱ-ㅎ|가-힣]+$/;
 
 @Controller()
