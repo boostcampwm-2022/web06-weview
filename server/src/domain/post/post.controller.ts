@@ -88,8 +88,6 @@ export class PostController {
     await this.addBookmarksToPostIfLogin(headers['authorization'], returnValue);
     await this.addSearchHistory(headers['authorization'], inquiryDto);
 
-    await this.addSearchHistory(headers['authorization'], inquiryDto);
-
     this.applyTags(tags, lastId);
 
     return returnValue;
