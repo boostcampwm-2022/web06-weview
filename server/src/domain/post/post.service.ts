@@ -63,7 +63,7 @@ export class PostService {
     postEntity.userNickname = userEntity.nickname;
 
     postEntity = await this.postRepository.save(postEntity);
-    this.postSearchService.indexPost(postEntity, tags);
+    await this.postSearchService.indexPost(postEntity, tags);
 
     return postEntity.id;
   }
