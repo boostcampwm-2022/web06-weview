@@ -1,0 +1,76 @@
+name: "[CD] MAIN"
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  path-check:
+  runs-on: ubuntu-20.04
+  outputs:
+    client: ${{ steps.filter.outputs.client }}
+    server: ${{ steps.filter.outputs.server }}
+    scheduler-server: ${{ steps.filter.outputs.scheduler-server }}
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          client:
+            - 'client/**'
+          server:
+            - 'server/**'
+          scheduler-server:
+            - 'scheduler-server/**'
+
+  client:
+    needs: path-check
+    if: ${{ needs.path-check.outputs.client == 'true' }}
+    uses: ./.github/workflows/reusable-deployment-client.yml
+    with:
+      bucket-name: weview
+    secrets:
+      VITE_SERVER_URL: ${{ secrets.MAIN_VITE_SERVER_URL }}
+      VITE_LOCAL_URL: ${{ secrets.MAIN_VITE_LOCAL_URL }}
+      VITE_GITHUB_AUTH_SERVER_URL: ${{ secrets.MAIN_VITE_GITHUB_AUTH_SERVER_URL }}
+      VITE_API_MODE: ${{ secrets.MAIN_VITE_API_MODE }}
+      NCLOUD_BUCKET_ACCESS_KEY: ${{ secrets.MAIN_NCLOUD_BUCKET_ACCESS_KEY }}
+      NCLOUD_BUCKET_SECRET_KEY: ${{ secrets.MAIN_NCLOUD_BUCKET_SECRET_KEY }}
+      NCLOUD_HOST: ${{ secrets.MAIN_NCLOUD_HOST }}
+      NCLOUD_USERNAME: ${{ secrets.MAIN_NCLOUD_USERNAME }}
+      NCLOUD_PASSWORD: ${{ secrets.MAIN_NCLOUD_PASSWORD }}
+      NCLOUD_PORT: ${{ secrets.MAIN_NCLOUD_PORT }}
+
+  server:
+    needs: path-check
+    if: ${{ needs.path-check.outputs.server == 'true' }}
+    uses: ./.github/workflows/reusable-deployment-server.yml
+    with:
+      docker-context: server
+      docker-image-name: weview-main
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_ACCESS_TOKEN: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      NCLOUD_HOST: ${{ secrets.MAIN_NCLOUD_HOST }}
+      NCLOUD_USERNAME: ${{ secrets.MAIN_NCLOUD_USERNAME }}
+      NCLOUD_PASSWORD: ${{ secrets.MAIN_NCLOUD_PASSWORD }}
+      NCLOUD_PORT: ${{ secrets.MAIN_NCLOUD_PORT }}
+
+  scheduler-server:
+    needs: path-check
+    if: ${{ needs.path-check.outputs.scheduler-server == 'true' }}
+    uses: ./.github/workflows/reusable-deployment-server.yml
+    with:
+      docker-context: scheduler-server
+      docker-image-name: weview-scheduler-main
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_ACCESS_TOKEN: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      NCLOUD_HOST: ${{ secrets.MAIN_NCLOUD_HOST }}
+      NCLOUD_USERNAME: ${{ secrets.MAIN_NCLOUD_USERNAME }}
+      NCLOUD_PASSWORD: ${{ secrets.MAIN_NCLOUD_PASSWORD }}
+      NCLOUD_PORT: ${{ secrets.MAIN_NCLOUD_PORT }}
