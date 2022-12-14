@@ -115,7 +115,7 @@ const ReviewCountCheckBoxes = (): JSX.Element => {
 };
 
 const DetailSearchForm = (): JSX.Element => {
-  const { word, handleWordChange, handleInsertTag } = useSearch(
+  const { word, handleWordChange, handleInsertTag, handleSubmit } = useSearch(
     LABEL_NAME.TAGS
   );
 
@@ -133,7 +133,12 @@ const DetailSearchForm = (): JSX.Element => {
       <LikeCountCheckBoxes />
       <ReviewCountCheckBoxes />
       <div className="detail-search-form__footer">
-        <button className="detail-search-form__footer__submit-btn">적용</button>
+        <button
+          className="detail-search-form__footer__submit-btn"
+          onClick={() => handleSubmit()}
+        >
+          적용
+        </button>
       </div>
     </div>
   );
