@@ -1,5 +1,4 @@
 name: "[CD] DEV"
-
 on:
   push:
     branches:
