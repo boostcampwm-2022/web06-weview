@@ -7,25 +7,25 @@ on:
 
 jobs:
   path-check:
-  runs-on: ubuntu-20.04
-  outputs:
-    client: ${{ steps.filter.outputs.client }}
-    server: ${{ steps.filter.outputs.server }}
-    scheduler-server: ${{ steps.filter.outputs.scheduler-server }}
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+    runs-on: ubuntu-20.04
+    outputs:
+      client: ${{ steps.filter.outputs.client }}
+      server: ${{ steps.filter.outputs.server }}
+      scheduler-server: ${{ steps.filter.outputs.scheduler-server }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - uses: dorny/paths-filter@v2
-      id: filter
-      with:
-        filters: |
-          client:
-            - 'client/**'
-          server:
-            - 'server/**'
-          scheduler-server:
-            - 'scheduler-server/**'
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            client:
+              - 'client/**'
+            server:
+              - 'server/**'
+            scheduler-server:
+              - 'scheduler-server/**'
 
   client:
     needs: path-check
