@@ -235,10 +235,7 @@ describe('PostSearchService', () => {
         searchCondition.tags = ['one'];
         searchConditionUsingES.body.query.bool.filter.bool.must.push({
           match: {
-            tags: {
-              query: 'one',
-              operator: 'AND',
-            },
+            tags: 'one',
           },
         });
 
@@ -252,14 +249,13 @@ describe('PostSearchService', () => {
       it('tags가 다섯 개 들어왔을 때, 정상 출력한다', async () => {
         //given
         searchCondition.tags = ['one', 'two', 'three', 'four', 'five'];
-        searchConditionUsingES.body.query.bool.filter.bool.must.push({
-          match: {
-            tags: {
-              query: ['one', 'two', 'three', 'four', 'five'].join(' '),
-              operator: 'AND',
+        for (const tag of searchCondition.tags) {
+          searchConditionUsingES.body.query.bool.filter.bool.must.push({
+            match: {
+              tags: tag,
             },
-          },
-        });
+          });
+        }
 
         //when
         await service.search(searchCondition);
