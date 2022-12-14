@@ -5,6 +5,10 @@
   flex-shrink: 0;
   height: 100%;
 
+  &:hover .post__image-slider__dots {
+    opacity: 1;
+  }
+
   &--relative {
     position: relative;
   }
@@ -15,6 +19,11 @@
     height: 51rem;
     overflow: hidden;
     background-color: black;
+
+    &:hover .post__image-slider__dots {
+      opacity: 1;
+      transition: all 0.2s ease-in-out;
+    }
   }
 
   &--image {
@@ -38,6 +47,7 @@
     justify-content: center;
     width: 100%;
     pointer-events: none;
+    opacity: 0.4;
 
     &--other,
     &--now {
