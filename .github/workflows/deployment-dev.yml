@@ -20,6 +20,8 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter
         with:
+          base: ${{ github.ref }}
+          ref: ${{ github.action_ref }}
           filters: |
             client:
               - 'client/**'
