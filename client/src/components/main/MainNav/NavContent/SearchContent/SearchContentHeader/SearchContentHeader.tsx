@@ -31,7 +31,7 @@ const SearchContentHeader = (): JSX.Element => {
           className="search-content__form__input"
           type="text"
           value={word}
-          placeholder="WeView 검색"
+          placeholder="검색어를 입력해주세요."
           onChange={handleWordChange}
           onKeyUp={handleWordKeyUp}
         />

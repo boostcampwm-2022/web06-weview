@@ -120,18 +120,21 @@ const DetailSearchForm = (): JSX.Element => {
   );
 
   return (
-    <div>
+    <div className="detail-search-form">
       <div className="title">상세 검색</div>
       <input
+        className="detail-search-form__input"
         type="text"
         value={word}
-        placeholder={"태그를 입력해주세요."}
+        placeholder={"태그를 엔터로 구분해서 입력할 수 있어요."}
         onChange={handleWordChange}
         onKeyUp={handleInsertTag}
       />
       <LikeCountCheckBoxes />
       <ReviewCountCheckBoxes />
-      <button>적용</button>
+      <div className="detail-search-form__footer">
+        <button className="detail-search-form__footer__submit-btn">적용</button>
+      </div>
     </div>
   );
 };

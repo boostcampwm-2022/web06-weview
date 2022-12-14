@@ -1,4 +1,7 @@
 @import "@/styles/_theme";
+@import "@/styles/_mixin";
+@import "@/styles/_button";
+@import "@/styles/_animation";
 
 @mixin icon-common {
   width: $font-x-large;
@@ -6,6 +9,15 @@
 }
 
 .detail-search-form {
+  @include content-fade-in;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  &__input {
+    @include search-input(calc($font-medium * 2));
+  }
+
   &__check-boxes {
     display: flex;
     gap: 1rem;
@@ -14,6 +26,7 @@
     height: 2.2rem;
 
     &__title {
+      width: 4rem;
       font-size: $font-medium;
     }
 
@@ -58,6 +71,28 @@
       &:hover {
         cursor: pointer;
         background-color: $light-gray;
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: right;
+
+    &__submit-btn {
+      // nav-button 작동 이상(클릭 유지 효과)으로 따로 작성
+      width: 6rem;
+      height: 2.2rem;
+      margin: 0;
+      font-size: $font-form;
+      color: $placeholder-color-dark;
+      cursor: pointer;
+      background: none;
+      border: $border-small $line-color;
+      border-radius: $radius-small;
+
+      &:active {
+        color: $text-color;
       }
     }
   }

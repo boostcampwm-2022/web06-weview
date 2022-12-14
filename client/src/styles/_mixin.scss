@@ -133,3 +133,25 @@
   backdrop-filter: blur(2px);
   background-color: rgba(0, 0, 0, 0.50);
 }
+@mixin search-input($height) {
+  box-sizing: border-box;
+  flex: 1;
+  height: $height;
+  padding-left: 1rem;
+  font-size: $font-medium;
+  line-height: $height;
+  background-color: $weview-off-white;
+  border: $border-small $placeholder-color-dark;
+  border-radius: $radius-small;
+  transition: 100ms;
+
+  &::placeholder {
+    font-size: $font-medium;
+    color: $placeholder-color;
+  }
+
+  &:focus {
+    background-color: $weview-white;
+    border: $border-small $primary;
+  }
+}
