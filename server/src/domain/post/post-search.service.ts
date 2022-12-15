@@ -202,4 +202,15 @@ export class PostSearchService {
       throw new TagInvalidException('태그의 길이가 너무 깁니다');
     }
   }
+
+  async delete(id: number) {
+    await this.esService.deleteByQuery({
+      index: this.configService.get<string>('ELASTICSEARCH_INDEX'),
+      body: {
+        query: {
+          match: { id: id },
+        },
+      },
+    });
+  }
 }
