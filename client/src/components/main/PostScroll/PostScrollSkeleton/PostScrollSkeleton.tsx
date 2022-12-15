@@ -17,7 +17,10 @@ const PostScrollSkeleton = (): JSX.Element => {
         <div className="post-skeleton__body--title"></div>
         <div className="post-skeleton__body--content"></div>
       </div>
-      <div className="post-skeleton__footer"></div>
+      <div className="post-skeleton__footer">
+        <span className="post-skeleton__footer__item--left"></span>
+        <span className="post-skeleton__footer__item--right"></span>
+      </div>
     </div>
   );
 };

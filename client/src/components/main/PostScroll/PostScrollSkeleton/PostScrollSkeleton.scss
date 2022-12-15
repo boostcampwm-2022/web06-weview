@@ -1,6 +1,7 @@
 @import "@/styles/_theme";
 @import "@/styles/_global-style";
 @import "@/styles/_mixin";
+@import "@/styles/_animation";
 
 .post-skeleton {
   box-sizing: border-box;
@@ -23,7 +24,11 @@
       width: fit-content;
 
       & * {
-        background-color: $line-color;
+        @include skeleton-opacity(
+          $skeleton-color,
+          $skeleton-color-dark,
+          3000ms
+        );
       }
 
       &__image {
@@ -39,9 +44,9 @@
     }
 
     &__code-info {
+      @include skeleton-opacity($skeleton-color, $skeleton-color-dark, 3000ms);
       width: 8rem;
       height: $font-medium;
-      background-color: $line-color;
     }
   }
 
@@ -50,6 +55,7 @@
     height: $main-post-bar-width;
     background-image: url("@/assets/progressive-image.jpg");
     background-size: cover;
+    opacity: 0.7;
   }
 
   &__body {
@@ -60,25 +66,42 @@
     width: 100%;
     height: 16.6rem;
     padding: $font-medium;
+    border-bottom: 1px solid $line-color;
 
     & * {
-      background-color: $line-color;
+      @include skeleton-opacity($skeleton-color, $skeleton-color-dark, 3000ms);
     }
 
     &--title {
+      flex-shrink: 0;
       width: 12rem;
-      height: $font-large;
+      height: 1.8rem;
     }
 
     &--content {
       width: 100%;
-      height: 10rem;
+      height: 100%;
     }
   }
 
   &__footer {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
     width: 100%;
     height: 7.5rem;
-    background-color: $light-gray;
+    padding: 1rem;
+
+    &__item--left {
+      @include skeleton-opacity($skeleton-color, $skeleton-color-dark, 3000ms);
+      width: 50%;
+      height: 100%;
+    }
+
+    &__item--right {
+      @include skeleton-opacity($skeleton-color, $skeleton-color-dark, 3000ms);
+      width: 5.5rem;
+      height: 100%;
+    }
   }
 }

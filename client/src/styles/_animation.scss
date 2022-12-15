@@ -107,4 +107,20 @@ $speed: cubic-bezier(0.86, 0, 0.3, 1);
     }
   }
 }
+@mixin skeleton-opacity($skeleton-color, $skeleton-color-highlight, $animation-time) {
+  background-color: $skeleton-color;
+  animation: skeleton-gradient $animation-time infinite ease-in-out;
+  @keyframes skeleton-gradient {
+    0% {
+      background-color: $skeleton-color;
+    }
 
+    50% {
+      background-color: $skeleton-color-highlight;
+    }
+
+    100% {
+      background-color: $skeleton-color;
+    }
+  }
+}

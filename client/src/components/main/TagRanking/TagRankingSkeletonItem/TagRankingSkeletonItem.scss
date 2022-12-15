@@ -11,7 +11,7 @@
     height: 2rem;
     overflow: hidden;
     vertical-align: top;
-    background: #f2f2f2;
+    background: $skeleton-color;
 
     &::before {
       @include skeleton-load(23rem);
@@ -22,7 +22,12 @@
       width: 3rem;
       height: 100%;
       content: "";
-      background: linear-gradient(to right, #f2f2f2, #ddd, #f2f2f2);
+      background: linear-gradient(
+        to right,
+        $skeleton-color,
+        $skeleton-color-dark,
+        $skeleton-color
+      );
       box-shadow: 0 0 30px 30px rgba(255, 255, 255, 0.05);
     }
   }
