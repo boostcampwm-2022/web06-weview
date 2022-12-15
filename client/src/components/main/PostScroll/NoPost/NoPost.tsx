@@ -3,12 +3,12 @@ import React from "react";
 import { recommendKeyword } from "@/components/main/MainNav/NavContent/SearchContent/SearchContentBody/SearchContentRecommend";
 import { Label } from "@/types/search";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
-import useLabel from "@/hooks/useLabel";
+import useSearch from "@/hooks/useSearch";
 
 import "./NoPost.scss";
 
 const NoPost = (): JSX.Element => {
-  const { loadLabels, handleSubmit, insertLabel } = useLabel();
+  const { loadLabels, handleSubmit, insertLabel } = useSearch();
 
   return (
     <div className="no-post">
