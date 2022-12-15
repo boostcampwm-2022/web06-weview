@@ -51,23 +51,14 @@ class EachSearchResponseDto {
   lineCount: number;
 
   constructor(post: any, author, images) {
-    let tags;
-    try {
-      tags = JSON.parse(post._source.tags);
-    } catch (e) {
-      if (post._source.tags.length > 0) {
-        tags = [post._source.tags];
-      } else {
-        tags = [];
-      }
-    }
     this.id = post._source.id;
     this.title = post._source.title;
     this.content = post._source.content;
     this.code = post._source.code;
     this.language = post._source.language;
     this.updatedAt = post._source.updatedat;
-    this.tags = tags;
+    this.tags =
+      post._source.tags.length === 0 ? [] : post._source.tags.split(' ');
     this.isLiked = false;
     this.isBookmarked = false;
     this.likesCount = post._source.likecount;
