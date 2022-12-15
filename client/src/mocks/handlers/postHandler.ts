@@ -60,7 +60,7 @@ export const postHandler = [
 
     return res(
       ctx.status(200),
-      ctx.delay(1000),
+      ctx.delay(lastId === -1 ? 10000 : 1000),
       ctx.json({
         posts: filteredData.slice(lastId, lastId + SIZE),
         lastId: lastId + SIZE - 1,
