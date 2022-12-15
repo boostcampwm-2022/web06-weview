@@ -4,15 +4,20 @@ import BookmarksOutlinedIcon from "@mui/icons-material/BookmarksOutlined";
 import NavMenu from "@/components/main/MainNav/NavMenus/NavMenu/NavMenu";
 import useNav from "@/hooks/useNav";
 import useSearchStore from "@/store/useSearchStore";
+import useAuth from "@/hooks/useAuth";
 
 const BookmarkMenu = (): JSX.Element => {
   const { handleBookmark } = useNav();
+  const { checkLogin } = useAuth();
   const searchBookmarkFilter = useSearchStore(
     (state) => state.searchBookmarkFilter
   );
 
   const handleMenuClick: MouseEventHandler = () => {
-    handleBookmark(searchBookmarkFilter);
+    if (checkLogin()) {
+      console.log("hello");
+      handleBookmark(searchBookmarkFilter);
+    }
   };
 
   return (
