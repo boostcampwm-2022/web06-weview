@@ -75,6 +75,7 @@ const usePostInfiniteScroll = (): PostInfiniteScrollResults => {
       getNextPageParam: (lastPost) =>
         lastPost.isLast ? undefined : lastPost.lastId,
       staleTime: 1000 * 60, // 1분
+      suspense: true,
     }
   );
 

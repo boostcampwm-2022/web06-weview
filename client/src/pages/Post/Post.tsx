@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import MainNav from "@/components/main/MainNav/MainNav";
@@ -6,6 +6,7 @@ import TagRanking from "@/components/main/TagRanking/TagRanking";
 import PostScroll from "@/components/main/PostScroll/PostScroll";
 import useCommonModalStore from "@/store/useCommonModalStore";
 import useSearchStore from "@/store/useSearchStore";
+import PostScrollSkeleton from "@/components/main/PostScroll/PostScrollSkeleton/PostScrollSkeleton";
 
 import "./Post.scss";
 
@@ -23,7 +24,9 @@ const Post = (): JSX.Element => {
     <div className={isModalOpened ? "hidden-main" : "main"}>
       <MainNav />
       <div className="main__content">
-        <PostScroll />
+        <Suspense fallback={<PostScrollSkeleton />}>
+          <PostScroll />
+        </Suspense>
         <TagRanking />
       </div>
     </div>
