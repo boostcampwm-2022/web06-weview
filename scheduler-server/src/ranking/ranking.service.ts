@@ -75,28 +75,28 @@ export class RankingService {
         return;
       }
 
-      const timeWaste = this.calcTimeWaste(idx);
+      const timeWeight = this.calcTimeWeight(idx);
       for (const tag in tagCounts) {
         if (totalTagCounts[tag]) {
-          totalTagCounts[tag] += tagCounts[tag] * timeWaste;
+          totalTagCounts[tag] += tagCounts[tag] * timeWeight;
           continue;
         }
 
-        totalTagCounts[tag] = tagCounts[tag] * timeWaste;
+        totalTagCounts[tag] = tagCounts[tag] * timeWeight;
       }
     });
 
     return totalTagCounts;
   }
 
-  /**
+  /*
    * 시간 가중치는 현재 큐의 인덱스와 배열의 크기에 따라 정해진다
    */
-  private calcTimeWaste(idx: number): number {
+  private calcTimeWeight(idx: number): number {
     const offset = idx - this.index + ARRAY_SIZE - 1;
-    const timeWaste = ((offset % ARRAY_SIZE) + 1) / ARRAY_SIZE;
+    const timeWeight = ((offset % ARRAY_SIZE) + 1) / ARRAY_SIZE;
 
-    return timeWaste;
+    return timeWeight;
   }
 
   private addPrevInfo(newRanking: any[]) {
