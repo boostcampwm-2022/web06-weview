@@ -32,12 +32,14 @@ const SubmitModal = (): JSX.Element => {
       onClick={closeSubmitModal}
     >
       <section className="submit-modal">
-        <h2 className="submit-modal__header">제출하기</h2>
-        <TitleInput />
-        <ContentArea />
-        <TagInput />
-        <div className="submit-modal__button">
-          <RegisterButton />
+        <div className="submit-modal__content">
+          <h2 className="submit-modal__header">제출하기</h2>
+          <TitleInput />
+          <ContentArea />
+          <TagInput />
+          <div className="submit-modal__button">
+            <RegisterButton />
+          </div>
         </div>
       </section>
     </div>

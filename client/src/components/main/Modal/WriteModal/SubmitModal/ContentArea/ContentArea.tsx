@@ -15,7 +15,7 @@ const ContentArea = (): JSX.Element => {
   }, []);
 
   return (
-    <>
+    <div>
       <label className="content-label" htmlFor="content">
         코드에 대한 소개나 질문등을 입력해주세요
       </label>
@@ -26,7 +26,7 @@ const ContentArea = (): JSX.Element => {
         className="content-textarea"
         spellCheck={false}
       />
-    </>
+    </div>
   );
 };
 

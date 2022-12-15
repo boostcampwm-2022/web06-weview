@@ -54,7 +54,7 @@ const TagInput = (): JSX.Element => {
   };
 
   return (
-    <>
+    <div>
       <label className="tag-label" htmlFor="tag">
         태그들을 입력해주세요
       </label>
@@ -74,7 +74,7 @@ const TagInput = (): JSX.Element => {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
