@@ -15,3 +15,4 @@ export const REVIEW_COUNT_ITEMS = [
 ];
 
 export const MAX_SEARCH_HISTORY = 5;
+export const MAX_SEARCH_TAGS_COUNT = 5;
