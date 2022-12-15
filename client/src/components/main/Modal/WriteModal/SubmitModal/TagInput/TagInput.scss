@@ -1,13 +1,16 @@
 @import "@/styles/_theme.scss";
 
 .tag-label {
+  display: block;
   margin-top: 1rem;
+  margin-bottom: 0.5rem;
   font-size: $font-form;
 }
 
 .tag-input {
-  width: 56%;
-  height: 2.5rem;
+  box-sizing: border-box;
+  width: 100%;
+  height: 3rem;
   padding-left: 0.5rem;
   font-family: GmarketSans;
   font-size: $font-form;
@@ -19,6 +22,8 @@
   display: flex;
   width: 100%;
   max-width: 100%;
+  height: 3rem;
+  margin-top: 0.5rem;
   overflow-x: scroll;
 
   &::-webkit-scrollbar {
