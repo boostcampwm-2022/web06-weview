@@ -14,6 +14,7 @@ import {
 } from "@/utils/label";
 import { LABEL_NAME } from "@/constants/label";
 import { formatTag } from "@/utils/regExpression";
+import { MAX_SEARCH_TAGS_COUNT } from "@/constants/search";
 
 interface UseLabelResult {
   word: string;
@@ -127,7 +128,11 @@ const useSearch = (
   };
 
   const handleInsertTag = (e: KeyboardEvent<HTMLInputElement>): void => {
-    if (word.length === 0 || !isEnterKey(e.key)) {
+    if (
+      word.length === 0 ||
+      !isEnterKey(e.key) ||
+      MAX_SEARCH_TAGS_COUNT <= labels.length
+    ) {
       return;
     }
     const newLabel = createLabel(formatTag(word.trim()), LABEL_NAME.TAGS);
