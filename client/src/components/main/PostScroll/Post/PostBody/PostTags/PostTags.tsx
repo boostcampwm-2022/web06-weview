@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
 import { createLabel } from "@/utils/label";
-import useLabel from "@/hooks/useLabel";
+import useSearch from "@/hooks/useSearch";
 import { Label } from "@/types/search";
 
 import "./PostTags.scss";
@@ -12,7 +12,7 @@ interface PostTagsProps {
 }
 
 const PostTags = ({ tags }: PostTagsProps): JSX.Element => {
-  const { loadLabels, handleSubmit } = useLabel();
+  const { loadLabels, handleSubmit } = useSearch();
 
   const handleClickLabel = useCallback(
     (label: Label) => {

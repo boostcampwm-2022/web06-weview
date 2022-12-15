@@ -1,6 +1,7 @@
-import React, { ChangeEvent, useCallback } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
 
 import useWritingStore from "@/store/useWritingStore";
+import useWritingModalStore from "@/store/useWritingModalStore";
 
 import "./TitleInput.scss";
 
@@ -9,10 +10,16 @@ const TitleInput = (): JSX.Element => {
     title: state.title,
     setTitle: state.setTitle,
   }));
+  const isOpened = useWritingModalStore((state) => state.isSubmitModalOpened);
+  const titleRef = useRef<HTMLInputElement>(null);
 
   const changeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   }, []);
+
+  useEffect(() => {
+    titleRef.current?.focus();
+  }, [isOpened]);
 
   return (
     <div className="title">
@@ -24,6 +31,7 @@ const TitleInput = (): JSX.Element => {
         className="title__input"
         value={title}
         onChange={changeTitle}
+        ref={titleRef}
       />
     </div>
   );

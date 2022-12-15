@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import useNavStore, { NAV_STATE, NAV_STATE_TYPE } from "@/store/useNavStore";
 
 type NavClickHandler = (fn?: Function) => void;
@@ -19,6 +21,7 @@ interface UseNavResult {
 }
 
 const useNav = (): UseNavResult => {
+  const navigate = useNavigate();
   const [navState, setNavState] = useNavStore((state) => [
     state.navState,
     state.setNavState,
@@ -26,6 +29,7 @@ const useNav = (): UseNavResult => {
 
   const handleNav =
     (newNavState: NAV_STATE_TYPE) => (fn: Function | undefined) => {
+      navigate("/");
       const state = navState === newNavState ? NAV_STATE.DEFAULT : newNavState;
       setNavState(state);
       if (fn !== undefined) {

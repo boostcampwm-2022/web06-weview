@@ -13,26 +13,7 @@
       height: calc($font-medium * 3);
 
       &__input {
-        box-sizing: border-box;
-        flex: 1;
-        height: 100%;
-        padding-left: 1rem;
-        font-size: $font-medium;
-        line-height: calc($font-medium * 3);
-        background-color: $weview-off-white;
-        border: $border-small $placeholder-color-dark;
-        border-radius: $radius-small;
-        transition: 100ms;
-
-        &::placeholder {
-          font-size: $font-medium;
-          color: $placeholder-color;
-        }
-
-        &:focus {
-          background-color: $weview-white;
-          border: $border-small $primary;
-        }
+        @include search-input(calc($font-medium * 3));
       }
 
       &__submit {

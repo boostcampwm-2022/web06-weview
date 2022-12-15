@@ -1,0 +1,107 @@
+@import "@/styles/_theme";
+@import "@/styles/_global-style";
+@import "@/styles/_mixin";
+@import "@/styles/_animation";
+
+.post-skeleton {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: $main-post-bar-width;
+  height: fit-content;
+  background-color: $weview-white;
+  border: 1px solid $line-color;
+  border-radius: $radius-medium;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+  &__title {
+    @include post-title;
+
+    &__author-profile {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+      width: fit-content;
+
+      & * {
+        @include skeleton-opacity(
+          $skeleton-color,
+          $skeleton-color-dark,
+          3000ms
+        );
+      }
+
+      &__image {
+        width: 4.72rem;
+        height: 4.72rem;
+        border-radius: $radius-circle;
+      }
+
+      &__username {
+        width: 10rem;
+        height: $font-medium;
+      }
+    }
+
+    &__code-info {
+      @include skeleton-opacity($skeleton-color, $skeleton-color-dark, 3000ms);
+      width: 8rem;
+      height: $font-medium;
+    }
+  }
+
+  &__image-slider {
+    width: 100%;
+    height: $main-post-bar-width;
+    background-image: url("@/assets/progressive-image.jpg");
+    background-size: cover;
+    opacity: 0.7;
+  }
+
+  &__body {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    height: 16.6rem;
+    padding: $font-medium;
+    border-bottom: 1px solid $line-color;
+
+    & * {
+      @include skeleton-opacity($skeleton-color, $skeleton-color-dark, 3000ms);
+    }
+
+    &--title {
+      flex-shrink: 0;
+      width: 12rem;
+      height: 1.8rem;
+    }
+
+    &--content {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__footer {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 7.5rem;
+    padding: 1rem;
+
+    &__item--left {
+      @include skeleton-opacity($skeleton-color, $skeleton-color-dark, 3000ms);
+      width: 50%;
+      height: 100%;
+    }
+
+    &__item--right {
+      @include skeleton-opacity($skeleton-color, $skeleton-color-dark, 3000ms);
+      width: 5.5rem;
+      height: 100%;
+    }
+  }
+}

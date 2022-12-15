@@ -15,11 +15,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get Prev Tag
+        id: prev-tag-finder
+        uses: WOOSERK/get-prev-tag-action@v0.1.1
 
       - uses: dorny/paths-filter@v2
         id: filter
         with:
-          base: ${{ github.ref }}
+          base: ${{ steps.prev-tag-finder.outputs.prev-tag }}
           ref: ${{ github.head_ref }}
           filters: |
             client:

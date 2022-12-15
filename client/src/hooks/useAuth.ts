@@ -10,6 +10,7 @@ interface UseAuthResult {
   myInfo: MyInfo | null;
   handleLogin: () => void;
   handleLogout: () => void;
+  checkLogin: () => boolean;
 }
 
 const useAuth = (): UseAuthResult => {
@@ -38,7 +39,16 @@ const useAuth = (): UseAuthResult => {
       });
   };
 
-  return { isLoggedIn, myInfo, handleLogin, handleLogout };
+  const checkLogin = (): boolean => {
+    if (isLoggedIn) {
+      return true;
+    }
+    alert("로그인이 필요합니다.");
+    handleLogin();
+    return false;
+  };
+
+  return { isLoggedIn, myInfo, handleLogin, handleLogout, checkLogin };
 };
 
 export default useAuth;

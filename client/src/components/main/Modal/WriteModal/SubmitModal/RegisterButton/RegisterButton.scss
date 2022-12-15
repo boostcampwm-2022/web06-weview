@@ -1,5 +1,11 @@
-@import '@/styles/button';
+@import "@/styles/button";
 
 .writing-register-button {
   @include nav-button;
+  margin-top: 0;
+
+  &:hover {
+    color: $code-color;
+    background-color: $codeblock-color;
+  }
 }

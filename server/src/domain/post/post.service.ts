@@ -107,6 +107,7 @@ export class PostService {
     }
     post.isDeleted = true;
     await this.postRepository.deleteUsingPost(post);
+    await this.postSearchService.delete(post.id);
   }
 
   async inquiryPost(postId: number) {

@@ -50,6 +50,7 @@ describe('PostService', () => {
                   ],
                 },
               }),
+            delete: () => jest.fn(),
           },
         },
         {

@@ -12,24 +12,26 @@ async function bootstrap() {
     app.set('trust proxy', 1);
   }
 
-  const config = new DocumentBuilder()
-    .setTitle('Weview API')
-    .setVersion('1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        name: 'JWT',
-        description: 'Enter JWT Token',
-        in: 'header',
-      },
-      'accessToken',
-    )
-    .addCookieAuth('refreshToken')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/', app, document);
+  if (process.env.NODE_ENV !== 'prod') {
+    const config = new DocumentBuilder()
+      .setTitle('Weview API')
+      .setVersion('1.0')
+      .addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          name: 'JWT',
+          description: 'Enter JWT Token',
+          in: 'header',
+        },
+        'accessToken',
+      )
+      .addCookieAuth('refreshToken')
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('/', app, document);
+  }
 
   app.useGlobalPipes(
     new ValidationPipe({

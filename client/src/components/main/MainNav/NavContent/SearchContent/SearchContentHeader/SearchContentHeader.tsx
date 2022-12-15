@@ -3,10 +3,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import React, { useState } from "react";
 import ArrowDropDownCircleSharpIcon from "@mui/icons-material/ArrowDropDownCircleSharp";
 
-import useLabel from "@/hooks/useLabel";
+import useSearch from "@/hooks/useSearch";
 import { Label } from "@/types/search";
 import SearchLabel from "@/components/commons/SearchLabel/SearchLabel";
-import useNav from "@/hooks/useNav";
+import { LABEL_NAME } from "@/constants/label";
 
 import DetailSearchForm from "./DetailSearchForm/DetailSearchForm";
 
@@ -15,13 +15,12 @@ import "./SearchContentHeader.scss";
 const SearchContentHeader = (): JSX.Element => {
   const {
     word,
-    labels,
+    totalLabels,
     handleWordChange,
     handleWordKeyUp,
     removeLabel,
-    handleSubmit,
-  } = useLabel();
-  const { handleNavClose } = useNav();
+    handleSearchSubmit,
+  } = useSearch(LABEL_NAME.DETAILS);
   const [isDetailOpened, setIsDetailOpened] = useState(false);
 
   return (
@@ -32,15 +31,13 @@ const SearchContentHeader = (): JSX.Element => {
           className="search-content__form__input"
           type="text"
           value={word}
-          placeholder="WeView 검색"
+          placeholder="검색어를 입력해주세요."
           onChange={handleWordChange}
           onKeyUp={handleWordKeyUp}
         />
         <SearchIcon
           className="search-content__form__submit"
-          onClick={() => {
-            handleNavClose(() => handleSubmit());
-          }}
+          onClick={handleSearchSubmit}
         />
       </div>
       <div className="search-content__filter__header">
@@ -51,7 +48,7 @@ const SearchContentHeader = (): JSX.Element => {
         />
       </div>
       <div className="search-content__labels">
-        {labels.map((label: Label) => (
+        {totalLabels.map((label: Label) => (
           <SearchLabel
             key={`${label.type}-${label.value}-filtered`}
             label={label}

@@ -2,7 +2,7 @@ import React, { MouseEventHandler } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useNav from "@/hooks/useNav";
-import useLabel from "@/hooks/useLabel";
+import useSearch from "@/hooks/useSearch";
 
 import "./NavHeader.scss";
 
@@ -10,7 +10,7 @@ const NavHeader = (): JSX.Element => {
   const { handleNavClose } = useNav();
   const navigate = useNavigate();
 
-  const { loadLabels, handleSubmit } = useLabel();
+  const { loadLabels, handleSubmit } = useSearch();
 
   const handleHeaderClick: MouseEventHandler = () => {
     handleNavClose(() => {
