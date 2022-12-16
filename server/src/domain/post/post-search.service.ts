@@ -56,8 +56,8 @@ export class PostSearchService {
         authornickname: post.user.nickname,
         tags: tagValue,
         linecount: post.lineCount,
-        reviewcount: post.reviewCount,
-        likecount: post.likeCount,
+        reviewcount: post.reviewcount,
+        likecount: post.likecount,
       },
     });
   }
@@ -103,7 +103,7 @@ export class PostSearchService {
       searchFilter.body.query.bool.filter.bool.must.push({
         multi_match: {
           query: details[0],
-          fields: ['title', 'content', 'code', 'language', 'authorNickname'],
+          fields: ['title', 'content', 'code', 'language', 'usernickname'],
         },
       });
     }
@@ -120,7 +120,7 @@ export class PostSearchService {
     if (reviewCount && reviewCount >= 1) {
       searchFilter.body.query.bool.filter.bool.must.push({
         range: {
-          reviewCount: {
+          reviewcount: {
             gte: reviewCount,
           },
         },
@@ -129,7 +129,7 @@ export class PostSearchService {
     if (likeCount && likeCount >= 1) {
       searchFilter.body.query.bool.filter.bool.must.push({
         range: {
-          likeCount: {
+          likecount: {
             gte: likeCount,
           },
         },

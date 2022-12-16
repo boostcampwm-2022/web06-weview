@@ -123,18 +123,18 @@ export class PostRepository extends Repository<Post> {
   increaseLikeCount(post: Post) {
     this.createQueryBuilder()
       .update(Post)
-      .set({ likeCount: () => 'likeCount + 1' })
+      .set({ likecount: () => 'likeCount + 1' })
       .where('id=:id', { id: post.id })
       .execute();
   }
 
   decreaseLikeCount(post: Post) {
-    if (post.likeCount <= 0) {
+    if (post.likecount <= 0) {
       return;
     }
     this.createQueryBuilder()
       .update(Post)
-      .set({ likeCount: () => 'likeCount - 1' })
+      .set({ likecount: () => 'likeCount - 1' })
       .where('id=:id', { id: post.id })
       .execute();
   }
@@ -142,7 +142,7 @@ export class PostRepository extends Repository<Post> {
   increaseReviewCount(post: Post) {
     this.createQueryBuilder()
       .update(Post)
-      .set({ reviewCount: () => 'reviewCount + 1' })
+      .set({ reviewcount: () => 'reviewCount + 1' })
       .where('id=:id', { id: post.id })
       .execute();
   }
