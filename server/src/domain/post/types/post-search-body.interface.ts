@@ -6,8 +6,8 @@ interface PostSearchBody {
   language: string;
   createdat: Date;
   updatedat: Date;
-  authorid: number;
-  authornickname: string;
+  userid: number;
+  usernickname: string;
   tags: string;
   likecount: number;
   reviewcount: number;
