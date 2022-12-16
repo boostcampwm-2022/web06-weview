@@ -42,10 +42,10 @@ export class Post extends BaseTimeEntity {
   postToTags: PostToTag[];
 
   @Column({ default: 0 })
-  likeCount: number;
+  likecount: number;
 
   @Column({ default: 0 })
-  reviewCount: number;
+  reviewcount: number;
 
   @Column({ length: 255, default: '[]' })
   tags: string;
